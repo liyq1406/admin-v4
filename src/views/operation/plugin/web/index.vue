@@ -18,7 +18,6 @@
   import Tab from 'components/Tab'
   import { globalMixins } from 'src/mixins'
   import { setCurrPlugin } from 'store/actions/plugins'
-  import store from 'store/index'
   import api from 'api'
 
   export default {
@@ -29,8 +28,6 @@
     components: {
       'tab': Tab
     },
-
-    store,
 
     vuex: {
       getters: {

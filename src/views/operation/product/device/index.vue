@@ -40,7 +40,6 @@ import InfoList from 'components/InfoList'
 import Breadcrumb from 'components/Breadcrumb'
 import Map from 'components/Map'
 import { globalMixins } from 'src/mixins'
-import store from 'store'
 import { getCurrProduct, setCurrDevice, setCurrVirtualDevice } from 'store/actions/products'
 import formatDate from 'filters/format-date'
 
@@ -56,8 +55,6 @@ export default {
     InfoList,
     'x-map': Map
   },
-
-  store,
 
   vuex: {
     getters: {

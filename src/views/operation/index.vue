@@ -19,7 +19,6 @@ import Sidebar from 'components/Sidebar'
 import AlertBar from 'components/AlertBar'
 import { globalMixins } from 'src/mixins'
 import { MAIN_NAV, IS_DEMO } from 'consts/config'
-import store from 'store/index'
 
 export default {
   name: 'Operation',
@@ -32,8 +31,6 @@ export default {
     Sidebar,
     AlertBar
   },
-
-  store,
 
   vuex: {
     getters: {
@@ -161,10 +158,6 @@ export default {
             }, {
               alias: 'tags',
               url: `/plugins/recipes/${item.id}/tags`
-            // 暂时隐藏
-            // }, {
-            //   alias: 'heat',
-            //   url: `/plugins/warranty/${item.id}/heat`
             }]
             break
           case 'warranty': // 智能维保
@@ -236,7 +229,13 @@ export default {
           case 'content': // 内容管理
             sub.alias = 'content'
             sub.icon = 'newspaper-o'
-            sub.url = 'plugins/content'
+            sub.subs = [{
+              alias: 'articles',
+              url: `/plugins/content/${item.id}/articles`
+            }, {
+              alias: 'tags',
+              url: `/plugins/content/${item.id}/tags`
+            }]
             break
           default:
         }

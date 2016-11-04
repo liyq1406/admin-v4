@@ -8,7 +8,7 @@
 var toFixed = (num, digits) => {
   var result
 
-  if (digits === null || digits === undefined) {
+  if (typeof digits === 'undefined') {
     digits = 2
   }
 

@@ -57,6 +57,10 @@ export function format (val, type) {
       result = val.trim().length === val.length
       break
 
+    case 'englist':
+      result = /^[A-Z]+$/i.test(val)
+      break
+
     default:
       result = false
   }
@@ -71,6 +75,26 @@ export function format (val, type) {
  */
 export function equal (val, ref) {
   return val === ref
+}
+
+/**
+ * 在数组内
+ * @param  {Any} val 待验证的值
+ * @param  {Any} ref 参照值
+ * @return {Boolean} 验证结果
+ */
+export function inArr (val, arr) {
+  return arr.indexOf(val) >= 0
+}
+
+/**
+ * 不在数组内
+ * @param  {Any} val 待验证的值
+ * @param  {Any} ref 参照值
+ * @return {Boolean} 验证结果
+ */
+export function notInArr (val, arr) {
+  return !(arr.indexOf(val) >= 0)
 }
 
 /**

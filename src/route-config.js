@@ -1238,7 +1238,7 @@ let configRouter = (router) => {
         // 内容管理
         // ------------------------------
         // 文章列表
-        '/plugins/content/:app_id': {
+        '/plugins/content/:app_id/articles': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/content/article/index'))
@@ -1258,6 +1258,14 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/content/article/edit'))
+            }, 'admin')
+          }
+        },
+        // 标签管理
+        '/plugins/content/:app_id/tags': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/content/tag/list'))
             }, 'admin')
           }
         },

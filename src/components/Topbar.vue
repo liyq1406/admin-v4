@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import store from 'store/index'
 import { globalMixins } from 'src/mixins'
 import { IS_DEMO } from 'consts/config'
 import { showAlertMask, removeAlertMask } from 'store/actions/system'
@@ -77,9 +76,6 @@ export default {
   name: 'Topbar',
 
   mixins: [globalMixins],
-
-  // 状态管理
-  store,
 
   vuex: {
     getters: {

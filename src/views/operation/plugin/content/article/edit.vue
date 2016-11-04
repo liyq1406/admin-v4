@@ -40,7 +40,7 @@ export default {
     return {
       breadcrumbNav: [{
         label: '全部文章',
-        link: `/operation/plugins/content/${this.$route.params.app_id}`
+        link: `/operation/plugins/content/${this.$route.params.app_id}/articles`
       }, {
         label: '编辑文章'
       }]

@@ -11,7 +11,7 @@ let apiServer = ({
     plugin: 'http://plugin-api.xlink.cn:3000'
   },
   test: { // 测试服务器
-    api: 'http://api-test.xlink.cn:8887',
+    api: 'http://api-test.xlink.cn:80',
     plugin: 'http://test.plugin.xlink.cn:3000',
     message: 'http://139.196.164.250:3072'
   },
@@ -203,14 +203,14 @@ export const MAIN_NAV = {
         url: '/settings/users'
       }, {
         alias: 'email',
-        // url: '/settings/email/template'
-        url: '/settings/email/customize'
+        url: '/settings/email/template'
+        // url: '/settings/email/customize'
       }, {
         alias: 'message',
         url: '/settings/message/config'
-      }, {
-        alias: 'views',
-        url: '/settings/views/field'
+      // }, {
+      //   alias: 'views',
+      //   url: '/settings/views/field'
       }]
     }]
   },

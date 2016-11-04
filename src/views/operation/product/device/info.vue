@@ -49,7 +49,6 @@
 import api from 'api'
 import { globalMixins } from 'src/mixins'
 import SearchBox from 'components/SearchBox'
-import store from 'store'
 import { setCurrVirtualDevice } from 'store/actions/products'
 import _ from 'lodash'
 
@@ -61,8 +60,6 @@ export default {
   components: {
     SearchBox
   },
-
-  store,
 
   vuex: {
     getters: {

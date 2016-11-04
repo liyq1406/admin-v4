@@ -58,6 +58,7 @@
     "mockjs": "^1.0.1-beta2",
     "ora": "^0.2.0",
     "shelljs": "^0.6.0",
+    "stylus": "^0.54.5",
     "stylus-loader": "^1.5.1",
     "url-loader": "^0.5.7",
     "vue-hot-reload-api": "^1.2.0",

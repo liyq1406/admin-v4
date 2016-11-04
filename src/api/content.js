@@ -57,5 +57,61 @@ export default {
         }
       }
     )
+  },
+
+  /**
+   * 标签查询
+   */
+  getTags (appId, token, params) {
+    return http.post(
+      `${API_SERVER.content}/${appId}/api/label/list`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
+    )
+  },
+
+  /**
+   * 标签添加
+   */
+  addTag (appId, token, params) {
+    return http.post(
+      `${API_SERVER.content}/${appId}/api/label/save`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
+    )
+  },
+
+  /**
+   * 标签编辑
+   */
+  editTag (appId, labelId, token, params) {
+    return http.put(
+      `${API_SERVER.content}/${appId}/api/label/update/${labelId}`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
+    )
+  },
+
+  /**
+   * 标签删除
+   */
+  delTag (appId, labelId, token) {
+    return http.del(
+      `${API_SERVER.content}/${appId}/api/label/delete/${labelId}`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
+    )
   }
 }

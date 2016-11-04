@@ -202,7 +202,6 @@ import api from 'src/api'
 import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 import _ from 'lodash'
-import store from 'store'
 
 export default {
   name: 'RuleForm',
@@ -212,8 +211,6 @@ export default {
   components: {
     'x-select': Select
   },
-
-  store,
 
   vuex: {
     getters: {

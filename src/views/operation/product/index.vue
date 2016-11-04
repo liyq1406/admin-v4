@@ -17,7 +17,6 @@
 <script>
   import Tab from 'components/Tab'
   import api from 'api'
-  import store from 'store/index'
   import { setCurrProduct } from 'store/actions/products'
   import { globalMixins } from 'src/mixins'
 
@@ -25,8 +24,6 @@
     name: 'Products',
 
     mixins: [globalMixins],
-
-    store,
 
     vuex: {
       getters: {

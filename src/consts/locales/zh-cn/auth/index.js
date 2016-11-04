@@ -6,7 +6,6 @@
 export default {
 
   // 登录
-  platform_name: '云智易物联云平台企业管理台',
   old_entrance: '登录旧版管理台',
   register: '注册帐号',
   remember: '记住密码',

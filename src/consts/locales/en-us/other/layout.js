@@ -4,6 +4,11 @@
  */
 
 export default {
+  // 平台相关
+  platform: {
+    name: 'Xlink IoT Platform'
+  },
+
   // 主导航
   main_nav: {
     dashboard: {
@@ -178,6 +183,13 @@ export default {
             tags: 'Tags'
           }
         },
+        content: {
+          label: 'Content Management',
+          subs: {
+            articles: 'Articles',
+            tags: 'Tags'
+          }
+        },
         alerts: {
           label: 'Alert Service',
           subs: {
@@ -245,6 +257,7 @@ export default {
     }
   },
 
+  // 我的帐号
   my_account: 'My Account',
 
   // 用户菜单

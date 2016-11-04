@@ -158,7 +158,6 @@
 
 <script>
 import _ from 'lodash'
-import store from 'store/index'
 import SearchBox from 'components/SearchBox'
 import Modal from 'components/Modal'
 import Select from 'components/Select'
@@ -179,8 +178,6 @@ export default {
     'pager': Pager,
     'x-select': Select
   },
-  // 状态管理
-  store,
 
   vuex: {
     getters: {

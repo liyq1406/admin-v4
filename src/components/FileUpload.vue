@@ -6,7 +6,7 @@
       <div slot="body">
         <div class="mt10 mb30">
           <div class="upload-status mb5">
-            <div class="uploading" v-show="status==='uploading'">
+            <div class="uploading" v-show="status==='uploading' || status==='upload-error'">
               <div class="upload-pregress fr">{{ loaded | bytesPrettify }}/{{ total | bytesPrettify }}</div>
               <div class="upload-desc">固件正在上传，请勿离开此页面</div>
             </div>
@@ -95,16 +95,6 @@ export default {
       return {
         width: `${percentage}%`
       }
-    },
-
-    inputVal () {
-      let result = ''
-
-      if (this.input) {
-        result = this.input.value
-      }
-
-      return result
     }
   },
 
@@ -114,9 +104,6 @@ export default {
 
   watch: {
     inputValue (val, oldVal) {
-      console.log(val !== oldVal)
-      console.log(val)
-      console.log(oldVal)
       if (val && val !== oldVal) {
         this.upload()
       }
@@ -133,11 +120,10 @@ export default {
         this.xhr.abort()
         this.xhr = null
       }
-      this.input.value = ''
-      this.inputValue = ''
       this.status = ''
       this.loaded = 0
       this.total = 0
+      this.$emit('reset', this.input)
     },
 
     /**
@@ -180,6 +166,16 @@ export default {
         this.loaded = evt.loaded
         this.total = evt.total
       }
+
+      window.addEventListener('offline', (e) => {
+        this.status = 'upload-error'
+        this.xhr.abort()
+        this.xhr = null
+      })
+
+      // this.xhr.onerror = (evt) => {
+      //   this.status = 'upload-error'
+      // }
 
       // 发送请求
       let formData = new window.FormData()

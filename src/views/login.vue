@@ -1,7 +1,7 @@
 <template>
   <div class="auth-form login-form">
     <div class="inner">
-      <div class="form-legend">{{ $t('auth.platform_name') }}</div>
+      <div class="form-legend">{{ $t('layout.platform.name') }}</div>
       <div class="form">
         <validator name="authValidation">
           <form novalidate @submit.prevent="onSubmit">
@@ -46,7 +46,6 @@
   import { globalMixins } from 'src/mixins'
   import { setLoadingStatus } from 'store/actions/system'
   import { IS_SHOW_OLD_ENTRANCE } from 'consts/config'
-  import store from 'store/index'
 
   export default {
     name: 'LoginForm',
@@ -54,8 +53,6 @@
     layouts: ['auth'],
 
     mixins: [globalMixins],
-
-    store,
 
     vuex: {
       getters: {

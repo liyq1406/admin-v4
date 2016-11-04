@@ -32,7 +32,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import store from 'store'
 
 export default {
   name: 'Account',
@@ -40,8 +39,6 @@ export default {
   layouts: ['topbar', 'account-sidebar'],
 
   mixins: [globalMixins],
-
-  store,
 
   vuex: {
     getters: {

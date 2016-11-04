@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import store from 'store/index'
 import { removeProduct, updateProduct } from 'store/actions/products'
 import Panel from 'components/Panel'
 import Statistic from 'components/Statistic2'
@@ -59,8 +58,6 @@ export default {
 
   // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
   mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
-
-  store,
 
   vuex: {
     actions: {

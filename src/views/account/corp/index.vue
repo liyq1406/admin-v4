@@ -31,7 +31,6 @@ import { globalMixins } from 'src/mixins'
 import { editPasswordMixin } from '../mixins'
 import InfoList from 'components/InfoList'
 import Modal from 'components/Modal'
-import store from 'store'
 import formatDate from 'filters/format-date'
 // import api from 'api'
 import { isEmpty } from 'src/utils'
@@ -44,8 +43,6 @@ export default {
 
   // editPasswordMixin提供编辑密码的逻辑
   mixins: [globalMixins, editPasswordMixin],
-
-  store,
 
   vuex: {
     getters: {

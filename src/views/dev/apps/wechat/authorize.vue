@@ -452,7 +452,6 @@ export default {
     onSetSubmit () {
       if (this.setValidation.$valid && !this.setting) {
         this.setting = true
-        console.log(JSON.stringify(this.setModel))
         api.app.empowerWechat(this.app.id, this.currProduct.id, this.setModel).then((res) => {
           if (res.status === 200) {
             this.resetSet()
@@ -490,7 +489,6 @@ export default {
           }
         } else {
           this.setModel = res.data.auth_config
-          this.setModel.product_id = res.data.product_id
         }
       }).catch((res) => {
         this.handleError(res)

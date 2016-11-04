@@ -4,6 +4,11 @@
  */
 
 export default {
+  // 平台相关
+  platform: {
+    name: '云智易物联云平台企业管理台'
+  },
+
   // 主导航
   main_nav: {
     dashboard: {
@@ -178,6 +183,13 @@ export default {
             tags: '标签管理'
           }
         },
+        content: {
+          label: '内容管理',
+          subs: {
+            articles: '文章管理',
+            tags: '标签管理'
+          }
+        },
         alerts: {
           label: '告警服务',
           subs: {
@@ -245,6 +257,7 @@ export default {
     }
   },
 
+  // 我的帐号
   my_account: '我的账户',
 
   // 用户菜单

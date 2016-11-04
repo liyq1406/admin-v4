@@ -35,7 +35,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="bortop" v-if="this.$route.params.type_value === '2'">
+                <!-- <div class="bortop" v-if="this.$route.params.type_value === '2'">
                   <h2>添加设备烹饪提示</h2>
                   <div class="row">
                     <div class="line32 mrb10" v-for="tip in cookTips">
@@ -51,7 +51,7 @@
                       <button @click.prevent.stop="addTips" class="col-offset-3 btn btn-ghost addCookTip"><i class="fa fa-plus">添加烹饪提示步骤</i></button>
                     </div>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-actions mb40 row">
                   <div class="col-offset-4">
                     <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
@@ -171,10 +171,6 @@ import ImageUploader from 'components/ImageUploader'
 import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-import TagInput from 'components/TagInput'
-// import locales from 'consts/locales/index'
-// import { DEVICES } from '../../config'
-import store from 'src/store'
 
 export default {
   name: 'EditRecipe',
@@ -189,11 +185,9 @@ export default {
     'pager': Pager,
     'modal': Modal,
     'image-uploader': ImageUploader,
-    'tag-input': TagInput,
     Modal,
     'x-select': Select
   },
-  store,
 
   vuex: {
     getters: {

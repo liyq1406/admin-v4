@@ -118,7 +118,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import store from 'store'
 import Select from 'components/Select'
 import Pager from 'components/Pager'
 import api from 'api'
@@ -133,8 +132,6 @@ export default {
     'x-select': Select,
     Pager
   },
-
-  store,
 
   vuex: {
     getters: {

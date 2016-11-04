@@ -1,10 +1,7 @@
 import api from 'api'
-import store from 'store/index'
 import { getCurrProduct } from 'store/actions/products'
 
 export var setCurrProductMixin = {
-  store,
-
   vuex: {
     getters: {
       currentProduct: ({ products }) => products.curr

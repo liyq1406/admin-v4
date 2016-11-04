@@ -9,25 +9,24 @@
       </div>
     </div>
     <ul class="deepul" v-if="menu && menu.param && menu.param.length > 0">
-      <tree-item v-for="item in menu.param" :menu="item" :index="$index" @add-menu="handleAddMenu" @edit-menu="handleEditMenu" @add-code="handleAddCode" @edit-code="handleEditCode" @push-data="test" @push-code-data="setCode"></tree-item>
+      <tree-item v-for="item in menu.param" :menu="item" :index="$index" @add-menu="handleAddMenu" @edit-menu="handleEditMenu" @add-code="handleAddCode" @edit-code="handleEditCode" @push-data="test" @push-code-data="setCode" @delete-menu="deleteMenu" @delete-code="deleteCode"></tree-item>
     </ul>
   </li>
   <!-- 餐单添加编辑 -->
   <modal :show.sync="MenuShow" width="480px">
     <h3 slot="header"><span v-if="type==='add'">添加</span><span v-if="type==='edit'">编辑</span>菜单</h3>
     <div slot="body" class="form">
-      <menu-form :type="type" :menu="menuClone" @submit="pushMenu" @close="closeMenu" @delete="deleteMenu"></menu-form>
+      <menu-form v-if="MenuShow" :type="type" :menu="menuClone" @submit="pushMenu" @close="closeMenu" @delete="deleteMenu"></menu-form>
     </div>
   </modal>
   <!-- 烹饪参数添加编辑 -->
   <modal :show.sync="CodeShow" width="480px">
-    <h3 slot="header"><span v-if="type==='add'">添加</span><span v-if="type==='edit'">编辑烹饪参数</h3>
+    <h3 slot="header"><span v-if="type==='add'">添加</span><span v-if="type==='edit'">编辑</span>烹饪参数</h3>
     <div slot="body" class="form">
-      <code-form :type="type" :menu="codeClone" @submit="pushCode" @close="closeCode" @delete="deleteCode"></code-form>
+      <code-form v-if="CodeShow" :type="type" :menu="codeClone" @submit="pushCode" @close="closeCode" @delete="deleteCode"></code-form>
     </div>
   </modal>
 </template>
-
 <script>
   import MenuForm from './MenuForm'
   import CodeForm from './CodeForm'
@@ -85,7 +84,7 @@
         console.log(JSON.stringify(val))
         this.menu.param.$set(index, val)
         console.log(JSON.stringify(this.menu))
-        this.$emit('push-code-data', this.menu, index)
+        this.$emit('push-code-data', this.menu, this.index)
       },
       test (val, index) {
         // console.log(val)
@@ -179,26 +178,36 @@
       closeCode () {
         this.CodeShow = false
       },
-      deleteMenu () {
-        this.menu = null
-        this.MenuShow = false
+      deleteMenu (menu, index, deleted) {
+        if (index >= 0 && !deleted) {
+          deleted = true
+          this.menu.param.splice(index, 1)
+          this.MenuShow = false
+        }
+        this.$emit('delete-menu', this.menu, this.index, deleted)
       },
-      deleteCode () {
+      deleteCode (menu, index, codeDeleted) {
         // delete this.menu.name
         // delete this.menu.param_id
         // delete this.menu.desc
-        var deleteKey = ['name', 'param_id', 'desc']
-        var menu = {}
-        for (var key in this.menu) {
-          if (this.menu.hasOwnProperty(key)) {
-            if (deleteKey.indexOf(key) === -1) {
-              menu[key] = this.menu[key]
+        if (index >= 0 && !codeDeleted) {
+          codeDeleted = true
+          var deleteKey = ['name', 'param_id', 'desc']
+          var obj = {}
+          for (var key in this.menu.param[index]) {
+            if (menu.hasOwnProperty(key)) {
+              if (deleteKey.indexOf(key) === -1) {
+                obj[key] = menu[key]
+              }
             }
           }
+          this.CodeShow = false
+          this.menu.param[index] = obj
+          console.log(obj)
         }
-        this.menu = menu
         this.type = 'add'
         this.CodeShow = false
+        this.$emit('delete-code', this.menu, this.index, codeDeleted)
       }
       // handleAddCode (menu) {
       //   // 向父组件传递增加烹饪参数事件
