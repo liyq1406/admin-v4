@@ -53,7 +53,7 @@ export default {
    */
   getProductCustomization (productId) {
     return http.get(
-      `${API_SERVER.default}/v2/customization?id=corp.${productId}.list`
+      `${API_SERVER.default}/v2/customization?id=corp.product.${productId}.list`
     )
   },
 
@@ -64,7 +64,7 @@ export default {
    */
   setProductCustomization (productId, params) {
     return http.post(
-      `${API_SERVER.default}/v2/customization?id=corp.${productId}.list`, params
+      `${API_SERVER.default}/v2/customization?id=corp.product.${productId}.list`, params
     )
   }
 }

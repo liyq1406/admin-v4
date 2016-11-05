@@ -24,9 +24,9 @@ export default {
   data () {
     return {
       secondaryNav: [{
-        label: '自定义邮件',
-        link: { path: '/dev/settings/email/customize' }
-      }, {
+      //   label: '自定义邮件',
+      //   link: { path: '/dev/settings/email/customize' }
+      // }, {
         label: '云智易模版设置',
         link: { path: '/dev/settings/email/template' }
       }]
