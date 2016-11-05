@@ -106,7 +106,7 @@ export default {
     },
     handleSubmit (cloneMenu) {
       if (this.$validation.invalid) {
-        return
+        return this.$validate(true)
       }
       this.menu = this.cloneMenu
       if (this.delChecked === false) {

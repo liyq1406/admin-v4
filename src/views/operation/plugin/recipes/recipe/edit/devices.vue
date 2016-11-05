@@ -64,6 +64,13 @@
     <div class="actions">
       <button class="btn btn-primary" @click="addDevice" :disabled="recipe.devices.length >= products.length" :class="{'disabled':recipe.devices.length >= products.length}"><i class="fa fa-plus"></i>添加烹饪设备</button>
     </div>
+    <div class="form-actions mb40 row">
+      <div class="col-offset-4">
+        <button type="submit" @click.prevent.stop="editOthers('edit')" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
+        <!-- <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-lg">预览</button> -->
+        <!-- <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button> -->
+      </div>
+    </div>
 
     <modal :show.sync="modal.show" @close="onCancel" width="480px">
       <h3 slot="header">{{ modal.type === 'add' ? '添加' : '编辑' }}烹饪设备</h3>
@@ -105,7 +112,7 @@
             <div class="form-row row">
               <label class="form-control col-6">设备指令:</label>
               <div class="controls col-18">
-                <div class="input-text-wrap required-sign">
+                <div v-placeholder="'请输入设备指令'" class="input-text-wrap required-sign">
                   <textarea v-model="model.autoexec" name="model.autoexec" type="text" v-validate:autoexec="['required']" class="input-text"></textarea>
                 </div>
                 <div class="form-tips form-tips-error">
@@ -335,11 +342,13 @@ export default {
       if (this.tipsType === 'add') {
         this.recipe.devices[no].prompts.push({prompt_text: obj.prompt_text})
         this.onTipsCancel()
-        this.editOthers('edit')
+        // this.editOthers('edit')
       } else if (this.tipsType === 'edit') {
-        this.recipe.devices[no].prompts[lesno] = {prompt_text: obj.prompt_text}
+        // this.recipe.devices[no].prompts[lesno] = {prompt_text: obj.prompt_text}
+        // this.recipe.devices[no].prompts[lesno] = _.extend({}, this.recipe.devices[no].prompts[lesno], {prompt_text: obj.prompt_text})
+        this.$set(`recipe.devices[${no}].prompts[${lesno}]`, {prompt_text: obj.prompt_text})
         this.onTipsCancel()
-        this.editOthers('edit')
+        // this.editOthers('edit')
       }
     },
     delTips (obj) {
@@ -347,7 +356,7 @@ export default {
       var lesno = this.recipe.devices[no].prompts.indexOf(obj.tip)
       this.recipe.devices[no].prompts.splice(lesno, 1)
       this.onTipsCancel()
-      this.editOthers('edit')
+      // this.editOthers('edit')
     },
     onTipsCancel () {
       this.tipsShow = false
@@ -370,14 +379,14 @@ export default {
       var no = this.recipe.devices.indexOf(this.typeModal.device)
       this.recipe.devices[no].autoexec.type = this.typeModal.type
       this.onTypeCancel()
-      this.editOthers('edit')
+      // this.editOthers('edit')
     },
     // 编辑指令
     editIns (obj) {
       var no = this.recipe.devices.indexOf(obj.device)
       this.recipe.devices[no].autoexec.value = obj.value
       this.onInsCancel()
-      this.editOthers('edit')
+      // this.editOthers('edit')
     },
     // 删除指令
     deleteIns (obj) {
@@ -387,7 +396,7 @@ export default {
         // this.recipe.devices[no] = obj.value
         this.recipe.devices.splice(no, 1)
         this.onInsCancel()
-        this.editOthers('edit')
+        // this.editOthers('edit')
       } else {
         return
       }
@@ -472,6 +481,11 @@ export default {
         this.submitting = false
         this.onCancel()
         this.getRecipes()
+        this.showNotice({
+          type: 'success',
+          content: '菜谱更新成功！'
+        })
+        this.$route.router.go({path: '/operation/plugins/recipes/' + this.$route.params.app_id + '/recipes'})
       })
     }
     // addTip (arr, index) {

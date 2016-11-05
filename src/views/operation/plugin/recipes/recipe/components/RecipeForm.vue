@@ -323,11 +323,11 @@
                     <label class="form-control col-3 line32">本地菜谱ID: </label>
                     <div class="controls col-21">
                       <div class="input-text-wrap">
-                        <input type="text" v-model="local_id" style="width:300px" class="input-text" name="local_id" v-validate:localid="{required: true, maxlength: 20, format: 'trim'}"/>
+                        <input type="text" v-model="local_id" style="width:300px" class="input-text" name="local_id" v-validate:localid="{required: true, format: 'trim'}"/>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.localid.touched && $validation.localid.required">请输入本地菜谱ID</span>
-                        <span v-if="$validation.localid.modified && $validation.localid.maxlength">本地菜谱ID不能超过20位</span>
+                        <!-- <span v-if="$validation.localid.modified && $validation.localid.maxlength">本地菜谱ID不能超过20位</span> -->
                         <span v-if="$validation.localid.touched && $validation.localid.format">菜谱ID不允许前后带空格</span>
                       </div>
                     </div>
@@ -344,6 +344,7 @@
                   <div class="form-actions row">
                     <div class="col-offset-4">
                       <button @click.prevent.stop="openFirAdd" class="btn btn-ghost"><i class="fa fa-plus"></i>添加菜单</button>
+                      <button @click.prevent.stop="openFirCodeAdd" class="btn btn-ghost"><i class="fa fa-plus"></i>添加烹饪参数</button>
                     </div>
                   </div>
                 </div>
@@ -361,7 +362,7 @@
               <h3 slot="header">添加菜单</h3>
               <div slot="body" class="form">
                 <form autocomplete="off" novalidate>
-                  <div class="form-row row">
+                  <div class="form-row row" v-if="addFirMenuShow">
                     <label class="form-control col-6">菜单名称:</label>
                     <div class="controls col-18">
                       <div class="input-text-wrap">
@@ -369,7 +370,7 @@
                       </div>
                       <!-- <div class="form-tips form-tips-error">
                         <span v-if="$validation.firmenu.touched && $validation.firmenu.required">请输入菜单名称</span>
-                        <span v-if="$validation.firmenu.modified && $validation.firmenu.maxlength">菜单名称不能超过20位</span>
+                        <span v-if="$validation.firmenu.modified && $validation.firmenu.maxlength">菜单名称不能超过10位</span>
                         <span v-if="$validation.firmenu.touched && $validation.firmenu.format">菜单名称不允许前后带空格</span>
                       </div> -->
                     </div>
@@ -379,6 +380,13 @@
                     <button @click.prevent.stop="cancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
                   </div>
                 </form>
+              </div>
+            </modal>
+            <!-- 添加一级烹饪参数 -->
+            <modal :show.sync="addFirCodeShow" width="480px">
+              <h3 slot="header">添加烹饪参数</h3>
+              <div slot="body" class="form">
+                <code-form v-if="addFirCodeShow" :type="codeType" :menu="codeClone" @submit="pushCode" @close="closeCode"></code-form>
               </div>
             </modal>
           </div>
@@ -441,7 +449,7 @@
             <modal :show.sync="modal.show" @close="onCancel" width="480px">
               <h3 slot="header">{{ modal.type === 'add' ? '添加' : '编辑' }}烹饪设备</h3>
               <div slot="body" class="form">
-                <device-form v-if="modal.show" :recipe="recipe" :name="name" :type="modal.type" @add="deviceSubmit"></device-form>
+                <device-form v-if="modal.show" :recipe="recipe" :name="name" :type="modal.type" @add="deviceSubmit" @close="modal.show = false"></device-form>
               </div>
             </modal>
             <!-- 编辑类型begin -->
@@ -600,6 +608,7 @@ import TreeItem from './TreeItem'
 import DeviceForm from './DeviceForm'
 import InstructionsForm from '../components/InstructionsForm'
 import TipsForm from '../components/TipsForm'
+import CodeForm from '../components/CodeForm'
 
 export default {
   name: 'Creation',
@@ -609,6 +618,7 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
+    CodeForm,
     'tree-item': TreeItem,
     'search-box': SearchBox,
     'pager': Pager,
@@ -637,6 +647,9 @@ export default {
 
   data () {
     return {
+      addFirCodeShow: false,
+      codeClone: {},
+      codeType: 'add',
       deviceModel: {},
       instructionsShow: false,
       instructionsModal: {},
@@ -1091,6 +1104,13 @@ export default {
       if (this.$route.params.type_value === '3') {
         if (!this.local_id) {
           alert('请填写本地菜谱ID！')
+          return
+        }
+      }
+      if (this.$route.params.type_value === '2') {
+        if (!this.recipe.devices.length) {
+          alert('请添加烹饪设备！')
+          return
         }
       }
 
@@ -1335,6 +1355,18 @@ export default {
       this.addFirMenuShow = false
       this.addMenuModal.type = ''
     },
+    openFirCodeAdd () {
+      this.addFirCodeShow = true
+    },
+    // 创建一级烹饪参数
+    pushCode (model) {
+      this.menus.push({
+        name: model.name,
+        desc: model.desc,
+        param_id: model.param_id
+      })
+      this.addFirCodeShow = false
+    },
     // 创建子菜单
     addChildrenMenu () {
       // if (this.$validation.invalid) {
@@ -1362,6 +1394,9 @@ export default {
       // this.$resetValidation()
       this.addFirMenuShow = false
     },
+    closeCode () {
+      this.addFirCodeShow = false
+    },
     test (val, index) {
       console.log(index)
       console.log(val)
@@ -1378,20 +1413,9 @@ export default {
     },
     deleteCode (val, index, codeDeleted) {
       if (index >= 0 && !codeDeleted) {
-        var deleteKey = ['name', 'param_id', 'desc']
-        var obj = {}
-        for (var key in this.menus[index]) {
-          if (val.hasOwnProperty(key)) {
-            if (deleteKey.indexOf(key) === -1) {
-              obj[key] = val[key]
-            }
-          }
-        }
-        // this.menus.$set(index, obj)
-        this.menus[index].$set(obj)
+        codeDeleted = true
+        this.menus.splice(index, 1)
       }
-      console.log('最终')
-      console.log(JSON.stringify(this.menus))
     },
     /**
      * 初始化

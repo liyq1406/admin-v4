@@ -36,7 +36,7 @@
       <div class="form-row row">
         <label class="form-control col-6">设备指令:</label>
         <div class="controls col-18">
-          <div class="input-text-wrap required-sign">
+          <div v-placeholder="'请输入设备指令'" class="input-text-wrap">
             <textarea v-model="model.autoexec.value" name="model.autoexec.value" type="text" v-validate:autoexec="['required']" class="input-text"></textarea>
           </div>
           <div class="form-tips form-tips-error">
@@ -177,7 +177,10 @@ export default {
       console.log(this.model)
       this.$emit('add', this.model)
     },
-    onCancel () {}
+    onCancel () {
+      this.$emit('close')
+      this.$resetValidation()
+    }
   }
 }
 </script>

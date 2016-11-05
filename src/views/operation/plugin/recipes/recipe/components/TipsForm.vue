@@ -5,11 +5,12 @@
         <label class="form-control col-6">设备提示:</label>
         <div class="controls col-18">
           <div class="input-text-wrap">
-            <textarea v-model="cloneModal.prompt_text" name="cloneModal.prompt_text" type="text" class="input-text" v-validate:tip="{required: true, format: 'trim'}" ></textarea>
+            <textarea v-model="cloneModal.prompt_text" name="cloneModal.prompt_text" type="text" class="input-text" v-validate:tip="{maxlength: 30, format: 'trim'}" ></textarea>
           </div>
           <div class="form-tips form-tips-error">
-            <span v-if="$validation.tip.touched && $validation.tip.required">请输入设备提示</span>
+            <!-- <span v-if="$validation.tip.touched && $validation.tip.required">请输入设备提示</span> -->
             <span v-if="$validation.tip.touched && $validation.tip.format">指令提示不允许前后带空格</span>
+            <span v-if="$validation.tip.modified && $validation.tip.maxlength">设备提示不能超过30个字符</span>
           </div>
         </div>
       </div>
@@ -77,7 +78,7 @@ export default {
     },
     handleSubmit (cloneModal) {
       if (this.$validation.invalid) {
-        return
+        return this.$validate(true)
       }
       this.model = this.cloneModal
       if (this.delChecked === false) {

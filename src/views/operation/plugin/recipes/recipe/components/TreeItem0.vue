@@ -1,12 +1,12 @@
 <template>
   <li class="mrb15 itemli">
     <div class="line32">
-      <!-- <span class="bg"></span> -->
-      <a class="mr10 pagelink" @mouseover="showOpera = true" @mouseout="leaveMouse"><i v-if="menu && menu.hasOwnProperty('name') && !menu.hasOwnProperty('type')" class=" mr10 cookingIcon"></i><span  @click.prevent.stop="handleMenu('edit', menu)" v-if="menu && menu.hasOwnProperty('type') && !menu.hasOwnProperty('name')">{{ menu.type }}</span><span @click.prevent.stop="handleCode('edit',menu)" v-if="menu && menu.hasOwnProperty('name')">{{ menu.name }}</span></a>
+      <span class="bg"></span>
+      <a class="mr10" @click.prevent.stop="handleMenu('edit', menu)" @mouseover="showOpera = true" @mouseout="leaveMouse"><i v-if="showIcon" class=" mr10 fa fa-cutlery"></i><span v-if="menu && menu.hasOwnProperty('type')"></span>{{menu.type}}</a>
       <div class="btn-area" v-if="showOpera" @mouseover="inMouse" @mouseout="leaveMouse">
         <button v-if="!menu.name" class="btn btn-ghost mr10" @click.prevent.stop="handleMenu('add', menu)"><i class="fa fa-plus"></i>添加子菜单</button>
-        <button v-if="!menu.name" class="btn btn-ghost mr10" @click.prevent.stop="handleCode('add', menu)"><i class="fa fa-plus"></i>添加烹饪参数</button>
-        <!-- <button v-if="menu.name && !menu.param" class="btn btn-ghost mr10" @click.prevent.stop="handleCode('edit',menu)"><i class="fa fa-plus"></i>编辑烹饪参数</button> -->
+        <button v-if="!menu.name && !menu.param" class="btn btn-ghost mr10" @click.prevent.stop="handleCode('add', menu)"><i class="fa fa-plus"></i>添加烹饪参数</button>
+        <button v-if="menu.name && !menu.param" class="btn btn-ghost mr10" @click.prevent.stop="handleCode('edit',menu)"><i class="fa fa-plus"></i>编辑烹饪参数</button>
       </div>
     </div>
     <ul class="deepul" v-if="menu && menu.param && menu.param.length > 0">
@@ -153,20 +153,13 @@
         // alert(JSON.stringify(model))
         if (this.type === 'add') {
           // 如果是添加
-          // this.menu = _.extend({}, this.menu, {name: model.name})
-          // this.menu = _.extend({}, this.menu, {desc: model.desc})
-          // this.menu = _.extend({}, this.menu, {param_id: model.param_id})
-          if (this.menu.param && this.menu.param.length > 0) {
-            // 如果本身有其他子菜单，则push进去
-            this.menu.param.push(model)
-          } else {
-            // 不存在param，则新建一个
-            // this.$set(this.menu, 'param', model)
-            this.menu = _.extend({}, this.menu, {param: [model]})
-            // let b = [a]
-            // this.$set(this.menu, 'param', b)
-          }
+          this.menu = _.extend({}, this.menu, {name: model.name})
+          this.menu = _.extend({}, this.menu, {desc: model.desc})
+          this.menu = _.extend({}, this.menu, {param_id: model.param_id})
           console.log(model)
+          // this.menu.name = model.name
+          // this.menu.desc = model.desc
+          // this.menu.param_id = model.param_id
           this.CodeShow = false
         } else if (this.type === 'edit') {
           // 如果是编辑
@@ -200,19 +193,18 @@
         // delete this.menu.desc
         if (index >= 0 && !codeDeleted) {
           codeDeleted = true
-          // var deleteKey = ['name', 'param_id', 'desc']
-          // var obj = {}
-          // for (var key in this.menu.param[index]) {
-          //   if (menu.hasOwnProperty(key)) {
-          //     if (deleteKey.indexOf(key) === -1) {
-          //       obj[key] = menu[key]
-          //     }
-          //   }
-          // }
-          this.menu.param.splice(index, 1)
+          var deleteKey = ['name', 'param_id', 'desc']
+          var obj = {}
+          for (var key in this.menu.param[index]) {
+            if (menu.hasOwnProperty(key)) {
+              if (deleteKey.indexOf(key) === -1) {
+                obj[key] = menu[key]
+              }
+            }
+          }
           this.CodeShow = false
-          // this.menu.param[index] = obj
-          // console.log(obj)
+          this.menu.param[index] = obj
+          console.log(obj)
         }
         this.type = 'add'
         this.CodeShow = false
@@ -236,19 +228,11 @@
 
 <style lang="stylus">
   @import '../../../../../../assets/stylus/common'
-  .cookingIcon
-    background url('../../../../../../assets/images/weibo.png') no-repeat center top
-    display inline-block
-    width 23px
-    height 17px
-    margin-bottom -2px
   .bg
     background url('../../../../../../assets/images/lastitem.png') no-repeat center top
     display inline-block
     width 37px
     height 16px
-  .pagelink
-    color #c0252e
   .mr10
     margin-right 10px
   .mrb15

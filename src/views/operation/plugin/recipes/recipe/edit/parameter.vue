@@ -35,13 +35,14 @@
               <div class="controls col-21">
                 <!-- <tree-item></tree-item> -->
                 <ul class="menu" v-if="menus && menus.length > 0">
-                  <tree-item  v-for="menu in menus" :menu="menu" :index="$index" @push-data="test" @push-code-data="setCode"></tree-item>
+                  <tree-item  v-for="menu in menus" :menu="menu" :index="$index" @push-data="test" @push-code-data="setCode" @delete-menu="deleteMenu" @delete-code="deleteCode"></tree-item>
                 </ul>
               </div>
             </div>
             <div class="form-actions row">
               <div class="col-offset-4">
                 <button @click.prevent.stop="openFirAdd" class="btn btn-ghost"><i class="fa fa-plus"></i>添加菜单</button>
+                <button @click.prevent.stop="openFirCodeAdd" class="btn btn-ghost"><i class="fa fa-plus"></i>添加烹饪参数</button>
               </div>
             </div>
           </div>
@@ -82,6 +83,13 @@
           </validator>
         </div>
       </modal>
+      <!-- 添加烹饪参数 -->
+      <modal :show.sync="addFirCodeShow" width="480px">
+        <h3 slot="header">添加烹饪参数</h3>
+        <div slot="body" class="form">
+          <code-form v-if="addFirCodeShow" :type="codeType" :menu="codeClone" @submit="pushCode" @close="closeCode"></code-form>
+        </div>
+      </modal>
     </div>
   </div>
 </template>
@@ -98,6 +106,7 @@ import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import TagInput from 'components/TagInput'
+import CodeForm from '../components/CodeForm'
 
 export default {
   name: 'EditRecipe',
@@ -115,6 +124,7 @@ export default {
     'image-uploader': ImageUploader,
     'tag-input': TagInput,
     Modal,
+    CodeForm,
     'x-select': Select
   },
 
@@ -124,15 +134,18 @@ export default {
       products: ({ products }) => products.released
     }
   },
-  props: {
-    type: {
-      type: String,
-      default: 'edit'
-    }
-  },
+  // props: {
+  //   type: {
+  //     type: String,
+  //     default: 'edit'
+  //   }
+  // },
 
   data () {
     return {
+      addFirCodeShow: false,
+      codeClone: {},
+      codeType: 'add',
       addFirMenuShow: false,
       originAddModel: {},
       addMenuModal: {
@@ -348,6 +361,19 @@ export default {
       this.menus.$set(index, val)
       console.log(JSON.stringify(this.menus))
       // this.menu = val
+    },
+    deleteMenu (val, index, deleted) {
+      if (index >= 0 && !deleted) {
+        this.menus.splice(index, 1)
+      }
+      // console.log('最终')
+      // console.log(JSON.stringify(this.menus))
+    },
+    deleteCode (menu, index, codeDeleted) {
+      if (index >= 0 && !codeDeleted) {
+        codeDeleted = true
+        this.menus.splice(index, 1)
+      }
     },
     /**
      * 初始化
@@ -690,6 +716,9 @@ export default {
       this.addFirMenuShow = true
       this.$resetValidation()
     },
+    openFirCodeAdd () {
+      this.addFirCodeShow = true
+    },
     // 创建一级菜单
     addFirstMenu () {
       if (this.$validation.invalid) {
@@ -700,6 +729,15 @@ export default {
       })
       this.addFirMenuShow = false
       this.addMenuModal.type = ''
+    },
+    // 烹饪参数
+    pushCode (model) {
+      this.menus.push({
+        name: model.name,
+        desc: model.desc,
+        param_id: model.param_id
+      })
+      this.addFirCodeShow = false
     },
     // 创建子菜单
     addChildrenMenu () {
@@ -727,6 +765,9 @@ export default {
       // console.log(this)
       this.$resetValidation()
       this.addFirMenuShow = false
+    },
+    closeCode () {
+      this.addFirCodeShow = false
     }
   }
 }

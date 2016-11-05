@@ -118,6 +118,10 @@ export default {
         title: '作者',
         class: 'wp20'
       }, {
+        key: 'type',
+        title: '菜谱类型',
+        class: 'wp20'
+      }, {
         key: 'create_time',
         title: '创建时间',
         class: 'wp20'
@@ -171,10 +175,12 @@ export default {
     // 菜谱列表
     recipeList () {
       let result = []
+      var types = ['普通菜谱', '智能菜谱', '本地菜谱']
       this.recipes.forEach((item) => {
         result.push({
           name: `<a class="hl-red">${item.name}</a>`,
           creator: item.creator,
+          type: '<span>' + types[item.type - 1] + '</span>',
           create_time: formatDate(item.create_time),
           pageviews: item.pageviews || 0,
           status: item.status === 1 ? '<span>已发布</span>' : '<span class="hl-orange">待审核</span>',
