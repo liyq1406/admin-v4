@@ -2,7 +2,8 @@
   <div class="panel mt20 mb20">
     <div class="panel-hd panel-hd-full bordered">
       <div class="actions">
-        <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group>
+        <!-- <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group> -->
+        <date-time-multiple-picker :periods="periods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
       </div>
       <h2>{{ $t('operation.product.overview.active.title') }}</h2>
     </div>
@@ -20,11 +21,12 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import RadioButtonGroup from 'components/RadioButtonGroup'
+// import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
 import formatDate from 'filters/format-date'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import _ from 'lodash'
 
 export default {
@@ -33,8 +35,9 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    RadioButtonGroup,
-    Chart
+    // RadioButtonGroup,
+    Chart,
+    DateTimeMultiplePicker
   },
 
   vuex: {
@@ -51,6 +54,9 @@ export default {
         series: [],
         xAxis: []
       },
+      periods: [7, 30, 90],
+      defaultPeriod: 7,
+      beforeTime: 1,
       activated: 0,
       total: 0,
       loadingTrend: false,
@@ -137,6 +143,14 @@ export default {
 
   methods: {
     /**
+     * 时间组件时间改变回调
+     */
+    onTimeChange (start, end) {
+      this.period = parseInt((end - start) / 1000 / 60 / 60 / 24) + 1
+      this.beforeTime = parseInt((new Date() - end) / 1000 / 60 / 60 / 24)
+      this.getTrend()
+    },
+    /**
      * 获取产品激活趋势数据
      * 遍历产品列表，获取每种产品的激活趋势数据
      * @author shengzhi
@@ -146,7 +160,7 @@ export default {
       let xAxis = []
 
       // 数据日期范围
-      let range = createDayRange(1, this.period)
+      let range = createDayRange(this.beforeTime, this.period)
 
       this.loadingTrend = true
       api.statistics.getProductTrend(this.$route.params.id, range.start, range.end).then((res) => {

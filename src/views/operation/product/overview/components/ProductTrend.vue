@@ -5,7 +5,8 @@
     </div>
     <div class="tab-s2 tab-s2-full mt10 mb5">
       <div class="actions">
-        <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group>
+        <!-- <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group> -->
+        <date-time-multiple-picker :periods="periods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
       </div>
       <ul>
         <li v-for="item in locales.data.PRODUCT_FILTERS" class="tab-s2-item" @click="tabIndex = $index" :class="{'active': tabIndex === $index}">{{ item.label }}</li>
@@ -34,12 +35,13 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import RadioButtonGroup from 'components/RadioButtonGroup'
+// import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 import Statistic from 'components/Statistic2'
 import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
 import formatDate from 'filters/format-date'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import _ from 'lodash'
 
 export default {
@@ -48,9 +50,10 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    RadioButtonGroup,
+    // RadioButtonGroup,
     Chart,
-    Statistic
+    Statistic,
+    DateTimeMultiplePicker
   },
 
   vuex: {
@@ -75,6 +78,9 @@ export default {
         count: 0,
         change: 0
       },
+      periods: [7, 30, 90],
+      defaultPeriod: 7,
+      beforeTime: 1,
       doubled: 0, // 两倍时间段数据总和
       latest: 0, // 时间段数据总和
       loadingTrend: false, // 是否正在加载趋势数据
@@ -155,6 +161,14 @@ export default {
 
   methods: {
     /**
+     * 时间组件时间改变回调
+     */
+    onTimeChange (start, end) {
+      this.period = parseInt((end - start) / 1000 / 60 / 60 / 24) + 1
+      this.beforeTime = parseInt((new Date() - end) / 1000 / 60 / 60 / 24)
+      this.getTrend()
+    },
+    /**
      * 获取产品激活趋势数据
      * 遍历产品列表，获取每种产品的激活趋势数据
      * @author shengzhi
@@ -168,7 +182,7 @@ export default {
       this.doubled = 0
       this.latest = 0
       // 数据日期范围
-      let range = createDayRange(1, this.period * 2)
+      let range = createDayRange(this.beforeTime, this.period * 2)
 
       this.loadingTrend = true
       api.statistics.getProductTrend(this.$route.params.id, range.start, range.end).then((res) => {
