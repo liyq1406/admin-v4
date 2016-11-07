@@ -16,6 +16,9 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
+              <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+            </div>
+            <div class="filter-group-item">
               <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="getAlerts(true)" @search-activate="searching=!searching"  @press-enter="getAlerts(true)">
                 <x-select width="90px" :label="queryType.label" size="small">
                   <select v-model="queryType">
@@ -47,6 +50,7 @@ import Table from 'components/Table'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
+import _ from 'lodash'
 
 export default {
   name: 'AlertTable',
@@ -70,6 +74,7 @@ export default {
 
   data () {
     return {
+      exporting: false,
       selecting: true,
       alerts: [],
       visibilityOptions: [
@@ -129,11 +134,10 @@ export default {
       }
     },
 
-    // 查询条件
-    queryCondition () {
-      let condition = {
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
+    // 基本筛选条件
+    baseCondition () {
+      var condition = {
+        filter: ['alert_id', 'alert_name', 'content', 'create_date', 'from', 'id', 'is_read', 'location', 'mac', 'notify_type', 'product_id', 'product_name', 'tags', 'to', 'type'],
         order: {},
         query: {
           product_id: {
@@ -161,6 +165,16 @@ export default {
           condition.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
         }
       })
+
+      return condition
+    },
+
+    // 列表查询条件
+    queryCondition () {
+      let condition = _.cloneDeep(this.baseCondition)
+
+      condition.limit = this.countPerPage
+      condition.offset = (this.currentPage - 1) * this.countPerPage
 
       return condition
     },
@@ -205,6 +219,35 @@ export default {
       this.visibility = this.visibilityOptions[0]
       this.queryType = this.queryTypeOptions[0]
       this.getAlerts()
+    },
+
+    /**
+     * 处理导出 CSV 按钮点击
+     */
+    onExportBtnClick () {
+      if (this.exporting) {
+        return
+      }
+
+      let postData = {
+        name: '告警列表',
+        describe: '告警列表',
+        type: 3,
+        params: this.baseCondition
+      }
+
+      this.exporting = true
+      api.exportTask.createTask(postData).then((res) => {
+        this.showNotice({
+          type: 'success',
+          content: '导出CSV任务创建成功'
+        })
+        this.$route.router.go('/operation/settings/offline-data')
+        // this.onExportCancel()
+      }).catch((res) => {
+        this.exporting = false
+        this.handleError(res)
+      })
     },
 
     /**
