@@ -209,7 +209,7 @@ export default {
       },
       modal: {
         show: false,
-        type: 'add'
+        type: 'edit'
       },
       isShowModal: false,
       selectedProduct: {},
@@ -662,11 +662,7 @@ export default {
         edit: '菜谱修改成功！'
       })[this.type]
 
-      if (this.type === 'edit') {
-        process = api.recipes.editRecipes(appId, this.$route.params.id, token, params)
-      } else {
-        process = api.recipes.addRecipes(appId, token, params)
-      }
+      process = api.recipes.editRecipes(appId, this.$route.params.id, token, params)
 
       process.then((res) => {
         if (res.status === 200) {
@@ -775,6 +771,9 @@ export default {
 
 <style lang="stylus" scoped>
   @import '../../../../../../assets/stylus/common'
+  .menu
+    position relative
+    left -35px
   .settingArea
     margin-top 10px
   .mrt10
