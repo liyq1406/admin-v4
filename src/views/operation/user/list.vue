@@ -30,6 +30,9 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+              </div>
+              <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" @cancel="getUsers(true)" :placeholder="$t('common.placeholder.search')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers(true)">
                   <x-select width="100px" :label="queryType.label" size="small">
                     <select v-model="queryType">
@@ -60,6 +63,7 @@
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic2'
   import {createDayRange} from 'utils'
+  import _ from 'lodash'
 
   export default {
     name: 'UserList',
@@ -76,6 +80,7 @@
 
     data () {
       return {
+        exporting: false,
         allTotal: 0,
         // 是否缓存用户在线状态
         cacheOnlineType: false,
@@ -239,16 +244,14 @@
         })
         return result
       },
-      /**
-       * 列表查询条件
-       * @return {[type]} [description]
-       */
-      queryCondition () {
+
+      // 基本筛选条件
+      baseCondition () {
         var condition = {
           filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid', 'is_online'],
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
+          order: {
+            create_time: 'desc'
+          },
           query: {}
         }
 
@@ -286,6 +289,16 @@
         })
 
         return condition
+      },
+
+      // 列表查询条件
+      queryCondition () {
+        let condition = _.cloneDeep(this.baseCondition)
+
+        condition.limit = this.countPerPage
+        condition.offset = (this.currentPage - 1) * this.countPerPage
+
+        return condition
       }
     },
 
@@ -304,6 +317,35 @@
     },
 
     methods: {
+      /**
+       * 处理导出 CSV 按钮点击
+       */
+      onExportBtnClick () {
+        if (this.exporting) {
+          return
+        }
+
+        let postData = {
+          name: '用户列表',
+          describe: '用户列表',
+          type: 2,
+          params: this.baseCondition
+        }
+
+        this.exporting = true
+        api.exportTask.createTask(postData).then((res) => {
+          this.showNotice({
+            type: 'success',
+            content: '导出CSV任务创建成功'
+          })
+          this.$route.router.go('/operation/settings/offline-data')
+          // this.onExportCancel()
+        }).catch((res) => {
+          this.exporting = false
+          this.handleError(res)
+        })
+      },
+
       /**
        * 获取用户在线状态
        * @param  {[type]} userId [description]

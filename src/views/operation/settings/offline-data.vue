@@ -110,7 +110,11 @@ export default {
         let status
 
         if (item.status === 2) { // 导出中，显示百分比
-          status = toPercentage(item.finished / item.total, 0)
+          if (!item.finished) {
+            status = '0%'
+          } else {
+            status = toPercentage(item.finished / item.total, 0)
+          }
         } else { // 否则显示任务状态文案
           status = this._getTaskStatusLabel(item.status)
         }

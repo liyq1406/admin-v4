@@ -37,9 +37,14 @@
               </div>
             </div>
             <div class="filter-group fr">
-              <search-box :key.sync="query" :active="searching" :placeholder="$t('operation.user.major.search_placeholder')" @cancel="getMajorClient(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMajorClient(true)">
-                <button slot="search-button" @click="getMajorClient(true)" class="btn"><i class="fa fa-search"></i></button>
-              </search-box>
+              <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('operation.user.major.search_placeholder')" @cancel="getMajorClient(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMajorClient(true)">
+                  <button slot="search-button" @click="getMajorClient(true)" class="btn"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
             </div>
           </div>
           <x-table :headers="headers" :tables="tables" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-name="goDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
@@ -462,11 +467,9 @@ export default {
       })
       return result
     },
-    /**
-     * 获取大客户列表的条件
-     * @return {[type]} [description]
-     */
-    queryCondition () {
+
+    // 基本筛选条件
+    baseCondition () {
       var condition = {
         filter: [
           'id',
@@ -481,8 +484,6 @@ export default {
           'create_time',
           'device_sum'
         ],
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
         order: {'create_time': 'desc'},
         query: {}
       }
@@ -506,6 +507,16 @@ export default {
       })
 
       return condition
+    },
+
+    // 列表查询条件
+    queryCondition () {
+      let condition = _.cloneDeep(this.baseCondition)
+
+      condition.limit = this.countPerPage
+      condition.offset = (this.currentPage - 1) * this.countPerPage
+
+      return condition
     }
   },
 
@@ -522,6 +533,35 @@ export default {
   ready () {
   },
   methods: {
+    /**
+     * 处理导出 CSV 按钮点击
+     */
+    onExportBtnClick () {
+      if (this.exporting) {
+        return
+      }
+
+      let postData = {
+        name: '大客户列表',
+        describe: '大客户列表',
+        type: 4,
+        params: this.baseCondition
+      }
+
+      this.exporting = true
+      api.exportTask.createTask(postData).then((res) => {
+        this.showNotice({
+          type: 'success',
+          content: '导出CSV任务创建成功'
+        })
+        this.$route.router.go('/operation/settings/offline-data')
+        // this.onExportCancel()
+      }).catch((res) => {
+        this.exporting = false
+        this.handleError(res)
+      })
+    },
+
     getWarrantyList () {
       // console.log('搜索')
     },
