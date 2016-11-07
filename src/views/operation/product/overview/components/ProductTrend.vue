@@ -8,7 +8,7 @@
         <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group>
       </div>
       <ul>
-        <li v-for="item in locales.data.PRODUCT_FILTERS" @click="tabIndex = $index" :class="{'active': tabIndex === $index}">{{ item.label }}</li>
+        <li v-for="item in locales.data.PRODUCT_FILTERS" class="tab-s2-item" @click="tabIndex = $index" :class="{'active': tabIndex === $index}">{{ item.label }}</li>
       </ul>
     </div>
     <div class="row mt10">

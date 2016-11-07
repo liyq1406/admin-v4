@@ -13,7 +13,7 @@
     </info-card>
     <div class="tab-s2 mt20 mb5">
       <ul>
-        <li v-for="item in tabItems" @click="currIndex=$index" :class="{'active':currIndex===$index}">{{ item }}</li>
+        <li v-for="item in tabItems" class="tab-s2-item" @click="currIndex=$index" :class="{'active':currIndex===$index}">{{ item }}</li>
       </ul>
     </div>
     <div v-stretch="122">
@@ -481,7 +481,7 @@ export default {
   border-bottom 1px solid #CCC
   clearfix()
 
-  li
+  .tab-s2-item
     float left
     padding 10px 10px 7px
     cursor pointer

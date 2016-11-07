@@ -46,6 +46,7 @@ import log from './api/log'
 import interconnect from './api/interconnect'
 import message from './api/message'
 import customization from './api/customization'
+import exportTask from './api/export-task'
 
 export default {
   sms,
@@ -78,5 +79,6 @@ export default {
   log,
   interconnect,
   message,
-  customization
+  customization,
+  exportTask
 }

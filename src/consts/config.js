@@ -257,9 +257,17 @@ export const MAIN_NAV = {
       //   url: '/users/analysis'
       }]
     }, {
-      alias: 'snapshots', // 用户管理
-      icon: 'database',
+      alias: 'snapshots', // 快照分析
+      icon: 'line-chart',
       url: 'snapshots'
+    }, {
+      alias: 'settings', // 设置
+      icon: 'cog',
+      unfold: true, // 展开子级菜单
+      subs: [{
+        alias: 'offline_data',
+        url: '/settings/offline-data'
+      }]
     }]
   }
 }

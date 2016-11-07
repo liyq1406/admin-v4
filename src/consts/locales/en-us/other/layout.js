@@ -226,31 +226,10 @@ export default {
             analysis: 'User Performance Analysis'
           }
         },
-        device_map: {
-          label: 'Device Map'
-        },
-        firmwares: {
-          label: 'Firmware Management',
-          subs: {
-            overview: 'Overview',
-            versions: 'Version Management',
-            upgrade: 'Firmware Upgrade'
-          }
-        },
-        statistic: {
-          label: 'Statistical Ananlysis',
-          subs: {
-            products: 'Product Statistics',
-            users: 'User Statistics'
-          }
-        },
         settings: {
-          label: 'System Setting',
+          label: 'Settings',
           subs: {
-            auth: 'Authorization Management',
-            members: 'Member Management',
-            account: 'Account Information',
-            mail_templates: 'Email Module'
+            offline_data: 'Offline Data'
           }
         }
       }

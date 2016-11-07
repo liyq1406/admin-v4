@@ -226,31 +226,10 @@ export default {
             analysis: '用户行为分析'
           }
         },
-        device_map: {
-          label: '设备地图'
-        },
-        firmwares: {
-          label: '固件管理',
-          subs: {
-            overview: '概览',
-            versions: '版本管理',
-            upgrade: '固件升级'
-          }
-        },
-        statistic: {
-          label: '统计分析',
-          subs: {
-            products: '产品统计',
-            users: '用户统计'
-          }
-        },
         settings: {
-          label: '系统设置',
+          label: '设置',
           subs: {
-            auth: '授权管理',
-            members: '成员管理',
-            account: '帐号信息',
-            mail_templates: '邮件模板'
+            offline_data: '离线数据'
           }
         }
       }

@@ -19,6 +19,9 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+              </div>
+              <div class="filter-group-item">
                 <search-box :key.sync="key" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDealer(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDealer(true)">
                   <x-select width="100px" :label="queryType.label" size="small">
                     <select v-model="queryType">
@@ -85,16 +88,21 @@
   import Select from 'components/Select'
   import SearchBox from 'components/SearchBox'
   import Pager from 'components/Pager'
+  import DatePicker from 'components/DatePicker'
+  import Modal from 'components/Modal'
+  import _ from 'lodash'
 
   export default {
-    name: 'AddBroadcast',
+    name: 'DealerList',
 
     mixins: [globalMixins, pluginMixins],
 
     components: {
       'x-select': Select,
       SearchBox,
-      Pager
+      Pager,
+      Modal,
+      DatePicker
     },
 
     data () {
@@ -153,29 +161,74 @@
         countPerPage: 10,
         currentPage: 1,
         key: '',
-        adding: false
+        adding: false,
+        exporting: false
       }
     },
 
     computed: {
-      queryCondition () {
-        var condition = {
+      // 基本筛选条件
+      baseCondition () {
+        let condition = {
           filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time'],
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          query: {}
+          query: {},
+          order: {
+            create_time: 'desc'
+          }
         }
+
         if (this.key.length > 0) {
           condition.query[this.queryType.value] = {$in: [this.key]}
         }
+
+        return condition
+      },
+
+      // 列表查询条件
+      queryCondition () {
+        let condition = _.cloneDeep(this.baseCondition)
+
+        condition.limit = this.countPerPage
+        condition.offset = (this.currentPage - 1) * this.countPerPage
+
         return condition
       }
     },
+
     ready () {
       this.getDealer()
     },
 
     methods: {
+      /**
+       * 处理导出 CSV 按钮点击
+       */
+      onExportBtnClick () {
+        if (this.exporting) {
+          return
+        }
+
+        let postData = {
+          name: '经销商列表',
+          describe: '经销商列表',
+          type: 5,
+          params: this.baseCondition
+        }
+
+        this.exporting = true
+        api.exportTask.createTask(postData).then((res) => {
+          this.showNotice({
+            type: 'success',
+            content: '导出CSV任务创建成功'
+          })
+          this.$route.router.go('/operation/settings/offline-data')
+          // this.onExportCancel()
+        }).catch((res) => {
+          this.exporting = false
+          this.handleError(res)
+        })
+      },
+
       // 获取经销商列表
       getDealer (reset) {
         if (reset === true) {

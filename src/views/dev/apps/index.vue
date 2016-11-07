@@ -74,7 +74,7 @@
           <div class="panel-bd mt20">
             <div class="tab-s2 tab-s2-full mb5">
               <ul>
-                <li v-for="link in appNav[selectedApp.type]" :class="{'active': selectedTabIndex-0===$index}" @click="selectedTabIndex=$index">{{ link.label }}</li>
+                <li v-for="link in appNav[selectedApp.type]" class="tab-s2-item" :class="{'active': selectedTabIndex-0===$index}" @click="selectedTabIndex=$index">{{ link.label }}</li>
                 <!-- <li :class="{'active': selectedTabIndex-0===2}" v-show="selectedApp.type===2" @click="selectedTabIndex=2">升级管理</li>
                 <li :class="{'active': selectedTabIndex-0===2}" v-show="selectedApp.type===4" @click="selectedTabIndex=2">微信授权</li> -->
               </ul>

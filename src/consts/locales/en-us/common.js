@@ -59,6 +59,7 @@ export default {
   sex: 'Gender',
   action_success: 'Success',
   action_fail: 'Failed',
+  export_condition: '条件筛选',
   unit: {
     time: {
       hour: 'Hour',

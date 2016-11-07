@@ -60,6 +60,7 @@ export default {
   sex: '性别',
   action_success: '操作成功',
   action_fail: '操作失败',
+  export_condition: '条件筛选',
   unit: {
     time: {
       hour: '时',
