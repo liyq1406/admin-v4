@@ -34,6 +34,9 @@
                     <option v-for="industry in industrys" :value="industry">{{industry}}</option>
                   </select>
                 </x-select>
+                <span class="ml10">创建时间</span>
+                <date-time-range-picker @timechange="onTimeChange" :start-offset="timePickerStartOffset" :show-time="true"></date-time-range-picker>
+
               </div>
             </div>
             <div class="filter-group fr">
@@ -198,6 +201,7 @@ import Modal from 'components/Modal'
 import formatDate from 'filters/format-date'
 import AreaSelect from 'components/AreaSelect'
 import _ from 'lodash'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import { createDayRange } from 'utils'
 
 export default {
@@ -213,7 +217,8 @@ export default {
     Modal,
     Statistic,
     RadioButtonGroup,
-    DateTimeMultiplePicker
+    DateTimeMultiplePicker,
+    DateTimeRangePicker
   },
 
   data () {
@@ -372,25 +377,9 @@ export default {
         }
       ],
       // 当前用于排序的字段
-      sortKey: ''
-      // test: [
-      //   {
-      //     date: new Date('2016-08-06'),
-      //     val: 5
-      //   },
-      //   {
-      //     date: new Date('2016-08-05'),
-      //     val: 6
-      //   },
-      //   {
-      //     date: new Date('2016-08-04'),
-      //     val: 3
-      //   },
-      //   {
-      //     date: new Date('2016-08-03'),
-      //     val: 3
-      //   }
-      // ]
+      sortKey: '',
+      startTime: new Date() - 7 * 1000 * 60 * 60 * 24,
+      endTime: new Date()
     }
   },
   computed: {
@@ -486,7 +475,12 @@ export default {
           'device_sum'
         ],
         order: {'create_time': 'desc'},
-        query: {}
+        query: {
+          'create_time': {
+            '$gte': formatDate(this.startTime, 'yyyy-MM-ddThh:mm:ss.SSSZ', true),
+            '$lte': formatDate(this.endTime, 'yyyy-MM-ddThh:mm:ss.SSSZ', true)
+          }
+        }
       }
       /**
        * 搜索框搜索
@@ -527,8 +521,6 @@ export default {
       this.getMajorClient()
       // 获取统计信息
       this.getSummary()
-      // 获取趋势用于渲染曲线图
-      // this.getTrends()
     }
   },
   ready () {
@@ -613,22 +605,17 @@ export default {
       })
     },
     /**
-     * 图表时间范围改变
+     * 时间范围改变
      * @param  {[type]} startDate [description]
      * @param  {[type]} endDate   [description]
      * @return {[type]}           [description]
      */
-    onTimeChange (startDate, endDate) {
-      var startYear = startDate.getFullYear()
-      var startMonth = startDate.getMonth() + 1
-      var startDay = startDate.getDate()
-      var endYear = endDate.getFullYear()
-      var endMonth = endDate.getMonth() + 1
-      var endDay = endDate.getDate()
-      this.chartCondition.startDate = `${startYear}-${startMonth}-${startDay}`
-      this.chartCondition.endDate = `${endYear}-${endMonth}-${endDay}`
-      this.getTrends()
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getMajorClient()
     },
+
     /**
      * 获取统计信息
      * @return {[type]} [description]
