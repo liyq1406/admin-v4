@@ -1,6 +1,6 @@
 <template>
   <div class="time-range-picker-wrap">
-    <button @click='toggle' class="time-range-show" readonly="readonly">{{timeShowPanel}}
+    <button @click.prevent.stop='toggle' class="time-range-show" readonly="readonly">{{timeShowPanel}}
       <span class="fa fa-sort-down ml10"></span>
     </button>
     <div v-show='showChoosePanel' class="time-range-picker-panel" :style="{opacity: opacity}">
@@ -15,7 +15,7 @@
         <a @click.prevent.stop='selectEndTime' class="fa fa-calendar"></a>
       </div>
       <div class="choose-submit">
-        <button @click='dispatchTime'>{{ $t('components.ensure')}}</button>
+        <button @click.prevent.stop='dispatchTime'>{{ $t('components.ensure')}}</button>
       </div>
     </div>
     <date-time-picker :open.sync='showTimePicker' @timechange='timeChange' :value='defaultTime' :show-time='showTime'></date-time-picker>
@@ -44,6 +44,14 @@ export default {
     showTime: {
       type: Boolean,
       default: false
+    },
+    initStartTime: {
+      type: Number,
+      default: ''
+    },
+    initEndTime: {
+      type: Number,
+      default: ''
     }
   },
   data () {
@@ -65,8 +73,16 @@ export default {
   },
   ready () {
     var curTime = new Date()
-    this.defaultTime = this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * this.startOffset)
-    this.endTime = curTime
+    if (this.initStartTime) {
+      this.defaultTime = this.startTime = new Date(this.initStartTime)
+    } else {
+      this.defaultTime = this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * this.startOffset)
+    }
+    if (this.initEndTime) {
+      this.endTime = new Date(this.initEndTime)
+    } else {
+      this.endTime = curTime
+    }
     this._closeEvent = EventListener.listen(window, 'click', this.handleClose)
   },
   beforeDestroy () {
@@ -122,6 +138,16 @@ export default {
       var curTime = new Date()
       this.defaultTime = this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * this.startOffset)
       this.endTime = curTime
+    },
+    initStartTime () {
+      if (this.initStartTime) {
+        this.defaultTime = this.startTime = new Date(this.initStartTime)
+      }
+    },
+    initEndTime () {
+      if (this.initEndTime) {
+        this.endTime = new Date(this.initEndTime)
+      }
     }
   }
 }

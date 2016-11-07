@@ -13,19 +13,19 @@
           <!-- Start: 产品信息统计 -->
           <div class="row">
             <div class="col-6">
-              <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" :title="$t('operation.product.overview.total.count')" :tooltip="$t('operation.product.overview.total.tooltip')" color="gray" align="left" :titletop="true">
+              <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" :title="statistic.devices.sum.title" :tooltip="statistic.devices.sum.tooltip" color="gray" align="left" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" :title="$t('operation.product.overview.activated.count')" :tooltip="$t('operation.product.overview.activated.tooltip')" color="green" align="left" :titletop="true">
+              <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" :title="" :tooltip="" color="green" align="left" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" :title="$t('operation.product.overview.online.count')" :tooltip="$t('operation.product.overview.online.tooltip')" color="blue" :titletop="true">
+              <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" :title="" :tooltip="" color="blue" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.users.total" :change="statistic.users.change" :title="$t('operation.product.overview.users.count')" :tooltip="$t('operation.product.overview.users.tooltip')" color="orange" :titletop="true">
+              <statistic :total="statistic.users.total.total" :change="statistic.users.total.change" :title="" :tooltip="" color="orange" :titletop="true">
               </statistic>
             </div>
           </div>
@@ -34,9 +34,9 @@
       </div>
     </panel>
 
-    <product-trend></product-trend>
-    <product-active></product-active>
-    <product-distribution></product-distribution>
+    <product-trend v-if="isShowTrend"></product-trend>
+    <product-active v-if="isShowActive"></product-active>
+    <product-distribution v-if="isShowDistribution"></product-distribution>
   </div>
 </template>
 
@@ -46,10 +46,12 @@ import Panel from 'components/Panel'
 import Statistic from 'components/Statistic2'
 import Tooltip from 'components/Tooltip'
 import { globalMixins } from 'src/mixins'
-import { productSummaryMixin, setCurrProductMixin } from '../mixins'
+import { setCurrProductMixin } from '../mixins'
 import ProductTrend from './components/ProductTrend'
 import ProductActive from './components/ProductActive'
 import ProductDistribution from './components/ProductDistribution'
+import api from 'api'
+import config from 'consts/custom-config'
 
 export default {
   name: 'Overview',
@@ -57,7 +59,7 @@ export default {
   layouts: ['topbar', 'sidebar'],
 
   // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
-  mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
+  mixins: [globalMixins, setCurrProductMixin],
 
   vuex: {
     actions: {
@@ -78,37 +80,37 @@ export default {
 
   data () {
     return {
+      isShowTrend: true,
+      isShowActive: true,
+      isShowDistribution: true,
       // 统计
       statistic: {
-        // 用户总数
         users: {
-          options: {},
-          total: 0,
-          change: 0,
-          data: []
+          total: {
+            total: 0,
+            change: 0
+          },
+          online: {
+            total: 0,
+            change: 0
+          }
         },
         // 设备
         devices: {
           // 总数
           sum: {
-            options: {},
             total: 0,
-            change: 0,
-            data: []
+            change: 0
           },
           // 激活设备
           activated: {
-            options: {},
             total: 0,
-            change: 0,
-            data: []
+            change: 0
           },
           // 在线设备
           online: {
-            options: {},
             total: 0,
-            change: 0,
-            data: []
+            change: 0
           }
         }
       }
@@ -125,9 +127,59 @@ export default {
   route: {
     data () {
       this.getCurrProduct(this.$route.params.id)
-
-      // getProductSummary 方法来自 productSummaryMixin
+      this.getConfig()
       this.getProductSummary()
+    }
+  },
+  ready () {
+    this.initTranslate()
+  },
+  methods: {
+    getConfig () {
+      let key = config.genKey(this.$route.params.id)
+      api.customization.getCorpCustomization(key).then((res) => {
+        if (res.status === 200) {
+          if (res.data) {
+            this.parseConfig(JSON.parse(res.data[key]))
+          } else {
+            this.setDefaultConfig()
+          }
+        }
+      }).catch((res) => {
+        this.setDefaultConfig()
+        this.handleError(res)
+      })
+    },
+    setDefaultConfig () {},
+    parseConfig (config) {
+      this.isShowTrend = config.trend
+      this.isShowActive = config.active
+      this.isShowDistribution = config.distribution
+    },
+    initTranslate () {
+      this.statistic.users.total.title = this.$t('operation.product.overview.users.count')
+      this.statistic.users.total.tooltip = this.$t('operation.product.overview.users.tooltip')
+      this.statistic.devices.sum.title = this.$t('operation.product.overview.total.count')
+      this.statistic.devices.sum.tooltip = this.$t('operation.product.overview.total.tooltip')
+      this.statistic.devices.activated.title = this.$t('operation.product.overview.activated.count')
+      this.statistic.devices.activated.tooltip = this.$t('operation.product.overview.activated.tooltip')
+      this.statistic.devices.online.title = this.$t('operation.product.overview.online.count')
+      this.statistic.devices.online.tooltip = this.$t('operation.product.overview.online.tooltip')
+    },
+    getProductSummary () {
+      api.statistics.getProductSummary(this.$route.params.id).then((res) => {
+        if (res.status === 200) {
+          this.statistic.devices.activated.total = res.data.activated
+          this.statistic.devices.sum.total = res.data.total
+          this.statistic.devices.online.total = res.data.online
+          this.statistic.devices.sum.change = res.data.today_add_device || 0
+          this.statistic.devices.activated.change = res.data.today_activated_device || 0
+          this.statistic.users.total.total = res.data.total_user
+          this.statistic.users.total.change = res.data.today_add_user || 0
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
     }
   }
 }
