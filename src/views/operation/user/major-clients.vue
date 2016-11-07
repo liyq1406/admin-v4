@@ -218,6 +218,7 @@ export default {
 
   data () {
     return {
+      exporting: false,
       curProvince: {},
       curCity: {},
       curDistrict: {},
