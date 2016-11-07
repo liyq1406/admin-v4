@@ -1,4 +1,4 @@
-import config from './config'
+import config from 'consts/custom-config'
 import api from 'api'
 
 var ProductConfigPool = {} // 产品配置信息缓存

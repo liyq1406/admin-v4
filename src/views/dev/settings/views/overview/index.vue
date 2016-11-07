@@ -209,7 +209,7 @@ import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 import _ from 'lodash'
 import proxy from './proxy-api'
-import config from './config'
+import config from 'consts/custom-config'
 
 var QUOTAS = [
   { label: '指标1', value: 1 },
