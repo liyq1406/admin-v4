@@ -73,7 +73,7 @@ export default {
     },
     handleSubmit (cloneModal) {
       if (this.$validation.invalid) {
-        return
+        return this.$validate(true)
       }
       this.model = this.cloneModal
       if (this.delChecked === false) {

@@ -1,8 +1,8 @@
 <template>
   <li class="mrb15 itemli">
-    <div class="line32">
+    <div class="line32 mrb15">
       <!-- <span class="bg"></span> -->
-      <a class="mr10 pagelink" @mouseover="showOpera = true" @mouseout="leaveMouse"><i v-if="menu && menu.hasOwnProperty('name') && !menu.hasOwnProperty('type')" class=" mr10 cookingIcon"></i><span  @click.prevent.stop="handleMenu('edit', menu)" v-if="menu && menu.hasOwnProperty('type') && !menu.hasOwnProperty('name')">{{ menu.type }}</span><span @click.prevent.stop="handleCode('edit',menu)" v-if="menu && menu.hasOwnProperty('name')">{{ menu.name }}</span></a>
+      <a class="mr10 pagelink linearea box" @mouseover="showOpera = true" @mouseout="leaveMouse"><i v-if="menu && menu.hasOwnProperty('name') && !menu.hasOwnProperty('type')" class=" mr10 cookingIcon"></i><span  @click.prevent.stop="handleMenu('edit', menu)" v-if="menu && menu.hasOwnProperty('type') && !menu.hasOwnProperty('name')">{{ menu.type }}</span><span @click.prevent.stop="handleCode('edit',menu)" v-if="menu && menu.hasOwnProperty('name')">{{ menu.name }}</span></a>
       <div class="btn-area" v-if="showOpera" @mouseover="inMouse" @mouseout="leaveMouse">
         <button v-if="!menu.name" class="btn btn-ghost mr10" @click.prevent.stop="handleMenu('add', menu)"><i class="fa fa-plus"></i>添加子菜单</button>
         <button v-if="!menu.name" class="btn btn-ghost mr10" @click.prevent.stop="handleCode('add', menu)"><i class="fa fa-plus"></i>添加烹饪参数</button>
@@ -236,6 +236,22 @@
 
 <style lang="stylus">
   @import '../../../../../../assets/stylus/common'
+  .itemli
+    position relative
+  .linearea
+    position relative
+    padding-left 35px
+    top 16px
+  li li .box
+    /*padding-left 35px*/
+    &:after
+      position absolute
+      top 5px
+      left 0
+      content ""
+      width 28px
+      height 1px
+      border-bottom 2px dotted #ddd
   .cookingIcon
     background url('../../../../../../assets/images/weibo.png') no-repeat center top
     display inline-block
@@ -245,8 +261,8 @@
   .bg
     background url('../../../../../../assets/images/lastitem.png') no-repeat center top
     display inline-block
-    width 37px
-    height 16px
+    width 38px
+    height 32px
   .pagelink
     color #c0252e
   .mr10
@@ -258,8 +274,10 @@
     height 32px
   .btn-area
     display inline-block
+    position relative
+    top 16px
   .deepul
-    margin-left 20px
-    padding-left 20px
+    margin-left 40px
+    /*padding-left 20px*/
     border-left 2px dotted #ddd
   </style>

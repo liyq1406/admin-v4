@@ -34,12 +34,20 @@
                     <option v-for="industry in industrys" :value="industry">{{industry}}</option>
                   </select>
                 </x-select>
+                <span class="ml10">创建时间</span>
+                <date-time-range-picker @timechange="onTimeChange" :start-offset="timePickerStartOffset" :show-time="true"></date-time-range-picker>
+
               </div>
             </div>
             <div class="filter-group fr">
-              <search-box :key.sync="query" :active="searching" :placeholder="$t('operation.user.major.search_placeholder')" @cancel="getMajorClient(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMajorClient(true)">
-                <button slot="search-button" @click="getMajorClient(true)" class="btn"><i class="fa fa-search"></i></button>
-              </search-box>
+              <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('operation.user.major.search_placeholder')" @cancel="getMajorClient(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMajorClient(true)">
+                  <button slot="search-button" @click="getMajorClient(true)" class="btn"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
             </div>
           </div>
           <x-table :headers="headers" :tables="tables" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-name="goDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
@@ -193,6 +201,7 @@ import Modal from 'components/Modal'
 import formatDate from 'filters/format-date'
 import AreaSelect from 'components/AreaSelect'
 import _ from 'lodash'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import { createDayRange } from 'utils'
 
 export default {
@@ -208,11 +217,13 @@ export default {
     Modal,
     Statistic,
     RadioButtonGroup,
-    DateTimeMultiplePicker
+    DateTimeMultiplePicker,
+    DateTimeRangePicker
   },
 
   data () {
     return {
+      exporting: false,
       curProvince: {},
       curCity: {},
       curDistrict: {},
@@ -366,25 +377,9 @@ export default {
         }
       ],
       // 当前用于排序的字段
-      sortKey: ''
-      // test: [
-      //   {
-      //     date: new Date('2016-08-06'),
-      //     val: 5
-      //   },
-      //   {
-      //     date: new Date('2016-08-05'),
-      //     val: 6
-      //   },
-      //   {
-      //     date: new Date('2016-08-04'),
-      //     val: 3
-      //   },
-      //   {
-      //     date: new Date('2016-08-03'),
-      //     val: 3
-      //   }
-      // ]
+      sortKey: '',
+      startTime: new Date() - 7 * 1000 * 60 * 60 * 24,
+      endTime: new Date()
     }
   },
   computed: {
@@ -462,11 +457,9 @@ export default {
       })
       return result
     },
-    /**
-     * 获取大客户列表的条件
-     * @return {[type]} [description]
-     */
-    queryCondition () {
+
+    // 基本筛选条件
+    baseCondition () {
       var condition = {
         filter: [
           'id',
@@ -481,10 +474,13 @@ export default {
           'create_time',
           'device_sum'
         ],
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
         order: {'create_time': 'desc'},
-        query: {}
+        query: {
+          'create_time': {
+            '$gte': formatDate(this.startTime, 'yyyy-MM-ddThh:mm:ss.SSSZ', true),
+            '$lte': formatDate(this.endTime, 'yyyy-MM-ddThh:mm:ss.SSSZ', true)
+          }
+        }
       }
       /**
        * 搜索框搜索
@@ -506,6 +502,16 @@ export default {
       })
 
       return condition
+    },
+
+    // 列表查询条件
+    queryCondition () {
+      let condition = _.cloneDeep(this.baseCondition)
+
+      condition.limit = this.countPerPage
+      condition.offset = (this.currentPage - 1) * this.countPerPage
+
+      return condition
     }
   },
 
@@ -515,13 +521,40 @@ export default {
       this.getMajorClient()
       // 获取统计信息
       this.getSummary()
-      // 获取趋势用于渲染曲线图
-      // this.getTrends()
     }
   },
   ready () {
   },
   methods: {
+    /**
+     * 处理导出 CSV 按钮点击
+     */
+    onExportBtnClick () {
+      if (this.exporting) {
+        return
+      }
+
+      let postData = {
+        name: '大客户列表',
+        describe: '大客户列表',
+        type: 4,
+        params: this.baseCondition
+      }
+
+      this.exporting = true
+      api.exportTask.createTask(postData).then((res) => {
+        this.showNotice({
+          type: 'success',
+          content: '导出CSV任务创建成功'
+        })
+        this.$route.router.go('/operation/settings/offline-data')
+        // this.onExportCancel()
+      }).catch((res) => {
+        this.exporting = false
+        this.handleError(res)
+      })
+    },
+
     getWarrantyList () {
       // console.log('搜索')
     },
@@ -572,22 +605,17 @@ export default {
       })
     },
     /**
-     * 图表时间范围改变
+     * 时间范围改变
      * @param  {[type]} startDate [description]
      * @param  {[type]} endDate   [description]
      * @return {[type]}           [description]
      */
-    onTimeChange (startDate, endDate) {
-      var startYear = startDate.getFullYear()
-      var startMonth = startDate.getMonth() + 1
-      var startDay = startDate.getDate()
-      var endYear = endDate.getFullYear()
-      var endMonth = endDate.getMonth() + 1
-      var endDay = endDate.getDate()
-      this.chartCondition.startDate = `${startYear}-${startMonth}-${startDay}`
-      this.chartCondition.endDate = `${endYear}-${endMonth}-${endDay}`
-      this.getTrends()
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getMajorClient()
     },
+
     /**
      * 获取统计信息
      * @return {[type]} [description]

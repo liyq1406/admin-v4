@@ -675,6 +675,15 @@ export default {
         })
         return
       }
+      if (this.major_ingredients.length === 1 && !this.major_ingredients[0].name) {
+        alert('请填写主料！')
+        return
+      }
+
+      if (this.minor_ingredients.length === 1 && !this.minor_ingredients[0].name) {
+        alert('请填写辅料！')
+        return
+      }
 
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token

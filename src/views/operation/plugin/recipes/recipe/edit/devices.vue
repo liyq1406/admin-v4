@@ -113,10 +113,11 @@
               <label class="form-control col-6">设备指令:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入设备指令'" class="input-text-wrap required-sign">
-                  <textarea v-model="model.autoexec" name="model.autoexec" type="text" v-validate:autoexec="['required']" class="input-text"></textarea>
+                  <textarea v-model="model.autoexec" name="model.autoexec" type="text" v-validate:autoexec="{required: true, format: 'trim'}" class="input-text"></textarea>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.autoexec.touched && $validation.autoexec.required">{{ $t('common.validation.required', {field: '设备指令'}) }}</span>
+                  <span v-if="$validation.autoexec.touched && $validation.autoexec.format">设备指令不允许前后带空格</span>
                 </div>
               </div>
             </div>
@@ -317,6 +318,7 @@ export default {
     },
 
     editInstructions (device) {
+      console.log(device)
       this.instructionsShow = true
       this.instructionsModal = {
         device: device,
@@ -340,7 +342,9 @@ export default {
       var no = this.recipe.devices.indexOf(obj.device)
       var lesno = this.recipe.devices[no].prompts.indexOf(obj.tip)
       if (this.tipsType === 'add') {
-        this.recipe.devices[no].prompts.push({prompt_text: obj.prompt_text})
+        var device = _.clone(this.recipe.devices[no])
+        device.prompts.push({prompt_text: obj.prompt_text})
+        this.recipe.devices.$set(no, device)
         this.onTipsCancel()
         // this.editOthers('edit')
       } else if (this.tipsType === 'edit') {

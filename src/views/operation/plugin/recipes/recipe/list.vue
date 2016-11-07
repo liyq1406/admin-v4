@@ -276,8 +276,8 @@ export default {
      * @param {Object} recipe 目标菜谱
      */
     onNameClick (recipe) {
-      console.log(recipe)
-      this.$route.router.go({path: `${recipe.origin._id}/edit/${recipe.origin.type}/basic-info`, append: true})
+      var type = recipe.origin.type || 1
+      this.$route.router.go({path: `${recipe.origin._id}/edit/${type}/basic-info`, append: true})
     },
 
     jumpAdd () {

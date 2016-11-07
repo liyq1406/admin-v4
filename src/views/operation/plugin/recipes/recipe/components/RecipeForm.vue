@@ -1114,6 +1114,16 @@ export default {
         }
       }
 
+      if (this.major_ingredients.length === 1 && !this.major_ingredients[0].name) {
+        alert('请填写主料！')
+        return
+      }
+
+      if (this.minor_ingredients.length === 1 && !this.minor_ingredients[0].name) {
+        alert('请填写辅料！')
+        return
+      }
+
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
@@ -1287,6 +1297,7 @@ export default {
     },
     // 删除指令
     deleteIns (obj) {
+      alert(123)
       var result = window.confirm('确认删除该设备烹饪设备?')
       if (result === true) {
         var no = this.recipe.devices.indexOf(obj.device)
@@ -1431,6 +1442,9 @@ export default {
 
 <style lang="stylus" scoped>
   @import '../../../../../../assets/stylus/common'
+  .menu
+    position relative
+    left -35px
   .actions
     margin-top 20px
     margin-bottom 20px
