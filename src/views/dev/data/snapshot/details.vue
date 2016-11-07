@@ -54,7 +54,7 @@
               <div class="device-details-box">
                 <div class="device-msg-box">
                   <div class="header-box row">
-                    <div class="device-base-msg-box col-15 row">
+                    <div class="device-base-msg-box col-10 row">
                       <div class="device-picture col-6">
                         <img :src="deviceThumb"/>
                       </div>
@@ -75,12 +75,13 @@
                         <button class="btn btn-ghost btn-sm mt10" @click="showEditModal=true"><i class="fa fa-edit"></i>选择显示的索引数据</button>
                       </div>
                     </div>
-                    <div class="operation-box col-9">
+                    <div class="operation-box col-14">
                       <div class="check-device hidden">
                         <button class="btn btn-primary" v-link="{path: '/dev/products/' + this.$route.params.product_id + '/devices/' + selectedDeviceData.id}">查看设备</button>
                       </div>
                       <div class="radio-group-periods">
                         <radio-button-group :items="periods" :value.sync="period" @select="getSnapshot"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+                        <!-- <date-time-multiple-picker :periods="computedPeriods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker> -->
                       </div>
                       <div class="radio-group-box">
                         <button class="btn btn-ghost mr10" @click="refresh">
@@ -161,6 +162,7 @@ import { globalMixins } from 'src/mixins'
 import Alert from 'components/Alert'
 import Breadcrumb from 'components/Breadcrumb'
 import _ from 'lodash'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import formatDate from 'filters/format-date'
 
 export default {
@@ -177,7 +179,8 @@ export default {
     Breadcrumb,
     Chart,
     'x-select': Select,
-    'x-alert': Alert
+    'x-alert': Alert,
+    DateTimeMultiplePicker
   },
 
   data () {
@@ -221,6 +224,9 @@ export default {
           data: [0, 0, 0, 0, 0, 0, 0]
         }
       ],
+      // periods: [7, 30, 90],
+      defaultPeriod: 7,
+      beforeTime: 1,
       snapshots: [],
       allSnapshots: [],
       loadingData: true,
@@ -234,6 +240,15 @@ export default {
   },
 
   computed: {
+    computedPeriods () {
+      var result = [1, 7, 30]
+      if (this.periods.length) {
+        result = this.periods.map((item) => {
+          return item.value
+        })
+      }
+      return result
+    },
     // 图表配置
     chartOptions () {
       return {
@@ -423,6 +438,15 @@ export default {
   },
 
   methods: {
+    /**
+     * 时间组件时间改变回调
+     */
+    onTimeChange (start, end) {
+      this.period = parseInt((end - start) / 1000 / 60 / 60 / 24) + 1
+      this.beforeTime = parseInt((new Date() - end) / 1000 / 60 / 60 / 24)
+      this.getSnapshot()
+    },
+
     canBeCounted (type) {
       return (type >= 2 && type <= 5) || type === 8 || type === 9 // 可统计的数据端点类型
     },
