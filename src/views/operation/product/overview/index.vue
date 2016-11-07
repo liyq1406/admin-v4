@@ -13,19 +13,19 @@
           <!-- Start: 产品信息统计 -->
           <div class="row">
             <div class="col-6">
-              <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" :title="statistic.devices.sum.title" :tooltip="statistic.devices.sum.tooltip" color="gray" align="left" :titletop="true">
+              <statistic :total="statisticsDisplay[1].total" :change="statisticsDisplay[1].change" :title="statisticsDisplay[1].title" :tooltip="statisticsDisplay[1].tooltip" color="gray" align="left" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" :title="" :tooltip="" color="green" align="left" :titletop="true">
+              <statistic :total="statisticsDisplay[2].total" :change="statisticsDisplay[2].change" :title="statisticsDisplay[2].title" :tooltip="statisticsDisplay[2].tooltip" color="green" align="left" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" :title="" :tooltip="" color="blue" :titletop="true">
+              <statistic :total="statisticsDisplay[3].total" :change="statisticsDisplay[3].change" :title="statisticsDisplay[3].title" :tooltip="statisticsDisplay[3].tooltip" color="blue" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.users.total.total" :change="statistic.users.total.change" :title="" :tooltip="" color="orange" :titletop="true">
+              <statistic :total="statisticsDisplay[4].total" :change="statisticsDisplay[3].change" :title="statisticsDisplay[4].title" :tooltip="statisticsDisplay[4].tooltip" color="orange" :titletop="true">
               </statistic>
             </div>
           </div>
@@ -51,7 +51,8 @@ import ProductTrend from './components/ProductTrend'
 import ProductActive from './components/ProductActive'
 import ProductDistribution from './components/ProductDistribution'
 import api from 'api'
-import config from 'consts/custom-config'
+import customConfig from 'consts/custom-config'
+import _ from 'lodash'
 
 export default {
   name: 'Overview',
@@ -80,6 +81,7 @@ export default {
 
   data () {
     return {
+      quatas: {},
       isShowTrend: true,
       isShowActive: true,
       isShowDistribution: true,
@@ -88,11 +90,15 @@ export default {
         users: {
           total: {
             total: 0,
-            change: 0
+            change: 0,
+            title: '',
+            tooltip: ''
           },
           online: {
             total: 0,
-            change: 0
+            change: 0,
+            title: '',
+            tooltip: ''
           }
         },
         // 设备
@@ -100,17 +106,23 @@ export default {
           // 总数
           sum: {
             total: 0,
-            change: 0
+            change: 0,
+            title: '',
+            tooltip: ''
           },
           // 激活设备
           activated: {
             total: 0,
-            change: 0
+            change: 0,
+            title: '',
+            tooltip: ''
           },
           // 在线设备
           online: {
             total: 0,
-            change: 0
+            change: 0,
+            title: '',
+            tooltip: ''
           }
         }
       }
@@ -121,6 +133,19 @@ export default {
     deviceThumb () {
       let pics = this.currentProduct.pics
       return (pics && pics.length && pics[0]) ? pics[0] : '/static/images/device_thumb.png'
+    },
+    statisticsDisplay () {
+      let res = {
+        1: {},
+        2: {},
+        3: {},
+        4: {}
+      }
+      for (let i in this.quatas) {
+        res[i] = this.getQuatasValue(this.quatas[i], i)
+      }
+
+      return res
     }
   },
 
@@ -135,18 +160,73 @@ export default {
     this.initTranslate()
   },
   methods: {
+    getQuatasValue (quata, index) {
+      let res = {}
+      if (quata) {
+        if (quata.dataFrom === customConfig.DATAFROM.preset) {
+          res = _.clone(this.getPresetValue(quata.preset))
+          if (res) {
+            res.title = quata.name
+            res.tooltip = ''
+          }
+        }
+      } else {
+        res = _.clone(this.getDefaltPresetValue(index))
+      }
+      return res
+    },
+    getDefaltPresetValue (index) {
+      let res = {}
+      switch (index) {
+        case 1:
+          res = this.statistic.devices.sum
+          break
+        case 2:
+          res = this.statistic.devices.activated
+          break
+        case 3:
+          res = this.statistic.devices.online
+          break
+        case 4:
+          res = this.statistic.users.total
+          break
+        default:
+          break
+      }
+      return res
+    },
+    getPresetValue (index) {
+      let res = {}
+      switch (index) {
+        case customConfig.PRESET.devices_count:
+          res = this.statistic.devices.sum
+          break
+        case customConfig.PRESET.devices_active:
+          res = this.statistic.devices.activated
+          break
+        case customConfig.PRESET.devices_online:
+          res = this.statistic.devices.online
+          break
+        case customConfig.PRESET.users_count:
+          res = this.statistic.users.total
+          break
+        case customConfig.PRESET.users_online:
+          res = this.statistic.users.total
+          break
+        default:
+          break
+      }
+      return res
+    },
     getConfig () {
-      let key = config.genKey(this.$route.params.id)
+      let key = customConfig.genKey(this.$route.params.id)
       api.customization.getCorpCustomization(key).then((res) => {
         if (res.status === 200) {
           if (res.data) {
             this.parseConfig(JSON.parse(res.data[key]))
-          } else {
-            this.setDefaultConfig()
           }
         }
       }).catch((res) => {
-        this.setDefaultConfig()
         this.handleError(res)
       })
     },
@@ -155,6 +235,15 @@ export default {
       this.isShowTrend = config.trend
       this.isShowActive = config.active
       this.isShowDistribution = config.distribution
+      this.quatas = config.quatas
+      for (let i in this.quatas) {
+        if (this.quatas[i].dataFrom === customConfig.DATAFROM.datapoint) {
+          this.getStatictisValue(this.quatas[i], i)
+        }
+      }
+    },
+    getStatictisValue (quata, index) {
+      console.log(quata, index)
     },
     initTranslate () {
       this.statistic.users.total.title = this.$t('operation.product.overview.users.count')

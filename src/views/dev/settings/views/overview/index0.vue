@@ -12,10 +12,6 @@
                 <input v-model="selectProduct" type="radio" :value="product.id" name="products"/>
                 <label>{{ product.name }}</label>
               </div>
-              <x-radios :items="productsOption"
-                          name="products"
-                        @select="">
-              </x-radios>
               <div v-if="!releasedProduct.length" class="fl input-radio-wrap">
                 <label>暂无已发布设备</label>
               </div>
@@ -27,11 +23,7 @@
             </div>
             <div class="controls col-21">
               <div class="radio-button-wrap">
-                <radio-button-group :items="quotasInfo"
-                                     color="red"
-                               :value.sync="selectedQuota"
-                                   @select="quotaSelect">
-                </radio-button-group>
+                <radio-button-group :items="quotasInfo" color="red" :value.sync="selectedQuota" @select="quotaSelect"></radio-button-group>
               </div>
               <div class="quotas-detail mt30">
                 <div class="{{ arrowClass }}"></div>
@@ -42,10 +34,7 @@
                       <label>数据来源:</label>
                     </div>
                     <div class="controls col-21">
-                      <radio-button-group :items="dataFromInfo"
-                                     :value.sync="curQuotaData.dataFrom"
-                                         @select="dataFromSelect">
-                      </radio-button-group>
+                      <radio-button-group :items="dataFromInfo" :value.sync="curQuotaData.dataFrom" @select="dataFromSelect"></radio-button-group>
                     </div>
                   </div>
                   <div class="form-row row">
@@ -54,7 +43,7 @@
                     </div>
                     <div class="controls col-6">
                       <div class="input-text-wrap">
-                        <input v-model="quotaData[curQuotaIndex].name" type="text" placeholder="请输入指标名称" class="input-text" v-validate:name="{required: true}" lazy/>
+                        <input v-model="curQuotaData.name" type="text" placeholder="请输入指标名称" class="input-text" v-validate:name="{required: true}" lazy/>
                         <div class="form-tips form-tips-error">
                           <span v-if="$validation.name.touched && $validation.name.required">指标名称不能为空</span>
                         </div>
@@ -66,10 +55,18 @@
                       <label>绑定数据项:</label>
                     </div>
                     <div class="controls col-21">
-                      <x-radios :items="presetOption"
-                                  name="preset"
-                                @select="">
-                      </x-radios>
+                      <div class="input-radio-wrap">
+                        <input v-model="curQuotaData.dataBind" type="radio" :value="1" name="bind-data"/>
+                        <label>授权数</label>
+                        <input v-model="curQuotaData.dataBind" type="radio" :value="4" name="bind-data"/>
+                        <label>用户数</label>
+                        <input v-model="curQuotaData.dataBind" type="radio" :value="2" name="bind-data"/>
+                        <label>激活数</label>
+                        <input v-model="curQuotaData.dataBind" type="radio" :value="5" name="bind-data"/>
+                        <label>用户在线数</label>
+                        <input v-model="curQuotaData.dataBind" type="radio" :value="3" name="bind-data"/>
+                        <label>设备在线数</label>
+                      </div>
                     </div>
                   </div>
                   <template v-if="curQuotaData.dataFrom === 1">
@@ -78,13 +75,21 @@
                         <label>数据规则:</label>
                       </div>
                       <div class="control col-6">
-                        <statistics-rule-options :product-id="selectProduct"></statistics-rule-options>
+                        <x-select width="120px" :label="selectedRule.name" :size="selectSize">
+                          <select v-model="selectedRule" @change="statisticsRuleSelect">
+                            <option v-for="option in statisticsRulesOptions" :value="option">{{ option.name }}</option>
+                          </select>
+                        </x-select>
                       </div>
                       <div class="form-control col-3">
                         <label>数据端点:</label>
                       </div>
                       <div class="control col-6">
-                        <datapoint-options :product-id="selectProduct"></datapoint-options>
+                        <x-select width="100px" :label="selectedDatapoint.name" :size="selectSize">
+                          <select v-model="selectedDatapoint" @change="datapointSelect">
+                            <option v-for="option in datapointOptions" :value="option">{{ option.name }}</option>
+                          </select>
+                        </x-select>
                       </div>
                     </div>
                     <div v-if="selectedRule.fineness && selectedRule.fineness.length" class="form-row row">
@@ -199,16 +204,12 @@
 <script>
 import api from 'api'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import RadioGroup from 'components/RadioGroup'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 import _ from 'lodash'
 import proxy from './proxy-api'
 import config from 'consts/custom-config'
-import XRadios from './components/x-radios'
-import StatisticsRuleOptions from './components/statistics-rule-options'
-import DatapointOptions from './components/datapoint-options'
 
 var QUOTAS = [
   { label: '指标1', value: 1 },
@@ -221,15 +222,6 @@ var QUOTAS_TYPES = [
   { label: '数据端点', value: 1 },
   { label: '绑定预设项', value: 2 }
 ]
-
-var PRESETSOPTION = [
-  { label: '设备总数', value: 1 },
-  { label: '用户数', value: 2 },
-  { label: '激活数', value: 3 },
-  { label: '用户在线数', value: 4 },
-  { label: '设备在线数', value: 5 }
-]
-
 export default {
   name: 'custom-overview',
 
@@ -244,22 +236,16 @@ export default {
   components: {
     'x-select': Select,
     RadioButtonGroup,
-    RadioGroup,
-    XRadios,
-    DateTimeRangePicker,
-    StatisticsRuleOptions,
-    DatapointOptions
+    DateTimeRangePicker
   },
 
   data () {
     return {
-      curQuotaIndex: 1,
       initStartTime: 0,
       initEndTime: 0,
       editing: false,
       quotasInfo: QUOTAS,
       dataFromInfo: QUOTAS_TYPES,
-      presetOption: PRESETSOPTION,
       selectedQuota: 1,
       curQuotaData: {
         // dataFrom: 1,
@@ -272,12 +258,7 @@ export default {
       },
       features: {},
       selectProduct: '',
-      quotaData: {
-        1: {},
-        2: {},
-        3: {},
-        4: {}
-      },
+      quotaData: {},
       statisticsRulesOptions: [],
       selectedRule: {
         name: ''
@@ -334,18 +315,6 @@ export default {
     },
     dpMode () {
       return this.selectedRule.dp_mode || []
-    },
-    productsOption () {
-      let res = []
-      if (this.releasedProduct.length) {
-        this.releasedProduct.forEach((item) => {
-          res.push({
-            value: item.id,
-            label: item.name
-          })
-        })
-      }
-      return res
     }
   },
   watch: {

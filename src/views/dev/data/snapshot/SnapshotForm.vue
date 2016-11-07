@@ -76,7 +76,8 @@
                       <tr>
                         <th width="5%">选择</th>
                         <th widht="10%">索引</th>
-                        <th width="30%">数据类型</th>
+                        <th widht="10%">端点ID</th>
+                        <th width="20%">数据类型</th>
                         <th width="15%">单位符号</th>
                         <th width="40%">描述</th>
                       </tr>
@@ -85,6 +86,7 @@
                       <tr v-for="dp in datapoints | limitBy countPerPage (currentPage-1)*countPerPage">
                         <td><input :checked="dp.selected" type="checkbox" @click="toggleSelected(dp)"/></td>
                         <td>{{dp.index}}</td>
+                        <td>{{dp.name}}</td>
                         <td>{{getTypeByValue(dp.type).label}}</td>
                         <td>{{dp.symbol}}</td>
                         <td>{{dp.description}}</td>
