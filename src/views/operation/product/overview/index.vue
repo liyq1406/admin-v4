@@ -141,7 +141,7 @@ export default {
         3: {},
         4: {}
       }
-      for (let i in this.quatas) {
+      for (let i in res) {
         res[i] = this.getQuatasValue(this.quatas[i], i)
       }
 
@@ -171,7 +171,7 @@ export default {
           }
         }
       } else {
-        res = _.clone(this.getDefaltPresetValue(index))
+        res = _.clone(this.getDefaltPresetValue(parseInt(index)))
       }
       return res
     },
