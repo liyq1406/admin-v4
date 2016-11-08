@@ -35,13 +35,19 @@
         </validator>
       </div>
     </div>
-    <div class="old-entrance" v-if="isShowOldEntrance">
-      <a href="http://admin-v3.xlink.cn/" target="_blank">{{ $t('auth.old_entrance') }} &gt;</a>
+    <div class="extra-actions">
+      <div class="old-entrance" v-if="isShowOldEntrance">
+        <a href="http://admin-v3.xlink.cn/" target="_blank">{{ $t('auth.old_entrance') }} &gt;</a>
+      </div>
+      <div class="lang-switcher">
+        <a href="#" :class="{'active': currLang === 'zh-cn'}" @click.prevent.stop="switchLanguage('zh-cn')">中文</a> / <a href="#" :class="{'active': currLang === 'en-us'}"  @click.prevent.stop="switchLanguage('en-us')">English</a>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
   import api from 'api'
   import { globalMixins } from 'src/mixins'
   import { setLoadingStatus } from 'store/actions/system'
@@ -65,6 +71,7 @@
 
     data () {
       return {
+        currLang: window.localStorage.getItem('lang'),
         isShowOldEntrance: IS_SHOW_OLD_ENTRANCE,
         model: {
           account: '',
@@ -99,6 +106,18 @@
     },
 
     methods: {
+      /**
+       * 切换语言
+       */
+      switchLanguage (lang) {
+        if (lang !== this.currLang) {
+          this.currLang = lang
+          window.localStorage.setItem('lang', lang)
+          Vue.config.lang = lang
+          document.location.reload()
+        }
+      },
+
       // 设置 Cookies
       setCookie (name, value) {
         var Days = 30
@@ -205,12 +224,26 @@
         .btn
           cursor wait
 
-  .old-entrance
+  .extra-actions
     width 500px
     margin 10px auto 0
-    text-align right
+    color #CCC
+    clearfix()
 
     a
-      margin-right 10px
       color #CCC
+
+      &:hover
+        color #FFF
+        text-decoration underline
+
+      &.active
+        color #FFF
+
+    .lang-switcher
+      margin-left 10px
+
+    .old-entrance
+      float right
+      margin-right 10px
 </style>

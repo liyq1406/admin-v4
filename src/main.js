@@ -39,9 +39,15 @@ Vue.use(VueVlidator)
 // 加载多语言插件
 // 手动切换语言设置 `Vue.config.lang = 'en-us'`
 // 详见：https://github.com/kazupon/vue-i18n
+let browserLang = browser.language === 'zh-cn' || browser.language === 'zh-tw' ? 'zh-cn' : 'en-us'
+let lang = window.localStorage.getItem('lang')
+
+if (lang) {
+  browserLang = lang
+}
 Vue.use(i18n, {
   // 根据浏览器语言自动进行语言切换，默认为'en-us'
-  lang: browser.language === 'zh-cn' || browser.language === 'zh-tw' ? 'zh-cn' : 'en-us',
+  lang: browserLang,
   // lang: 'zh-cn',
   locales: locales
 })
