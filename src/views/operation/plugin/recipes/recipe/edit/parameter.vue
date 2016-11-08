@@ -60,17 +60,17 @@
       <modal :show.sync="addFirMenuShow" width="480px">
         <h3 slot="header">添加菜单</h3>
         <div slot="body" class="form">
-          <validator name="validation">
+          <!-- <validator v-if="addFirMenuShow" name="validation">
             <form autocomplete="off" novalidate>
               <div class="form-row row">
                 <label class="form-control col-6">菜单名称:</label>
                 <div class="controls col-18">
                   <div class="input-text-wrap">
-                    <input v-model="addMenuModal.type" name="addMenuModal.type" type="text" class="input-text" v-validate:firmenu="{required: true, maxlength: 20, format: 'trim'}" lazy>
+                    <input v-model="addMenuModal.type" name="addMenuModal.type" type="text" class="input-text" v-validate:firmenu="{required: true, maxlength: 10, format: 'trim'}" lazy>
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.firmenu.touched && $validation.firmenu.required">请输入菜单名称</span>
-                    <span v-if="$validation.firmenu.modified && $validation.firmenu.maxlength">菜单名称不能超过20位</span>
+                    <span v-if="$validation.firmenu.modified && $validation.firmenu.maxlength">菜单名称不能超过10位</span>
                     <span v-if="$validation.firmenu.touched && $validation.firmenu.format">菜单名称不允许前后带空格</span>
                   </div>
                 </div>
@@ -80,7 +80,8 @@
                 <button @click.prevent.stop="cancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               </div>
             </form>
-          </validator>
+          </validator> -->
+          <menu-form v-if="addFirMenuShow" :type="add" :menu={} @submit="addFirstMenu" @close="cancel"></menu-form>
         </div>
       </modal>
       <!-- 添加烹饪参数 -->
@@ -107,6 +108,7 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import TagInput from 'components/TagInput'
 import CodeForm from '../components/CodeForm'
+import MenuForm from '../components/MenuForm'
 
 export default {
   name: 'EditRecipe',
@@ -125,6 +127,7 @@ export default {
     'tag-input': TagInput,
     Modal,
     CodeForm,
+    MenuForm,
     'x-select': Select
   },
 
@@ -710,18 +713,18 @@ export default {
     },
     openFirAdd () {
       this.addFirMenuShow = true
-      this.$resetValidation()
+      // this.$resetValidation()
     },
     openFirCodeAdd () {
       this.addFirCodeShow = true
     },
     // 创建一级菜单
-    addFirstMenu () {
-      if (this.$validation.invalid) {
-        return
-      }
+    addFirstMenu (obj) {
+      // if (this.$validation.invalid) {
+      //   return
+      // }
       this.menus.push({
-        type: this.addMenuModal.type
+        type: obj.type
       })
       this.addFirMenuShow = false
       this.addMenuModal.type = ''
@@ -759,7 +762,7 @@ export default {
     },
     cancel () {
       // console.log(this)
-      this.$resetValidation()
+      // this.$resetValidation()
       this.addFirMenuShow = false
     },
     closeCode () {

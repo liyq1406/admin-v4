@@ -361,25 +361,21 @@
             <modal :show.sync="addFirMenuShow" width="480px">
               <h3 slot="header">添加菜单</h3>
               <div slot="body" class="form">
-                <form autocomplete="off" novalidate>
+                <!-- <form autocomplete="off" novalidate>
                   <div class="form-row row" v-if="addFirMenuShow">
                     <label class="form-control col-6">菜单名称:</label>
                     <div class="controls col-18">
                       <div class="input-text-wrap">
                         <input v-model="addMenuModal.type" name="addMenuModal.type" type="text" class="input-text" lazy>
                       </div>
-                      <!-- <div class="form-tips form-tips-error">
-                        <span v-if="$validation.firmenu.touched && $validation.firmenu.required">请输入菜单名称</span>
-                        <span v-if="$validation.firmenu.modified && $validation.firmenu.maxlength">菜单名称不能超过10位</span>
-                        <span v-if="$validation.firmenu.touched && $validation.firmenu.format">菜单名称不允许前后带空格</span>
-                      </div> -->
                     </div>
                   </div>
                   <div class="form-actions">
                     <button @click.prevent.stop="addFirstMenu" class="btn btn-primary">确定</button>
                     <button @click.prevent.stop="cancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
                   </div>
-                </form>
+                </form> -->
+                <menu-form v-if="addFirMenuShow" :type="add" :menu={} @submit="addFirstMenu" @close="cancel"></menu-form>
               </div>
             </modal>
             <!-- 添加一级烹饪参数 -->
@@ -608,6 +604,7 @@ import TreeItem from './TreeItem'
 import DeviceForm from './DeviceForm'
 import InstructionsForm from '../components/InstructionsForm'
 import TipsForm from '../components/TipsForm'
+import MenuForm from './MenuForm'
 import CodeForm from '../components/CodeForm'
 
 export default {
@@ -619,6 +616,7 @@ export default {
 
   components: {
     CodeForm,
+    MenuForm,
     'tree-item': TreeItem,
     'search-box': SearchBox,
     'pager': Pager,
@@ -1352,16 +1350,16 @@ export default {
       // this.$resetValidation()
     },
     // 创建一级菜单
-    addFirstMenu () {
+    addFirstMenu (obj) {
       // if (this.$validation.invalid) {
       //   return
       // }
-      if (!(this.addMenuModal.type.trim())) {
-        alert('请输入菜单名称！')
-        return
-      }
+      // if (!(this.addMenuModal.type.trim())) {
+      //   alert('请输入菜单名称！')
+      //   return
+      // }
       this.menus.push({
-        type: this.addMenuModal.type
+        type: obj.type
       })
       this.addFirMenuShow = false
       this.addMenuModal.type = ''
