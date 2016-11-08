@@ -302,7 +302,7 @@ export default {
   float right
   height 55px
   line-height 54px
-  z-index 10100
+  z-index 1010
 
   li
     line-height 54px
@@ -355,7 +355,7 @@ export default {
   line-height 54px
   text-align right
   padding 0 20px
-  z-index 1000
+  z-index 990
   position relative
 
   &:after

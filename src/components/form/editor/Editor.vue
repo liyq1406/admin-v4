@@ -5,8 +5,10 @@
 </template>
 
 <script>
-import WangEditor from './js/wangEditor'
+// http://wangeditor.github.io/
+import WangEditor from 'wangeditor'
 import { API_SERVER } from 'consts/config'
+import browser from 'utils/browser'
 
 export default {
   props: {
@@ -54,11 +56,19 @@ export default {
      * @author shengzhi
      */
     createEditor () {
-      const self = this
-      const editor = new WangEditor(this.$el.getElementsByClassName('editor-content')[0])
+      let self = this
+      let editor = new WangEditor(this.$el.getElementsByClassName('editor-content')[0])
+      let browserLang = browser.language === 'zh-cn' || browser.language === 'zh-tw' ? 'zh-cn' : 'en-us'
+      let lang = window.localStorage.getItem('lang') || browserLang
+      let langMap = {
+        'zh-cn': 'zh-cn',
+        'en-us': 'en'
+      }
+
+      editor.config.lang = WangEditor.langs[langMap[lang]]
 
       // 工具菜单栏配置
-      editor.config.menus = ['fontsize', 'forecolor', '|', 'bold', 'italic', 'underline', '|', 'link', 'unlink', 'img']
+      editor.config.menus = ['fontsize', 'forecolor', '|', 'bold', 'italic', 'underline', '|', 'link', 'unlink', 'img', '|', 'fullscreen']
 
       // 图片上传配置
       editor.config.uploadImgUrl = this.uploadUrl

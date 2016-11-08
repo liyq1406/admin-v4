@@ -42,12 +42,9 @@ Vue.use(VueVlidator)
 let browserLang = browser.language === 'zh-cn' || browser.language === 'zh-tw' ? 'zh-cn' : 'en-us'
 let lang = window.localStorage.getItem('lang')
 
-if (lang) {
-  browserLang = lang
-}
 Vue.use(i18n, {
   // 根据浏览器语言自动进行语言切换，默认为'en-us'
-  lang: browserLang,
+  lang: lang || browserLang,
   // lang: 'zh-cn',
   locales: locales
 })

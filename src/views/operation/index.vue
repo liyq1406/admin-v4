@@ -290,5 +290,5 @@ export default {
   fixed left top
   size 100%
   background rgba(0, 0, 0, .6)
-  z-index 10000
+  z-index 1000
 </style>

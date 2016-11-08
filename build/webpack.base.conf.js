@@ -23,7 +23,9 @@ module.exports = {
       'consts': path.resolve(__dirname, '../src/consts'),
       'utils': path.resolve(__dirname, '../src/utils'),
       'filters': path.resolve(__dirname, '../src/filters'),
-      'store': path.resolve(__dirname, '../src/store')
+      'store': path.resolve(__dirname, '../src/store'),
+      'jquery': path.resolve(__dirname, '../static/vendor/wangeditor/js/lib/jquery-2.2.1.js'),
+      'wangeditor': path.resolve(__dirname, '../static/vendor/wangeditor/js/wangEditor.js')
     }
   },
   resolveLoader: {
@@ -42,7 +44,7 @@ module.exports = {
         test: /\.js$/,
         loader: 'eslint',
         include: projectRoot,
-        exclude: /node_modules|src\/components\/form\/editor\/js/
+        exclude: /node_modules|static\/vendor/
       }
     ],
     loaders: [
@@ -54,7 +56,7 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel',
         include: projectRoot,
-        exclude: /node_modules|src\/components\/form\/editor\/js/
+        exclude: /node_modules|static\/vendor/
       },
       {
         test: /\.json$/,

@@ -3130,6 +3130,8 @@ _e(function (E, $) {
     table: '表格',
     emotion: '表情',
     img: '图片',
+    uploadImage: '上传图片',
+    webImage: '网络图片',
     video: '视频',
     'width': '宽',
     'height': '高',
@@ -3173,6 +3175,8 @@ _e(function (E, $) {
     table: 'Table',
     emotion: 'Emotions',
     img: 'Image',
+    uploadImage: 'Upload',
+    webImage: 'From web',
     video: 'Video',
     'width': 'width',
     'height': 'height',
@@ -5236,8 +5240,8 @@ _e(function (E, $) {
     $panelContent.append($tabContainer).append($contentContainer);
 
     // tab
-    var $uploadTab = $('<a href="#">上传图片</a>');
-    var $linkTab = $('<a href="#">网络图片</a>');
+    var $uploadTab = $('<a href="#">' + lang.uploadImage + '</a>');
+    var $linkTab = $('<a href="#">' + lang.webImage + '</a>');
     $tabContainer.append($uploadTab).append($linkTab);
 
     // 上传图片 content
