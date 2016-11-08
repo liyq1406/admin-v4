@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="item in items" class="fl input-radio-wrap">
-      <input type="radio" :value="item.value" :name="name" @change="onSelect"/>
+      <input v-model="defaultItem.value" type="radio" :value="item.value" :name="name" @change="onSelect"/>
       <label>{{ item.label }}</label>
     </div>
   </div>
@@ -20,13 +20,18 @@
         type: String,
         default: '',
         required: true
+      },
+      defaultItem: {
+        type: Object,
+        default () {
+          return {}
+        }
       }
     },
 
     methods: {
-      onSelect (value) {
-        this.value = value
-        this.$emit('select', value)
+      onSelect () {
+        this.$emit('select', this.defaultItem.value)
       }
     }
   }

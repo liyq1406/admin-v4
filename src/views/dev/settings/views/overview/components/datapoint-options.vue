@@ -1,7 +1,7 @@
 <template>
   <div>
     <x-select width="120px" :label="selectedDatapoint.label" :size="small">
-      <select @change="onSelect">
+      <select v-model="selectedDatapoint" @change="onSelect">
         <option v-for="opt in options" :value="opt">{{ opt.label }}</option>
       </select>
     </x-select>
@@ -12,6 +12,7 @@
   import api from 'api'
   import Select from 'components/Select'
   import { globalMixins } from 'src/mixins'
+  import _ from 'lodash'
 
   export default {
     mixins: [globalMixins],
@@ -33,6 +34,12 @@
         type: String,
         required: true,
         default: ''
+      },
+      defaultItem: {
+        type: Object,
+        default () {
+          return {}
+        }
       }
     },
 
@@ -49,11 +56,12 @@
         if (this.dataPoints.length) {
           this.dataPoints.forEach((item) => {
             res.push({
-              value: item.id,
+              value: item.index,
               label: item.name
             })
           })
         }
+        res = _.filter(res, this.filter)
         return res
       }
     },
@@ -63,6 +71,14 @@
         if (this.productId) {
           this.getCurProductDatapoints(this.productId)
         }
+      },
+      filter () {
+        if (this.options.length) {
+          this.selectedDatapoint = this.options[0]
+        } else {
+          this.selectedDatapoint = {}
+        }
+        this.onSelect()
       }
     },
 
@@ -73,15 +89,21 @@
     },
 
     methods: {
-      onSelect (value) {
-        this.value = value
-        this.$emit('select', value)
+      onSelect () {
+        let dpOrigin = _.find(this.dataPoints, (item) => {
+          return item.index === this.selectedDatapoint.value
+        })
+        this.$emit('select', dpOrigin)
       },
       // 获取当前产品的数据端点
       getCurProductDatapoints (productId) {
         api.product.getDatapoints(productId).then((res) => {
           if (res.status === 200 && res.data.length) {
             this.dataPoints = res.data
+            if (this.options.length) {
+              this.selectedDatapoint = this.options[0]
+            }
+            this.onSelect()
           }
         }).catch((res) => {
           this.handleError(res)
