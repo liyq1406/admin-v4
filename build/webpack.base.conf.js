@@ -30,6 +30,7 @@ module.exports = {
     fallback: [path.join(__dirname, '../node_modules')]
   },
   module: {
+    exprContextCritical: false,
     preLoaders: [
       {
         test: /\.vue$/,
@@ -41,7 +42,7 @@ module.exports = {
         test: /\.js$/,
         loader: 'eslint',
         include: projectRoot,
-        exclude: /node_modules/
+        exclude: /node_modules|src\/components\/form\/editor\/js/
       }
     ],
     loaders: [
@@ -53,7 +54,7 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel',
         include: projectRoot,
-        exclude: /node_modules/
+        exclude: /node_modules|src\/components\/form\/editor\/js/
       },
       {
         test: /\.json$/,

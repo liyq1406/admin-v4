@@ -29,8 +29,8 @@
         <div class="form-row row">
           <label class="form-control col-4"><i class="hl-red">*</i> 正文:</label>
           <div class="controls col-20">
-            <editor @change="onContentChange" :value="model.text"></editor>
-            <input type="text" v-model="model.text" name="model.text" v-validate:text="{required: true}" class="hidden">
+            <editor :input-content="model.text" @input="onInput"></editor>
+            <input type="text" v-model="outputContent" name="outputContent" v-validate:text="{required: true}" class="hidden">
             <div class="form-tips form-tips-error">
               <span v-if="$validation.text.touched && $validation.text.required">{{ $t('common.validation.required', {field: '正文'}) }}</span>
             </div>
@@ -69,7 +69,7 @@
 
 <script>
 import api from 'api'
-import Editor from 'components/Editor'
+import Editor from 'components/form/editor/Editor'
 import ImageUploader from 'components/ImageUploader'
 import TagInput from 'components/TagInput'
 import { globalMixins } from 'src/mixins'
@@ -102,6 +102,7 @@ export default {
 
   data () {
     return {
+      outputContent: '',
       model: {
         name: '',
         text: '',
@@ -124,7 +125,7 @@ export default {
     formParams () {
       var params = {
         name: this.model.name,
-        text: this.model.text,
+        text: this.outputContent,
         cover: this.images,
         status: parseInt(this.model.status),
         label: _.compact(this.tag.split(',')),
@@ -171,9 +172,10 @@ export default {
      * @author shengzhi
      * @param {String} content 编辑器内容
      */
-    onContentChange (content) {
+    onInput (content) {
+      console.log(content)
       if (typeof content === 'string') {
-        this.model.text = content
+        this.outputContent = content
       }
     },
 

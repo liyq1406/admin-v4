@@ -1765,6 +1765,7 @@ let configRouter = (router) => {
     '/operation/content/splashwnd/:app_id': '/operation/content/splashwnd/:app_id',
     // '/operation/plugins/nest/:app_id': '/operation/plugins/nest/:app_id/forbidden',
     // '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/forbidden',
+    '/operation/plugins/content/:app_id': '/operation/plugins/content/:app_id/articles',
     '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/overview',
     '/operation/plugins/recipes/:app_id/recipes/:id/edit/:type_value': '/operation/plugins/recipes/:app_id/recipes/:id/edit/:type_value/basic-info',
     '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/work-orders/repair',
