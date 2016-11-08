@@ -24,6 +24,9 @@
       <div class="filter-bar filter-bar-head filter-bar-lr">
         <div class="filter-group fr">
           <div class="filter-group-item">
+            <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+          </div>
+          <div class="filter-group-item">
             <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="getList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getList(true)">
               <x-select width="90px" :label="queryType.label" size="small">
                 <select v-model="queryType">
@@ -84,6 +87,7 @@ export default {
 
   data () {
     return {
+      exporting: false,
       alert: {
         tag: '',
         name: ''
@@ -157,10 +161,11 @@ export default {
         countPerPage: this.countPerPage
       }
     },
-    queryCondition () {
-      var params = {
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
+
+    // 基本筛选条件
+    baseCondition () {
+      var condition = {
+        filter: ['alert_id', 'alert_name', 'content', 'create_date', 'from', 'id', 'is_read', 'location', 'mac', 'notify_type', 'product_id', 'product_name', 'tags', 'to', 'type'],
         order: {},
         query: {
           alert_id: {
@@ -181,11 +186,11 @@ export default {
             temp = 2100000000
           }
           // 设备ID不能用模糊匹配
-          params.query.from = {
+          condition.query.from = {
             '$in': [temp]
           }
         } else {
-          params.query[this.queryType.value] = {
+          condition.query[this.queryType.value] = {
             '$like': this.key
           }
         }
@@ -193,12 +198,23 @@ export default {
 
       this.headers.map((item) => {
         if (item.sortType) {
-          params.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
+          condition.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
         }
       })
 
-      return params
+      return condition
     },
+
+    // 列表查询条件
+    queryCondition () {
+      let condition = _.cloneDeep(this.baseCondition)
+
+      condition.limit = this.countPerPage
+      condition.offset = (this.currentPage - 1) * this.countPerPage
+
+      return condition
+    },
+
     tables () {
       var result = []
       this.records.map((item) => {
@@ -217,6 +233,35 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理导出 CSV 按钮点击
+     */
+    onExportBtnClick () {
+      if (this.exporting) {
+        return
+      }
+
+      let postData = {
+        name: '告警列表',
+        describe: '告警列表',
+        type: 3,
+        params: this.baseCondition
+      }
+
+      this.exporting = true
+      api.exportTask.createTask(postData).then((res) => {
+        this.showNotice({
+          type: 'success',
+          content: '导出CSV任务创建成功'
+        })
+        this.$route.router.go('/operation/settings/offline-data')
+        // this.onExportCancel()
+      }).catch((res) => {
+        this.exporting = false
+        this.handleError(res)
+      })
+    },
+
     /**
      * 按某个属性排序
      * 国辉
