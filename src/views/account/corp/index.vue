@@ -36,7 +36,6 @@ import formatDate from 'filters/format-date'
 import { isEmpty } from 'src/utils'
 import defaultLogo from 'assets/images/logo.png'
 import blankImg from 'assets/images/blank.png'
-import _ from 'lodash'
 
 export default {
   name: 'Info',

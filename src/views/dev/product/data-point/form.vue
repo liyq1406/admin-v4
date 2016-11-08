@@ -132,7 +132,6 @@ import api from 'api'
 import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 import Breadcrumb from 'components/Breadcrumb'
-import _ from 'lodash'
 
 export default {
   name: 'Authorize',

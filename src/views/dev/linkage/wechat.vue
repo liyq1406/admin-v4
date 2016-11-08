@@ -87,7 +87,6 @@
   import locales from 'consts/locales/index'
   import api from 'api'
   // import Modal from 'components/Modal'
-  import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
   import { updatePlugin, removePlugin } from 'store/actions/plugins'
 

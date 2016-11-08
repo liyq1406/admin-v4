@@ -26,7 +26,6 @@
 
 <script>
 import Modal from 'components/Modal'
-import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 

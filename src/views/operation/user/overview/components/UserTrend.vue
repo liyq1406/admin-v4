@@ -37,7 +37,6 @@ import {getTrend} from '../api-user'
 import { globalMixins } from 'src/mixins'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import formatDate from 'filters/format-date'
-import _ from 'lodash'
 import {getLastYearDate} from 'utils'
 
 export default {

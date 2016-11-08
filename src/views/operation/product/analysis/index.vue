@@ -41,7 +41,6 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Chart from 'components/Chart/index'
 import formatDate from 'filters/format-date'
 import Distributing from './components/Distributing'
-import _ from 'lodash'
 
 export default {
   name: 'Portrait',

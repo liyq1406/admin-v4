@@ -80,7 +80,6 @@ import api from 'api'
 import * as config from 'consts/config'
 import Statistic from 'components/Statistic'
 import formatDate from 'filters/format-date'
-import _ from 'lodash'
 
 export default {
   name: 'OrderList',

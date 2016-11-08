@@ -76,7 +76,6 @@ import Breadcrumb from 'components/Breadcrumb'
 import Dropdown from 'components/Dropdown'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'operate-stall-details',

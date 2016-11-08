@@ -67,7 +67,6 @@ import Modal from 'components/Modal'
 import Switch from 'components/Switch'
 import PicTxt from 'components/PicTxt'
 import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
-import _ from 'lodash'
 import api from 'api'
 
 export default {

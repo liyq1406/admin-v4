@@ -102,7 +102,6 @@ import locales from 'consts/locales/index'
 import Range from 'components/Range1'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
-import _ from 'lodash'
 
 var socket = null
 

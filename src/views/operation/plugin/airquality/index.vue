@@ -42,7 +42,6 @@ import AreaSelect from 'components/AreaSelect'
 import Chart from 'components/Chart/index'
 import 'echarts/extension/bmap/bmap'
 import formatDate from 'filters/format-date'
-import _ from 'lodash'
 
 import api from 'api'
 

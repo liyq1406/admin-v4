@@ -97,7 +97,6 @@
 import { globalMixins } from 'src/mixins'
 import Modal from 'components/Modal'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'Authorize',

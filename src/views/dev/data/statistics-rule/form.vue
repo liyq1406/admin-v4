@@ -139,7 +139,6 @@ import { globalMixins } from 'src/mixins'
 import Select from 'components/Select'
 import Pager from 'components/Pager'
 import api from 'api'
-import _ from 'lodash'
 
 const SNAPSHOT_STATISTICS_TYPES = {
   max: 1,

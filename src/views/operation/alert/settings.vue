@@ -438,7 +438,6 @@
   import Modal from 'components/Modal'
   import Select from 'components/Select'
   import TagInput from 'components/TagInput'
-  import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
 
   export default {

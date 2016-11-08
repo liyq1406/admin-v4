@@ -55,7 +55,6 @@
 
 <script>
   import api from 'api'
-  import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
   import { updatePlugin, removePlugin } from 'store/actions/plugins'
 

@@ -132,7 +132,6 @@ import api from 'api'
 import Select from 'components/Select'
 import Alert from 'components/Alert'
 import { globalMixins } from 'src/mixins'
-import _ from 'lodash'
 
 export default {
   name: 'RegisterForm',

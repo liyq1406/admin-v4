@@ -37,7 +37,6 @@
 import Modal from './components/Modal'
 import Topbar from 'components/Topbar'
 import Toast from './components/Toast'
-import _ from 'lodash'
 import api from './api'
 import store from 'store/index'
 import { globalMixins } from './mixins'

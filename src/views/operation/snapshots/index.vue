@@ -99,7 +99,6 @@
   import Pager from 'components/Pager'
   import formatDate from 'filters/format-date'
   import api from 'api'
-  import _ from 'lodash'
   import Table from 'components/Table'
   import toFixed from 'filters/to-fixed'
 

@@ -275,7 +275,6 @@ import Switch from 'components/Switch'
 import Modal from 'components/Modal'
 import Alert from 'components/Alert'
 import api from 'api'
-import _ from 'lodash'
 
 var socket = null
 

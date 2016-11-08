@@ -164,7 +164,6 @@ import WebSettings from './web/settings'
 import WechatSettings from './wechat/settings'
 import WechatAuthorize from './wechat/authorize'
 import Modal from 'components/Modal'
-import _ from 'lodash'
 
 export default {
   name: 'Data',

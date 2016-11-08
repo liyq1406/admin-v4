@@ -60,7 +60,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import _ from 'lodash'
 
 export default {
   name: 'Completion',

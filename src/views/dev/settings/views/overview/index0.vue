@@ -207,7 +207,6 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
-import _ from 'lodash'
 import proxy from './proxy-api'
 import config from 'consts/custom-config'
 

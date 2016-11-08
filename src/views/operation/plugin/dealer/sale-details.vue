@@ -159,7 +159,6 @@
 
 <script>
 import api from 'api'
-import _ from 'lodash'
 import Breadcrumb from 'components/Breadcrumb'
 import Modal from 'components/Modal'
 // import AreaSelect from 'components/AreaSelect'

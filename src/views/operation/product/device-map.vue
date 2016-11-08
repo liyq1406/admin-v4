@@ -61,7 +61,6 @@ import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Alert from 'components/Alert'
 import Pager from 'components/Pager'
-import _ from 'lodash'
 import formatDate from 'filters/format-date'
 
 export default {

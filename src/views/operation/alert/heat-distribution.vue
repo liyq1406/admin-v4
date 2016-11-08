@@ -114,7 +114,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'

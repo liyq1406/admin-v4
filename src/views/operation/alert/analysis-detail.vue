@@ -68,7 +68,6 @@ import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import locales from 'consts/locales/index'
 import Vue from 'vue'
-import _ from 'lodash'
 
 export default {
   name: 'Overview',

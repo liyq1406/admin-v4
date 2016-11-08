@@ -30,7 +30,6 @@
 
 <script>
 import Select from '../components/Select'
-import _ from 'lodash'
 
 export default {
   name: 'AreaSelect',

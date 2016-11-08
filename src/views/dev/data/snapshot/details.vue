@@ -161,7 +161,6 @@ import Chart from 'components/Chart/index'
 import { globalMixins } from 'src/mixins'
 import Alert from 'components/Alert'
 import Breadcrumb from 'components/Breadcrumb'
-import _ from 'lodash'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import formatDate from 'filters/format-date'
 

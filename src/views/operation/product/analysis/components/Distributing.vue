@@ -48,7 +48,6 @@ import convertData from 'components/Chart/convert-data'
 import { globalMixins } from 'src/mixins'
 import {numToPercent} from 'utils'
 import PercentTable from 'components/PercentTable'
-import _ from 'lodash'
 
 export default {
   name: 'Distributing',

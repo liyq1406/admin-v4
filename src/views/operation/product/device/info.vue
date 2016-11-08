@@ -50,7 +50,6 @@ import api from 'api'
 import { globalMixins } from 'src/mixins'
 import SearchBox from 'components/SearchBox'
 import { setCurrVirtualDevice } from 'store/actions/products'
-import _ from 'lodash'
 
 export default {
   name: 'DeviceDetails',

@@ -6,7 +6,6 @@
 import EventListener from 'utils/event-listener'
 import echarts from 'echarts'
 import { CHART_COLORS } from 'consts/config'
-import _ from 'lodash'
 
 export default {
   name: 'Chart',

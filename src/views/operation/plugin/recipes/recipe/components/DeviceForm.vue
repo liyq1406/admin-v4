@@ -57,11 +57,9 @@
 
 <script>
 import Modal from 'components/Modal'
-// import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import Select from 'components/Select'
-import _ from 'lodash'
 
 export default {
   name: 'DeviceForm',

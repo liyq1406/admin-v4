@@ -93,7 +93,6 @@
   import Select from 'components/Select'
   import Captcha from 'components/Captcha'
   import { globalMixins } from 'src/mixins'
-  import _ from 'lodash'
 
   export default {
     name: 'RegisterForm',

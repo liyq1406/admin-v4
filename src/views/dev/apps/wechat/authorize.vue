@@ -276,7 +276,6 @@ import Modal from 'components/Modal'
 import Select from 'components/Select'
 import Tooltip from 'components/Tooltip'
 // import locales from 'consts/locales/index'
-import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 
 export default {

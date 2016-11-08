@@ -74,7 +74,6 @@ import ImageUploader from 'components/ImageUploader'
 import TagInput from 'components/TagInput'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-import _ from 'lodash'
 
 export default {
   name: 'ArticleForm',

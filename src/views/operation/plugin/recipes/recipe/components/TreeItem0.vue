@@ -32,7 +32,6 @@
   import MenuForm from './MenuForm'
   import CodeForm from './CodeForm'
   import Modal from 'components/Modal'
-  import _ from 'lodash'
   export default {
     name: 'TreeItem',
 

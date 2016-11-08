@@ -1,6 +1,5 @@
 import * as types from '../mutation-types'
 import api from 'api'
-import _ from 'lodash'
 
 export const getAllProducts = ({ dispatch }, products) => {
   dispatch(types.RECEIVE_PRODUCTS, products)

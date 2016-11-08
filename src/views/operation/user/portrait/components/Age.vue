@@ -12,7 +12,6 @@
 import PercentTable from 'components/PercentTable'
 import Chart from 'components/Chart/index'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'Age',

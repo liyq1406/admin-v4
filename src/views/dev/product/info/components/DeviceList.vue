@@ -56,7 +56,6 @@ import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import Modal from 'components/Modal'
 import Select from 'components/Select'
-import _ from 'lodash'
 import formatDate from 'filters/format-date'
 // import BatchExportQr from './batch-export-qr'
 

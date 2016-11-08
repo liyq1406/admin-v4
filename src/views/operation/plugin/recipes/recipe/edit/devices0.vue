@@ -84,7 +84,6 @@ import { pluginMixins } from '../../../mixins'
 import Modal from 'components/Modal'
 import Select from 'components/Select'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'Devices',

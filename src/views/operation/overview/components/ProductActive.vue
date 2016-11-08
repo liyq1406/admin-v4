@@ -28,7 +28,6 @@ import api from 'api'
 import truncate from 'filters/truncate'
 import formatDate from 'filters/format-date'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-import _ from 'lodash'
 
 export default {
   name: 'ProductActive',

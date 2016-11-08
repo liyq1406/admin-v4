@@ -1,4 +1,3 @@
-import _ from 'lodash'
 
 const MODULES = {
   operation_product: 'OPERATION_PRODUCT'

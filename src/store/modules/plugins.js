@@ -5,7 +5,6 @@ import {
   UPDATE_PLUGIN,
   SET_CURRENT_PLUGIN
 } from '../mutation-types'
-import _ from 'lodash'
 
 // 状态初始化
 var state = {

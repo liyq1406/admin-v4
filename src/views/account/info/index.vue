@@ -89,7 +89,6 @@ import api from 'api'
 import Select from 'components/Select'
 import EditInfoForm from './components/EditInfoForm'
 import { setCurrentMember } from 'store/actions/system'
-// import _ from 'lodash'
 
 export default {
   name: 'Info',

@@ -99,7 +99,6 @@ import Breadcrumb from 'components/Breadcrumb'
 import formatDate from 'filters/format-date'
 import Select from 'components/Select'
 import api from 'api'
-// import _ from 'lodash'
 
 export default {
   name: 'MemberDetails',

@@ -12,7 +12,6 @@
   import api from 'api'
   import Select from 'components/Select'
   import { globalMixins } from 'src/mixins'
-  import _ from 'lodash'
 
   export default {
     mixins: [globalMixins],

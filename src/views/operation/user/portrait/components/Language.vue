@@ -13,7 +13,6 @@
 import Chart from 'components/Chart/index'
 import PercentTable from 'components/PercentTable'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'portrait-model',

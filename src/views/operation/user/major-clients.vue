@@ -200,7 +200,6 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Modal from 'components/Modal'
 import formatDate from 'filters/format-date'
 import AreaSelect from 'components/AreaSelect'
-import _ from 'lodash'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import { createDayRange } from 'utils'
 

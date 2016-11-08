@@ -98,7 +98,6 @@ import Statistic from 'components/Statistic2'
 import Chart from 'components/Chart'
 import formatDate from 'filters/format-date'
 import { patchLostDates } from 'utils'
-import _ from 'lodash'
 
 export default {
   name: 'Analysis',

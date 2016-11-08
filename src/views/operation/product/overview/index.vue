@@ -52,7 +52,6 @@ import ProductActive from './components/ProductActive'
 import ProductDistribution from './components/ProductDistribution'
 import api from 'api'
 import customConfig from 'consts/custom-config'
-import _ from 'lodash'
 
 export default {
   name: 'Overview',

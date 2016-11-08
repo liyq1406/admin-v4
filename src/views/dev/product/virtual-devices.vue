@@ -153,7 +153,6 @@ import Pager from 'components/Pager'
 import Range from 'components/Range1'
 import Switch from 'components/Switch'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'VirtualDevices',

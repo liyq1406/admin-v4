@@ -279,7 +279,6 @@
   import api from 'api'
   import Modal from 'components/Modal'
   import Select from 'components/Select'
-  import _ from 'lodash'
   import * as config from 'consts/config'
   import { globalMixins } from 'src/mixins'
 

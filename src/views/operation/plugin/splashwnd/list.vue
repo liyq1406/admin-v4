@@ -56,7 +56,6 @@
 
 <script>
 import Vue from 'vue'
-// import _ from 'lodash'
 import api from 'api'
 import * as config from 'consts/config'
 import locales from 'consts/locales/index'

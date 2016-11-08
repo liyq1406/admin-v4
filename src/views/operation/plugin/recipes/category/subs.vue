@@ -29,7 +29,6 @@ import Breadcrumb from 'components/Breadcrumb'
 import Table from 'components/Table'
 import CategoryModal from './components/CategoryModal'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'SubCategoryList',

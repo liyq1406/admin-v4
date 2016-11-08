@@ -42,7 +42,6 @@ import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
 import formatDate from 'filters/format-date'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-import _ from 'lodash'
 
 export default {
   name: 'ProductTrend',

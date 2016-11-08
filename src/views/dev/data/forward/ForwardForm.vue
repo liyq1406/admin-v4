@@ -68,7 +68,6 @@ import Pager from 'components/Pager'
 import Vue from 'vue'
 // import * as config from 'consts/config'
 import locales from 'consts/locales/index'
-import _ from 'lodash'
 
 export default {
   name: 'SnapshotForm',

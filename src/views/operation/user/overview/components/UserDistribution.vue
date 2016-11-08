@@ -23,7 +23,6 @@ import Panel from 'components/Panel'
 import { globalMixins } from 'src/mixins'
 import {getUserRegion} from '../api-user'
 import {numToPercent} from 'utils'
-import _ from 'lodash'
 
 export default {
   name: 'distribution',

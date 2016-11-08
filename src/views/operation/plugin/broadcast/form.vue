@@ -319,7 +319,6 @@
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import TagInput from 'components/TagInput'
   import api from 'api'
-  import _ from 'lodash'
   import { createDayRange } from 'utils'
 
   export default {

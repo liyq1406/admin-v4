@@ -24,7 +24,6 @@ import api from 'api'
 // import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
-import _ from 'lodash'
 
 export default {
   name: 'Security',

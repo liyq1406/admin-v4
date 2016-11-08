@@ -67,7 +67,6 @@ import { setCurrProductMixin } from '../../mixins'
 import { globalMixins } from 'src/mixins'
 import Table from 'components/Table'
 import Modal from 'components/Modal'
-import _ from 'lodash'
 
 export default {
   name: 'Qrcode',

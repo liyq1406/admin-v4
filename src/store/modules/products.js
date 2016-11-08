@@ -7,7 +7,6 @@ import {
   SET_CURRENT_DEVICE,
   SET_CURRENT_VIRTUAL_DEVICE
 } from '../mutation-types'
-import _ from 'lodash'
 // import Vue from 'vue'
 
 // 状态初始化

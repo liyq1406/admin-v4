@@ -106,7 +106,6 @@ import InfoList from 'components/InfoList'
 import Gallery from 'components/Gallery'
 import api from 'api'
 import formatDate from 'filters/format-date'
-// import _ from 'lodash'
 
 export default {
   name: 'IssueDetails',

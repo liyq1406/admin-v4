@@ -201,7 +201,6 @@
 import api from 'src/api'
 import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
-import _ from 'lodash'
 
 export default {
   name: 'RuleForm',

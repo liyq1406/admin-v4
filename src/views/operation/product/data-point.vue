@@ -263,7 +263,6 @@
   import Modal from 'components/Modal'
   import Pager from 'components/Pager'
   import Select from 'components/Select'
-  import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
 
   export default {

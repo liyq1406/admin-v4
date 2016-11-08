@@ -63,7 +63,6 @@
   import Table from 'components/Table'
   import Breadcrumb from 'components/Breadcrumb'
   import formatDate from 'filters/format-date'
-  import _ from 'lodash'
 
   export default {
     name: 'AddBroadcast',

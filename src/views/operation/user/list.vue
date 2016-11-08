@@ -63,7 +63,6 @@
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic2'
   import {createDayRange} from 'utils'
-  import _ from 'lodash'
 
   export default {
     name: 'UserList',

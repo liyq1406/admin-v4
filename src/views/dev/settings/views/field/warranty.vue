@@ -135,7 +135,6 @@
   import Modal from 'components/Modal'
   import SearchBox from 'components/SearchBox'
   // import locales from 'consts/locales/index'
-  // import _ from 'lodash'
 
   export default {
     name: 'user',

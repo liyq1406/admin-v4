@@ -50,7 +50,6 @@ import Table from 'components/Table'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
-import _ from 'lodash'
 
 export default {
   name: 'AlertTable',

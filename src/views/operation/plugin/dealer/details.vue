@@ -106,7 +106,6 @@
   // import Vue from 'vue'
   // import locales from 'consts/locales/index'
   import api from 'api'
-  import _ from 'lodash'
   import RadioGroup from 'components/RadioGroup'
   import Pager from 'components/Pager'
   import Breadcrumb from 'components/Breadcrumb'

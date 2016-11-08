@@ -153,7 +153,6 @@
   import AreaSelect from 'components/AreaSelect'
   import api from 'api'
   import * as config from 'consts/config'
-  import _ from 'lodash'
 
   export default {
     // name: 'AccountList',

@@ -67,7 +67,6 @@ import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
-import _ from 'lodash'
 
 export default {
   name: 'TagList',

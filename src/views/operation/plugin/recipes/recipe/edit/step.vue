@@ -168,7 +168,6 @@ import Pager from 'components/Pager'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import ImageUploader from 'components/ImageUploader'
-import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 

@@ -112,7 +112,6 @@ import { pluginMixins } from '../../../mixins'
 import Modal from 'components/Modal'
 import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
-import _ from 'lodash'
 
 export default {
   name: 'MenuForm',

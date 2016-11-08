@@ -133,7 +133,6 @@ import Chart from 'components/Chart/index'
 import api from 'api'
 import { patchLostDates } from 'utils'
 import formatDate from 'filters/format-date'
-import _ from 'lodash'
 
 export default {
   name: 'BroadcastDetails',

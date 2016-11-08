@@ -116,7 +116,6 @@ import api from 'api'
 import Select from 'components/Select'
 import Switch from 'components/Switch'
 import Modal from 'components/Modal'
-import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 
 export default {

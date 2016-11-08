@@ -98,7 +98,6 @@ import Breadcrumb from 'components/Breadcrumb'
 import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'ContentForm',

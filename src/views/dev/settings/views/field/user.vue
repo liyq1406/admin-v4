@@ -116,7 +116,6 @@
   import Select from 'components/Select'
   import Modal from 'components/Modal'
   import SearchBox from 'components/SearchBox'
-  import _ from 'lodash'
   // import locales from 'consts/locales/index'
 
   export default {

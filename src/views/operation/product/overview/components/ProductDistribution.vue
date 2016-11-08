@@ -24,7 +24,6 @@ import { toPercentage } from 'filters/format-date'
 import PercentTable from 'components/PercentTable'
 import PROVINCE_MAP from 'consts/mapping/provinces'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'ProductDistribution',

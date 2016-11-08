@@ -90,7 +90,6 @@
   import Pager from 'components/Pager'
   import DatePicker from 'components/DatePicker'
   import Modal from 'components/Modal'
-  import _ from 'lodash'
 
   export default {
     name: 'DealerList',

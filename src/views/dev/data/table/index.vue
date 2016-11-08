@@ -445,7 +445,6 @@ import IntelligentTable from 'components/IntelligentTable'
 import DatePicker from 'components/DatePicker'
 import TimePicker from 'components/TimePicker2'
 import Select from 'components/Select'
-import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 
 export default {

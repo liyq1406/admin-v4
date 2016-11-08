@@ -157,7 +157,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import SearchBox from 'components/SearchBox'
 import Modal from 'components/Modal'
 import Select from 'components/Select'

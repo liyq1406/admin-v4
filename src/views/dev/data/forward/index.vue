@@ -75,7 +75,6 @@ import Pager from 'components/Pager'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 // import locales from 'consts/locales/index'
-// import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
 

@@ -17,7 +17,6 @@ import AlertBar from 'components/AlertBar'
 import { globalMixins } from 'src/mixins'
 import { MAIN_NAV } from 'consts/config'
 // import api from 'api'
-// import _ from 'lodash'
 
 export default {
   name: 'dev',

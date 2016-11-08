@@ -79,7 +79,6 @@
   import locales from 'consts/locales/index'
   import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
-  import _ from 'lodash'
 
   export default {
     name: 'Alert',

@@ -14,7 +14,6 @@ import api from 'api'
 import { globalMixins } from 'src/mixins'
 import Table from 'components/Table'
 import formatDate from 'filters/format-date'
-import _ from 'lodash'
 
 export default {
   name: 'Users',
