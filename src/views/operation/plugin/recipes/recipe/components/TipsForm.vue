@@ -4,7 +4,7 @@
       <div class="form-row row">
         <label class="form-control col-6">设备提示:</label>
         <div class="controls col-18">
-          <div class="input-text-wrap">
+          <div v-placeholder="'请输入设备提示内容，如：请将食物翻面'"  class="input-text-wrap">
             <textarea v-model="cloneModal.prompt_text" name="cloneModal.prompt_text" type="text" class="input-text" v-validate:tip="{maxlength: 30, format: 'trim'}" ></textarea>
           </div>
           <div class="form-tips form-tips-error">

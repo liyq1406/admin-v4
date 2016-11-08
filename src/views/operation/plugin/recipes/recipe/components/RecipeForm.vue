@@ -425,7 +425,7 @@
                       </tr>
                       <tr v-for="tip in device.prompts">
                         <td class="w5">第{{ $index + 1 }}步</td>
-                        <td><span class="hl-red">{{ tip.prompt_text }}</span></td>
+                        <td><span v-if="tip.prompt_text"  class="hl-red">{{ tip.prompt_text }}</span><span class="graytip" v-if="!tip.prompt_text">请输入提示内容,如:请将食物翻面</span></td>
                         <td class="w5 tac"><a class="hl-red" @click.prevent="addTips(device, 'edit', tip)">编辑</a></td>
                       </tr>
                       <tr>
@@ -1440,6 +1440,8 @@ export default {
 
 <style lang="stylus" scoped>
   @import '../../../../../../assets/stylus/common'
+  .graytip
+    color #a9a9a9
   .menu
     position relative
     left -35px
