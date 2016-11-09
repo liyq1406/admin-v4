@@ -29,5 +29,6 @@ export default {
     device_session_log: 'Device Online-offline'
   },
   get_url: 'Get URL',
-  url: 'Download URL'
+  url: 'Download URL',
+  export_success: 'Exporting task created successfully'
 }

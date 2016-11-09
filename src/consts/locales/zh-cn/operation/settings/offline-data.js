@@ -29,5 +29,6 @@ export default {
     device_session_log: '设备上下线'
   },
   get_url: '获取地址',
-  url: '下载地址'
+  url: '下载地址',
+  export_success: '导出CSV任务创建成功'
 }

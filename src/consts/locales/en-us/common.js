@@ -55,11 +55,12 @@ export default {
   },
   email: 'Email',
   phone: 'Phone',
+  create_time: 'Create Time',
   age: 'Age',
   sex: 'Gender',
   action_success: 'Success',
   action_fail: 'Failed',
-  export_condition: '条件筛选',
+  export_condition: 'Exporting Condition',
   unit: {
     time: {
       hour: 'Hour',

@@ -56,6 +56,7 @@ export default {
   },
   email: '邮箱',
   phone: '手机',
+  create_time: '创建时间',
   age: '年龄',
   sex: '性别',
   action_success: '操作成功',

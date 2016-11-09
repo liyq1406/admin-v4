@@ -34,7 +34,7 @@
                     <option v-for="industry in industrys" :value="industry">{{industry}}</option>
                   </select>
                 </x-select>
-                <span class="ml10">创建时间</span>
+                <span class="ml10">{{ $t('common.create_time') }}</span>
                 <date-time-range-picker @timechange="onTimeChange" :start-offset="timePickerStartOffset" :show-time="true"></date-time-range-picker>
 
               </div>
@@ -544,7 +544,7 @@ export default {
       api.exportTask.createTask(postData).then((res) => {
         this.showNotice({
           type: 'success',
-          content: '导出CSV任务创建成功'
+          content: this.$t('operation.settings.offline.export_success')
         })
         this.$route.router.go('/operation/settings/offline-data')
         // this.onExportCancel()
