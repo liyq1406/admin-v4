@@ -208,7 +208,7 @@ export default {
           }
         }
       },
-      startTime: new Date() - 7 * 1000 * 60 * 60 * 24,
+      startTime: new Date() - 365 * 1000 * 60 * 60 * 24,
       endTime: new Date()
     }
   },
@@ -348,7 +348,7 @@ export default {
     onTimeChange (start, end) {
       this.startTime = start
       this.endTime = end
-      this.getMajorClient()
+      this.getDevices()
     },
 
     /**

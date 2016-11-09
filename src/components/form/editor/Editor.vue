@@ -21,7 +21,8 @@ export default {
     // 图片上传 URL
     uploadUrl: {
       type: String,
-      default: `${API_SERVER.default}/v2/upload/image?content_type=data_uri`
+      // default: `${API_SERVER.default}/v2/upload/image?content_type=data_uri`
+      default: `${API_SERVER.default}/v2/upload/image`
     },
 
     // 编辑器高度
@@ -73,7 +74,8 @@ export default {
       // 图片上传配置
       editor.config.uploadImgUrl = this.uploadUrl
       editor.config.uploadHeaders = {
-        'Content-Type': 'multipart/form-data',
+        // 'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/x-www-form-urlencoded',
         'Access-Token': window.localStorage.getItem('accessToken')
       }
 

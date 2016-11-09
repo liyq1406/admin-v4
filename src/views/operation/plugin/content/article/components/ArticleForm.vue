@@ -172,7 +172,6 @@ export default {
      * @param {String} content 编辑器内容
      */
     onInput (content) {
-      console.log(content)
       if (typeof content === 'string') {
         this.outputContent = content
       }

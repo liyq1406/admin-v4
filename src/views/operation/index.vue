@@ -100,7 +100,7 @@ export default {
       })
 
       // 其他固定导航
-      result.subs = result.subs.concat(subs.slice(1, subs.length))
+      result.subs = result.subs.concat(subs.slice(1, subs.length - 1))
 
       // 插件导航
       this.plugins.forEach((item) => {
@@ -248,6 +248,9 @@ export default {
           result.subs.push(sub)
         }
       })
+
+      // 最后的固定导航
+      result.subs = result.subs.concat(subs.slice(-1))
       return result
     }
   },

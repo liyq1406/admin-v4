@@ -6660,6 +6660,7 @@ _e(function (E, $) {
       // headers
       var headers = editor.config.uploadHeaders || {};
 
+      console.log(base64)
       // 获取文件扩展名
       var fileExt = 'png';  // 默认为 png
       if (fileName.indexOf('.') > 0) {
@@ -6682,7 +6683,7 @@ _e(function (E, $) {
       var xhr = new XMLHttpRequest();
       var timeoutId;
       var src;
-      var formData = new FormData();
+      // var formData = new FormData();
 
       // 超时处理
       function timeoutCallback() {
@@ -6739,12 +6740,12 @@ _e(function (E, $) {
 
       // 填充数据
       // formData.append(name, convertBase64UrlToBlob(base64, fileType), E.random() + '.' + fileExt);
-      formData.append(name, base64, E.random() + '.' + fileExt);
+      // formData.append(name, base64, E.random() + '.' + fileExt);
 
       // 添加参数
-      $.each(params, function (key, value) {
-        formData.append(key, value);
-      });
+      // $.each(params, function (key, value) {
+      //   formData.append(key, value);
+      // });
 
       // 开始上传
       xhr.open('POST', uploadImgUrl, true);
@@ -6759,7 +6760,7 @@ _e(function (E, $) {
       xhr.withCredentials = true;
 
       // 发送数据
-      xhr.send(formData);
+      xhr.send(base64);
       timeoutId = setTimeout(timeoutCallback, uploadTimeout);
 
       E.log('开始上传...并开始超时计算');
@@ -7011,7 +7012,7 @@ _e(function (E, $) {
     };
 
     // 开始取文件
-    reader.readAsDataURL(file);
+    reader.readAsArrayBuffer(file);
   };
 
   // 暴露给 E
@@ -7302,7 +7303,7 @@ _e(function (E, $) {
           };
 
           //读取粘贴的文件
-          reader.readAsDataURL(file);
+          reader.readAsArrayBuffer(file);
         });
       } else {
         // -------- 非 chrome 不能用 data.items 取图片 -----
@@ -7379,7 +7380,7 @@ _e(function (E, $) {
         };
 
         //读取粘贴的文件
-        reader.readAsDataURL(file);
+        reader.readAsArrayBuffer(file);
 
       });
     });
