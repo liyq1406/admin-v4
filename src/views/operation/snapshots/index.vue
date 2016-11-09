@@ -368,7 +368,8 @@
         let params = {
           offset: 0,
           limit: 10000, // 取所有规则
-          product_id: []
+          product_id: [],
+          type: 1
         }
         if (this.releasedProduct && this.releasedProduct.length) {
           this.releasedProduct.forEach((item) => {

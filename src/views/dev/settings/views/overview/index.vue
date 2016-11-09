@@ -453,7 +453,8 @@ export default {
       let params = {
         offset: 0,
         limit: 10000, // 取所有规则
-        product_id: [this.selectProduct]
+        product_id: [this.selectProduct],
+        type: 2
       }
       api.snapshot.getAllStatisticRules(params).then((res) => {
         if (res.status === 200 && res.data.list && res.data.list.length) {
@@ -570,7 +571,8 @@ export default {
           statistics_rule_id: source.selectedRule.id,
           datapoint_index: source.selectedDatapoint.index,
           statistics_type: source.statisticType,
-          period: source.statisticPeriod
+          period: source.statisticPeriod,
+          fineness: Math.max.apply(Math, source.selectedRule.fineness) || 0
         }
         if (res.datapoint.period === config.PERIODS.custom) {
           res.datapoint.custom_time = {}

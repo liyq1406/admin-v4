@@ -622,21 +622,55 @@ let configRouter = (router) => {
             require.ensure([], (require) => {
               resolve(require('./views/dev/data/statistics-rule'))
             }, 'admin')
+          },
+          subRoutes: {
+            // 设备统计规则
+            'device': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/data/statistics-rule/device'))
+                }, 'admin')
+              }
+            },
+            // 产品规则
+            'product': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/data/statistics-rule/product'))
+                }, 'admin')
+              }
+            }
           }
         },
         // 添加统计规则
-        'data/statistics-rule/add': {
+        'data/statistics-rule/device/add': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/data/statistics-rule/add'))
+              resolve(require('./views/dev/data/statistics-rule/device/add'))
             }, 'admin')
           }
         },
         // 修改统计规则
-        'data/statistics-rule/edit/:rule_id': {
+        'data/statistics-rule/device/edit/:rule_id': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/data/statistics-rule/edit'))
+              resolve(require('./views/dev/data/statistics-rule/device/edit'))
+            }, 'admin')
+          }
+        },
+        // 添加统计规则
+        'data/statistics-rule/product/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/statistics-rule/product/add'))
+            }, 'admin')
+          }
+        },
+        // 修改统计规则
+        'data/statistics-rule/product/edit/:rule_id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/statistics-rule/product/edit'))
             }, 'admin')
           }
         },

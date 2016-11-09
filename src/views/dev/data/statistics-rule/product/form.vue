@@ -454,7 +454,7 @@ export default {
         fineness: this.getFineness(),
         name: this.name,
         describe: this.description,
-        type: 1,
+        type: 2,
         status: this.status
       }
 
@@ -474,7 +474,7 @@ export default {
       process.then((res) => {
         this.submitting = false
         if (res.status === 200) {
-          this.$route.router.replace('/dev/data/statistics-rule')
+          this.$route.router.replace('/dev/data/statistics-rule/product')
         }
       }).catch((res) => {
         this.submitting = false
@@ -507,7 +507,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../../assets/stylus/common'
+@import '../../../../../assets/stylus/common'
 
 .form
   max-width 800px

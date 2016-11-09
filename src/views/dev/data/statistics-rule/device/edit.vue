@@ -27,10 +27,10 @@ export default {
   data () {
     return {
       breadcrumbNav: [{
-        label: '统计规则',
-        link: '/dev/data/statistics-rule'
+        label: '设备统计规则',
+        link: '/dev/data/statistics-rule/device'
       }, {
-        label: '修改统计规则'
+        label: '修改设备统计规则'
       }]
     }
   }
