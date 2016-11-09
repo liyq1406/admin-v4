@@ -350,7 +350,9 @@ export default {
         case 1:
           result = 'boolean'
           break
+        case 5:
         case 6:
+        case 7:
           result = 'string'
           break
         default:
@@ -376,11 +378,19 @@ export default {
      */
     setDataEvent (dp) {
       if (this.refreshing) return
+
+      let index = dp.index
+      let value = dp.value
+
+      if (dp.type === 5) {
+        value = parseFloat(dp.value)
+      }
+
       var params = {
         datapoint: [
           {
-            index: dp.index,
-            value: dp.value
+            index: index,
+            value: value
           }
         ]
       }
@@ -388,12 +398,15 @@ export default {
       //   params.datapoint[0].value = String(params.datapoint[0].value)
       // }
       // this.settingData = true
+      this.refreshing = true
       api.diagnosis.setDeviceAttribute(this.$route.params.device_id, params).then((res) => {
         if (res.status === 200) {
+          this.refreshing = false
           this.getDatapointValues()
           // this.getDatapoints()
         }
       }).catch((res) => {
+        this.refreshing = false
         this.handleError(res)
       })
     }
