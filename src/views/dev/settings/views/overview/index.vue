@@ -57,7 +57,7 @@
                     <div class="controls col-21">
                       <div class="input-radio-wrap">
                         <input v-model="curQuotaData.dataBind" type="radio" :value="1" name="bind-data"/>
-                        <label>授权数</label>
+                        <label>设备总数</label>
                         <input v-model="curQuotaData.dataBind" type="radio" :value="4" name="bind-data"/>
                         <label>用户数</label>
                         <input v-model="curQuotaData.dataBind" type="radio" :value="2" name="bind-data"/>
@@ -544,6 +544,7 @@ export default {
       if (params.quatas[this.selectedQuota].datapoint) {
         params.quatas[this.selectedQuota].datapoint.datapoint_index = this.selectedDatapoint.index
         params.quatas[this.selectedQuota].datapoint.statistics_rule_id = this.selectedRule.id
+        params.quatas[this.selectedQuota].datapoint.snapshot_id = this.selectedRule.snapshot_id
       }
       proxy.setCustomOverviewConfig(this.selectProduct, params).then((res) => {
         if (res.status === 200) {
@@ -572,7 +573,8 @@ export default {
           datapoint_index: source.selectedDatapoint.index,
           statistics_type: source.statisticType,
           period: source.statisticPeriod,
-          fineness: Math.max.apply(Math, source.selectedRule.fineness) || 0
+          fineness: Math.max.apply(Math, source.selectedRule.fineness) || 0,
+          snapshot_id: source.selectedRule.snapshot_id
         }
         if (res.datapoint.period === config.PERIODS.custom) {
           res.datapoint.custom_time = {}

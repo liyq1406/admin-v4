@@ -49,10 +49,12 @@ let defaultValue = {
   quatas: {
     1: { // 指标1
       dataFrom: DATAFROM.preset,
-      name: '授权数',
+      name: '设备总数',
       preset: PRESET.devices_count // 数据来源为绑定数据项
       // datapoint: { // 数据来源为数据端点
       //   statistics_rule_id: '', // 统计规则ID
+      //   snapshot_id: '', // 快照ID
+      //   fineness: 0, // 时间粒度
       //   datapoint_index: 0, // 数据端点的索引值
       //   statistics_type: STATISTICS_TYPES.max, // 1,2,3,4分别表示最大值，最小值，平均，求和
       //   period: PERIODS.one,
