@@ -82,7 +82,7 @@
                 <td><span v-if="firmware.type===1">WIFI</span><span v-if="firmware.type===2">MCU</span><span v-if="firmware.type===3">子设备</span></td>
                 <td><span v-if="firmware.identify===0">-</span><span v-else>{{ firmware.identify }}</span></td>
                 <td>{{ firmware.create_date | formatDate }}</td>
-                <td>{{ firmware.file_size | bytesPrettify }}</td>
+                <td>{{ firmware.file_size | prettyBytes }}</td>
                 <td>{{ firmware.file_md5 }}</td>
                 <td class="tac">
                   <!-- <button @click="onEditFirmware(firmware)" class="btn btn-link btn-mini">{{ $t('common.edit') }}</button> -->
