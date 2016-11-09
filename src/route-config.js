@@ -607,6 +607,45 @@ let configRouter = (router) => {
           }
         },
 
+        'plugins/broadcast/:app_id/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/broadcast/form'))
+            }, 'admin')
+          }
+        },
+        'plugins/broadcast/:app_id/list': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/broadcast/list'))
+            }, 'admin')
+          }
+        },
+        // 推送详情
+        'plugins/broadcast/:app_id/list/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/broadcast/details'))
+            }, 'admin')
+          }
+        },
+        // 编辑推送
+        'plugins/broadcast/:app_id/list/:id/update': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/broadcast/form'))
+            }, 'admin')
+          }
+        },
+        // 禁止访问
+        'plugins/broadcast/:app_id/forbidden': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/broadcast/forbidden'))
+            }, 'admin')
+          }
+        },
+
         // 菜谱管理
         // ------------------------------
         // 菜谱列表
@@ -943,6 +982,7 @@ let configRouter = (router) => {
     '/operation/plugins/splashwnd/:app_id': '/operation/plugins/splashwnd/:app_id/list',
     '/operation/content/splashwnd/:app_id': '/operation/content/splashwnd/:app_id',
     '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/issues',
+    '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/add',
     '/operation/plugins/recipes/:app_id/recipes/:id/edit/:type_value': '/operation/plugins/recipes/:app_id/recipes/:id/edit/:type_value/basic-info',
     '/operation/plugins': '/operation/plugins/extensions',
     '/operation/alerts': '/operation/alerts/record',

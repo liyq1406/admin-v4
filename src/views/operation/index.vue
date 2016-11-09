@@ -149,6 +149,16 @@ export default {
               url: `/plugins/recipes/${item.id}/tags`
             }]
             break
+          case 'broadcast': // 消息推送
+            sub.icon = 'envelope'
+            sub.subs = [{
+              alias: 'add',
+              url: `/plugins/broadcast/${item.id}/add`
+            }, {
+              alias: 'list',
+              url: `/plugins/broadcast/${item.id}/list`
+            }]
+            break
           case 'helpdesk': // 用户反馈
             sub.icon = 'inbox'
             sub.subs = [{

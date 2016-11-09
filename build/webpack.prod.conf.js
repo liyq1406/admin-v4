@@ -31,6 +31,9 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
+    new webpack.ProvidePlugin({
+      '_': 'lodash'
+    }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
