@@ -8,11 +8,10 @@
               <label class="middle-word">选择产品:</label>
             </div>
             <div class="controls col-21">
-              <x-radios :items="productsOption"
-                          name="products"
-                 :default-item="{ value: defaultProductId }"
-                        @select="productChange">
-              </x-radios>
+              <div v-for="product in releasedProduct" class="fl input-radio-wrap">
+                <input v-model="selectProduct" type="radio" :value="product.id" name="products"/>
+                <label>{{ product.name }}</label>
+              </div>
               <div v-if="!releasedProduct.length" class="fl input-radio-wrap">
                 <label>暂无已发布设备</label>
               </div>
@@ -24,11 +23,7 @@
             </div>
             <div class="controls col-21">
               <div class="radio-button-wrap">
-                <radio-button-group :items="quotasInfo"
-                                     color="red"
-                               :value.sync="curQuotaIndex"
-                                   @select="quotaChange">
-                </radio-button-group>
+                <radio-button-group :items="quotasInfo" color="red" :value.sync="selectedQuota" @select="quotaSelect"></radio-button-group>
               </div>
               <div class="quotas-detail mt30">
                 <div class="{{ arrowClass }}"></div>
@@ -39,10 +34,7 @@
                       <label>数据来源:</label>
                     </div>
                     <div class="controls col-21">
-                      <radio-button-group :items="dataFromInfo"
-                                     :value.sync="quataData[curQuotaIndex].dataFrom"
-                                         @select="dataFromChange">
-                      </radio-button-group>
+                      <radio-button-group :items="dataFromInfo" :value.sync="curQuotaData.dataFrom" @select="dataFromSelect"></radio-button-group>
                     </div>
                   </div>
                   <div class="form-row row">
@@ -51,71 +43,80 @@
                     </div>
                     <div class="controls col-6">
                       <div class="input-text-wrap">
-                        <input v-model="quataData[curQuotaIndex].name" type="text" placeholder="请输入指标名称" class="input-text" v-validate:name="{required: true}" lazy/>
+                        <input v-model="curQuotaData.name" type="text" placeholder="请输入指标名称" class="input-text" v-validate:name="{required: true}" lazy/>
                         <div class="form-tips form-tips-error">
                           <span v-if="$validation.name.touched && $validation.name.required">指标名称不能为空</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div v-if="quataData[curQuotaIndex].dataFrom !== 1" class="form-row row">
+                  <div v-if="curQuotaData.dataFrom !== 1" class="form-row row">
                     <div class="form-control col-3">
                       <label>绑定数据项:</label>
                     </div>
                     <div class="controls col-21">
-                      <x-radios :items="presetOption"
-                                  name="preset"
-                         :default-item="{ value: quataData[curQuotaIndex].preset }"
-                                @select="">
-                      </x-radios>
+                      <div class="input-radio-wrap">
+                        <input v-model="curQuotaData.dataBind" type="radio" :value="1" name="bind-data"/>
+                        <label>授权数</label>
+                        <input v-model="curQuotaData.dataBind" type="radio" :value="4" name="bind-data"/>
+                        <label>用户数</label>
+                        <input v-model="curQuotaData.dataBind" type="radio" :value="2" name="bind-data"/>
+                        <label>激活数</label>
+                        <input v-model="curQuotaData.dataBind" type="radio" :value="5" name="bind-data"/>
+                        <label>用户在线数</label>
+                        <input v-model="curQuotaData.dataBind" type="radio" :value="3" name="bind-data"/>
+                        <label>设备在线数</label>
+                      </div>
                     </div>
                   </div>
-                  <template v-if="quataData[curQuotaIndex].dataFrom === 1">
+                  <template v-if="curQuotaData.dataFrom === 1">
                     <div class="form-row row">
                       <div class="form-control col-3">
                         <label>数据规则:</label>
                       </div>
                       <div class="control col-6">
-                        <statistics-rule-options :product-id="selectProductId"
-                                                     @select="statisticsRulesChange"
-                                                     :default-item="{
-                                                         label: quataData[curQuotaIndex].statisticsRule.name,
-                                                         value: quataData[curQuotaIndex].statisticsRule.id
-                                                       }">
-                        </statistics-rule-options>
+                        <x-select width="120px" :label="selectedRule.name" :size="selectSize">
+                          <select v-model="selectedRule" @change="statisticsRuleSelect">
+                            <option v-for="option in statisticsRulesOptions" :value="option">{{ option.name }}</option>
+                          </select>
+                        </x-select>
                       </div>
                       <div class="form-control col-3">
                         <label>数据端点:</label>
                       </div>
                       <div class="control col-6">
-                        <datapoint-options :product-id="selectProductId"
-                                               :filter="dpFilter"
-                                               @select="datapointChange">
-                          </datapoint-options>
+                        <x-select width="100px" :label="selectedDatapoint.name" :size="selectSize">
+                          <select v-model="selectedDatapoint" @change="datapointSelect">
+                            <option v-for="option in datapointOptions" :value="option">{{ option.name }}</option>
+                          </select>
+                        </x-select>
                       </div>
                     </div>
-                    <div v-if="true" class="form-row row">
+                    <div v-if="selectedRule.fineness && selectedRule.fineness.length" class="form-row row">
                       <div class="form-control col-3">
-                        <label>统计维度:</label>
+                        <label>数据计算:</label>
                       </div>
                       <div class="controls col-21">
-                        <x-radios :items="statisticsTypeOption"
-                                    name="statisticsType"
-                           :default-item="{ value: quataData[this.curQuotaIndex].statisticsType }"
-                                  @select="">
-                        </x-radios>
-                      </div>
-                    </div>
-                    <div v-if="true" class="form-row row">
-                      <div class="form-control col-3">
-                        <label>时间粒度:</label>
-                      </div>
-                      <div class="controls col-21">
-                        <x-radios :items="finenessOption"
-                                    name="fineness"
-                                    :default-item="{ value: quataData[this.curQuotaIndex].fineness }"
-                                  @select="">
-                        </x-radios>
+                        <div class="input-radio-wrap">
+                          <template v-for="item in statisticsTypes">
+                            <template v-if="item.mode===1">
+                              <input v-model="curQuotaData.statisticType" type="radio" :value="1" name="statistic-type"/>
+                              <label>最大值</label>
+                            </template>
+                            <template v-if="item.mode===2">
+                              <input v-model="curQuotaData.statisticType" type="radio" :value="2" name="statistic-type"/>
+                              <label>最小值</label>
+                            </template>
+                            <template v-if="item.mode===3">
+                              <input v-model="curQuotaData.statisticType" type="radio" :value="3" name="statistic-type"/>
+                              <label>平均</label>
+                            </template>
+                            <template v-if="item.mode===4">
+                              <input v-model="curQuotaData.statisticType" type="radio" :value="4" name="statistic-type"/>
+                              <label>求和</label>
+                            </template>
+                          </template>
+                        </div>
                       </div>
                     </div>
                     <div class="form-row row">
@@ -123,15 +124,20 @@
                         <label>计算周期:</label>
                       </div>
                       <div class="controls col-21">
-                        <div class="fl">
-                          <x-radios :items="peroidOption"
-                                      name="peroid"
-                                      :default-item="{ value: quataData[curQuotaIndex].period }"
-                                    @select="periodChange">
-                          </x-radios>
+                        <div class="input-radio-wrap fl">
+                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="1" name="statistic-period" @change="statisticPeriodSelect"/>
+                          <label>24小时</label>
+                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="2" name="statistic-period" @change="statisticPeriodSelect"/>
+                          <label>7日</label>
+                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="3" name="statistic-period" @change="statisticPeriodSelect"/>
+                          <label>30日</label>
+                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="4" name="statistic-period" @change="statisticPeriodSelect"/>
+                          <label>至今</label>
+                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="5" name="statistic-period" @change="statisticPeriodSelect"/>
+                          <label>自定义时间</label>
                         </div>
-                        <div v-if="quataData[curQuotaIndex].period === 5" class="time-range-lineheight">
-                          <date-time-range-picker :init-start-time="quataData[curQuotaIndex].custom_time.start" :init-end-time="quataData[curQuotaIndex].custom_time.end" @timechange="timeSelect"></date-time-range-picker>
+                        <div v-if="curQuotaData.statisticPeriod === 5" class="time-range-lineheight">
+                          <date-time-range-picker :init-start-time="initStartTime" :init-end-time="initEndTime" @timechange="timeSelect"></date-time-range-picker>
                         </div>
                       </div>
                     </div>
@@ -196,17 +202,13 @@
 </template>
 
 <script>
-// import api from 'api'
+import api from 'api'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import RadioGroup from 'components/RadioGroup'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
-// import proxy from './proxy-api'
+import proxy from './proxy-api'
 import config from 'consts/custom-config'
-import XRadios from './components/x-radios'
-import StatisticsRuleOptions from './components/statistics-rule-options'
-import DatapointOptions from './components/datapoint-options'
 
 var QUOTAS = [
   { label: '指标1', value: 1 },
@@ -219,38 +221,6 @@ var QUOTAS_TYPES = [
   { label: '数据端点', value: 1 },
   { label: '绑定预设项', value: 2 }
 ]
-
-var PRESETSOPTION = [
-  { label: '设备总数', value: 1 },
-  { label: '用户数', value: 2 },
-  { label: '激活数', value: 3 },
-  { label: '用户在线数', value: 4 },
-  { label: '设备在线数', value: 5 }
-]
-
-var PEROID = [
-  { label: '24小时', value: 1 },
-  { label: '7日', value: 2 },
-  { label: '30日', value: 3 },
-  { label: '至今', value: 4 },
-  { label: '自定义时间', value: 5 }
-]
-
-var FINENESS = [
-  { label: '小时', value: 1 },
-  { label: '天', value: 2 },
-  { label: '周', value: 3 },
-  { label: '月', value: 4 },
-  { label: '年', value: 5 }
-]
-
-var STATISTICS_TYPES = [
-  { value: 1, label: '最大值' },
-  { value: 2, label: '最小值' },
-  { value: 3, label: '平均值' },
-  { value: 4, label: '和' }
-]
-
 export default {
   name: 'custom-overview',
 
@@ -265,214 +235,375 @@ export default {
   components: {
     'x-select': Select,
     RadioButtonGroup,
-    RadioGroup,
-    XRadios,
-    DateTimeRangePicker,
-    StatisticsRuleOptions,
-    DatapointOptions
+    DateTimeRangePicker
   },
 
   data () {
     return {
-      curQuotaIndex: 1, // 当前指标索引
       initStartTime: 0,
       initEndTime: 0,
       editing: false,
       quotasInfo: QUOTAS,
       dataFromInfo: QUOTAS_TYPES,
-      presetOption: PRESETSOPTION,
-      peroidOption: PEROID,
-      features: { // 功能模块
-        trend: true,
-        active: true,
-        distribution: true
+      selectedQuota: 1,
+      curQuotaData: {
+        // dataFrom: 1,
+        // dataBind: 1,
+        // name: '',
+        // statisticPeriod: 1,
+        // selectedRule: {},
+        // selectedDatapoint: {},
+        // statisticType: 1
       },
-      _features: {},
-      defaultProductId: '',
-      selectProductId: '',
-      _quataData: {},
-      quataData: {
-        1: {
-          dataFrom: config.DATAFROM.preset,
-          name: '设备总数',
-          statisticsRule: {},
-          datapoint: {},
-          preset: 1,
-          period: 1,
-          custom_time: {
-            start: 0,
-            end: 0
-          },
-          fineness: 0,
-          statisticsType: 0
-        },
-        2: {
-          dataFrom: config.DATAFROM.preset,
-          name: '设备激活数',
-          statisticsRule: {},
-          datapoint: {},
-          preset: 3,
-          period: 1,
-          custom_time: {
-            start: 0,
-            end: 0
-          },
-          fineness: 0,
-          statisticsType: 0
-        },
-        3: {
-          dataFrom: config.DATAFROM.preset,
-          name: '设备在线数',
-          statisticsRule: {},
-          datapoint: {},
-          preset: 5,
-          period: 1,
-          custom_time: {
-            start: 0,
-            end: 0
-          },
-          fineness: 0,
-          statisticsType: 0
-        },
-        4: {
-          dataFrom: config.DATAFROM.preset,
-          name: '用户在线数',
-          statisticsRule: {},
-          datapoint: {},
-          preset: 2,
-          period: 1,
-          custom_time: {
-            start: 0,
-            end: 0
-          },
-          fineness: 0,
-          statisticsType: 0
-        }
+      features: {},
+      selectProduct: '',
+      quotaData: {},
+      statisticsRulesOptions: [],
+      selectedRule: {
+        name: ''
+      },
+      dataPoints: [],
+      selectedDatapoint: {
+        name: ''
+      },
+      configLoaded: {
+        1: false,
+        2: false,
+        3: false,
+        4: false
       }
     }
   },
   computed: {
-    statisticsTypeOption () { // 统计维度
-      let res = STATISTICS_TYPES
-      let rule = this.quataData[this.curQuotaIndex].statisticsRule
-      if (rule && rule.dp_mode && rule.dp_mode.length) {
-        let ruleGroups = _.groupBy(rule.dp_mode, (item) => {
-          return item.index
-        })
-        if (ruleGroups) {
-          let curDp = this.quataData[this.curQuotaIndex].datapoint
-          if (!curDp) {
-            return []
-          }
-          if (ruleGroups[curDp.index]) {
-            return _.filter(res, (item) => {
-              return _.find(ruleGroups[curDp.index], (mode) => {
-                return mode.mode === item.value
-              })
-            })
-          }
-        }
-      } else {
-        return []
-      }
-    },
-    finenessOption () {
-      let res = FINENESS
-      let rule = this.quataData[this.curQuotaIndex].statisticsRule
-      if (rule && rule.fineness && rule.fineness.length) {
-        return _.filter(res, (item) => {
-          return _.find(rule.fineness, (fi) => {
-            return fi === item.value
-          })
-        })
-      }
-      return res
-    },
     arrowClass () {
       let res = 'arrow arrow-left-'
-      return res + this.curQuotaIndex
+      return res + this.selectedQuota
     },
-    productsOption () {
+    datapointOptions () {
       let res = []
-      if (this.releasedProduct.length) {
-        this.releasedProduct.forEach((item) => {
-          res.push({
-            value: item.id,
-            label: item.name
+      if (this.dataPoints && this.dataPoints.length) {
+        this.dataPoints.forEach((item) => {
+          let findDpMode = _.find(this.dpMode, (dp) => {
+            return dp.index === item.index
           })
+          if (findDpMode) {
+            res.push({
+              id: item.id,
+              name: item.name,
+              index: item.index
+            })
+          }
         })
       }
       return res
     },
-    dpFilter () {
-      let rule = this.quataData[this.curQuotaIndex].statisticsRule
-      if (rule && rule.dp_mode && rule.dp_mode.length) {
-        let ruleGroups = _.groupBy(rule.dp_mode, (item) => {
-          return item.index
-        })
-        return function (dp) {
-          return !!ruleGroups[dp.value]
-        }
+    statisticsTypes () {
+      if (typeof this.selectedDatapoint.index !== 'number' || !this.dpMode || !this.dpMode.length) {
+        return
       }
-      return function () { return false }
+      let res = _.filter(this.dpMode, (item) => {
+        return item.index === this.selectedDatapoint.index
+      })
+      if (res && res.length) {
+        res.sort((a, b) => {
+          return a.mode - b.mode
+        })
+        //
+      }
+      return res || []
+    },
+    dpMode () {
+      return this.selectedRule.dp_mode || []
     }
   },
   watch: {
     releasedProduct () {
-      this.setDefaultProduct()
+      if (this.releasedProduct.length) {
+        this.selectProduct = this.releasedProduct[0].id
+      }
+    },
+    selectProduct () {
+      if (this.selectProduct) {
+        this.resetConfig()
+        this.getCurProductStatisticRules()
+        this.getCurProductDatapoints(this.selectProduct)
+      }
     }
   },
   route: {
-    data () {}
+    data () {
+      if (this.releasedProduct.length) {
+        this.selectProduct = this.releasedProduct[0].id
+      }
+    }
   },
   ready () {
-    this.copyDefaultConfig()
-    this.setDefaultProduct()
   },
   methods: {
-    copyDefaultConfig () {
-      this._quataData = _.cloneDeep(this.quataData)
-      this._features = _.cloneDeep(this.features)
+    // 重置当前产品配置
+    resetConfig () {
+      for (let i in this.configLoaded) {
+        // reset
+        this.configLoaded[i] = false
+      }
+      // 设置默认
+      this.initProductConfig(config.defaultValue)
+      proxy.getCustomOverviewConfig(this.selectProduct).then((res) => {
+        if (res) {
+          // 配置服务器返回
+          this.initProductConfig(res)
+          for (let i in res.quatas) {
+            if (res.quatas[i].dataFrom === config.DATAFROM.datapoint && res.quatas[i].datapoint && res.quatas[i].datapoint.statistics_type) {
+              this.configLoaded[i] = true
+            }
+          }
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
     },
-    resetProductConfig () {
-      this.quataData = _.cloneDeep(this._quataData)
-      this.features = _.cloneDeep(this._features)
+    initProductConfig (pConfig) {
+      for (let i in pConfig.quatas) {
+        this.quotaData[i] = {
+          dataFrom: pConfig.quatas[i].dataFrom,
+          name: pConfig.quatas[i].name
+        }
+        this.quotaData[i].statisticPeriod = 1
+        this.quotaData[i].dataBind = 1
+        if (pConfig.quatas[i].dataFrom === config.DATAFROM.preset) {
+          this.quotaData[i].dataBind = pConfig.quatas[i].preset
+        }
+        if (pConfig.quatas[i].dataFrom === config.DATAFROM.datapoint && pConfig.quatas[i].datapoint) {
+          this.quotaData[i].statisticPeriod = pConfig.quatas[i].datapoint.period
+          this.quotaData[i].statisticType = pConfig.quatas[i].datapoint.statistics_type
+          this.quotaData[i].statistics_rule_id = pConfig.quatas[i].datapoint.statistics_rule_id
+          this.quotaData[i].datapoint_index = pConfig.quatas[i].datapoint.datapoint_index
+        }
+
+        if (this.quotaData[i].statisticPeriod === 5) {
+          this.quotaData[i].custom_time = _.clone(pConfig.quatas[i].datapoint.custom_time)
+        }
+      }
+      this.selectedQuota = 1
+      this.features = {
+        trend: pConfig.trend,
+        active: pConfig.active,
+        distribution: pConfig.distribution
+      }
+      this.curQuotaData = _.clone(this.quotaData[1])
+      if (this.curQuotaData.custom_time) {
+        this.initStartTime = this.curQuotaData.custom_time.start || 0
+        this.initEndTime = this.curQuotaData.custom_time.end || 0
+      }
+      this.setStatisticesConfig()
+      this.$nextTick(() => {
+        this.$validate(true)
+      })
     },
-    setDefaultProduct () {
-      if (this.releasedProduct.length) {
-        this.defaultProductId = this.selectProductId = this.productsOption[0].value
+    setStatisticesConfig () {
+      if (this.statisticsRulesOptions.length) {
+        for (let i in this.quotaData) {
+          if (this.quotaData[i].statistics_rule_id) { // 设置数据规则
+            let selectedRule = _.find(this.statisticsRulesOptions, (item) => {
+              return item.id === this.quotaData[i].statistics_rule_id
+            })
+            if (selectedRule) {
+              this.quotaData[i].selectedRule = _.clone(selectedRule)
+            }
+          } else {
+            this.quotaData[i].selectedRule = _.clone(this.statisticsRulesOptions[0])
+          }
+          if (typeof this.quotaData[i].datapoint_index === 'number') { // 设置数据端点
+            let selectedDatapoint = _.find(this.datapointOptions, (item) => {
+              return item.index === this.quotaData[i].datapoint_index
+            })
+            if (selectedDatapoint) {
+              this.quotaData[i].selectedDatapoint = _.clone(selectedDatapoint)
+            }
+          } else {
+            this.quotaData[i].selectedDatapoint = _.clone(this.datapointOptions[0])
+          }
+        }
+        // 设置当前
+        this.curQuotaData = _.clone(this.quotaData[1])
+        if (this.curQuotaData.selectedRule) {
+          this.selectedRule = _.clone(this.curQuotaData.selectedRule)
+        }
+        if (this.curQuotaData.selectedDatapoint) {
+          this.selectedDatapoint = _.clone(this.curQuotaData.selectedDatapoint)
+        }
       }
     },
-    onSubmit () {},
-    quotaChange () {},
-    dataFromChange () {},
-    statisticsRulesChange (rule) {
-      this.quataData[this.curQuotaIndex].statisticsRule = _.clone(rule || {})
+    // 获取当前产品的数据端点
+    getCurProductDatapoints (productId) {
+      api.product.getDatapoints(productId).then((res) => {
+        if (res.status === 200 && res.data.length) {
+          this.dataPoints = res.data
+          this.setInitSelect(true)
+        } else {
+          this.dataPoints = []
+        }
+        this.setStatisticesConfig()
+      }).catch((res) => {
+        this.handleError(res)
+      })
     },
-    resetStatisticsType () {
-      this.quataData[this.curQuotaIndex].statisticsType = 0
+    // 获取当前产品的统计规则
+    getCurProductStatisticRules () {
+      let params = {
+        offset: 0,
+        limit: 10000, // 取所有规则
+        product_id: [this.selectProduct]
+      }
+      api.snapshot.getAllStatisticRules(params).then((res) => {
+        if (res.status === 200 && res.data.list && res.data.list.length) {
+          this.statisticsRulesOptions = res.data.list
+          this.selectedRule = this.statisticsRulesOptions[0]
+          this.setInitSelect(true)
+        } else {
+          this.statisticsRulesOptions = []
+          this.selectedRule = {}
+          this.selectedDatapoint = {}
+        }
+        this.setQuataSelect('selectedRule', _.clone(this.selectedRule))
+        this.setStatisticesConfig()
+      }).catch((res) => {
+        this.handleError(res)
+      })
     },
-    resetFineness () {
-      this.quataData[this.curQuotaIndex].fineness = 0
-    },
-    setDefaultStatisticesType () {
-      if (!this.quataData[this.curQuotaIndex].statisticsType && this.statisticsTypeOption.length) {
-        this.quataData[this.curQuotaIndex].statisticsType = this.statisticsTypeOption[0].value
+    setQuataSelect (key, value) {
+      for (let i in this.quotaData) {
+        if (this.quotaData[i]) {
+          this.quotaData[i][key] = _.clone(value)
+        }
       }
     },
-    datapointChange (datapoint) {
-      this.quataData[this.curQuotaIndex].datapoint = _.clone(datapoint)
+    // 默认选第一个数据规则和数据端点
+    setInitSelect (first) {
+      if (this.datapointOptions.length) {
+        this.selectedDatapoint = this.datapointOptions[0]
+        if (first) {
+          this.setQuataSelect('selectedDatapoint', _.clone(this.selectedDatapoint))
+        }
+        this.setStatisticsTypeInit(first)
+      } else {
+        this.selectedDatapoint = {}
+      }
     },
-    periodChange (value) {
-      this.quataData[this.curQuotaIndex].period = value
+    setStatisticsTypeInit (first) {
+      if (this.statisticsTypes.length) {
+        this.curQuotaData.statisticType = this.statisticsTypes[0].mode
+        if (first) {
+          // this.setQuataSelect('statisticType', this.statisticsTypes[0].mode)
+          for (let i in this.quotaData) {
+            if (!this.configLoaded[i]) {
+              this.quotaData[i].statisticType = this.statisticsTypes[0].mode
+            }
+          }
+        }
+      }
+    },
+    // 指标切换
+    quotaSelect (quata, oldQuata) {
+      this.quotaData[oldQuata] = _.clone(this.curQuotaData)
+      this.quotaData[oldQuata].selectedRule = _.clone(this.selectedRule)
+      this.quotaData[oldQuata].selectedDatapoint = _.clone(this.selectedDatapoint)
+      this.curQuotaData = _.clone(this.quotaData[quata])
+      if (this.curQuotaData.custom_time) {
+        this.initStartTime = this.curQuotaData.custom_time.start || 0
+        this.initEndTime = this.curQuotaData.custom_time.end || 0
+      } else {
+        this.initStartTime = this.initEndTime = 0
+      }
+      this.selectedRule = _.clone(this.curQuotaData.selectedRule) || {}
+      this.selectedDatapoint = _.clone(this.curQuotaData.selectedDatapoint) || {}
+      this.$resetValidation()
+    },
+    dataFromSelect () {},
+    onSubmit () {
+      if (this.editing) {
+        return
+      }
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
+      }
+      if (!this.selectProduct) {
+        return
+      }
+      this.editing = true
+      let params = _.clone(config.defaultValue)
+      for (let i in this.quotaData) {
+        params.quatas[i] = this.setParamsQuatasConfig(this.quotaData[i])
+      }
+      params.quatas[this.selectedQuota] = this.setParamsQuatasConfig(this.curQuotaData)
+      params.trend = this.features.trend
+      params.active = this.features.active
+      params.distribution = this.features.distribution
+      if (params.quatas[this.selectedQuota].datapoint) {
+        params.quatas[this.selectedQuota].datapoint.datapoint_index = this.selectedDatapoint.index
+        params.quatas[this.selectedQuota].datapoint.statistics_rule_id = this.selectedRule.id
+      }
+      proxy.setCustomOverviewConfig(this.selectProduct, params).then((res) => {
+        if (res.status === 200) {
+          // 设置成功
+          console.log('设置成功')
+        }
+        this.editing = false
+      }).catch((res) => {
+        this.handleError(res)
+        this.editing = false
+      })
+    },
+    setParamsQuatasConfig (source) {
+      let res = {}
+      res.dataFrom = source.dataFrom
+      res.name = source.name
+      if (res.dataFrom === config.DATAFROM.preset) { // 绑定预设项
+        res.preset = source.dataBind
+      } else if (res.dataFrom === config.DATAFROM.datapoint) { // 绑定数据规则
+        if (!source.selectedRule || !source.selectedRule.id) {
+          // 当前产品没有数据规则
+          return
+        }
+        res.datapoint = {
+          statistics_rule_id: source.selectedRule.id,
+          datapoint_index: source.selectedDatapoint.index,
+          statistics_type: source.statisticType,
+          period: source.statisticPeriod
+        }
+        if (res.datapoint.period === config.PERIODS.custom) {
+          res.datapoint.custom_time = {}
+          if (source.custom_time) {
+            res.datapoint.custom_time.start = source.custom_time.start || 0
+            res.datapoint.custom_time.end = source.custom_time.end || 0
+          } else { // 没有设置时间。默认为一周
+            let curTime = new Date()
+            res.datapoint.custom_time.start = curTime.getTime() - 3600 * 24 * 1000 * 6
+            res.datapoint.custom_time.end = curTime.getTime()
+          }
+        }
+      }
+      return res
+    },
+    statisticsRuleSelect () {
+      this.setInitSelect()
+    },
+    datapointSelect () {
+      this.setStatisticsTypeInit()
     },
     timeSelect (startTime, endTime) {
-      this.quataData[this.curQuotaIndex].custom_time.start = startTime.getTime()
-      this.quataData[this.curQuotaIndex].custom_time.end = endTime.getTime()
+      if (!this.curQuotaData.custom_time) {
+        this.curQuotaData.custom_time = {}
+      }
+      this.curQuotaData.custom_time.start = startTime.getTime()
+      this.curQuotaData.custom_time.end = endTime.getTime()
     },
-    productChange (productId) {
-      this.resetProductConfig()
-      this.selectProductId = productId
+    statisticPeriodSelect (value) {
+      if (this.curQuotaData.statisticPeriod === 5 && this.curQuotaData.custom_time) {
+        this.initStartTime = this.curQuotaData.custom_time.start || 0
+        this.initEndTime = this.curQuotaData.custom_time.end || 0
+      }
     }
   }
 }
