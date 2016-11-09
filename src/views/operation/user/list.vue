@@ -247,7 +247,7 @@
       // 基本筛选条件
       baseCondition () {
         var condition = {
-          filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid', 'is_online'],
+          filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid', 'is_online', 'active_date'],
           order: {
             create_time: 'desc'
           },
