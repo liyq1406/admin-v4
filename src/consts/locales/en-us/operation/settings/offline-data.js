@@ -4,30 +4,30 @@
  */
 
 export default {
-  main_title: '离线数据',
+  main_title: 'Offline Data',
   columns: {
-    status: '任务进度',
-    type: '导出类型',
-    begin_time: '任务开始',
-    end_time: '任务结束',
-    url: '下载地址'
+    status: 'Progress',
+    type: 'Type',
+    begin_time: 'Start Time',
+    end_time: 'End Time',
+    url: 'Download'
   },
   status: {
-    to_be_exported: '待导出',
-    exporting: '导出中',
-    exported: '导出完成',
-    invalid: '无效导出',
-    expired: '过期'
+    to_be_exported: 'To be exported',
+    exporting: 'Exporting',
+    exported: 'Exported',
+    invalid: 'Invalid',
+    expired: 'Expired'
   },
   types: {
-    device: '设备列表',
-    user: '用户列表',
-    alert: '告警信息列表',
-    heavy_buyer: '大客户列表',
-    dealer: '经销商列表',
-    warranty: '维保列表',
-    device_session_log: '设备上下线'
+    device: 'Device',
+    user: 'User',
+    alert: 'Alert',
+    heavy_buyer: 'VIP',
+    dealer: 'Dealer',
+    warranty: 'Warranty',
+    device_session_log: 'Device Online-offline'
   },
-  get_url: '获取地址',
-  url: '下载地址'
+  get_url: 'Get URL',
+  url: 'Download URL'
 }
