@@ -216,6 +216,9 @@ export default {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {
+          type: {
+            $in: [1, 2]
+          },
           status: 1
         },
         order: {
