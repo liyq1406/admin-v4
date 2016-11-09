@@ -12,7 +12,7 @@ let apiServer = ({
     api: 'http://cloud.fotile.com',
     plugin: 'http://cloud.fotile.com:3000'
   }
-})[process.env.API_SERVER || 'test']
+})[process.env.API_SERVER || 'fotile']
 
 export const API_SERVER = {
   // 默认
