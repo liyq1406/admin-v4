@@ -70,25 +70,25 @@
                 <th>序列号</th>
                 <th>客户名称</th>
                 <th>手机号</th>
-                <!-- <th class="tac">{{ $t("common.action") }}</th> -->
+                <th class="tac">{{ $t("common.action") }}</th>
               </tr>
             </thead>
             <tbody>
               <template v-if="sales.length > 0">
                 <tr v-for="sale in sales">
-                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/sales/' + sale.id" class="hl-red">{{ sale.mac || '--' }}</td>
-                  <td>{{ sale.sale_time | formatDate 'yyyy-MM-dd' }}</a></td>
+                  <td><a v-link="'/operation/products/' + sale.product_id + '/devices/' + sale.device_id + '/info'" class="hl-red">{{ sale.mac || '--' }}</a></td>
+                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/sales/' + sale.id" class="hl-red">{{ sale.sale_time | formatDate 'yyyy-MM-dd' }}</a></td>
                   <td>{{ sale.product_mod || '--' }}</td>
                   <td>{{ sale.sn || '--' }}</td>
                   <td>{{ sale.name || '--' }}</td>
                   <td>{{ sale.phone || '--' }}</td>
-                  <!-- <td class="tac">
+                  <td class="tac">
                     <button v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/edit/' + sale.id" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
-                  </td> -->
+                  </td>
                 </tr>
               </template>
               <tr v-if="sales.length === 0 && !loadingData">
-                <td colspan="6" class="tac">
+                <td colspan="7" class="tac">
                   <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
@@ -243,7 +243,7 @@
       },
       queryCondition () {
         var condition = {
-          filter: ['name', 'id', 'email', 'phone', 'client_type', 'province', 'city', 'address', 'sn', 'sale_time', 'product_mod', 'mac'],
+          filter: ['name', 'id', 'email', 'phone', 'client_type', 'province', 'city', 'address', 'sn', 'sale_time', 'product_mod', 'mac', 'product_id', 'device_id'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage
         }

@@ -52,6 +52,11 @@ export default {
   ready () {
     this.startTime = this.time
   },
+  watch: {
+    time () {
+      this.startTime = this.time
+    }
+  },
   methods: {
     timeChange (microtime) {
       var date = new Date(microtime)

@@ -124,12 +124,32 @@ export default {
   },
   /**
    * 添加客户信息(销售记录)
-   * @param  {String} clientInfoId 认证信息
+   * @param  {String} dealerId 经销商id
    * @return {Promise}
    */
   addClientInfo (dealerId, params) {
     return http.post(
       `${API_SERVER.default}/v2/dealer/${dealerId}/add_client_info/upload`, params
+    )
+  },
+  /**
+   * 修改客户信息(销售记录)
+   * @param  {String} clientInfoId 销售信息id
+   * @return {Promise}
+   */
+  editClientInfo (clientInfoId, params) {
+    return http.put(
+      `${API_SERVER.default}/v2/dealer/client_info/${clientInfoId}`, params
+    )
+  },
+  /**
+   * 添加客户信息(销售记录)
+   * @param  {String} clientInfoId 认证信息
+   * @return {Promise}
+   */
+  delClientInfo (clientInfoId) {
+    return http.del(
+      `${API_SERVER.default}/v2/dealer/client_info/${clientInfoId}`
     )
   }
 }
