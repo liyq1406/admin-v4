@@ -589,8 +589,13 @@ export default {
       if (this.refreshing) return
       let index = dp.index
       let value = dp.value
+
       if (type === 'string') {
-        value = ev.target.value
+        if (dp.type === 5) {
+          value = parseFloat(ev.target.value)
+        } else {
+          value = ev.target.value
+        }
       }
       // if (isNaN(dp.value)) return
       var params = {
@@ -642,6 +647,7 @@ export default {
         case 4:
           result = 'number'
           break
+        case 5:
         case 6:
         case 7:
           result = 'string'
