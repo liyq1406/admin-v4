@@ -36,7 +36,7 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick"><i class="fa fa-share"></i></button>
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
               </div>
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)" :max="(queryType.value === 'id'?2100000000: false)">
@@ -51,44 +51,23 @@
             </div>
             <div class="filter-group">
               <x-select width="90px" size="small" :label="visibility.label">
-                <span slot="label">{{ $t('common.display') }}：</span>
+                <span slot="label">{{ $t('common.display') }}: </span>
                 <select v-model="visibility" @change="getDevices">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
+              <span class="ml10">{{ $t('operation.product.device.manager.active_date') }}: </span>
+              <x-select width="98px" size="small" :label="rangeOption.label">
+                <select v-model="rangeOption" @change="onRangeOptionChange">
+                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </x-select>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="timePickerStartOffset" :show-time="true"></date-time-range-picker>
             </div>
           </div>
           <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
       </div>
     </div>
-
-    <!-- 导出 CSV 条件筛选浮层 Start -->
-    <modal :show.sync="showExportModal" @close="onExportCancel" width="540px">
-      <h3 slot="header">{{ $t('common.export_condition') }}</h3>
-      <div slot="body" class="form">
-        <form autocomplete="off" novalidate @submit.prevent="onExportSubmit">
-          <div class="form-row row">
-            <label class="form-control col-6">销售时间</label>
-            <div class="controls col-18">
-              <div class="row">
-                <div class="col-10">
-                  <date-picker :value.sync="startDate" width="100%"></date-picker>
-                </div>
-                <div class="col-4 tac control-text">至</div>
-                <div class="col-10">
-                  <date-picker :value.sync="endDate" width="100%"></date-picker>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-actions">
-            <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-            <button @click.prevent.stop="onExportCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-          </div>
-        </form>
-      </div>
-    </modal>
-    <!-- 导出 CSV 条件筛选浮层 End -->
   </div>
 </template>
 
@@ -101,7 +80,7 @@ import Pager from 'components/Pager'
 import Modal from 'components/Modal'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
-import DatePicker from 'components/DatePicker'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import locales from 'consts/locales/index'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
@@ -120,7 +99,7 @@ export default {
     'modal': Modal,
     'search-box': SearchBox,
     'pager': Pager,
-    DatePicker,
+    DateTimeRangePicker,
     Statistic
   },
 
@@ -138,7 +117,7 @@ export default {
     })
 
     return {
-      showExportModal: false,
+      exporting: false,
       startDate: '',
       endDate: '',
       query: '',
@@ -150,6 +129,11 @@ export default {
         value: 'all'
       },
       visibilityOptions: locales[Vue.config.lang].data.DEVICE_VISIBILITY_OPTIONS,
+      rangeOption: {
+        label: this.$t('common.any'),
+        value: 'any'
+      },
+      timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
       devices: [],
       total: 0,
       currentPage: 1,
@@ -223,7 +207,9 @@ export default {
             data: []
           }
         }
-      }
+      },
+      startTime: new Date() - 7 * 1000 * 60 * 60 * 24,
+      endTime: new Date()
     }
   },
 
@@ -255,12 +241,10 @@ export default {
       return result
     },
 
-    // 筛选条件
-    queryCondition () {
+    // 基本筛选条件
+    baseCondition () {
       var condition = {
         filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
         order: this.sortOrders,
         query: {}
       }
@@ -287,6 +271,16 @@ export default {
       }
 
       return condition
+    },
+
+    // 列表查询条件
+    queryCondition () {
+      let condition = _.cloneDeep(this.baseCondition)
+
+      condition.limit = this.countPerPage
+      condition.offset = (this.currentPage - 1) * this.countPerPage
+
+      return condition
     }
   },
 
@@ -307,21 +301,54 @@ export default {
      * 处理导出 CSV 按钮点击
      */
     onExportBtnClick () {
-      this.showExportModal = true
+      if (this.exporting) {
+        return
+      }
+
+      let condition = _.cloneDeep(this.baseCondition)
+      condition.filter = ['id', 'name', 'mac', 'sn', 'is_active', 'active_date', 'is_online', 'last_login', 'mcu_mod', 'mcu_version', 'firmware_mod', 'firmware_version', 'corp_id', 'product_id', 'region_id', 'create_time']
+
+      let postData = {
+        name: '设备列表',
+        describe: '设备列表',
+        type: 1,
+        params: condition,
+        extend: {
+          product_id: this.$route.params.id
+        }
+      }
+
+      this.exporting = true
+      api.exportTask.createTask(postData).then((res) => {
+        this.showNotice({
+          type: 'success',
+          content: this.$t('operation.settings.offline.export_success')
+        })
+        this.$route.router.go('/operation/settings/offline-data')
+        // this.onExportCancel()
+      }).catch((res) => {
+        this.exporting = false
+        this.handleError(res)
+      })
     },
 
     /**
-     * 取消导出
+     * 处理时间区段改变
      */
-    onExportCancel () {
-      this.showExportModal = false
+    onRangeOptionChange () {
+
     },
 
     /**
-     * 提交导出任务
+     * 时间范围改变
+     * @param  {[type]} startDate [description]
+     * @param  {[type]} endDate   [description]
+     * @return {[type]}           [description]
      */
-    onExportSubmit () {
-      this.showExportModal = false
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getMajorClient()
     },
 
     /**

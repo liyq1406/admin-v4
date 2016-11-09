@@ -73,6 +73,12 @@ export const DEVICE_VISIBILITY_OPTIONS = [
   { label: '未激活', value: 'inactive' }
 ]
 
+// 时间区段筛选待选项
+export const TIME_RANGE_OPTIONS = [
+  { label: '不限', value: 'any' },
+  { label: '指定', value: 'specified' }
+]
+
 // 产品活跃时间段
 export const ACTIVE_PERIODS = [
   { label: '1天', value: 1 },

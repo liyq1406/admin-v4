@@ -75,6 +75,12 @@ export const DEVICE_VISIBILITY_OPTIONS = [
   { label: 'Inactivated', value: 'inactive' }
 ]
 
+// 时间区段筛选待选项
+export const TIME_RANGE_OPTIONS = [
+  { label: 'Any', value: 'any' },
+  { label: 'Specified', value: 'specified' }
+]
+
 // Firmware Type
 export const FIRMWARE_TYPES = [
   { label: 'WIFI', value: 1 },

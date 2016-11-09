@@ -159,6 +159,7 @@ export default {
 .time-range-picker-wrap
   height 28px
   display inline-block
+  vertical-align middle
   position relative
   .time-range-show
     padding 0px 10px
