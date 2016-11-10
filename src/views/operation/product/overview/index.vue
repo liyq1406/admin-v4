@@ -246,7 +246,7 @@ export default {
           res = this.statistic.users.total
           break
         case customConfig.PRESET.users_online:
-          res = this.statistic.users.total
+          res = this.statistic.users.online
           break
         default:
           break
@@ -290,8 +290,8 @@ export default {
         time.end = res.end || 0
       }
       // 增加8小时
-      time.start = time.start + 8 * 3600 * 24
-      time.end = time.end + 8 * 3600 * 24
+      time.start = time.start + 8 * 3600 * 1000
+      time.end = time.end + 8 * 3600 * 1000
       let params = {
         index: datapoint.datapoint_index,
         date_start: new Date(time.start),
