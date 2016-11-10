@@ -198,7 +198,7 @@ export default {
       })
     },
     editRule (rule) {
-      this.$route.router.go({path: 'statistics-rule/device/edit/' + rule.idOrigin})
+      this.$route.router.go({path: 'device/edit/' + rule.idOrigin})
     }
   }
 }
