@@ -5,7 +5,7 @@
  * @param {Integer} n byte值
  * @return {String}
  */
-var bytesPrettify = (n) => {
+var prettyBytes = (n) => {
   let result
 
   if (n === '' || isNaN(n)) {
@@ -23,4 +23,4 @@ var bytesPrettify = (n) => {
   return result
 }
 
-export default bytesPrettify
+export default prettyBytes
