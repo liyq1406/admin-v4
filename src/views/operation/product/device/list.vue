@@ -62,7 +62,7 @@
                   <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
-              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="timePickerStartOffset" :show-time="true"></date-time-range-picker>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
             </div>
           </div>
           <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
@@ -208,7 +208,7 @@ export default {
           }
         }
       },
-      startTime: new Date() - 365 * 1000 * 60 * 60 * 24,
+      startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
       endTime: new Date()
     }
   },
@@ -252,6 +252,13 @@ export default {
       if (this.query.length > 0) {
         this.currentPage = 1
         condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+      }
+
+      if (this.rangeOption.value === 'specified') {
+        condition.query['active_date'] = {
+          '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+          '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
+        }
       }
 
       switch (this.visibility.value) {
@@ -336,7 +343,9 @@ export default {
      * 处理时间区段改变
      */
     onRangeOptionChange () {
-
+      if (this.rangeOption.value === 'any') {
+        this.getDevices()
+      }
     },
 
     /**

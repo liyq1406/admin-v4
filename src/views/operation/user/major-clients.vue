@@ -35,8 +35,12 @@
                   </select>
                 </x-select>
                 <span class="ml10">{{ $t('common.create_time') }}</span>
-                <date-time-range-picker @timechange="onTimeChange" :start-offset="timePickerStartOffset" :show-time="true"></date-time-range-picker>
-
+                <x-select width="98px" size="small" :label="rangeOption.label">
+                  <select v-model="rangeOption" @change="onRangeOptionChange">
+                    <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                  </select>
+                </x-select>
+                <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
               </div>
             </div>
             <div class="filter-group fr">
@@ -189,6 +193,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import api from 'api'
 import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
@@ -202,6 +207,7 @@ import formatDate from 'filters/format-date'
 import AreaSelect from 'components/AreaSelect'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import { createDayRange } from 'utils'
+import locales from 'consts/locales/index'
 
 export default {
   name: 'MajorClients',
@@ -250,6 +256,11 @@ export default {
         startDate: '', // 开始时间
         endDate: '' // 结束时间
       },
+      rangeOption: {
+        label: this.$t('common.any'),
+        value: 'any'
+      },
+      timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
       industrys: [
         this.$t('operation.user.major.industrys.web'),
         this.$t('operation.user.major.industrys.security'),
@@ -476,8 +487,8 @@ export default {
         order: {'create_time': 'desc'},
         query: {
           'create_time': {
-            '$gte': formatDate(this.startTime, 'yyyy-MM-ddThh:mm:ss.SSSZ', true),
-            '$lte': formatDate(this.endTime, 'yyyy-MM-ddThh:mm:ss.SSSZ', true)
+            '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+            '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
           }
         }
       }
@@ -552,6 +563,14 @@ export default {
         this.exporting = false
         this.handleError(res)
       })
+    },
+    /**
+     * 处理时间区段改变
+     */
+    onRangeOptionChange () {
+      if (this.rangeOption.value === 'any') {
+        this.getMajorClient()
+      }
     },
 
     getWarrantyList () {
