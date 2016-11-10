@@ -1,11 +1,6 @@
 <template>
   <div class="panel">
     <div class="panel-hd">
-      <!-- <div class="filter-group fr">
-        <div class="actions">
-          <button class="btn btn-primary" @click="onAdd"><i class="fa fa-plus"></i> 添加用户字段</button>
-        </div>
-      </div> -->
       <h2>用户字段</h2>
     </div>
 
@@ -158,7 +153,6 @@
         loadingData: false,
         showModal: false,
         editing: false,
-        delChecked: false,
         modal: {
           label: '',
           name: '',
@@ -217,24 +211,16 @@
       editField () {
         this.editing = true
         var params = _.cloneDeep(this.fields)
+        var dSort = -0.1
+        if (this.modal.sort < this.modal.targetIndex) dSort = dSort * -1
         var newField = {
           'name': this.modal.name,
           'label': this.modal.label,
           'hidden': this.modal.hidden,
-          'sort': this.modal.targetIndex - 0.1,
+          'sort': this.modal.targetIndex + dSort,
           'value_type': this.modal.value_type
         }
         params.splice(this.modal.sort - 1, 1, newField)
-        this.updateData(params)
-      },
-
-      /**
-       * 删除字段
-       */
-      deleteField () {
-        this.editing = true
-        var params = _.cloneDeep(this.fields)
-        params.splice(this.modal.sort - 1, 1)
         this.updateData(params)
       },
 
@@ -284,7 +270,6 @@
         var modal = _.clone(field)
         modal.targetIndex = field.sort
         this.modal = modal
-        this.delChecked = false
         this.showModal = true
       },
 
@@ -292,11 +277,7 @@
        * 提交按钮
        */
       onSubmit () {
-        if (this.delChecked) {
-          this.deleteField()
-        } else {
-          this.editField()
-        }
+        this.editField()
       },
 
       /**

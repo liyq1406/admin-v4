@@ -151,7 +151,7 @@ export default {
           'sort': 3
         },
         {
-          'name': 'is_online',
+          'name': 'active_date',
           'label': '激活时间',
           'hidden': false,
           'sort': 4

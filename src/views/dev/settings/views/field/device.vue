@@ -19,11 +19,11 @@
               </x-select>
             </div>
           </div>
-          <div class="filter-group fr">
+          <!-- <div class="filter-group fr">
             <div class="actions">
               <button class="btn btn-primary" @click="onAdd"><i class="fa fa-plus"></i> 添加设备字段</button>
             </div>
-          </div>
+          </div> -->
         </div>
         <table class="table table-stripe table-bordered">
           <thead>
@@ -70,13 +70,13 @@
     </div>
     <!-- 添加字段浮层 -->
     <modal :show.sync="showModal" @close="onCancel">
-      <h3 slot="header">{{modalTitle}}</h3>
+      <h3 slot="header">编辑设备字段</h3>
       <div slot="body" class="form">
         <validator name="validation">
           <form autocomplete="off" @submit.prevent="onSubmit" novalidate>
 
             <!-- 字段ID -->
-            <div class="form-row row" v-if="canEdit">
+            <!-- <div class="form-row row" v-if="canEdit">
               <label class="form-control col-6">字段ID:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入字段ID'" class="input-text-wrap">
@@ -88,7 +88,7 @@
                   <span v-if="$validation.name.touched && $validation.name.format">字段ID只能包含英文</span>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <!-- 字段名 -->
             <div class="form-row row">
@@ -104,7 +104,7 @@
             </div>
 
             <!-- 选择字段类型 -->
-            <div class="form-row row" v-if="canEdit">
+            <!-- <div class="form-row row" v-if="canEdit">
               <label class="form-control col-6">数据类型:</label>
               <div class="controls filter-group-item col-18">
                 <x-select :label="dataPointType(modal.value_type)">
@@ -113,13 +113,24 @@
                   </select>
                 </x-select>
               </div>
+            </div> -->
+
+            <div class="form-row row">
+              <label class="form-control col-6">编辑序号:</label>
+              <div class="controls col-18">
+                <x-select :label="modal.targetIndex + ''">
+                  <select v-model="modal.targetIndex">
+                    <option v-for="n in fields.length" :value="n + 1">{{ n + 1 }}</option>
+                  </select>
+                </x-select>
+              </div>
             </div>
 
             <!-- 提交按钮 -->
             <div class="form-actions">
-              <label v-if="modalType === 'edit' &&  canEdit" class="del-check">
+              <!-- <label v-if="modalType === 'edit' &&  canEdit" class="del-check">
                 <input type="checkbox" name="del" v-model="delChecked"/> 删除此字段
-              </label>
+              </label> -->
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             </div>
@@ -178,7 +189,7 @@
             'sort': 3
           },
           {
-            'name': 'is_online',
+            'name': 'active_date',
             'label': '激活时间',
             'hidden': false,
             'sort': 4
@@ -285,11 +296,11 @@
       },
 
       // 基本字段key值
-      baseFieldKeys () {
-        return this.fields.map((item) => {
-          return item.name
-        })
-      },
+      // baseFieldKeys () {
+      //   return this.fields.map((item) => {
+      //     return item.name
+      //   })
+      // },
 
       // 正在加载标志位
       loadingData () {
@@ -305,24 +316,24 @@
           result = this.products && this.products[0] || {}
         }
         return result
-      },
+      }
 
       // 浮层标题
-      modalTitle () {
-        return this.modalType === 'add' ? '添加设备字段' : '编辑设备字段'
-      },
+      // modalTitle () {
+      //   return this.modalType === 'add' ? '添加设备字段' : '编辑设备字段'
+      // }
 
       // 是否显示更多编辑权限标志位
-      canEdit () {
-        var result = false
-        var condition = [
-          this.modal.category === 'base_fields',
-          this.defaultFieldKeys.indexOf(this.modal.name) === -1,
-          this.modalType === 'add'
-        ]
-        result = condition[0] && condition[1] || condition[2]
-        return result
-      }
+      // canEdit () {
+      //   var result = false
+      //   var condition = [
+      //     this.modal.category === 'base_fields',
+      //     this.defaultFieldKeys.indexOf(this.modal.name) === -1,
+      //     this.modalType === 'add'
+      //   ]
+      //   result = condition[0] && condition[1] || condition[2]
+      //   return result
+      // }
     },
     watch: {
       currProduct (product) {
@@ -339,8 +350,12 @@
       }
     },
     ready () {
+      // this.test()
     },
     methods: {
+      test () {
+        this.updateData([])
+      },
       /**
        * 初始化数据
        */
@@ -371,7 +386,10 @@
         this.editing = true
         var params = _.cloneDeep(this.fields)
         var newField = _.clone(this.modal)
-        params.splice(this.editIndex, 1, newField)
+        var dSort = -1
+        if (this.modal.sort < this.modal.targetIndex) dSort = dSort * -1
+        newField.sort = newField.targetIndex + dSort
+        params.splice(this.modal.sort - 1, 1, newField)
         this.updateData(params)
       },
 
@@ -381,7 +399,7 @@
       deleteField () {
         this.editing = true
         var params = _.cloneDeep(this.fields)
-        params.splice(this.editIndex, 1)
+        params.splice(this.sort - 1, 1)
         this.updateData(params)
       },
 
@@ -463,32 +481,33 @@
       /**
        * 返回除了某个key之外的基本字段
        */
-      repeatKeys (ignore) {
-        return this.baseFieldKeys.filter((item) => {
-          return item !== ignore
-        })
-      },
+      // repeatKeys (ignore) {
+      //   return this.baseFieldKeys.filter((item) => {
+      //     return item !== ignore
+      //   })
+      // },
 
       /**
        * 显示添加字段浮层
        */
-      onAdd () {
-        this.modalType = 'add'
-        this.modal.oldName = ''
-        this.modal.label = ''
-        this.modal.name = ''
-        this.modal.hidden = false
-        this.showModal = true
-      },
+      // onAdd () {
+      //   this.modalType = 'add'
+      //   this.modal.oldName = ''
+      //   this.modal.label = ''
+      //   this.modal.name = ''
+      //   this.modal.hidden = false
+      //   this.showModal = true
+      // },
 
       /**
        * 显示浮层
        */
       onEdit (field, index) {
         this.modalType = 'edit'
-        this.modal = _.clone(field)
-        this.modal.oldName = field.name
-        this.editIndex = index
+        var modal = _.clone(field)
+        modal.oldName = field.name
+        modal.targetIndex = field.sort
+        this.modal = modal
         this.delChecked = false
         this.showModal = true
       },
@@ -508,20 +527,21 @@
        * 提交按钮
        */
       onSubmit () {
-        switch (this.modalType) {
-          case 'add':
-            this.addField()
-            break
-          case 'edit':
-            if (this.delChecked) {
-              this.deleteField()
-            } else {
-              this.editField()
-            }
-            break
-          default:
-            return
-        }
+        this.editField()
+        // switch (this.modalType) {
+        //   case 'add':
+        //     this.addField()
+        //     break
+        //   case 'edit':
+        //     if (this.delChecked) {
+        //       this.deleteField()
+        //     } else {
+        //       this.editField()
+        //     }
+        //     break
+        //   default:
+        //     return
+        // }
       },
 
       /**
