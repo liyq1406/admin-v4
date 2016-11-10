@@ -1,11 +1,11 @@
 <template>
   <div class="panel">
     <div class="panel-hd">
-      <div class="filter-group fr">
+      <!-- <div class="filter-group fr">
         <div class="actions">
           <button class="btn btn-primary" @click="onAdd"><i class="fa fa-plus"></i> 添加用户字段</button>
         </div>
-      </div>
+      </div> -->
       <h2>用户字段</h2>
     </div>
 
@@ -18,15 +18,20 @@
         <table class="table table-stripe table-bordered">
           <thead>
             <tr>
+              <th>序号</th>
               <th class="wp50">字段名</th>
               <th class="tac">字段类别</th>
               <th class="tac">字段类型</th>
+              <th class="tac">显示</th>
               <th class="tac">操作</th>
             </tr>
           </thead>
           <tbody>
             <template v-if="fields.length > 0">
               <tr v-for="field in fields">
+                <td>
+                  <span>{{field.sort}}</span>
+                </td>
                 <td>
                   <span>{{field.label}}</span>
                 </td>
@@ -35,6 +40,9 @@
                 </td>
                 <td class="tac">
                   <span>{{dataPointType(field.value_type)}}</span>
+                </td>
+                <td class="tac">
+                  <switch :value="!field.hidden" @switch-toggle="toggleHidden(field)" size="small"></switch>
                 </td>
                 <td class="tac">
                   <a class="hl-red" @click="onEdit(field)">编辑</a>
@@ -52,23 +60,10 @@
     </div>
     <!-- 添加字段浮层 -->
     <modal :show.sync="showModal" @close="onCancel">
-      <h3 slot="header">{{modalTitle}}</h3>
+      <h3 slot="header">编辑用户字段</h3>
       <div slot="body" class="form">
         <validator name="majorClientValidation">
           <form autocomplete="off" @submit.prevent="onSubmit" novalidate>
-
-            <!-- 字段key -->
-            <div class="form-row row">
-              <label class="form-control col-6">字段key:</label>
-              <div class="controls col-18">
-                <div v-placeholder="'请输入字段key'" class="input-text-wrap">
-                  <input v-model="modal.name" type="text" name="modal.name" v-validate:name="{required: true}" lazy class="input-text"/>
-                </div>
-                <div class="form-tips form-tips-error">
-                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.required">请输入字段key</span>
-                </div>
-              </div>
-            </div>
 
             <!-- 字段名 -->
             <div class="form-row row">
@@ -83,13 +78,12 @@
               </div>
             </div>
 
-            <!-- 选择字段类型 -->
             <div class="form-row row">
-              <label class="form-control col-6">数据类型:</label>
-              <div class="controls filter-group-item col-18">
-                <x-select :label="dataPointType(modal.value_type)">
-                  <select v-model="modal.value_type">
-                    <option v-for="type in 3" :value="type+1">{{dataPointType(type+1)}}</option>
+              <label class="form-control col-6">编辑序号:</label>
+              <div class="controls col-18">
+                <x-select :label="modal.targetIndex + ''">
+                  <select v-model="modal.targetIndex">
+                    <option v-for="n in fields.length" :value="n + 1">{{ n + 1 }}</option>
                   </select>
                 </x-select>
               </div>
@@ -97,9 +91,9 @@
 
             <!-- 提交按钮 -->
             <div class="form-actions">
-              <label v-if="modalType === 'edit'" class="del-check">
+              <!-- <label v-if="modalType === 'edit'" class="del-check">
                 <input type="checkbox" name="del" v-model="delChecked"/> 删除此字段
-              </label>
+              </label> -->
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             </div>
@@ -116,6 +110,7 @@
   import Select from 'components/Select'
   import Modal from 'components/Modal'
   import SearchBox from 'components/SearchBox'
+  import Switch from 'components/Switch'
   // import locales from 'consts/locales/index'
 
   export default {
@@ -131,11 +126,35 @@
     components: {
       'x-select': Select,
       SearchBox,
-      Modal
+      Modal,
+      Switch
     },
 
     data () {
       return {
+        base_fields: [
+          {
+            'name': 'nickname',
+            'label': '昵称',
+            'hidden': false,
+            'sort': 1,
+            'value_type': 1
+          },
+          {
+            'name': 'gender',
+            'label': '性别',
+            'hidden': false,
+            'sort': 2,
+            'value_type': 1
+          },
+          {
+            'name': 'age',
+            'label': '年龄',
+            'hidden': false,
+            'sort': 3,
+            'value_type': 1
+          }
+        ],
         loadingData: false,
         showModal: false,
         editing: false,
@@ -143,43 +162,20 @@
         modal: {
           label: '',
           name: '',
-          value_type: 1
+          value_type: 1,
+          targetIndex: -1
         },
-        modalType: '',
-        userFields: {
-          base_fields: [
-            {
-              'name': 'nickname',
-              'label': '昵称',
-              'hidden': false,
-              'sort': 1,
-              'value_type': 1
-            },
-            {
-              'name': 'gender',
-              'label': '性别',
-              'hidden': false,
-              'sort': 2,
-              'value_type': 1
-            },
-            {
-              'name': 'age',
-              'label': '年龄',
-              'hidden': false,
-              'sort': 3,
-              'value_type': 1
-            }
-          ]
-        }
+        userFields: {}
       }
     },
     computed: {
       // 字段列表
       fields () {
         var result = []
-        this.userFields.base_fields.forEach((item, index) => {
+        var userFields = this.userFields.base_fields || this.base_fields
+        userFields.forEach((item, index) => {
           var field = _.clone(item)
-          field.category = 'base_field'
+          field.category = 'base_fields'
           result.push(field)
         })
         result.sort((a, b) => {
@@ -189,10 +185,6 @@
           item.sort = index + 1
         })
         return result
-      },
-      // 浮层标题
-      modalTitle () {
-        return this.modalType === 'add' ? '添加用户字段' : '编辑用户字段'
       }
     },
     route: {
@@ -207,16 +199,16 @@
       test () {
         this.updateData([])
       },
+
       /**
-      * 添加字段
-      */
-      addField () {
-        this.editing = true
-        var params = _.cloneDeep(this.fields)
-        var newField = _.clone(this.modal)
-        newField.sort = params.length + 1
-        params.push(newField)
-        this.updateData(params)
+       * 是否显示按钮切换事件
+       * @param  {[type]} field [description]
+       * @return {[type]}       [description]
+       */
+      toggleHidden (field) {
+        field.hidden = !field.hidden
+        this.updateData(this.fields)
+        // this.setFiled()
       },
 
       /**
@@ -229,7 +221,7 @@
           'name': this.modal.name,
           'label': this.modal.label,
           'hidden': this.modal.hidden,
-          'sort': this.modal.sort,
+          'sort': this.modal.targetIndex - 0.1,
           'value_type': this.modal.value_type
         }
         params.splice(this.modal.sort - 1, 1, newField)
@@ -286,22 +278,12 @@
       },
 
       /**
-       * 显示添加字段浮层
-       */
-      onAdd () {
-        this.modalType = 'add'
-        this.modal.label = ''
-        this.modal.name = ''
-        this.modal.hidden = false
-        this.showModal = true
-      },
-
-      /**
        * 显示浮层
        */
       onEdit (field) {
-        this.modalType = 'edit'
-        this.modal = _.clone(field)
+        var modal = _.clone(field)
+        modal.targetIndex = field.sort
+        this.modal = modal
         this.delChecked = false
         this.showModal = true
       },
@@ -310,19 +292,10 @@
        * 提交按钮
        */
       onSubmit () {
-        switch (this.modalType) {
-          case 'add':
-            this.addField()
-            break
-          case 'edit':
-            if (this.delChecked) {
-              this.deleteField()
-            } else {
-              this.editField()
-            }
-            break
-          default:
-            return
+        if (this.delChecked) {
+          this.deleteField()
+        } else {
+          this.editField()
         }
       },
 
@@ -339,9 +312,6 @@
       computedCategory (type) {
         var result = ''
         switch (type) {
-          case 'base_field':
-            result = '基本字段'
-            break
           case 'base_fields':
             result = '基本字段'
             break
