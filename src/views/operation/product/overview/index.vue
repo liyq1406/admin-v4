@@ -83,6 +83,7 @@ export default {
 
   data () {
     return {
+      configLoaded: false,
       quatas: {},
       dpQuatasValues: {
         1: NaN,
@@ -152,7 +153,6 @@ export default {
       for (let i in res) {
         res[i] = this.getQuatasValue(this.quatas[i], i)
         if (!isNaN(this.dpQuatasValues[i])) {
-          console.log(this.dpQuatasValues[i])
           res[i].total = this.dpQuatasValues[i]
         }
       }
@@ -164,6 +164,8 @@ export default {
   route: {
     data () {
       this.getCurrProduct(this.$route.params.id)
+      this.configLoaded = false
+      this.resetDpValue()
       this.getConfig()
       this.getProductSummary()
     }
@@ -172,8 +174,16 @@ export default {
     this.initTranslate()
   },
   methods: {
+    resetDpValue () {
+      for (let i in this.dpQuatasValues) {
+        this.dpQuatasValues[i] = NaN
+      }
+    },
     getQuatasValue (quata, index) {
       let res = {}
+      if (!this.configLoaded) {
+        return
+      }
       if (quata) {
         if (quata.dataFrom === customConfig.DATAFROM.preset) {
           res = this.getPresetValue(quata.preset)
@@ -240,8 +250,10 @@ export default {
             this.parseConfig(JSON.parse(res.data[key]))
           }
         }
+        this.configLoaded = true
       }).catch((res) => {
         this.handleError(res)
+        this.configLoaded = true
       })
     },
     parseConfig (config) {
