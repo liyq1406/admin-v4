@@ -61,6 +61,10 @@ export function format (val, type) {
       result = /^[A-Z]+$/i.test(val)
       break
 
+    case 'account':
+      result = /^[A-Z][a-z0-9_]*$/i.test(val)
+      break
+
     default:
       result = false
   }

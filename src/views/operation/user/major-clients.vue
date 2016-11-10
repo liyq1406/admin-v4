@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <modal :show.sync="showAddModal" @close="onAddCancel" width="524px">
+    <modal :show.sync="showAddModal" @close="onAddCancel" width="561px">
       <h3 slot="header">{{ $t('operation.user.major.new') }}</h3>
       <div slot="body" class="form">
         <validator name="majorClientValidation">
@@ -68,15 +68,44 @@
               <label class="form-control col-6">{{ $t('operation.user.major.columns.name') }}:</label>
               <div class="controls col-18">
                 <div v-placeholder="$t('operation.user.major.placeholders.name')" class="input-text-wrap">
-                  <input v-model="addModal.name" type="text" name="addModal.name" v-validate:name="{required: true, minlength: 2, maxlength: 32}" lazy class="input-text"/>
+                  <input v-model="addModal.username" type="text" name="addModal.username" v-validate:username="{required: true, minlength: 6, maxlength: 32, format: 'account'}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.required">{{ $t('common.validation.required', {field: $t('operation.user.major.columns.name')}) }}</span>
-                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.modified && $majorClientValidation.name.minlength">{{ $t('common.validation.minlength', [$t('operation.user.major.columns.name'), 2]) }}</span>
-                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.modified && $majorClientValidation.name.maxlength">{{ $t('common.validation.maxlength', [$t('operation.user.major.columns.name'), 40]) }}</span>
+                  <span v-if="$majorClientValidation.username.touched && $majorClientValidation.username.required">{{ $t('common.validation.required', {field: $t('operation.user.major.columns.name')}) }}</span>
+                  <span v-if="$majorClientValidation.username.touched && $majorClientValidation.username.modified && $majorClientValidation.username.minlength">{{ $t('common.validation.minlength', [$t('operation.user.major.columns.name'), 6]) }}</span>
+                  <span v-if="$majorClientValidation.username.touched && $majorClientValidation.username.modified && $majorClientValidation.username.maxlength">{{ $t('common.validation.maxlength', [$t('operation.user.major.columns.name'), 40]) }}</span>
+                  <span v-if="$majorClientValidation.username.touched && $majorClientValidation.username.modified && $majorClientValidation.username.format">{{ $t('common.validation.account', {field: $t('operation.user.major.columns.name')}) }}</span>
                 </div>
               </div>
             </div>
+            <!-- 密码 -->
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t('operation.user.major.password') }}:</label>
+              <div class="controls col-18">
+                <div v-placeholder="$t('auth.password')" class="input-text-wrap">
+                  <input type="password" v-model="addModal.password" v-validate:password="{required: true, minlength: 8, maxlength: 16}" name="addModal.password" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$majorClientValidation.password.touched && $majorClientValidation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
+                  <span v-if="$majorClientValidation.password.modified && $majorClientValidation.password.minlength">{{ $t('common.validation.minlength', [$t('auth.fields.password'), 8]) }}</span>
+                  <span v-if="$majorClientValidation.password.modified && $majorClientValidation.password.maxlength">{{ $t('common.validation.maxlength', [$t('auth.fields.password'), 16]) }}</span>
+                </div>
+              </div>
+            </div>
+            <!-- 确认密码 -->
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t('operation.user.major.comfirm_password') }}:</label>
+              <div class="controls col-18">
+                <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
+                  <input type="password" v-model="confirmPassword" v-validate:confirm-password="{required: true, equal: addModal.password}"  name="confirmPassword" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$majorClientValidation.confirmPassword.touched && $majorClientValidation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('auth.fields.confirm_password')}) }}</span>
+                  <span v-if="$majorClientValidation.confirmPassword.modified && $majorClientValidation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('auth.fields.confirm_password'), $t('auth.fields.password')]) }}</span>
+                </div>
+              </div>
+            </div>
+
             <div class="form-row row">
               <label class="form-control col-6">{{ $t('operation.user.major.columns.contacter') }}:</label>
               <div class="controls col-18">
@@ -91,30 +120,6 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t('operation.user.major.columns.phone') }}:</label>
-              <div class="controls col-18">
-                <div v-placeholder="$t('operation.user.major.placeholders.phone')" class="input-text-wrap">
-                  <input v-model="addModal.phone" type="number" name="addModal.phone" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
-                </div>
-                <div class="form-tips form-tips-error">
-                  <span v-if="$majorClientValidation.phone.touched && $majorClientValidation.phone.required">{{ $t('common.validation.required', {field: $t('operation.user.major.columns.phone')}) }}</span>
-                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.phone.modified && $majorClientValidation.phone.format">{{ $t('common.validation.format', {field: $t('operation.user.major.columns.phone')}) }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">{{ $t('operation.user.major.columns.email') }}:</label>
-              <div class="controls col-18">
-                <div v-placeholder="$t('operation.user.major.placeholders.email')" class="input-text-wrap">
-                  <input v-model="addModal.email" type="email" name="addModal.email" v-validate:email="{required: true, format: 'email'}" required lazy class="input-text"/>
-                </div>
-                <div class="form-tips form-tips-error">
-                  <span v-if="$majorClientValidation.email.touched && $majorClientValidation.email.required">{{ $t('common.validation.required', {field: $t('operation.user.major.columns.email')}) }}</span>
-                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.email.modified && $majorClientValidation.email.format">{{ $t('common.validation.format', {field: $t('operation.user.major.columns.email')}) }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="form-row row">
               <label class="form-control col-6">{{ $t('operation.user.major.columns.industry') }}:</label>
               <div class="controls filter-group-item col-18">
                 <x-select :label="addModal.industry">
@@ -122,45 +127,12 @@
                     <option v-for="industry in industrys" :value="industry">{{industry}}</option>
                   </select>
                 </x-select>
-                <!-- <div v-placeholder="'请输入行业'" class="input-text-wrap">
-                  <input v-model="addModal.industry" type="text" name="addModal.industry" v-validate:industry="{required: true}" class="input-text"/>
-                </div>
-                <div class="form-tips form-tips-error">
-                  <span v-if="$majorClientValidation.industry.touched && $majorClientValidation.industry.required">行业为必填</span>
-                </div> -->
               </div>
             </div>
             <div class="form-row row">
               <label class="form-control col-6">{{ $t('operation.user.major.columns.locality') }}:</label>
               <div class="controls col-18">
                 <div class="clearfix">
-                  <!-- 国家 -->
-                  <!-- <div class="fl mr5 w120">
-                    <div v-placeholder="'国家'" class="input-text-wrap">
-                      <input v-model="addModal.country" type="text" name="country" v-validate:country="{required: false}" class="input-text"/>
-                    </div>
-                    <div class="form-tips form-tips-error">
-                      <span v-if="$majorClientValidation.country.touched && $majorClientValidation.country.required">国家为必填</span>
-                    </div>
-                  </div> -->
-                  <!-- 省份 -->
-                  <!-- <div class="fl mr5 w120">
-                    <div v-placeholder="'省份'" class="input-text-wrap">
-                      <input v-model="addModal.province" type="text" name="province" v-validate:province="{required: true}" class="input-text"/>
-                    </div>
-                    <div class="form-tips form-tips-error">
-                      <span v-if="$majorClientValidation.province.touched && $majorClientValidation.province.required">省份为必填</span>
-                    </div>
-                  </div> -->
-                  <!-- 城市 -->
-                  <!-- <div class="fl w120">
-                    <div v-placeholder="'城市'" class="input-text-wrap">
-                      <input v-model="addModal.city" type="text" name="city" v-validate:city="{required: true}" class="input-text"/>
-                    </div>
-                    <div class="form-tips form-tips-error">
-                      <span v-if="$majorClientValidation.city.touched && $majorClientValidation.city.required">城市为必填</span>
-                    </div>
-                  </div> -->
                   <div class="filter-group-item">
                     <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
                   </div>
@@ -271,13 +243,12 @@ export default {
       ],
       addModal: {
         // 名称
-        name: '',
+        username: '',
+
+        password: '',
+
         // 联系人
         contacter: '',
-        // 联系电话
-        phone: '',
-        // 邮箱
-        email: '',
         // 行业
         industry: '',
         // 国家
@@ -289,6 +260,7 @@ export default {
         // 地址
         location: ''
       },
+      confirmPassword: '',
       trendsData: [
         // {
         //   day: '2016-08-06',
@@ -359,7 +331,7 @@ export default {
       ],
       headers: [
         {
-          key: 'name',
+          key: 'username',
           title: this.$t('operation.user.major.columns.name')
         },
         {
@@ -376,10 +348,10 @@ export default {
           key: 'contacter',
           title: this.$t('operation.user.major.columns.contacter')
         },
-        {
-          key: 'phone',
-          title: this.$t('operation.user.major.columns.phone')
-        },
+        // {
+        //   key: 'phone',
+        //   title: this.$t('operation.user.major.columns.phone')
+        // },
         {
           key: 'create_time',
           title: this.$t('operation.user.major.columns.create_time'),
@@ -455,11 +427,11 @@ export default {
       var result = []
       this.majorClients.map((item) => {
         var majorClient = {
-          name: '<a class="hl-red">' + item.name + '</a>',
+          username: '<a class="hl-red">' + (item.username || '-') + '</a>',
           device_sum: item.device_sum,
           industry: item.industry,
           contacter: item.contacter,
-          phone: item.phone,
+          // phone: item.phone,
           create_time: formatDate(item.create_time),
           prototype: item
         }
@@ -473,9 +445,7 @@ export default {
       var condition = {
         filter: [
           'id',
-          'name',
-          'email',
-          'phone',
+          'username',
           'industry',
           'location',
           'contacter',
@@ -485,12 +455,7 @@ export default {
           'device_sum'
         ],
         order: {'create_time': 'desc'},
-        query: {
-          'create_time': {
-            '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
-            '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
-          }
-        }
+        query: {}
       }
       /**
        * 搜索框搜索
@@ -503,6 +468,13 @@ export default {
       // 下拉框筛选
       if (this.selectedFilterIndustry) {
         condition.query['industry'] = { $in: [this.selectedFilterIndustry] }
+      }
+
+      if (this.rangeOption.value === 'specified') {
+        condition.query['create_time'] = {
+          '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+          '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
+        }
       }
 
       this.headers.map((item) => {
@@ -763,13 +735,15 @@ export default {
     onShowAddModal () {
       var addModal = {
         // 名称
-        name: '',
+        username: '',
         // 联系人
         contacter: '',
+
+        password: '',
         // 联系电话
-        phone: '',
-        // 邮箱
-        email: '',
+        // phone: '',
+        // // 邮箱
+        // email: '',
         // 行业
         industry: this.$t('operation.user.major.industrys.web'),
         // 国家

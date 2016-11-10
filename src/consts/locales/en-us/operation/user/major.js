@@ -8,6 +8,8 @@ export default {
   list_title: 'VIP Customer List',
   new: 'Add VIP Customer',
   search_placeholder: 'Enter Customer Name',
+  password: 'password',
+  comfirm_password: 'Confirm',
   columns: {
     name: 'Customer Name',
     contacter: 'Contact',
