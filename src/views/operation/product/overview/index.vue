@@ -164,8 +164,7 @@ export default {
   route: {
     data () {
       this.getCurrProduct(this.$route.params.id)
-      this.configLoaded = false
-      this.resetDpValue()
+      this.resetConfig()
       this.getConfig()
       this.getProductSummary()
     }
@@ -174,15 +173,19 @@ export default {
     this.initTranslate()
   },
   methods: {
-    resetDpValue () {
+    resetConfig () {
+      this.configLoaded = false
       for (let i in this.dpQuatasValues) {
         this.dpQuatasValues[i] = NaN
       }
+      this.isShowTrend = true
+      this.isShowActive = true
+      this.isShowDistribution = true
     },
     getQuatasValue (quata, index) {
       let res = {}
       if (!this.configLoaded) {
-        return
+        return {}
       }
       if (quata) {
         if (quata.dataFrom === customConfig.DATAFROM.preset) {
