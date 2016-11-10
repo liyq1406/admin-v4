@@ -26,13 +26,17 @@
                     <option v-for="filter in filters" :value="filter">{{filter.name}}</option>
                   </select>
                 </x-select>
-                <span class="ml10">{{ this.$t('operation.user.list.columns.create_date') }}: </span>
-                <x-select width="98px" size="small" :label="rangeOption.label">
-                  <select v-model="rangeOption" @change="onRangeOptionChange">
-                    <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
-                  </select>
-                </x-select>
-                <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
+
+                <template v-if="debug">
+                  <span class="ml10">{{ this.$t('operation.user.list.columns.create_date') }}: </span>
+                  <x-select width="98px" size="small" :label="rangeOption.label">
+                    <select v-model="rangeOption" @change="onRangeOptionChange">
+                      <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                    </select>
+                  </x-select>
+                  <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
+                </template>
+
               </div>
             </div>
             <div class="filter-group fr">
