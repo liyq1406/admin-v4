@@ -26,6 +26,13 @@
                     <option v-for="filter in filters" :value="filter">{{filter.name}}</option>
                   </select>
                 </x-select>
+                <span class="ml10">{{ this.$t('operation.user.list.columns.create_date') }}: </span>
+                <x-select width="98px" size="small" :label="rangeOption.label">
+                  <select v-model="rangeOption" @change="onRangeOptionChange">
+                    <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                  </select>
+                </x-select>
+                <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
               </div>
             </div>
             <div class="filter-group fr">
@@ -54,6 +61,7 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import SearchBox from 'components/SearchBox'
   import Select from 'components/Select'
   import api from 'api'
@@ -63,6 +71,8 @@
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic2'
   import {createDayRange} from 'utils'
+  import locales from 'consts/locales/index'
+  import DateTimeRangePicker from 'components/DateTimeRangePicker'
 
   export default {
     name: 'UserList',
@@ -74,7 +84,8 @@
       'api': api,
       'x-select': Select,
       'x-table': Table,
-      Statistic
+      Statistic,
+      DateTimeRangePicker
     },
 
     data () {
@@ -130,6 +141,11 @@
         onlineCount: 0,
         // 7日活跃数
         serverDayActiveCount: 0,
+        rangeOption: {
+          label: this.$t('common.any'),
+          value: 'any'
+        },
+        timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
         headers: [
           {
             key: 'id', // 与tables的key对应
@@ -175,7 +191,9 @@
             id: '',
             online: false
           }
-        ]
+        ],
+        startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+        endTime: new Date()
       }
     },
 
@@ -260,6 +278,12 @@
             '$like': this.query
           }
         }
+        if (this.rangeOption.value === 'specified') {
+          condition.query['create_date'] = {
+            '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+            '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
+          }
+        }
 
         if (this.selectedFilter.value) {
           switch (this.selectedFilter.value) {
@@ -316,6 +340,25 @@
     },
 
     methods: {
+      /**
+       * 时间范围改变
+       * @param  {[type]} startDate [description]
+       * @param  {[type]} endDate   [description]
+       * @return {[type]}           [description]
+       */
+      onTimeChange (start, end) {
+        this.startTime = start
+        this.endTime = end
+        this.getUsers()
+      },
+      /**
+       * 处理时间区段改变
+       */
+      onRangeOptionChange () {
+        if (this.rangeOption.value === 'any') {
+          this.getUsers()
+        }
+      },
       /**
        * 处理导出 CSV 按钮点击
        */
