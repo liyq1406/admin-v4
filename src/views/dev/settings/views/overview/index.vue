@@ -566,7 +566,7 @@ export default {
       } else if (res.dataFrom === config.DATAFROM.datapoint) { // 绑定数据规则
         if (!source.selectedRule || !source.selectedRule.id) {
           // 当前产品没有数据规则
-          return
+          return {}
         }
         res.datapoint = {
           statistics_rule_id: source.selectedRule.id,
