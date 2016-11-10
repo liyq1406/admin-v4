@@ -40,7 +40,7 @@
                     <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
                   </select>
                 </x-select>
-                <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
+                <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
               </div>
             </div>
             <div class="filter-group fr">
