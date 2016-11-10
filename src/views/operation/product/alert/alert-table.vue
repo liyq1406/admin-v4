@@ -12,6 +12,15 @@
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
+
+              <span class="ml10">{{ $t('operation.product.device.alert.time') }}: </span>
+              <x-select width="98px" size="small" :label="rangeOption.label">
+                <select v-model="rangeOption" @change="onRangeOptionChange">
+                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </x-select>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
+
             </div>
           </div>
           <div class="filter-group fr">
@@ -43,13 +52,16 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import api from 'api'
+import locales from 'consts/locales/index'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
 
 export default {
   name: 'AlertTable',
@@ -65,7 +77,8 @@ export default {
   components: {
     'x-table': Table,
     'x-select': Select,
-    SearchBox
+    SearchBox,
+    DateTimeRangePicker
   },
 
   data () {
@@ -116,7 +129,14 @@ export default {
         title: this.$t('operation.product.device.alert.state')
       }],
       showBatchBtn: false,
-      dealList: []
+      dealList: [],
+      rangeOption: {
+        label: this.$t('common.any'),
+        value: 'any'
+      },
+      timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
+      startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+      endTime: new Date()
     }
   },
 
@@ -164,6 +184,13 @@ export default {
       // 显示指定告警类型
       if (this.visibility.value !== 'all') {
         condition.query.tags = { $in: [this.visibility.value] }
+      }
+
+      if (this.rangeOption.value === 'specified') {
+        condition.query['create_date'] = {
+          '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+          '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
+        }
       }
 
       this.headers.forEach((item) => {
@@ -229,6 +256,27 @@ export default {
       this.visibility = this.visibilityOptions[0]
       this.queryType = this.queryTypeOptions[0]
       this.getAlerts()
+    },
+
+    /**
+     * 处理时间区段改变
+     */
+    onRangeOptionChange () {
+      if (this.rangeOption.value === 'any') {
+        this.getAlerts(true)
+      }
+    },
+
+    /**
+     * 时间范围改变
+     * @param  {[type]} startDate [description]
+     * @param  {[type]} endDate   [description]
+     * @return {[type]}           [description]
+     */
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getAlerts(true)
     },
 
     /**
