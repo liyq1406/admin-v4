@@ -323,9 +323,7 @@
           region: this.dealer.area,
           sale_goal: this.dealer.sale_goal
         }
-        console.log(this.belongType.code)
         if (this.belongType.code) {
-          console.log(this.belongType.code)
           params.upper_dealer_code = this.belongType.code
         }
         api.dealer.update(this.$route.params.id, params).then((res) => {

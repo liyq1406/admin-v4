@@ -159,7 +159,7 @@
         if (this.submitting) return
 
         // 如果勾选了删除但在确认弹窗中没确认，则取消该次表单提交动作
-        if (this.delChecked && !window.confirm('确定要删除该数据端点？')) return
+        if (this.delChecked && !window.confirm('确定要删除该条销售记录?')) return
 
         // 如果表单验证不通过则重新验证
         if (!this.delChecked && this.$autoValidation.invalid) {
