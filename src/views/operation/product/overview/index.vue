@@ -26,7 +26,7 @@
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statisticsDisplay[4].total" :change="statisticsDisplay[3].change" :title="statisticsDisplay[4].title" :tooltip="statisticsDisplay[4].tooltip" color="orange" :titletop="true"
+              <statistic :total="statisticsDisplay[4].total" :change="statisticsDisplay[4].change" :title="statisticsDisplay[4].title" :tooltip="statisticsDisplay[4].tooltip" color="orange" :titletop="true"
               :animated="false">
               </statistic>
             </div>
@@ -181,6 +181,14 @@ export default {
       this.isShowTrend = true
       this.isShowActive = true
       this.isShowDistribution = true
+      for (let i in this.statistic.users) {
+        this.statistic.users[i].total = this.statistic.users[i].change = 0
+        this.statistic.users[i].title = this.statistic.users[i].tooltip = ''
+      }
+      for (let i in this.statistic.devices) {
+        this.statistic.devices[i].total = this.statistic.devices[i].change = 0
+        this.statistic.devices[i].title = this.statistic.devices[i].tooltip = ''
+      }
     },
     getQuatasValue (quata, index) {
       let res = {}

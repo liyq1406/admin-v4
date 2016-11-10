@@ -51,7 +51,7 @@
             </thead>
             <tbody>
               <template v-if="total > 0">
-                <tr v-for="dealer in dealers">
+                <tr v-for="dealer in dealerList">
                   <!-- <td>{{* dealer.name }}</td> -->
                   <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + dealer.id" class="hl-red">{{* dealer.name }}</a></td>
                   <td>{{* dealer.email || '--'}}</td>
@@ -166,6 +166,23 @@
     },
 
     computed: {
+      dealerList () {
+        let res = []
+        if (this.dealers.length) {
+          this.dealers.forEach((dealer) => {
+            if (dealer.upper_dealer_code) {
+              let upper = _.find(this.dealers, (item) => {
+                return item.dealer_code === dealer.upper_dealer_code
+              })
+              if (upper) {
+                dealer.belongTo = upper.name
+              }
+            }
+            res.push(_.clone(dealer))
+          })
+        }
+        return res
+      },
       // 基本筛选条件
       baseCondition () {
         let condition = {
@@ -221,7 +238,6 @@
             content: this.$t('operation.settings.offline.export_success')
           })
           this.$route.router.go('/operation/settings/offline-data')
-          // this.onExportCancel()
         }).catch((res) => {
           this.exporting = false
           this.handleError(res)
