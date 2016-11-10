@@ -1,7 +1,11 @@
+// 表单类
+import Editor from './form/editor/Editor'
+
 // 导航类
 import Pagination from './navigation/pagination/Pagination'
 
 const components = {
+  Editor,
   Pagination
 }
 

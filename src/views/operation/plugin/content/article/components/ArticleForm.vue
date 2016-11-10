@@ -69,7 +69,6 @@
 
 <script>
 import api from 'api'
-import Editor from 'components/form/editor/Editor'
 import ImageUploader from 'components/ImageUploader'
 import TagInput from 'components/TagInput'
 import { globalMixins } from 'src/mixins'
@@ -88,7 +87,6 @@ export default {
   },
 
   components: {
-    Editor,
     ImageUploader,
     TagInput
   },
