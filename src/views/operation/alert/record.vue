@@ -64,6 +64,7 @@
                 </select>
               </x-select>
               <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
+              
             </div>
           </div>
           <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
