@@ -56,6 +56,14 @@
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
+
+              <span class="ml10">{{ $t('operation.product.device.alert.time') }}: </span>
+              <x-select width="98px" size="small" :label="rangeOption.label">
+                <select v-model="rangeOption" @change="onRangeOptionChange">
+                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </x-select>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
             </div>
           </div>
           <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
@@ -84,6 +92,7 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
 
 // TODO 消除代码冗余 #weijie
 
@@ -100,7 +109,8 @@ export default {
     DateTimeMultiplePicker,
     'x-select': Select,
     'x-table': Table,
-    SearchBox
+    SearchBox,
+    DateTimeRangePicker
   },
 
   vuex: {
@@ -212,7 +222,14 @@ export default {
       }],
       showBatchBtn: false,
       dealList: [],
-      selecting: true
+      selecting: true,
+      rangeOption: {
+        label: this.$t('common.any'),
+        value: 'any'
+      },
+      timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
+      startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+      endTime: new Date()
     }
   },
 
@@ -257,6 +274,13 @@ export default {
           condition.query[this.queryType.value] = {
             '$like': this.key
           }
+        }
+      }
+
+      if (this.rangeOption.value === 'specified') {
+        condition.query['create_date'] = {
+          '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+          '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
         }
       }
 
@@ -343,6 +367,27 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理时间区段改变
+     */
+    onRangeOptionChange () {
+      if (this.rangeOption.value === 'any') {
+        this.getAlerts(true)
+      }
+    },
+
+    /**
+     * 时间范围改变
+     * @param  {[type]} startDate [description]
+     * @param  {[type]} endDate   [description]
+     * @return {[type]}           [description]
+     */
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getAlerts(true)
+    },
+
     /**
      * 处理导出 CSV 按钮点击
      */
