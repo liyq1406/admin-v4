@@ -44,7 +44,7 @@
 <script>
 import api from 'api'
 import Chart from 'components/Chart/index'
-import convertData from 'components/Chart/convert-data'
+import convertData from 'components/chart/convert-data'
 import { globalMixins } from 'src/mixins'
 import {numToPercent} from 'utils'
 import PercentTable from 'components/PercentTable'
