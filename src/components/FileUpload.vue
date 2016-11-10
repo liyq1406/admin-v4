@@ -7,7 +7,7 @@
         <div class="mt10 mb30">
           <div class="upload-status mb5">
             <div class="uploading" v-show="status==='uploading' || status==='upload-error'">
-              <div class="upload-pregress fr">{{ loaded | bytesPrettify }}/{{ total | bytesPrettify }}</div>
+              <div class="upload-pregress fr">{{ loaded | prettyBytes }}/{{ total | prettyBytes }}</div>
               <div class="upload-desc">固件正在上传，请勿离开此页面</div>
             </div>
             <div class="tips-success" v-show="status==='upload-success'"><i class="fa fa-check-circle"></i>固件上传成功</div>
