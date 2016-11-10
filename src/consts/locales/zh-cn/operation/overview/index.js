@@ -39,5 +39,9 @@ export default {
   },
   user_trend: {
     title: '用户趋势' // 用户趋势
+  },
+  model_analysis: {
+    title: '型号分析', // 型号分析
+    other: '其他'
   }
 }
