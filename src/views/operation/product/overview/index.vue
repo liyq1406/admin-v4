@@ -54,6 +54,7 @@ import ProductActive from './components/ProductActive'
 import ProductDistribution from './components/ProductDistribution'
 import api from 'api'
 import customConfig from 'consts/custom-config'
+import toFixed from 'filters/to-fixed'
 
 export default {
   name: 'Overview',
@@ -83,7 +84,12 @@ export default {
   data () {
     return {
       quatas: {},
-      dpQuatasValues: {},
+      dpQuatasValues: {
+        1: NaN,
+        2: NaN,
+        3: NaN,
+        4: NaN
+      },
       isShowTrend: true,
       isShowActive: true,
       isShowDistribution: true,
@@ -145,6 +151,10 @@ export default {
       }
       for (let i in res) {
         res[i] = this.getQuatasValue(this.quatas[i], i)
+        if (!isNaN(this.dpQuatasValues[i])) {
+          console.log(this.dpQuatasValues[i])
+          res[i].total = this.dpQuatasValues[i]
+        }
       }
 
       return res
@@ -269,7 +279,7 @@ export default {
       api.statistics.getProductSnapshotStatistic(datapoint.snapshot_id, datapoint.statistics_rule_id, params).then((res) => {
         if (res.status === 200 && res.data.product_id) {
           let val = NaN
-          switch (params.mode) {
+          switch (params.mode[0]) {
             case 1: // 最大
               val = res.data.max
               break
@@ -287,7 +297,7 @@ export default {
           }
           val = Number(val)
           if (!isNaN(val)) {
-            this.dpQuatasValues[index] = val
+            this.dpQuatasValues[index] = toFixed(val)
           }
         }
       }).catch((res) => {
@@ -295,7 +305,7 @@ export default {
       })
     },
     getDatapoinitValue (datapoint, index) {
-      if (typeof this.dpQuatasValues[index] === 'number') {
+      if (typeof this.dpQuatasValues[index] === 'number' && !isNaN(this.dpQuatasValues[index])) {
         return {
           total: this.dpQuatasValues[index],
           change: 0
