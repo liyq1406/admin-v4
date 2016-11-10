@@ -45,7 +45,7 @@
               </tr>
             </template>
             <tr v-if="fields.length === 0 && !loadingData">
-              <td colspan="4" class="tac">
+              <td colspan="6" class="tac">
                 <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
               </td>
             </tr>
@@ -129,24 +129,59 @@
       return {
         base_fields: [
           {
-            'name': 'nickname',
-            'label': '昵称',
+            'name': 'id',
+            'label': 'ID',
             'hidden': false,
             'sort': 1,
-            'value_type': 1
+            'value_type': 2
           },
           {
-            'name': 'gender',
-            'label': '性别',
+            'name': 'nickname',
+            'label': '昵称',
             'hidden': false,
             'sort': 2,
             'value_type': 1
           },
           {
-            'name': 'age',
-            'label': '年龄',
+            'name': 'email',
+            'label': '邮箱',
             'hidden': false,
             'sort': 3,
+            'value_type': 1
+          },
+          {
+            'name': 'phone',
+            'label': '手机',
+            'hidden': false,
+            'sort': 4,
+            'value_type': 1
+          },
+          {
+            'name': 'create_date',
+            'label': '注册时间',
+            'hidden': false,
+            'sort': 5,
+            'value_type': 1
+          },
+          {
+            'name': 'source',
+            'label': '来源',
+            'hidden': false,
+            'sort': 6,
+            'value_type': 2
+          },
+          // {
+          //   'name': 'is_activated',
+          //   'label': '激活状态',
+          //   'hidden': false,
+          //   'sort': 3,
+          //   'value_type': 2
+          // },
+          {
+            'name': 'status',
+            'label': '在线状态',
+            'hidden': false,
+            'sort': 7,
             'value_type': 1
           }
         ],
@@ -166,7 +201,10 @@
       // 字段列表
       fields () {
         var result = []
-        var userFields = this.userFields.base_fields || this.base_fields
+        var userFields = this.base_fields
+        if (this.userFields.base_fields && this.userFields.base_fields.length) {
+          userFields = this.userFields.base_fields
+        }
         userFields.forEach((item, index) => {
           var field = _.clone(item)
           field.category = 'base_fields'
