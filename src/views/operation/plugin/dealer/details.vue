@@ -363,7 +363,7 @@
         }
       },
       importDevices () {
-        this.$route.router.go(this.$route.params.dealer_id + '/import_devices')
+        this.$route.router.go('./import_devices')
       }
     }
   }

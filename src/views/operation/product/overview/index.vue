@@ -54,6 +54,7 @@ import ProductActive from './components/ProductActive'
 import ProductDistribution from './components/ProductDistribution'
 import api from 'api'
 import customConfig from 'consts/custom-config'
+import toFixed from 'filters/to-fixed'
 
 export default {
   name: 'Overview',
@@ -82,8 +83,14 @@ export default {
 
   data () {
     return {
+      configLoaded: false,
       quatas: {},
-      dpQuatasValues: {},
+      dpQuatasValues: {
+        1: NaN,
+        2: NaN,
+        3: NaN,
+        4: NaN
+      },
       isShowTrend: true,
       isShowActive: true,
       isShowDistribution: true,
@@ -145,6 +152,9 @@ export default {
       }
       for (let i in res) {
         res[i] = this.getQuatasValue(this.quatas[i], i)
+        if (!isNaN(this.dpQuatasValues[i])) {
+          res[i].total = this.dpQuatasValues[i]
+        }
       }
 
       return res
@@ -154,6 +164,8 @@ export default {
   route: {
     data () {
       this.getCurrProduct(this.$route.params.id)
+      this.configLoaded = false
+      this.resetDpValue()
       this.getConfig()
       this.getProductSummary()
     }
@@ -162,8 +174,16 @@ export default {
     this.initTranslate()
   },
   methods: {
+    resetDpValue () {
+      for (let i in this.dpQuatasValues) {
+        this.dpQuatasValues[i] = NaN
+      }
+    },
     getQuatasValue (quata, index) {
       let res = {}
+      if (!this.configLoaded) {
+        return
+      }
       if (quata) {
         if (quata.dataFrom === customConfig.DATAFROM.preset) {
           res = this.getPresetValue(quata.preset)
@@ -230,8 +250,10 @@ export default {
             this.parseConfig(JSON.parse(res.data[key]))
           }
         }
+        this.configLoaded = true
       }).catch((res) => {
         this.handleError(res)
+        this.configLoaded = true
       })
     },
     parseConfig (config) {
@@ -269,7 +291,7 @@ export default {
       api.statistics.getProductSnapshotStatistic(datapoint.snapshot_id, datapoint.statistics_rule_id, params).then((res) => {
         if (res.status === 200 && res.data.product_id) {
           let val = NaN
-          switch (params.mode) {
+          switch (params.mode[0]) {
             case 1: // 最大
               val = res.data.max
               break
@@ -287,7 +309,7 @@ export default {
           }
           val = Number(val)
           if (!isNaN(val)) {
-            this.dpQuatasValues[index] = val
+            this.dpQuatasValues[index] = toFixed(val)
           }
         }
       }).catch((res) => {
@@ -295,7 +317,7 @@ export default {
       })
     },
     getDatapoinitValue (datapoint, index) {
-      if (typeof this.dpQuatasValues[index] === 'number') {
+      if (typeof this.dpQuatasValues[index] === 'number' && !isNaN(this.dpQuatasValues[index])) {
         return {
           total: this.dpQuatasValues[index],
           change: 0
