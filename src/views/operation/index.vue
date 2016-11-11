@@ -105,7 +105,7 @@ export default {
       // 插件导航
       this.plugins.forEach((item) => {
         let sub = {
-          name: item.name,
+          // name: item.name,
           type: 'plugin',
           alias: item.plugin,
           id: item.id,
@@ -213,8 +213,14 @@ export default {
               url: `/plugins/dealer/${item.id}/list`
             }]
             break
+          case 'operateposition': // 运营位管理
+            sub.icon = 'newspaper-o'
+            break
+          case 'airquality': // 环境数据
+            sub.icon = 'mixcloud'
+            break
           case 'splashwnd': // 闪屏设置
-            sub.icon = 'inbox'
+            sub.icon = 'photo'
             sub.subs = [{
               alias: 'list',
               url: `/plugins/splashwnd/${item.id}/list`

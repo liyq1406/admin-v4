@@ -190,6 +190,12 @@ export default {
             tags: '标签管理'
           }
         },
+        operateposition: {
+          label: '运营位管理'
+        },
+        airquality: {
+          label: '环境数据'
+        },
         alerts: {
           label: '告警服务',
           subs: {

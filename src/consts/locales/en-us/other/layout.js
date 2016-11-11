@@ -151,7 +151,7 @@ export default {
             repair: 'Repair List',
             accounts: 'Net Management',
             heat: 'Thermal Distribution',
-            settings: 'Setting'
+            settings: 'Settings'
           }
         },
         helpdesk: {
@@ -159,23 +159,23 @@ export default {
           subs: {
             overview: 'Overview',
             issues: 'Message List',
-            settings: 'Setting'
+            settings: 'Settings'
           }
         },
         splashwnd: {
           label: 'APP Splash Screen',
           subs: {
-            list: 'APP Startup Setting'
+            list: 'Settings'
           }
         },
         dealer: {
-          label: 'Dealers Management',
+          label: 'Dealers',
           subs: {
             list: 'Dealers List'
           }
         },
         recipes: {
-          label: 'Cloud Recipe',
+          label: 'Recipes',
           subs: {
             recipes: 'Recipes',
             menus: 'Menus',
@@ -184,11 +184,17 @@ export default {
           }
         },
         content: {
-          label: 'Content Management',
+          label: 'Content',
           subs: {
             articles: 'Articles',
             tags: 'Tags'
           }
+        },
+        operateposition: {
+          label: 'Operate Position'
+        },
+        airquality: {
+          label: 'Air Quality'
         },
         alerts: {
           label: 'Alert Service',

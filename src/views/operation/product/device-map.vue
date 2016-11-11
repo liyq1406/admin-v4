@@ -1,7 +1,7 @@
 <template>
   <div class="main device-map-page">
     <div class="main-title">
-      <h2>{{ $t("layout.main_nav.operation.subs.device_map.label") }}</h2>
+      <h2>{{ $t("layout.main_nav.operation.subs.products.subs.device_map") }}</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fr">
