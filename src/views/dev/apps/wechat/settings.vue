@@ -81,7 +81,6 @@
   import Vue from 'vue'
   import locales from 'consts/locales/index'
   import api from 'api'
-  // import Modal from 'components/Modal'
   import { globalMixins } from 'src/mixins'
   import { updatePlugin, removePlugin } from 'store/actions/plugins'
 
@@ -172,6 +171,7 @@
                 this.$emit('update-curr-app')
                 this.removePlugin(this.app)
               }
+              this.editing = false
             }).catch((res) => {
               this.handleError(res)
               this.editing = false

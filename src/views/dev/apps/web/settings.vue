@@ -113,6 +113,7 @@
                 this.$emit('update-curr-app')
                 this.removePlugin(this.currApp)
               }
+              this.editing = false
             }).catch((res) => {
               this.handleError(res)
               this.editing = false

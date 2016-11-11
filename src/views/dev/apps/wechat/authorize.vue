@@ -25,8 +25,9 @@
           <tr>
             <th>设备ID</th>
             <th>MAC</th>
-            <th>微信设备TYPE</th>
             <th>授权状态</th>
+            <th>微信设备TYPE</th>
+            <th>微信设备二维码</th>
           </tr>
         </thead>
         <tbody>
@@ -35,14 +36,15 @@
             <tr v-for="device in devices">
               <td>{{ device.device_id }}</td>
               <td>{{ device.mac }}</td>
-              <td>{{ device.w_device_type }}</td>
               <td v-if="device.status -0 === 0">未授权</td>
               <td v-if="device.status -0 === 1">已授权</td>
               <td v-if="device.status -0 === 2">授权中</td>
+              <td>{{ device.w_device_type }}</td>
+              <td>{{ device.ticket}}</td>
             </tr>
           </template>
           <tr v-if="devices.length === 0 && !loadingData">
-            <td colspan="4" class="tac">
+            <td colspan="5" class="tac">
               <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
             </td>
           </tr>
