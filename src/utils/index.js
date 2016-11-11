@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import formatDate from '../filters/format-date'
 
 // 每天毫秒数

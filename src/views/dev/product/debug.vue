@@ -190,10 +190,10 @@
                   <input v-model="addModel.mac" name="addModel.mac" v-validate:mac="{required: true, minlength: 2, maxlength: 64, format: 'mac'}" type="text" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$addValidation.mac.touched && $addValidation.mac.required">{{ $t('ui.validation.required', {field: 'MAC'}) }}</span>
+                  <span v-if="$addValidation.mac.touched && $addValidation.mac.required">{{ $t('common.validation.required', {field: 'MAC'}) }}</span>
                   <span v-if="$addValidation.mac.touched && $addValidation.mac.modified && $addValidation.mac.format">MAC应为十六进制字符的组合</span>
-                  <span v-if="$addValidation.mac.touched && $addValidation.mac.modified && $addValidation.mac.minlength">{{ $t('ui.validation.minlength', ['MAC', 2]) }}</span>
-                  <span v-if="$addValidation.mac.touched && $addValidation.mac.modified && $addValidation.mac.maxlength">{{ $t('ui.validation.maxlength', ['MAC', 64]) }}</span>
+                  <span v-if="$addValidation.mac.touched && $addValidation.mac.modified && $addValidation.mac.minlength">{{ $t('common.validation.minlength', ['MAC', 2]) }}</span>
+                  <span v-if="$addValidation.mac.touched && $addValidation.mac.modified && $addValidation.mac.maxlength">{{ $t('common.validation.maxlength', ['MAC', 64]) }}</span>
                 </div>
               </div>
             </div>
@@ -205,7 +205,7 @@
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$addValidation.sn.modified && $addValidation.sn.format">序列号只能包含数字、英文字母和中划线</span>
-                  <span v-if="$addValidation.sn.touched && $addValidation.sn.modified && $addValidation.sn.maxlength">{{ $t('ui.validation.maxlength', ['序列号', 32]) }}</span>
+                  <span v-if="$addValidation.sn.touched && $addValidation.sn.modified && $addValidation.sn.maxlength">{{ $t('common.validation.maxlength', ['序列号', 32]) }}</span>
                 </div>
               </div>
             </div>
@@ -213,7 +213,7 @@
               <label class="form-control col-6">名字:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入名字'" class="input-text-wrap">
-                  <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{format: 'no-spaces-both-ends'}" lazy class="input-text"/>
+                  <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{format: 'trim'}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$addValidation.name.modified && $addValidation.name.format">名字前后不能包含空格</span>
@@ -275,7 +275,6 @@ import Switch from 'components/Switch'
 import Modal from 'components/Modal'
 import Alert from 'components/Alert'
 import api from 'api'
-import _ from 'lodash'
 
 var socket = null
 

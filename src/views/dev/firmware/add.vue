@@ -160,9 +160,7 @@
   import { globalMixins } from 'src/mixins'
   import Select from 'components/Select'
   import RadioButtonGroup from 'components/RadioButtonGroup'
-  import store from 'store'
   import api from 'api'
-  import _ from 'lodash'
   // import { createDayRange } from 'utils'
 
   // TODO 添加流程确定：选择产品如果版本数小于1？表单通过验证才可以点击按钮？ #weijie
@@ -173,8 +171,6 @@
     name: 'AddBroadcast',
 
     mixins: [globalMixins],
-
-    store,
 
     vuex: {
       getters: {

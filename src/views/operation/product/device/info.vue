@@ -9,19 +9,19 @@
               <button class="btn btn-ghost btn-sm" @click="getVDevice"><i class="fa fa-refresh" :class="{'fa-spin':refreshing}"></i></button>
             </div>
             <div class="filter-group-item">
-              <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
+              <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
             </div>
           </div>
-          <h3>设备状态数据</h3>
+          <h3>{{ $t('operation.product.device.info.title') }}</h3>
         </div>
         <table class="table table-stripe table-bordered">
           <thead>
             <tr>
-              <th>{{ $t('ui.datapoint.fields.index') }}</th>
-              <th>{{ $t('ui.datapoint.fields.name') }}</th>
-              <th>端点类型</th>
-              <th>{{ $t('ui.datapoint.fields.description') }}</th>
-              <th>{{ $t('ui.device.current_value') }}</th>
+              <th>{{ $t('operation.product.device.info.index') }}</th>
+              <th>{{ $t('operation.product.device.info.dp_id') }}</th>
+              <th>{{ $t('operation.product.device.info.dp_type') }}</th>
+              <th>{{ $t('operation.product.device.info.dp_describe') }}</th>
+              <th>{{ $t('operation.product.device.info.dp_value') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -34,7 +34,7 @@
             </tr>
             <tr v-if="filteredDatapoints.length === 0">
               <td colspan="5" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                <div v-else class="tips-null">{{ $t('ui.device.no_datapoint') }}</div>
+                <div v-else class="tips-null">{{ $t('common.no_data') }}</div>
               </td>
             </tr>
           </tbody>
@@ -49,9 +49,7 @@
 import api from 'api'
 import { globalMixins } from 'src/mixins'
 import SearchBox from 'components/SearchBox'
-import store from 'store'
 import { setCurrVirtualDevice } from 'store/actions/products'
-import _ from 'lodash'
 
 export default {
   name: 'DeviceDetails',
@@ -61,8 +59,6 @@ export default {
   components: {
     SearchBox
   },
-
-  store,
 
   vuex: {
     getters: {
@@ -106,39 +102,39 @@ export default {
       var result = [
         {
           value: 1,
-          label: '布尔类型'
+          label: this.$t('operation.product.device.info.dp_types.type_bool')
         },
         {
           value: 2,
-          label: '单字节(无符号)'
+          label: this.$t('operation.product.device.info.dp_types.type_uint8')
         },
         {
           value: 3,
-          label: '16位短整型（有符号）'
+          label: this.$t('operation.product.device.info.dp_types.type_int16')
         },
         {
           value: 4,
-          label: '32位整型（有符号）'
+          label: this.$t('operation.product.device.info.dp_types.type_int32')
         },
         {
           value: 5,
-          label: '浮点'
+          label: this.$t('operation.product.device.info.dp_types.type_float')
         },
         {
           value: 6,
-          label: '字符串'
+          label: this.$t('operation.product.device.info.dp_types.type_str')
         },
         {
           value: 7,
-          label: '字节数组'
+          label: this.$t('operation.product.device.info.dp_types.type_char_arr')
         },
         {
           value: 8,
-          label: '16位短整型（无符号）'
+          label: this.$t('operation.product.device.info.dp_types.type_uint16')
         },
         {
           value: 9,
-          label: '32位整型（无符号）'
+          label: this.$t('operation.product.device.info.dp_types.type_uint32')
         }
       ]
       return result

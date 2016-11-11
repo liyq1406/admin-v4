@@ -2,7 +2,7 @@
   <div :class="classes">
     <slot name="label"></slot>
     <date-picker :size="inputSize" :width="inputWidth" :value.sync="from"></date-picker>
-    <span>至</span>
+    <span>{{ $t('components.to') }}</span>
     <date-picker :size="inputSize" :width="inputWidth" :value.sync="to"></date-picker>
   </div>
 </template>

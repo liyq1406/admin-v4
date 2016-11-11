@@ -65,7 +65,7 @@
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">用户账号</div>
+                    <div class="x-label">用户帐号</div>
                     <div class="x-val">13800138000</div>
                   </div>
                 </div>

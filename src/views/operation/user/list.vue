@@ -2,7 +2,7 @@
   <div class="main">
 
     <div class="main-title">
-      <h2>用户管理</h2>
+      <h2>{{ $t('operation.user.list.main_title') }}</h2>
     </div>
     <!-- <pre> {{ usersOnlineType | json}} </pre> -->
     <!-- Start: 产品信息统计 -->
@@ -20,17 +20,31 @@
             <div class="filter-group fl">
               <div class="filter-group-item">
                 <x-select :label="selectedFilter.name" width='110px' size="small">
-                  <span slot="label">显示</span>
+                  <span slot="label">{{ $t('common.display') }}</span>
                   <select v-model="selectedFilter" @change="getUsers(true)">
                     <!-- <option :value="">全部</option> -->
                     <option v-for="filter in filters" :value="filter">{{filter.name}}</option>
                   </select>
                 </x-select>
+
+                <template v-if="debug">
+                  <span class="ml10">{{ this.$t('operation.user.list.columns.create_date') }}: </span>
+                  <x-select width="98px" size="small" :label="rangeOption.label">
+                    <select v-model="rangeOption" @change="onRangeOptionChange">
+                      <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                    </select>
+                  </x-select>
+                  <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
+                </template>
+
               </div>
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="getUsers(true)" :placeholder="'请输入查询内容'" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers(true)">
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" @cancel="getUsers(true)" :placeholder="$t('common.placeholder.search')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers(true)">
                   <x-select width="100px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -51,6 +65,7 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import SearchBox from 'components/SearchBox'
   import Select from 'components/Select'
   import api from 'api'
@@ -60,6 +75,8 @@
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic2'
   import {createDayRange} from 'utils'
+  import locales from 'consts/locales/index'
+  import DateTimeRangePicker from 'components/DateTimeRangePicker'
 
   export default {
     name: 'UserList',
@@ -71,11 +88,13 @@
       'api': api,
       'x-select': Select,
       'x-table': Table,
-      Statistic
+      Statistic,
+      DateTimeRangePicker
     },
 
     data () {
       return {
+        exporting: false,
         allTotal: 0,
         // 是否缓存用户在线状态
         cacheOnlineType: false,
@@ -87,28 +106,28 @@
         loadingData: false,
         users: [],
         queryTypeOptions: [
-          { label: '邮箱', value: 'email' },
-          { label: '手机', value: 'phone' }
+          { label: this.$t('common.email'), value: 'email' },
+          { label: this.$t('common.phone'), value: 'phone' }
         ],
         queryType: {
-          label: '邮箱',
+          label: this.$t('common.email'),
           value: 'email'
         },
         filters: [
           {
-            name: '全部',
+            name: this.$t('common.all'),
             value: 0
           },
           {
-            name: '已激活',
+            name: this.$t('operation.user.list.activated'),
             value: 1
           },
           {
-            name: '未激活',
+            name: this.$t('operation.user.list.not_activated'),
             value: 2
           },
           {
-            name: '在线',
+            name: this.$t('operation.user.list.online'),
             value: 3
           }
         ],
@@ -117,7 +136,7 @@
          * @type {Object}
          */
         selectedFilter: {
-          name: '全部',
+          name: this.$t('common.all'),
           value: 0
         },
         // 今日新增
@@ -126,6 +145,11 @@
         onlineCount: 0,
         // 7日活跃数
         serverDayActiveCount: 0,
+        rangeOption: {
+          label: this.$t('common.any'),
+          value: 'any'
+        },
+        timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
         headers: [
           {
             key: 'id', // 与tables的key对应
@@ -133,35 +157,35 @@
           },
           {
             key: 'nickname', // 与tables的key对应
-            title: '昵称' // 标题的内容
+            title: this.$t('operation.user.list.columns.nickname') // 标题的内容
           },
           {
             key: 'email',
-            title: '邮箱'
+            title: this.$t('common.email')
           },
           {
             key: 'phone',
-            title: '手机'
+            title: this.$t('common.phone')
           },
           {
             key: 'create_date',
-            title: '注册时间',
+            title: this.$t('operation.user.list.columns.create_date'), // 标题的内容
             sortType: -1
             // tooltip: '提示内容'
           },
           {
             key: 'source',
-            title: '来源',
+            title: this.$t('operation.user.list.columns.source'), // 标题的内容
             class: 'tac'
           },
           {
             key: 'is_active',
-            title: '激活状态',
+            title: this.$t('operation.user.list.columns.is_active'), // 标题的内容
             class: 'tac'
           },
           {
             key: 'online',
-            title: '在线状态',
+            title: this.$t('operation.user.list.columns.online'), // 标题的内容
             class: 'tac'
           }
         ],
@@ -171,7 +195,9 @@
             id: '',
             online: false
           }
-        ]
+        ],
+        startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+        endTime: new Date()
       }
     },
 
@@ -183,19 +209,19 @@
       statisticArr () {
         var result = [
           {
-            title: '用户总数',
+            title: this.$t('operation.user.list.total'),
             value: this.allTotal
           },
           {
-            title: '今日新增',
+            title: this.$t('operation.user.list.add_count'),
             value: this.todayAddCount
           },
           {
-            title: '当前在线',
+            title: this.$t('operation.user.list.online_count'),
             value: this.onlineCount
           },
           {
-            title: '七日活跃用户',
+            title: this.$t('operation.user.list.active_count'),
             value: this.serverDayActiveCount
           }
         ]
@@ -230,8 +256,8 @@
             phone: user.phone || '-',
             create_date: formatDate(user.create_date),
             source: this.computedSource(user.source),
-            is_active: user.is_active ? '已激活' : '未激活',
-            online: user.is_online === true ? '在线' : '下线',
+            is_active: user.is_active ? this.$t('operation.user.list.activated') : this.$t('operation.user.list.not_activated'),
+            online: user.is_online === true ? this.$t('operation.user.list.online') : this.$t('operation.user.list.offline'),
             status: this.computedStatus(user.status),
             prototype: user
           }
@@ -239,16 +265,14 @@
         })
         return result
       },
-      /**
-       * 列表查询条件
-       * @return {[type]} [description]
-       */
-      queryCondition () {
+
+      // 基本筛选条件
+      baseCondition () {
         var condition = {
-          filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid', 'is_online'],
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
+          filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid', 'is_online', 'active_date'],
+          order: {
+            create_time: 'desc'
+          },
           query: {}
         }
 
@@ -256,6 +280,12 @@
           // condition.query['id'] = { $in: [this.query] }
           condition.query[this.queryType.value] = {
             '$like': this.query
+          }
+        }
+        if (this.rangeOption.value === 'specified') {
+          condition.query['create_date'] = {
+            '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+            '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
           }
         }
 
@@ -286,6 +316,16 @@
         })
 
         return condition
+      },
+
+      // 列表查询条件
+      queryCondition () {
+        let condition = _.cloneDeep(this.baseCondition)
+
+        condition.limit = this.countPerPage
+        condition.offset = (this.currentPage - 1) * this.countPerPage
+
+        return condition
       }
     },
 
@@ -305,6 +345,54 @@
 
     methods: {
       /**
+       * 时间范围改变
+       * @param  {[type]} startDate [description]
+       * @param  {[type]} endDate   [description]
+       * @return {[type]}           [description]
+       */
+      onTimeChange (start, end) {
+        this.startTime = start
+        this.endTime = end
+        this.getUsers()
+      },
+      /**
+       * 处理时间区段改变
+       */
+      onRangeOptionChange () {
+        if (this.rangeOption.value === 'any') {
+          this.getUsers()
+        }
+      },
+      /**
+       * 处理导出 CSV 按钮点击
+       */
+      onExportBtnClick () {
+        if (this.exporting) {
+          return
+        }
+
+        let postData = {
+          name: '用户列表',
+          describe: '用户列表',
+          type: 2,
+          params: this.baseCondition
+        }
+
+        this.exporting = true
+        api.exportTask.createTask(postData).then((res) => {
+          this.showNotice({
+            type: 'success',
+            content: this.$t('operation.settings.offline.export_success')
+          })
+          this.$route.router.go('/operation/settings/offline-data')
+          // this.onExportCancel()
+        }).catch((res) => {
+          this.exporting = false
+          this.handleError(res)
+        })
+      },
+
+      /**
        * 获取用户在线状态
        * @param  {[type]} userId [description]
        * @return {[type]}        [description]
@@ -314,7 +402,7 @@
           var obj = {
             id: userId,
             online: Boolean(res.data.online),
-            text: res.data.online ? '在线' : '下线'
+            text: res.data.online ? this.$t('operation.user.list.online') : this.$t('operation.user.list.offline')
           }
           this.usersOnlineType.push(obj)
         }).catch((res) => {
@@ -404,7 +492,7 @@
        * @return {[type]}        [description]
        */
       computedOnline (userId) {
-        var result = '查询中...'
+        var result = '-'
         this.usersOnlineType.map((item) => {
           if (item.id === userId) {
             result = item.text
@@ -429,7 +517,7 @@
           '1': 'Web',
           '2': 'Android',
           '3': 'iOS',
-          '4': '微信'
+          '4': this.$t('common.wechat')
         }
         return result[source]
       },
@@ -441,8 +529,8 @@
        */
       computedStatus (status) {
         var result = {
-          '1': '正常',
-          '2': '停用'
+          '1': this.$t('common.normal'),
+          '2': this.$t('common.outage')
         }
         return result[status]
       },

@@ -1,8 +1,7 @@
 /**
  * 英文数据翻译
  */
-
-// 账号类型
+// 帐号类型
 export const ACCOUNT_TYPES = [
   { value: 1, label: '消费电子' },
   { value: 2, label: '智能家居' },
@@ -74,6 +73,12 @@ export const DEVICE_VISIBILITY_OPTIONS = [
   { label: '未激活', value: 'inactive' }
 ]
 
+// 时间区段筛选待选项
+export const TIME_RANGE_OPTIONS = [
+  { label: '不限', value: 'any' },
+  { label: '指定', value: 'specified' }
+]
+
 // 产品活跃时间段
 export const ACTIVE_PERIODS = [
   { label: '1天', value: 1 },
@@ -109,7 +114,11 @@ export const USER_FILTERS = [
 ]
 
 // 成员类型
-export const MEMBER_TYPES = ['管理员', '普通成员']
+export const MEMBER_TYPES = {
+  '1': '管理员',
+  '2': '运营人员',
+  '3': '开发人员'
+}
 
 // 成员状态类型
 export const MEMBER_STATUS_TYPES = ['待激活', '启用', '已停用']
@@ -230,6 +239,10 @@ export const OPERATE_TYPES = [
   { label: '删除', value: 3 },
   { label: '新增', value: 4 }
 ]
+
+export const WEEK_RANGE = ['日', '一', '二', '三', '四', '五', '六']
+
+export const MONTH_NAMES = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
 
 // 警告信息
 export const ALERT_MESSAGES = {

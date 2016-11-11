@@ -54,7 +54,7 @@
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" :max="(queryType.value === 'id'?2100000000: false)" @search="handleSearch" @press-enter="getDevices(true)">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" :max="(queryType.value === 'id'?2100000000: false)" @search="handleSearch" @press-enter="getDevices(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -104,7 +104,7 @@
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.sn.modified && $validation.sn.format">序列号只能包含数字、英文字母和中划线，且不以中划线开头</span>
-                  <span v-if="$validation.sn.touched && $validation.sn.modified && $validation.sn.maxlength">{{ $t('ui.validation.maxlength', ['序列号', 32]) }}</span>
+                  <span v-if="$validation.sn.touched && $validation.sn.modified && $validation.sn.maxlength">{{ $t('common.validation.maxlength', ['序列号', 32]) }}</span>
                 </div>
               </div>
             </div>
@@ -133,8 +133,6 @@ import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import Modal from 'components/Modal'
 import Select from 'components/Select'
-import store from 'store'
-import _ from 'lodash'
 import formatDate from 'filters/format-date'
 // import BatchExportQr from './batch-export-qr'
 
@@ -142,8 +140,6 @@ export default {
   name: 'ProductInfo',
 
   mixins: [globalMixins, setCurrProductMixin],
-
-  store,
 
   vuex: {
     actions: {

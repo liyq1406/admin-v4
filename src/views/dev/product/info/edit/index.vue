@@ -13,7 +13,6 @@
 import Breadcrumb from 'components/Breadcrumb'
 import Tab from 'components/Tab'
 import { globalMixins } from 'src/mixins'
-// import store from 'store'
 
 export default {
   name: 'edit',
@@ -24,21 +23,6 @@ export default {
     Tab,
     Breadcrumb
   },
-
-  // store,
-  //
-  // vuex: {
-  //   getters: {
-  //     currentProduct: ({ products }) => products.curr,
-  //     currDevice: ({ products }) => products.currDevice,
-  //     currVirtualDevice: ({ products }) => products.currVirtualDevice
-  //   },
-  //   actions: {
-  //     getCurrProduct,
-  //     setCurrDevice,
-  //     setCurrVirtualDevice
-  //   }
-  // },
 
   data () {
     return {

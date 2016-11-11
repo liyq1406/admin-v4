@@ -26,10 +26,10 @@
               <label class="form-control col-6">名称:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, format: 'no-spaces-both-ends'}"  lazy class="input-text"/>
+                  <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, format: 'trim'}"  lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
+                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
                   <span v-if="$validation.name.modified && $validation.name.format">名称前后不能包含空格</span>
                 </div>
               </div>
@@ -38,10 +38,10 @@
               <label class="form-control col-6">参数值:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <textarea v-model="model.info" type="text" name="model.info" v-validate:info="{required: true, format: 'no-spaces-both-ends'}"  lazy class="input-text"></textarea>
+                  <textarea v-model="model.info" type="text" name="model.info" v-validate:info="{required: true, format: 'trim'}"  lazy class="input-text"></textarea>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.info.touched && $validation.info.required">{{ $t('ui.validation.required', {field: '参数值'}) }}</span>
+                  <span v-if="$validation.info.touched && $validation.info.required">{{ $t('common.validation.required', {field: '参数值'}) }}</span>
                   <span v-if="$validation.info.modified && $validation.info.format">参数值前后不能包含空格</span>
                 </div>
               </div>
@@ -67,7 +67,6 @@ import { setCurrProductMixin } from '../../mixins'
 import { globalMixins } from 'src/mixins'
 import Table from 'components/Table'
 import Modal from 'components/Modal'
-import _ from 'lodash'
 
 export default {
   name: 'Qrcode',

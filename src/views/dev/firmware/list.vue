@@ -9,7 +9,7 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <!-- <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="" @search-activate="" @search-deactivate="" @search="" @press-enter="">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="" @search-activate="" @search-deactivate="" @search="" @press-enter="">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -87,7 +87,6 @@ import SearchBox from 'components/SearchBox'
 import Progress from 'components/Progress'
 import Table from 'components/Table'
 import locales from 'consts/locales/index'
-// import _ from 'lodash'
 // import formatDate from 'filters/format-date'
 // import { globalMixins } from 'src/mixins'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'

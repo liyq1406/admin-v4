@@ -12,7 +12,7 @@
             <info-list :info="userInfo"></info-list>
           </div>
         </div>
-        <div class="col-8">
+        <div class="col-8" v-if="sale.x_info && sale.x_info.length">
           <div class="sale-info-head">销售信息
             <div class="sale-info-body">
               <div class="row" v-for="info in sale.x_info">
@@ -52,8 +52,8 @@
             <div class="input-text-wrap">
               <input v-model="editModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
             </div>
-            <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.name')}) }}</span></div>
-            <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.sale.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.sale.name'), 32]) }}</span></div>
+            <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.name')}) }}</span></div>
+            <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('common.validation.minlength', [ $t('ui.dealer.sale.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.dealer.sale.name'), 32]) }}</span></div>
           </div>
         </div>
         <div class="form-row row">
@@ -62,8 +62,8 @@
             <div class="input-text-wrap">
               <input v-model="editModal.model.phone" type="text" v-form-ctrl name="phone" number required minlength="2" maxlength="11" lazy class="input-text"/>
             </div>
-            <div v-if="editValidation.$submitted && editValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.phone')}) }}</span></div>
-            <div v-if="editValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.phone')}) }}</span><span v-if="editValidation.phone.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.sale.phone'), 2]) }}</span><span v-if="editValidation.phone.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.sale.phone'), 32]) }}</span></div>
+            <div v-if="editValidation.$submitted && editValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.phone')}) }}</span></div>
+            <div v-if="editValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.phone')}) }}</span><span v-if="editValidation.phone.$error.minlength">{{ $t('common.validation.minlength', [ $t('ui.dealer.sale.phone'), 2]) }}</span><span v-if="editValidation.phone.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.dealer.sale.phone'), 32]) }}</span></div>
           </div>
         </div>
         <div class="form-row row">
@@ -86,10 +86,10 @@
             <div class="input-text-wrap">
               <input v-model="editModal.model.address" type="text" v-form-ctrl name="address" required minlength="2" maxlength="11" lazy class="input-text"/>
             </div>
-            <div v-if="editValidation.$submitted && editValidation.address.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.address.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.address')}) }}</span></div>
-            <div v-if="editValidation.address.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.address.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.address')}) }}</span>
-              <!-- <span v-if="editValidation.address.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.sale.address'), 2]) }}</span>
-              <span v-if="editValidation.address.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.sale.address'), 32]) }}</span> -->
+            <div v-if="editValidation.$submitted && editValidation.address.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.address.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.address')}) }}</span></div>
+            <div v-if="editValidation.address.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.address.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.address')}) }}</span>
+              <!-- <span v-if="editValidation.address.$error.minlength">{{ $t('common.validation.minlength', [ $t('ui.dealer.sale.address'), 2]) }}</span>
+              <span v-if="editValidation.address.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.dealer.sale.address'), 32]) }}</span> -->
             </div>
           </div>
         </div>
@@ -99,8 +99,8 @@
             <div class="input-text-wrap">
               <input v-model="editModal.model.place_floor_num" type="text" v-form-ctrl name="place_floor_count" number required  lazy class="input-text"/>
             </div>
-            <div v-if="editValidation.$submitted && editValidation.place_floor_count.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.place_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.floor_num')}) }}</span></div>
-            <div v-if="editValidation.place_floor_count.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.place_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.floor_num')}) }}</span></div>
+            <div v-if="editValidation.$submitted && editValidation.place_floor_count.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.place_floor_count.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.floor_num')}) }}</span></div>
+            <div v-if="editValidation.place_floor_count.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.place_floor_count.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.floor_num')}) }}</span></div>
           </div>
         </div>
         <div class="form-row row">
@@ -109,8 +109,8 @@
             <div class="input-text-wrap">
               <input v-model="editModal.model.floor_area" type="text" v-form-ctrl name="floor_area" number required  lazy class="input-text"/>
             </div>
-            <div v-if="editValidation.$submitted && editValidation.floor_area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.floor_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.floor_area')}) }}</span></div>
-            <div v-if="editValidation.floor_area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.floor_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.floor_area')}) }}</span></div>
+            <div v-if="editValidation.$submitted && editValidation.floor_area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.floor_area.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.floor_area')}) }}</span></div>
+            <div v-if="editValidation.floor_area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.floor_area.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.floor_area')}) }}</span></div>
           </div>
         </div>
         <div class="form-row row">
@@ -119,8 +119,8 @@
             <div class="input-text-wrap">
               <input v-model="editModal.model.place_area" type="text" v-form-ctrl name="place_area" number required  lazy class="input-text"/>
             </div>
-            <div v-if="editValidation.$submitted && editValidation.place_area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.place_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.place_area')}) }}</span></div>
-            <div v-if="editValidation.place_area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.place_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.place_area')}) }}</span></div>
+            <div v-if="editValidation.$submitted && editValidation.place_area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.place_area.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.place_area')}) }}</span></div>
+            <div v-if="editValidation.place_area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.place_area.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.place_area')}) }}</span></div>
           </div>
         </div>
         <div class="form-row row">
@@ -129,8 +129,8 @@
             <div class="input-text-wrap">
               <input v-model="editModal.model.lay_floor" type="text" v-form-ctrl name="lay_floor_count" number required  lazy class="input-text"/>
             </div>
-            <div v-if="editValidation.$submitted && editValidation.lay_floor_count.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.lay_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.lay_floor')}) }}</span></div>
-            <div v-if="editValidation.lay_floor_count.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.lay_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.lay_floor')}) }}</span></div>
+            <div v-if="editValidation.$submitted && editValidation.lay_floor_count.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.lay_floor_count.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.lay_floor')}) }}</span></div>
+            <div v-if="editValidation.lay_floor_count.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.lay_floor_count.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.lay_floor')}) }}</span></div>
           </div>
         </div>
         <div class="form-row row">
@@ -139,8 +139,8 @@
             <div class="input-text-wrap">
               <input v-model="editModal.model.permanent_population" type="text" v-form-ctrl name="permanent_population" number required  lazy class="input-text"/>
             </div>
-            <div v-if="editValidation.$submitted && editValidation.permanent_population.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.permanent_population.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.permanent_population')}) }}</span></div>
-            <div v-if="editValidation.permanent_population.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.permanent_population.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.permanent_population')}) }}</span></div>
+            <div v-if="editValidation.$submitted && editValidation.permanent_population.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.permanent_population.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.permanent_population')}) }}</span></div>
+            <div v-if="editValidation.permanent_population.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.permanent_population.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.sale.permanent_population')}) }}</span></div>
           </div>
         </div>
         <div class="form-actions">
@@ -159,7 +159,6 @@
 
 <script>
 import api from 'api'
-import _ from 'lodash'
 import Breadcrumb from 'components/Breadcrumb'
 import Modal from 'components/Modal'
 // import AreaSelect from 'components/AreaSelect'
@@ -305,19 +304,18 @@ export default {
       // }
       api.dealer.getUser(this.$route.params.sale_id).then((res) => {
         this.sale = res.data
-        this.userInfo.phone.value = this.sale.phone
+        this.userInfo.phone.value = this.sale.phone || '--'
         if (this.sale.client_type === 'common_buyer') {
           this.userInfo.type.value = '普通客户'
         } else {
           this.userInfo.type.value = '大客户'
         }
         // this.userInfo.type.value = this.sale.client_type
-        this.userInfo.province.value = this.sale.province
-        this.userInfo.city.value = this.sale.city
-        this.userInfo.address.value = this.sale.address
+        this.userInfo.province.value = this.sale.province || '--'
+        this.userInfo.city.value = this.sale.city || '--'
+        this.userInfo.address.value = this.sale.address || '--'
         // todo 字段缺失
-        this.userInfo.area.value = this.sale.region
-        this.loadingData = false
+        this.userInfo.area.value = this.sale.region || '--'
         this.loadingData = false
       }).catch((err) => {
         this.handleError(err)

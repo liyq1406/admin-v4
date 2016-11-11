@@ -63,13 +63,11 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import store from 'store'
 import Select from 'components/Select'
 import Pager from 'components/Pager'
 import Vue from 'vue'
 // import * as config from 'consts/config'
 import locales from 'consts/locales/index'
-import _ from 'lodash'
 
 export default {
   name: 'SnapshotForm',
@@ -80,8 +78,6 @@ export default {
     'x-select': Select,
     Pager
   },
-
-  store,
 
   vuex: {
     getters: {

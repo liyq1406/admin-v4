@@ -11,7 +11,7 @@ let apiServer = ({
     plugin: 'http://plugin-api.xlink.cn:3000'
   },
   test: { // 测试服务器
-    api: 'http://api-test.xlink.cn:8887',
+    api: 'http://api-test.xlink.cn:80',
     plugin: 'http://test.plugin.xlink.cn:3000',
     message: 'http://139.196.164.250:3072'
   },
@@ -75,6 +75,9 @@ export const IS_DEMO = process.env.API_SERVER === 'demo'
 // 默认每页记录数
 export const COUNT_PER_PAGE = 10
 
+// 百度地图 key
+export const BMAP_KEY = 'iqGzDSunIlUeEK1H8rkRfptH'
+
 // 高德地图 key
 export const AMAP_KEY = '5f21a013829b628d05551513d352f3f7'
 
@@ -83,6 +86,13 @@ export const MAX_FIRMWARE_FILE_SIZE = 8
 
 // 允许上传的最大图片文件大小（单位：Mb）
 export const MAX_IMAGE_FILE_SIZE = 2
+
+// 上传允许最大的大小
+export const MAX_UPLOAD_FILE_SIZE = {
+  file: 2,
+  image: 2,
+  firmware: 8
+}
 
 // 验证码刷新等待间隔(单位:秒)
 export const VERIFYCODE_DURATION = 90
@@ -167,7 +177,7 @@ export const MAIN_NAV = {
         url: '/data/snapshots'
       }, {
         alias: 'statistics-rule',
-        url: '/data/statistics-rule'
+        url: '/data/statistics-rule/device'
       }, {
         alias: 'forward',
         url: '/data/forward'
@@ -193,11 +203,13 @@ export const MAIN_NAV = {
         url: '/settings/users'
       }, {
         alias: 'email',
-        url: '/settings/email/template'
-      // url: '/settings/email/customize'
-      // }, {
-      //   alias: 'message',
-      //   url: '/settings/message/config'
+        url: '/settings/email/customize'
+      }, {
+        alias: 'message',
+        url: '/settings/message/config'
+      }, {
+        alias: 'views',
+        url: '/settings/views/overview'
       }]
     }]
   },
@@ -244,9 +256,17 @@ export const MAIN_NAV = {
       //   url: '/users/analysis'
       }]
     }, {
-      alias: 'snapshots', // 用户管理
-      icon: 'database',
+      alias: 'snapshots', // 快照分析
+      icon: 'line-chart',
       url: 'snapshots'
+    }, {
+      alias: 'settings', // 设置
+      icon: 'cog',
+      unfold: true, // 展开子级菜单
+      subs: [{
+        alias: 'offline_data',
+        url: '/settings/offline-data'
+      }]
     }]
   }
 }

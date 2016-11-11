@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-hd panel-hd-full bordered">
-      <h2>产品分布</h2>
+      <h2>{{ $t('operation.overview.product_dist.title') }}</h2>
     </div>
     <div class="panel-bd">
       <div class="row">
@@ -24,7 +24,6 @@ import { toPercentage } from 'filters/format-date'
 import PercentTable from 'components/PercentTable'
 import PROVINCE_MAP from 'consts/mapping/provinces'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'ProductDistribution',
@@ -53,15 +52,15 @@ export default {
       columns: [
         {
           key: 'region',
-          title: '地域'
+          title: this.$t('operation.overview.product_dist.region')
         },
         {
           key: 'count',
-          title: '设备数量'
+          title: this.$t('operation.overview.product_dist.count')
         },
         {
           key: 'percent',
-          title: '占比',
+          title: this.$t('operation.overview.product_dist.percent'),
           sortType: -1
         }
       ]
@@ -102,11 +101,11 @@ export default {
           max: this.max,
           left: 10,
           bottom: 20,
-          text: ['高', '低'],
+          text: [this.$t('common.high'), this.$t('common.low')],
           calculable: true
         },
         series: [{
-          name: '设备数量',
+          name: this.$t('operation.overview.product_dist.count'),
           type: 'map',
           mapType: 'china',
           roam: false,

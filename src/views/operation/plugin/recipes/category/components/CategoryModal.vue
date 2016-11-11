@@ -8,11 +8,11 @@
             <label class="form-control col-6">名称:</label>
             <div class="controls col-18">
               <div class="input-text-wrap required-sign" v-placeholder="'请填写菜谱类别名称，如“菜系”'">
-                <input v-model="category.name" name="category.name" type="text" v-validate:name="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" class="input-text"/>
+                <input v-model="category.name" name="category.name" type="text" v-validate:name="{required: true, maxlength: 20, format: 'trim'}" class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.recipe.fields.name')}) }}</span>
-                <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.recipe.fields.name'), 20]) }}</span>
+                <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.recipe.fields.name')}) }}</span>
+                <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', [$t('ui.recipe.fields.name'), 20]) }}</span>
                 <span v-if="$validation.name.touched && $validation.name.format">名称不允许前后带空格</span>
               </div>
             </div>
@@ -24,7 +24,7 @@
                 <textarea v-model="category.instructions" type="text" lazy class="input-text" v-validate:instructions="{maxlength: 40}"></textarea>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$validation.instructions.touched && $validation.instructions.maxlength">{{ $t('ui.validation.maxlength', ['描述', 40]) }}</span>
+                <span v-if="$validation.instructions.touched && $validation.instructions.maxlength">{{ $t('common.validation.maxlength', ['描述', 40]) }}</span>
               </div>
             </div>
           </div>
@@ -55,7 +55,6 @@ import Modal from 'components/Modal'
 import ImageUploader from 'components/ImageUploader'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-import _ from 'lodash'
 
 export default {
   name: 'CategoryModal',

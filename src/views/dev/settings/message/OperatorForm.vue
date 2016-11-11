@@ -15,14 +15,14 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-3">账号名称:</label>
+            <label class="form-control col-3">帐号名称:</label>
             <div class="controls col-15">
               <div class="input-text-wrap">
-                <input v-model="name" type="text" placeholder="请输入账号名称" v-validate:name="{required: true, minlength: 2, maxlength: 30}" name="name" class="input-text"/>
+                <input v-model="name" type="text" placeholder="请输入帐号名称" v-validate:name="{required: true, minlength: 2, maxlength: 30}" name="name" class="input-text"/>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">请输入账号名称</span>
-                  <span v-if="$validation.name.modified && $validation.name.minlength">账号名称不能少于2位</span>
-                  <span v-if="$validation.name.modified && $validation.name.maxlength">账号名称不能大于等于30位</span>
+                  <span v-if="$validation.name.touched && $validation.name.required">请输入帐号名称</span>
+                  <span v-if="$validation.name.modified && $validation.name.minlength">帐号名称不能少于2位</span>
+                  <span v-if="$validation.name.modified && $validation.name.maxlength">帐号名称不能大于等于30位</span>
                 </div>
               </div>
             </div>
@@ -55,11 +55,11 @@
               <label class="form-control col-3">URL:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.server_url" type="text" placeholder="请输入URL" v-validate:url="{required: true, minlength: 2, maxlength: 30}" name="dayu.server_url" class="input-text"/>
+                  <input v-model="dayu.server_url" type="text" placeholder="请输入URL" v-validate:url="{required: true}" name="dayu.server_url" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.url.touched && $validation.url.required">请输入url</span>
-                    <span v-if="$validation.url.modified && $validation.url.minlength">url不能少于2位</span>
-                    <span v-if="$validation.url.modified && $validation.url.maxlength">url不能大于等于30位</span>
+                    <!-- <span v-if="$validation.url.modified && $validation.url.minlength">url不能少于2位</span>
+                    <span v-if="$validation.url.modified && $validation.url.maxlength">url不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -68,11 +68,11 @@
               <label class="form-control col-3">app_key:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.app_key" type="text" placeholder="请输入URL" v-validate:appkey="{required: true, minlength: 2, maxlength: 30}" name="dayu.app_key" class="input-text"/>
+                  <input v-model="dayu.app_key" type="text" placeholder="请输入URL" v-validate:appkey="{required: true}" name="dayu.app_key" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.appkey.touched && $validation.appkey.required">请输入app_key</span>
-                    <span v-if="$validation.appkey.modified && $validation.appkey.minlength">app_key不能少于2位</span>
-                    <span v-if="$validation.appkey.modified && $validation.appkey.maxlength">app_key不能大于等于30位</span>
+                    <!-- <span v-if="$validation.appkey.modified && $validation.appkey.minlength">app_key不能少于2位</span>
+                    <span v-if="$validation.appkey.modified && $validation.appkey.maxlength">app_key不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -81,24 +81,24 @@
               <label class="form-control col-3">app_secret:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.app_secret" type="text" placeholder="请输入app secret" v-validate:appsecret="{required: true, minlength: 2, maxlength: 30}" name="dayu.app_secret" class="input-text"/>
+                  <input v-model="dayu.app_secret" type="text" placeholder="请输入app secret" v-validate:appsecret="{required: true}" name="dayu.app_secret" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.appsecret.touched && $validation.appsecret.required">请输入app_secret</span>
-                    <span v-if="$validation.appsecret.modified && $validation.appsecret.minlength">app_secret不能少于2位</span>
-                    <span v-if="$validation.appsecret.modified && $validation.appsecret.maxlength">app_secret不能大于等于30位</span>
+                    <!-- <span v-if="$validation.appsecret.modified && $validation.appsecret.minlength">app_secret不能少于2位</span>
+                    <span v-if="$validation.appsecret.modified && $validation.appsecret.maxlength">app_secret不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-3">注册账号模板:</label>
+              <label class="form-control col-3">注册帐号模板:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.register_template.free_sign_name" type="text" placeholder="请输入短信签名" v-validate:freesignname="{required: true, minlength: 2, maxlength: 30}" name="dayu.register_template.free_sign_name" class="input-text"/>
+                  <input v-model="dayu.register_template.free_sign_name" type="text" placeholder="请输入短信签名" v-validate:freesignname="{required: true}" name="dayu.register_template.free_sign_name" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.freesignname.touched && $validation.freesignname.required">请输入短信签名</span>
-                    <span v-if="$validation.freesignname.modified && $validation.freesignname.minlength">短信签名不能少于2位</span>
-                    <span v-if="$validation.freesignname.modified && $validation.freesignname.maxlength">短信签名不能大于等于30位</span>
+                    <!-- <span v-if="$validation.freesignname.modified && $validation.freesignname.minlength">短信签名不能少于2位</span>
+                    <span v-if="$validation.freesignname.modified && $validation.freesignname.maxlength">短信签名不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -106,11 +106,11 @@
             <div class="form-row row">
               <div class="controls col-15 col-offset-3">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.register_template.template_code" type="text" placeholder="请输入模板ID" v-validate:templatecode="{required: true, minlength: 2, maxlength: 30}" name="dayu.register_template.template_code" class="input-text"/>
+                  <input v-model="dayu.register_template.template_code" type="text" placeholder="请输入模板ID" v-validate:templatecode="{required: true}" name="dayu.register_template.template_code" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.templatecode.touched && $validation.templatecode.required">请输入模板ID</span>
-                    <span v-if="$validation.templatecode.modified && $validation.templatecode.minlength">模板ID不能少于2位</span>
-                    <span v-if="$validation.templatecode.modified && $validation.templatecode.maxlength">模板ID不能大于等于30位</span>
+                    <!-- <span v-if="$validation.templatecode.modified && $validation.templatecode.minlength">模板ID不能少于2位</span>
+                    <span v-if="$validation.templatecode.modified && $validation.templatecode.maxlength">模板ID不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -119,11 +119,11 @@
               <label class="form-control col-3">忘记密码模板:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.forgot_template.free_sign_name" type="text" placeholder="请输入短信签名" v-validate:freesignname2="{required: true, minlength: 2, maxlength: 30}" name="dayu.forgot_template.free_sign_name" class="input-text"/>
+                  <input v-model="dayu.forgot_template.free_sign_name" type="text" placeholder="请输入短信签名" v-validate:freesignname2="{required: true}" name="dayu.forgot_template.free_sign_name" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.freesignname2.touched && $validation.freesignname2.required">请输入短信签名</span>
-                    <span v-if="$validation.freesignname2.modified && $validation.freesignname2.minlength">短信签名不能少于2位</span>
-                    <span v-if="$validation.freesignname2.modified && $validation.freesignname2.maxlength">短信签名不能大于等于30位</span>
+                    <!-- <span v-if="$validation.freesignname2.modified && $validation.freesignname2.minlength">短信签名不能少于2位</span>
+                    <span v-if="$validation.freesignname2.modified && $validation.freesignname2.maxlength">短信签名不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -131,24 +131,24 @@
             <div class="form-row row">
               <div class="controls col-15 col-offset-3">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.forgot_template.template_code" type="text" placeholder="请输入模板ID" v-validate:templatecode2="{required: true, minlength: 2, maxlength: 30}" name="dayu.forgot_template.template_code" class="input-text"/>
+                  <input v-model="dayu.forgot_template.template_code" type="text" placeholder="请输入模板ID" v-validate:templatecode2="{required: true}" name="dayu.forgot_template.template_code" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.templatecode2.touched && $validation.templatecode2.required">请输入模板ID</span>
-                    <span v-if="$validation.templatecode2.modified && $validation.templatecode2.minlength">模板ID不能少于2位</span>
-                    <span v-if="$validation.templatecode2.modified && $validation.templatecode2.maxlength">模板ID不能大于等于30位</span>
+                    <!-- <span v-if="$validation.templatecode2.modified && $validation.templatecode2.minlength">模板ID不能少于2位</span>
+                    <span v-if="$validation.templatecode2.modified && $validation.templatecode2.maxlength">模板ID不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-3">更新账号模板:</label>
+              <label class="form-control col-3">更新帐号模板:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.update_template.free_sign_name" type="text" placeholder="请输入短信签名" v-validate:freesignname3="{required: true, minlength: 2, maxlength: 30}" name="dayu.update_template.free_sign_name" class="input-text"/>
+                  <input v-model="dayu.update_template.free_sign_name" type="text" placeholder="请输入短信签名" v-validate:freesignname3="{required: true}" name="dayu.update_template.free_sign_name" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.freesignname3.touched && $validation.freesignname3.required">请输入短信签名</span>
-                    <span v-if="$validation.freesignname3.modified && $validation.freesignname3.minlength">短信签名不能少于2位</span>
-                    <span v-if="$validation.freesignname3.modified && $validation.freesignname3.maxlength">短信签名不能大于等于30位</span>
+                    <!-- <span v-if="$validation.freesignname3.modified && $validation.freesignname3.minlength">短信签名不能少于2位</span>
+                    <span v-if="$validation.freesignname3.modified && $validation.freesignname3.maxlength">短信签名不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -156,11 +156,11 @@
             <div class="form-row row">
               <div class="controls col-15 col-offset-3">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.update_template.template_code" type="text" placeholder="请输入模板ID" v-validate:templatecode3="{required: true, minlength: 2, maxlength: 30}" name="dayu.update_template.template_code" class="input-text"/>
+                  <input v-model="dayu.update_template.template_code" type="text" placeholder="请输入模板ID" v-validate:templatecode3="{required: true}" name="dayu.update_template.template_code" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.templatecode3.touched && $validation.templatecode3.required">请输入模板ID</span>
-                    <span v-if="$validation.templatecode3.modified && $validation.templatecode3.minlength">模板ID不能少于2位</span>
-                    <span v-if="$validation.templatecode3.modified && $validation.templatecode3.maxlength">模板ID不能大于等于30位</span>
+                    <!-- <span v-if="$validation.templatecode3.modified && $validation.templatecode3.minlength">模板ID不能少于2位</span>
+                    <span v-if="$validation.templatecode3.modified && $validation.templatecode3.maxlength">模板ID不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -171,11 +171,11 @@
               <label class="form-control col-3">SID:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="twilio.account_sid" type="text" placeholder="请输入SID" v-validate:accountsid="{required: true, minlength: 2, maxlength: 30}" name="twilio.account_sid" class="input-text"/>
+                  <input v-model="twilio.account_sid" type="text" placeholder="请输入SID" v-validate:accountsid="{required: true}" name="twilio.account_sid" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.accountsid.touched && $validation.accountsid.required">请输入SID</span>
-                    <span v-if="$validation.accountsid.modified && $validation.accountsid.minlength">SID不能少于2位</span>
-                    <span v-if="$validation.accountsid.modified && $validation.accountsid.maxlength">SID不能大于等于30位</span>
+                    <!-- <span v-if="$validation.accountsid.modified && $validation.accountsid.minlength">SID不能少于2位</span>
+                    <span v-if="$validation.accountsid.modified && $validation.accountsid.maxlength">SID不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -184,11 +184,11 @@
               <label class="form-control col-3">TOKEN:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="twilio.auth_token" type="text" placeholder="请输入token" v-validate:authtoken="{required: true, minlength: 2, maxlength: 30}" name="twilio.auth_token" class="input-text"/>
+                  <input v-model="twilio.auth_token" type="text" placeholder="请输入token" v-validate:authtoken="{required: true}" name="twilio.auth_token" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.authtoken.touched && $validation.authtoken.required">请输入TOKEN</span>
-                    <span v-if="$validation.authtoken.modified && $validation.authtoken.minlength">TOKEN不能少于2位</span>
-                    <span v-if="$validation.authtoken.modified && $validation.authtoken.maxlength">TOKEN不能大于等于30位</span>
+                    <!-- <span v-if="$validation.authtoken.modified && $validation.authtoken.minlength">TOKEN不能少于2位</span>
+                    <span v-if="$validation.authtoken.modified && $validation.authtoken.maxlength">TOKEN不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -197,24 +197,24 @@
               <label class="form-control col-3">电话号码:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="twilio.from" type="text" placeholder="请输入电话号码" v-validate:from="{required: true, minlength: 2, maxlength: 30}" name="twilio.from" class="input-text"/>
+                  <input v-model="twilio.from" type="text" placeholder="请输入电话号码" v-validate:from="{required: true}" name="twilio.from" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.from.touched && $validation.from.required">请输入电话号码</span>
-                    <span v-if="$validation.from.modified && $validation.from.minlength">电话号码不能少于2位</span>
-                    <span v-if="$validation.from.modified && $validation.from.maxlength">电话号码不能大于等于30位</span>
+                    <!-- <span v-if="$validation.from.modified && $validation.from.minlength">电话号码不能少于2位</span>
+                    <span v-if="$validation.from.modified && $validation.from.maxlength">电话号码不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-3">注册账号模板:</label>
+              <label class="form-control col-3">注册帐号模板:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="twilio.register_template" type="text" placeholder="请输入模板内容" v-validate:registertemplate="{required: true, minlength: 2, maxlength: 30}" name="twilio.register_template" class="input-text"/>
+                  <input v-model="twilio.register_template" type="text" placeholder="请输入模板内容" v-validate:registertemplate="{required: true}" name="twilio.register_template" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.registertemplate.touched && $validation.registertemplate.required">请输入模板内容</span>
-                    <span v-if="$validation.registertemplate.modified && $validation.registertemplate.minlength">模板内容不能少于2位</span>
-                    <span v-if="$validation.registertemplate.modified && $validation.registertemplate.maxlength">模板内容不能大于等于30位</span>
+                    <!-- <span v-if="$validation.registertemplate.modified && $validation.registertemplate.minlength">模板内容不能少于2位</span>
+                    <span v-if="$validation.registertemplate.modified && $validation.registertemplate.maxlength">模板内容不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -223,24 +223,24 @@
               <label class="form-control col-3">忘记密码模板:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="twilio.forgot_template" type="text" placeholder="请输入模板内容" v-validate:forgottemplate="{required: true, minlength: 2, maxlength: 30}" name="twilio.forgot_template" class="input-text"/>
+                  <input v-model="twilio.forgot_template" type="text" placeholder="请输入模板内容" v-validate:forgottemplate="{required: true}" name="twilio.forgot_template" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.forgottemplate.touched && $validation.forgottemplate.required">请输入模板内容</span>
-                    <span v-if="$validation.forgottemplate.modified && $validation.forgottemplate.minlength">模板内容不能少于2位</span>
-                    <span v-if="$validation.forgottemplate.modified && $validation.forgottemplate.maxlength">模板内容不能大于等于30位</span>
+                    <!-- <span v-if="$validation.forgottemplate.modified && $validation.forgottemplate.minlength">模板内容不能少于2位</span>
+                    <span v-if="$validation.forgottemplate.modified && $validation.forgottemplate.maxlength">模板内容不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-3">更新账号模板:</label>
+              <label class="form-control col-3">更新帐号模板:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="twilio.update_template" type="text" placeholder="请输入模板内容" v-validate:updatetemplate="{required: true, minlength: 2, maxlength: 30}" name="twilio.update_template" class="input-text"/>
+                  <input v-model="twilio.update_template" type="text" placeholder="请输入模板内容" v-validate:updatetemplate="{required: true}" name="twilio.update_template" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.updatetemplate.touched && $validation.updatetemplate.required">请输入模板内容</span>
-                    <span v-if="$validation.updatetemplate.modified && $validation.updatetemplate.minlength">模板内容不能少于2位</span>
-                    <span v-if="$validation.updatetemplate.modified && $validation.updatetemplate.maxlength">模板内容不能大于等于30位</span>
+                    <!-- <span v-if="$validation.updatetemplate.modified && $validation.updatetemplate.minlength">模板内容不能少于2位</span>
+                    <span v-if="$validation.updatetemplate.modified && $validation.updatetemplate.maxlength">模板内容不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -266,11 +266,9 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import store from 'store'
 import Select from 'components/Select'
 import Pager from 'components/Pager'
 import api from 'api'
-// import _ from 'lodash'
 
 export default {
   name: 'OperateForm',
@@ -281,8 +279,6 @@ export default {
     'x-select': Select,
     Pager
   },
-
-  store,
 
   vuex: {},
 

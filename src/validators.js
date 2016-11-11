@@ -53,8 +53,16 @@ export function format (val, type) {
       break
 
     // 字符串开始与结尾无空格
-    case 'no-spaces-both-ends':
+    case 'trim':
       result = val.trim().length === val.length
+      break
+
+    case 'englist':
+      result = /^[A-Z]+$/i.test(val)
+      break
+
+    case 'account':
+      result = /^[A-Z][a-z0-9_]*$/i.test(val)
       break
 
     default:
@@ -71,6 +79,26 @@ export function format (val, type) {
  */
 export function equal (val, ref) {
   return val === ref
+}
+
+/**
+ * 在数组内
+ * @param  {Any} val 待验证的值
+ * @param  {Any} ref 参照值
+ * @return {Boolean} 验证结果
+ */
+export function inArr (val, arr) {
+  return arr.indexOf(val) >= 0
+}
+
+/**
+ * 不在数组内
+ * @param  {Any} val 待验证的值
+ * @param  {Any} ref 参照值
+ * @return {Boolean} 验证结果
+ */
+export function notInArr (val, arr) {
+  return !(arr.indexOf(val) >= 0)
 }
 
 /**

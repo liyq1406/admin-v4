@@ -34,6 +34,40 @@ export default {
   data () {
     let recipeRoot = `/operation/plugins/recipes/${this.$route.params.app_id}/recipes`
     let recipeId = this.$route.params.id
+    let type = this.$route.params.type_value
+    let tabArr = []
+    if (type === '1') {
+      // 如果菜谱类型为普通菜谱
+      tabArr = ['基本信息', '制作步骤']
+    } else if (type === '2') {
+      // 如果菜谱类型为智能菜谱
+      tabArr = ['基本信息', '制作步骤', '烹饪设置']
+    } else if (type === '3') {
+      // 本地菜谱
+      tabArr = ['基本信息', '制作步骤', '参数设置']
+    }
+    let nav = [{
+      label: '基本信息',
+      link: { path: `${recipeRoot}/${recipeId}/edit/${type}/basic-info` }
+      // link: { path: 'basic-info' }
+    }, {
+      label: '制作步骤',
+      link: { path: `${recipeRoot}/${recipeId}/edit/${type}/step` }
+    }, {
+      label: '参数设置',
+      link: { path: `${recipeRoot}/${recipeId}/edit/${type}/parameter` }
+    }, {
+      label: '烹饪设置',
+      link: { path: `${recipeRoot}/${recipeId}/edit/${type}/devices` }
+    }]
+    let tabs = []
+    nav.forEach((item) => {
+      tabArr.forEach((tab) => {
+        if (tab === item.label) {
+          tabs.push(item)
+        }
+      })
+    })
     return {
       breadcrumbNav: [{
         label: '菜谱管理',
@@ -41,14 +75,7 @@ export default {
       }, {
         label: '编辑菜谱'
       }],
-      secondaryNav: [{
-        label: '基本信息',
-        link: { path: `${recipeRoot}/${recipeId}/edit/basic-info` }
-        // link: { path: 'basic-info' }
-      }, {
-        label: '烹饪设置',
-        link: { path: `${recipeRoot}/${recipeId}/edit/devices` }
-      }]
+      secondaryNav: tabs
       // nav: ['基本信息', '烹饪设置'],
       // curr: 0
     }

@@ -31,21 +31,17 @@ import { globalMixins } from 'src/mixins'
 import { editPasswordMixin } from '../mixins'
 import InfoList from 'components/InfoList'
 import Modal from 'components/Modal'
-import store from 'store'
 import formatDate from 'filters/format-date'
 // import api from 'api'
 import { isEmpty } from 'src/utils'
 import defaultLogo from 'assets/images/logo.png'
 import blankImg from 'assets/images/blank.png'
-import _ from 'lodash'
 
 export default {
   name: 'Info',
 
   // editPasswordMixin提供编辑密码的逻辑
   mixins: [globalMixins, editPasswordMixin],
-
-  store,
 
   vuex: {
     getters: {
@@ -69,27 +65,27 @@ export default {
     corpInfo () {
       let result = {
         id: {
-          label: '企业ID',
+          label: this.$t('account.corp.corp_id'),
           value: ''
         },
         type: {
-          label: '应用类型',
+          label: this.$t('account.corp.app_type'),
           value: ''
         },
         contact: {
-          label: '联系人',
+          label: this.$t('account.corp.contact'),
           value: ''
         },
         createTime: {
-          label: '创建时间',
+          label: this.$t('account.corp.create_time'),
           value: ''
         },
         phone: {
-          label: '手机',
+          label: this.$t('account.corp.phone'),
           value: ''
         },
         email: {
-          label: '邮箱',
+          label: this.$t('account.corp.email'),
           value: ''
         }
       }

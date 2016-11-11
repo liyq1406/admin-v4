@@ -3,12 +3,12 @@
     <div class="panel mt20 mb30">
       <div class="panel-hd ml20 mr20">
         <div class="actions">
-          <search-box :key.sync="query" :active="searching" placeholder="请输入成员ID" @cancel="getLogs(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getLogs(true)">
-            <label>搜索成员</label>
+          <search-box :key.sync="query" :active="searching" :placeholder="$t('account.security.placeholder.id')" @cancel="getLogs(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getLogs(true)">
+            <label>{{ $t('account.security.search_member') }}</label>
             <button slot="search-button" @click="getLogs(true)" class="btn"><i class="fa fa-search"></i></button>
           </search-box>
         </div>
-        <h2>日志列表</h2>
+        <h2>{{ $t('account.security.log_list') }}</h2>
       </div>
       <div class="panel-bd ml20 mr20">
         <x-table :headers="columns" :tables="logList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
@@ -24,7 +24,6 @@ import api from 'api'
 // import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
-import _ from 'lodash'
 
 export default {
   name: 'Security',
@@ -47,30 +46,30 @@ export default {
       logs: [],
       columns: [{
         key: 'opt_name',
-        title: '成员姓名',
+        title: this.$t('account.security.member_name'),
         class: 'wp10'
       }, {
         key: 'opt',
-        title: '成员ID',
+        title: this.$t('account.security.member_id'),
         class: 'wp10'
       }, {
         key: 'ip',
-        title: '操作者IP',
+        title: this.$t('account.security.user_ip'),
         class: 'wp15'
       }, {
         key: 'summary',
-        title: '日志摘要'
+        title: this.$t('account.security.log_abstract')
       }, {
         key: 'level',
-        title: '日志级别',
+        title: this.$t('account.security.log_level'),
         class: 'wp5'
       }, {
         key: 'operate_type',
-        title: '操作类型',
+        title: this.$t('account.security.action_type'),
         class: 'wp5'
       }, {
         key: 'create_date',
-        title: '操作时间',
+        title: this.$t('account.security.action_time'),
         class: 'wp15'
       }]
     }
@@ -111,15 +110,15 @@ export default {
     logList () {
       let levels = {
         '1': {
-          label: '通知',
+          label: this.$t('account.security.notice'),
           class: 'text-label'
         },
         '2': {
-          label: '警告',
+          label: this.$t('account.security.alert'),
           class: 'text-label-warning'
         },
         '3': {
-          label: '错误',
+          label: this.$t('account.security.error'),
           class: 'text-label-danger'
         }
       }

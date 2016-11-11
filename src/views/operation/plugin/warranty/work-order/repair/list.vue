@@ -53,6 +53,9 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+              </div>
+              <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" @cancel="getOrderWorkList(true)" :placeholder="'输入工单编号'" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="" @press-enter="getOrderWorkList(true)">
                   <button slot="search-button" @click="getOrderWorkList(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
@@ -99,6 +102,7 @@ export default {
 
   data () {
     return {
+      exporting: false,
       token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
       useTime: false,
       startTimePick: '',
@@ -268,11 +272,11 @@ export default {
       //   return html
       // }
     },
-    queryCondition () {
+
+    // 基本筛选条件
+    baseCondition () {
       var condition = {
         filter: ['_id', 'assigned_id', 'create_time', 'product_id', 'product_sn', 'remark', 'status', 'assigned_name'],
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
         order: {'create_time': -1},
         query: {}
       }
@@ -337,6 +341,29 @@ export default {
       }
 
       return condition
+    },
+
+    // 列表查询条件
+    queryCondition () {
+      let condition = _.cloneDeep(this.baseCondition)
+
+      condition.limit = this.countPerPage
+      condition.offset = (this.currentPage - 1) * this.countPerPage
+
+      return condition
+    },
+
+    // 导出CSV条件参数
+    exportParams () {
+      return {
+        name: '维修列表',
+        describe: '维修列表',
+        type: 6,
+        params: this.baseCondition,
+        extend: {
+          app_id: this.$route.params.app_id
+        }
+      }
     }
   },
 
@@ -358,6 +385,28 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理导出 CSV 按钮点击
+     */
+    onExportBtnClick () {
+      if (this.exporting) {
+        return
+      }
+
+      this.exporting = true
+      api.exportTask.createTask(this.exportParams).then((res) => {
+        this.showNotice({
+          type: 'success',
+          content: this.$t('operation.settings.offline.export_success')
+        })
+        this.$route.router.go('/operation/settings/offline-data')
+        // this.onExportCancel()
+      }).catch((res) => {
+        this.exporting = false
+        this.handleError(res)
+      })
+    },
+
     /**
      * 当前页码改变
      * @author weijie

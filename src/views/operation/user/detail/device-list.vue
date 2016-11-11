@@ -4,7 +4,7 @@
       <div class="data-table with-loading">
         <div class="filter-bar">
           <div class="filter-group fl">
-            <span class="table-title">设备列表</span>
+            <span class="table-title">{{ $t('operation.user.details.devices.title') }}</span>
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
@@ -83,18 +83,18 @@ export default {
       ],
       products: [],
       queryTypeOptions: [
-        { label: '设备ID', value: 'id' },
+        { label: this.$t('operation.user.details.devices.id'), value: 'id' },
         { label: 'MAC', value: 'mac' },
-        { label: '序列号', value: 'sn' }
+        { label: this.$t('operation.user.details.devices.sn'), value: 'sn' }
       ],
       queryType: {
-        label: '设备ID',
+        label: this.$t('operation.user.details.devices.id'),
         value: 'id'
       },
       headers: [
         {
           key: 'id',
-          title: '设备ID'
+          title: this.$t('operation.user.details.devices.id')
         },
         {
           key: 'mac',
@@ -102,16 +102,16 @@ export default {
         },
         {
           key: 'sn',
-          title: '序列号（sn）'
+          title: this.$t('operation.user.details.devices.sn')
         },
         {
           key: 'active_date',
-          title: '激活时间',
+          title: this.$t('operation.user.details.devices.active_date'),
           sortType: -1
         },
         {
           key: 'is_online',
-          title: '在线状态'
+          title: this.$t('operation.user.details.devices.is_online')
         }
       ]
     }
@@ -138,7 +138,7 @@ export default {
           mac: '<a class="hl-red">' + device.mac + '</a>',
           sn: device.sn, // 是否激活
           active_date: formatDate(device.active_date),
-          is_online: device.is_online ? '在线' : '离线', // 是否在线
+          is_online: device.is_online ? this.$t('operation.user.details.devices.online') : this.$t('operation.user.details.devices.offline'), // 是否在线
           prototype: device
         }
         result.push(table)

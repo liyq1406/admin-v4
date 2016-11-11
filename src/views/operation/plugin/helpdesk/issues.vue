@@ -62,10 +62,8 @@ import Pager from 'components/Pager'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 // import locales from 'consts/locales/index'
-// import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
-import store from 'store'
 import api from 'api'
 import formatDate from 'filters/format-date'
 
@@ -73,8 +71,6 @@ export default {
   name: 'Issues',
 
   mixins: [globalMixins, pluginMixins],
-
-  store,
 
   vuex: {
     getters: {

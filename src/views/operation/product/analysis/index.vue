@@ -2,7 +2,7 @@
   <div class="main">
     <div class="main-title">
       <div class="col-4">
-        <h2>产品分析</h2>
+        <h2>{{ $t('operation.product.analysis.title') }}</h2>
       </div>
     </div>
     <div class="filter-bar filter-bar-head">
@@ -41,7 +41,6 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Chart from 'components/Chart/index'
 import formatDate from 'filters/format-date'
 import Distributing from './components/Distributing'
-import _ from 'lodash'
 
 export default {
   name: 'Portrait',
@@ -71,13 +70,13 @@ export default {
       periods: [7, 30, 90],
       dimension: 'duration',
       dimensions: [{
-        label: '单次时长',
+        label: this.$t('operation.product.analysis.duration_per'),
         value: 'duration'
       }, {
-        label: '使用次数',
+        label: this.$t('operation.product.analysis.using_count'),
         value: 'times'
       }, {
-        label: '时段分布',
+        label: this.$t('operation.product.analysis.time_distribution'),
         value: 'period'
       }],
       startTime: null,
@@ -108,7 +107,7 @@ export default {
           minInterval: 1
         },
         series: [{
-          name: '数量',
+          name: this.$t('operation.product.analysis.count'),
           type: 'bar',
           barMaxWidth: 30,
           data: _.map(this.durationData, 'value')
@@ -138,7 +137,7 @@ export default {
           minInterval: 1
         },
         series: [{
-          name: '数量',
+          name: this.$t('operation.product.analysis.count'),
           type: 'bar',
           barMaxWidth: 30,
           data: _.map(this.timesData, 'value')
@@ -168,7 +167,7 @@ export default {
           minInterval: 1
         },
         series: [{
-          name: '数量',
+          name: this.$t('operation.product.analysis.count'),
           type: 'bar',
           barMaxWidth: 30,
           data: _.map(this.periodData, 'value')

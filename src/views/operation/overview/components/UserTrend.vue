@@ -1,23 +1,24 @@
 <template>
   <div class="panel mt20 mb20">
     <div class="panel-hd">
-      <h2>用户趋势</h2>
+      <h2>{{ $t('operation.overview.user_trend.title') }}</h2>
     </div>
     <div class="tab-s2 tab-s2-full mt10 mb5">
       <div class="actions">
-        <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group>
+        <!-- <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group> -->
+        <date-time-multiple-picker :periods="periods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
       </div>
       <ul>
-        <li v-for="item in locales.data.USER_FILTERS" @click="tabIndex = $index" :class="{'active': tabIndex === $index}">{{ item.label }}</li>
+        <li v-for="item in locales.data.USER_FILTERS" @click="tabIndex = $index" class="tab-s2-item" :class="{'active': tabIndex === $index}">{{ item.label }}</li>
       </ul>
     </div>
     <div class="row mt10">
       <div class="col-offset-12 col-12 row">
         <div class="col-12">
-          <statistic :total="today.total" :change="today.change" title="今日增长" tooltip="今日增长" color="green" :titletop="true"></statistic>
+          <statistic :total="today.total" :change="today.change" :title="$t('common.today_increase')" :tooltip="$t('common.today_increase')" color="green" :titletop="true"></statistic>
         </div>
         <div class="col-12">
-          <statistic :total="avg.total" :change="avg.change" :title="period+'天平均增长'" :tooltip="period+'天平均增长'" color="orange" :titletop="true"></statistic>
+          <statistic :total="avg.total" :change="avg.change" :title="$t('common.avg_increase', {period: period})" :tooltip="$t('common.avg_increase', {period: period})" color="orange" :titletop="true"></statistic>
         </div>
       </div>
     </div>
@@ -44,7 +45,7 @@ import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
 // import truncate from 'filters/truncate'
 import formatDate from 'filters/format-date'
-import _ from 'lodash'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 
 export default {
   name: 'UserTrend',
@@ -54,7 +55,8 @@ export default {
   components: {
     RadioButtonGroup,
     Chart,
-    Statistic
+    Statistic,
+    DateTimeMultiplePicker
   },
 
   data () {
@@ -83,6 +85,9 @@ export default {
         change: 0,
         total: 0
       },
+      periods: [7, 30, 90],
+      defaultPeriod: 7,
+      beforeTime: 1,
       loadingTrend: false
     }
   },
@@ -185,6 +190,14 @@ export default {
 
   methods: {
     /**
+     * 时间组件时间改变回调
+     */
+    onTimeChange (start, end) {
+      this.period = parseInt((end - start) / 1000 / 60 / 60 / 24) + 1
+      this.beforeTime = parseInt((new Date() - end) / 1000 / 60 / 60 / 24)
+      this.getTrend()
+    },
+    /**
      * 获取产品激活趋势数据
      * 遍历产品列表，获取每种产品的激活趋势数据
      * @author shengzhi
@@ -198,7 +211,7 @@ export default {
       let totalXAxis = []
 
       // 数据日期范围
-      let range = createDayRange(1, this.period)
+      let range = createDayRange(this.beforeTime, this.period)
 
       api.statistics.getUserTrend(range.start, range.end).then((res) => {
         this.addData = _.map(res.data, (item) => {
@@ -219,17 +232,17 @@ export default {
         // 日期数据补全，缺失的日期数据全部补0
         let userData = patchLostDates(res.data, range.start, this.period, ['add', 'active', 'total'])
         let addObj = {
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: []
         }
         let activeObj = {
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: []
         }
         let totalObj = {
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: []
         }

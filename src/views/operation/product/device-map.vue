@@ -1,7 +1,7 @@
 <template>
   <div class="main device-map-page">
     <div class="main-title">
-      <h2>{{ $t("ui.main_nav.operation.subs.device_map.label") }}</h2>
+      <h2>{{ $t("layout.main_nav.operation.subs.device_map.label") }}</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fr">
@@ -16,7 +16,7 @@
           </search-box>
         </div>
       </div>
-      <h3>地图</h3>
+      <h3>{{ $t('operation.product.devicemap.map') }}</h3>
     </div>
 
     <!-- 设备地图 -->
@@ -34,8 +34,8 @@
             <div class="device-id">{{ device.mac }}</div>
             <div class="device-address">{{ device.address }}</div>
             <div class="status">
-              <span v-if="device.is_online" class="hl-green">在线</span>
-              <span v-else class="hl-gray">离线</span>
+              <span v-if="device.is_online" class="hl-green">{{ $t('operation.product.devicemap.online') }}</span>
+              <span v-else class="hl-gray">{{ $t('operation.product.devicemap.offline') }}</span>
             </div>
           </div>
         </div>
@@ -61,7 +61,6 @@ import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Alert from 'components/Alert'
 import Pager from 'components/Pager'
-import _ from 'lodash'
 import formatDate from 'filters/format-date'
 
 export default {
@@ -85,12 +84,12 @@ export default {
       query: '',
       searching: false,
       queryTypeOptions: [
-        { label: '设备ID', value: 'id' },
+        { label: this.$t('operation.product.devicemap.device_id'), value: 'id' },
         { label: 'MAC', value: 'mac' },
-        { label: '所在区域', value: 'area' }
+        { label: this.$t('operation.product.devicemap.region'), value: 'area' }
       ],
       queryType: {
-        label: '设备ID',
+        label: this.$t('operation.product.devicemap.device_id'),
         value: 'id'
       },
       currentPage: 1,
@@ -241,7 +240,7 @@ export default {
         this.placeSearch = new AMap.PlaceSearch({
           pageSize: 10,
           pageIndex: 1,
-          city: '全国' // 城市
+          city: this.$t('operation.product.devicemap.nationwide') // 城市
         })
         this.geocoder = new AMap.Geocoder({
           radius: 1000,
@@ -259,7 +258,7 @@ export default {
           } else {
             this.showNotice({
               type: 'error',
-              content: ' 无法定位当前城市'
+              content: this.$t('operation.product.devicemap.no_location')
             })
           }
         })
@@ -273,7 +272,7 @@ export default {
           } else {
             this.showNotice({
               type: 'error',
-              content: '找不到指定城市或地区'
+              content: this.$t('operation.product.devicemap.no_area')
             })
           }
         })
@@ -374,7 +373,7 @@ export default {
           })
         } else {
           this.ids = []
-          this.infoMsg = '当前区域未找到设备'
+          this.infoMsg = this.$t('operation.product.devicemap.no_device')
         }
         this.currIndex = 0
         this.oldCurrIndex = 0
@@ -507,11 +506,11 @@ export default {
       let hours = (n / 3600).toFixed(1)
       let minutes = Math.floor(n / 60)
       if (hours > 1) {
-        return `${hours}小时`
+        return `${hours}${this.$t('operation.product.alert.hour')}`
       } else if (minutes > 1) {
-        return `${minutes}分钟`
+        return `${minutes}${this.$t('operation.product.alert.minutes')}`
       } else {
-        return `${n}秒`
+        return `${n}${this.$t('operation.product.alert.second')}`
       }
     },
 
@@ -530,7 +529,7 @@ export default {
       content.push(`<div class="info-row"><span class="label">MAC: </span>${data.mac}</div>`)
       content.push(`<div class="info-row"><span class="label">地址: </span>${data.address}</div>`)
       content.push(`<div class="info-row"><span class="label">在线时长: </span>${this.prettyDuration(data.online_count)}</div>`)
-      content.push(`<div class="info-row tar"><a href="/#!/operation/products/${this.$route.params.id}/devices/${data.id}">查看详情&gt;&gt;</a></div>`)
+      content.push(`<div class="info-row tar"><a href="/#!/operation/products/${this.$route.params.id}/devices/${data.id}">${this.$t('operation.product.devicemap.detail')}&gt;&gt;</a></div>`)
       content.push('</div>')
       content.push('</div>')
       this.infoWindow.setContent(content.join(''))
@@ -577,7 +576,7 @@ export default {
               this.getGeography(Number(did))
             } else {
               this.devices = []
-              this.infoMsg = '未找到该设备'
+              this.infoMsg = this.$t('operation.product.devicemap.no_device_find')
               this.setMarkers()
             }
           }).catch((res) => {
@@ -590,7 +589,7 @@ export default {
         if (this.queryType.value === 'id' && !this.searching) {
           this.showNotice({
             type: 'error',
-            content: '请输入设备ID'
+            content: this.$t('operation.product.devicemap.input_device_id')
           })
         } else {
           this.citySearch.getLocalCity()

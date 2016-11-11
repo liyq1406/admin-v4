@@ -2,27 +2,27 @@
   <div v-show="!validating" class="auth-form fetch-form">
     <div class="inner" v-show="verifycodeValid && !resetsuccess">
       <a v-link="{path: '/login'}" class="fa fa-chevron-circle-left link-return"></a>
-      <div class="form-legend">{{ $t("ui.auth.reset") }}</div>
+      <div class="form-legend">{{ $t("auth.reset") }}</div>
       <div class="form">
         <validator name="authValidation">
           <form autocomplete="off" novalidate @submit.prevent="onSubmit">
             <div class="form-row">
-              <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
+              <div v-placeholder="$t('auth.password')" class="input-text-wrap">
                 <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true, minlength: 6, maxlength: 16}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
-                <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('ui.validation.minlength', [$t('ui.auth.fields.password'), 6]) }}</span>
-                <span v-if="$authValidation.password.modified && $authValidation.password.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.auth.fields.password'), 16]) }}</span>
+                <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
+                <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('common.validation.minlength', [$t('auth.fields.password'), 6]) }}</span>
+                <span v-if="$authValidation.password.modified && $authValidation.password.maxlength">{{ $t('common.validation.maxlength', [$t('auth.fields.password'), 16]) }}</span>
               </div>
             </div>
             <div class="form-row">
-              <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">
+              <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
                 <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.password}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.confirmPassword.touched && $authValidation.confirmPassword.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
-                <span v-if="$authValidation.confirmPassword.modified && $authValidation.confirmPassword.equal">{{ $t('ui.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
+                <span v-if="$authValidation.confirmPassword.touched && $authValidation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('auth.fields.confirm_password')}) }}</span>
+                <span v-if="$authValidation.confirmPassword.modified && $authValidation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('auth.fields.confirm_password'), $t('auth.fields.password')]) }}</span>
               </div>
             </div>
             <div class="form-actions">
@@ -34,13 +34,13 @@
     </div>
     <div class="auth-msg-box" v-show="!verifycodeValid && !resetsuccess">
       <x-alert :cols="16" type="error">
-        <p>{{ $t("ui.auth.activate_fail_msg") }}</p>
+        <p>{{ $t("auth.activate_fail_msg") }}</p>
         <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
       </x-alert>
     </div>
     <div class="auth-msg-box" v-show="resetsuccess">
-      <x-alert :cols="16" type="success" :title="$t('ui.auth.reset_success')">
-        <p>{{ $t("ui.auth.reset_success_msg") }}</p>
+      <x-alert :cols="16" type="success" :title="$t('auth.reset_success')">
+        <p>{{ $t("auth.reset_success_msg") }}</p>
         <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
       </x-alert>
     </div>
@@ -48,22 +48,22 @@
   <!-- <div v-show="!validating" class="form form-auth form-fetch-password">
     <form autocomplete="off" v-show="verifycodeValid && !resetsuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
       <div class="form-header">
-        <h2>{{ $t("ui.auth.reset") }}</h2>
+        <h2>{{ $t("auth.reset") }}</h2>
       </div>
       <div class="form-body">
         <div class="form-row row">
-          <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
+          <div v-placeholder="$t('auth.password')" class="input-text-wrap">
             <input type="password" v-model="model.new_password" v-form-ctrl required maxlength="16" minlength="6" name="new_password" lazy class="input-text"/>
           </div>
-          <div v-if="validation.$submitted && validation.new_password.$pristine" class="form-tips form-tips-error"><span v-if="validation.new_password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span></div>
-          <div v-if="validation.new_password.$dirty" class="form-tips form-tips-error"><span v-if="validation.new_password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span><span v-if="validation.new_password.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.auth.fields.password'), 6]) }}</span><span v-if="validation.new_password.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.auth.fields.password'), 16]) }}</span></div>
+          <div v-if="validation.$submitted && validation.new_password.$pristine" class="form-tips form-tips-error"><span v-if="validation.new_password.$error.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span></div>
+          <div v-if="validation.new_password.$dirty" class="form-tips form-tips-error"><span v-if="validation.new_password.$error.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span><span v-if="validation.new_password.$error.minlength">{{ $t('common.validation.minlength', [ $t('auth.fields.password'), 6]) }}</span><span v-if="validation.new_password.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('auth.fields.password'), 16]) }}</span></div>
         </div>
         <div class="form-row row">
-          <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">
+          <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
             <input type="password" v-model="confirmPassword" v-form-ctrl required custom-validator="checkEqualToPassword" name="confirmPassword" lazy class="input-text"/>
           </div>
-          <div v-if="validation.$submitted && validation.confirmPassword.$pristine" class="form-tips form-tips-error"><span v-if="validation.confirmPassword.$error.required">{{ $t("ui.auth.confirm_password") }}</span></div>
-          <div v-if="validation.confirmPassword.$dirty" class="form-tips form-tips-error"><span v-if="model.password && validation.confirmPassword.$error.required">{{ $t("ui.auth.confirm_password") }}</span><span v-if="validation.confirmPassword.$error.customValidator">{{ $t("ui.auth.confirm_password_tips") }}</span></div>
+          <div v-if="validation.$submitted && validation.confirmPassword.$pristine" class="form-tips form-tips-error"><span v-if="validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span></div>
+          <div v-if="validation.confirmPassword.$dirty" class="form-tips form-tips-error"><span v-if="model.password && validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span><span v-if="validation.confirmPassword.$error.customValidator">{{ $t("auth.confirm_password_tips") }}</span></div>
         </div>
         <div class="form-actions">
           <button type="submit" class="btn btn-primary btn-block">{{ $t("common.ok") }}</button>
@@ -74,14 +74,14 @@
     <div v-show="!verifycodeValid && !resetsuccess" class="form-cont reset-password-fail">
       <div class="alert alert-fail">
         <div class="fa fa-times-circle-o"></div>
-        <h2>{{ $t("ui.auth.activate_fail_msg") }}</h2>
+        <h2>{{ $t("auth.activate_fail_msg") }}</h2>
       </div>
     </div>
     <div v-show="resetsuccess" class="form-cont reset-password-success">
       <div class="alert alert-success">
         <div class="fa fa-check-circle-o"></div>
-        <h2>{{ $t("ui.auth.reset_success") }}</h2>
-        <p>{{ $t("ui.auth.reset_success_msg") }}</p>
+        <h2>{{ $t("auth.reset_success") }}</h2>
+        <p>{{ $t("auth.reset_success_msg") }}</p>
         <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary">{{ $t("common.ok") }}</a></div>
       </div>
     </div>

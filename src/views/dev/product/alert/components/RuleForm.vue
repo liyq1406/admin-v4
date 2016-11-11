@@ -9,12 +9,12 @@
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.name") }}:</label>
                 <div class="controls col-19">
                   <div v-placeholder="$t('ui.rule.placeholders.name')" class="input-text-wrap">
-                    <input class="input-text" type="text" name="model.name" v-model="model.name" v-validate:name="{required: true, minlength: 2, maxlength: 32, format: 'no-spaces-both-ends'}" lazy/>
+                    <input class="input-text" type="text" name="model.name" v-model="model.name" v-validate:name="{required: true, minlength: 2, maxlength: 32, format: 'trim'}" lazy/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span>
-                    <span v-if="$validation.name.modified && $validation.name.minlength">{{ $t('ui.validation.minlength', [$t('ui.rule.fields.name'), 2]) }}</span>
-                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.rule.fields.name'), 32]) }}</span>
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.name')}) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.minlength">{{ $t('common.validation.minlength', [$t('ui.rule.fields.name'), 2]) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', [$t('ui.rule.fields.name'), 32]) }}</span>
                     <span v-if="$validation.name.modified && $validation.name.format">{{ $t('ui.rule.fields.name') }}不允许前后带空格</span>
                   </div>
                 </div>
@@ -82,8 +82,8 @@
                     <textarea class="input-text" type="text" name="model.content" v-model="model.content" v-length-tip="{max: 250, model: model.content}" v-validate:content="{required: true, maxlength: 250}" lazy></textarea>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.content.touched && $validation.content.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span>
-                    <span v-if="$validation.content.modified && $validation.content.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.rule.fields.content'), 250]) }}</span>
+                    <span v-if="$validation.content.touched && $validation.content.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.content')}) }}</span>
+                    <span v-if="$validation.content.modified && $validation.content.maxlength">{{ $t('common.validation.maxlength', [$t('ui.rule.fields.content'), 250]) }}</span>
                   </div>
                 </div>
               </div>
@@ -125,9 +125,9 @@
                         </label>
                       </div>
                       <div class="col-18">
-                        <div v-show="isShowApn" class="apn-list mt10">
+                        <div v-show="isShowApn && iOSApps.length" class="app-list mb10">
                           <div class="checkbox-group">
-                            <label v-for="app in apps" v-if="app.type===1" class="checkbox">
+                            <label v-for="app in iOSApps" class="checkbox">
                               <input type="checkbox" v-model="model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                             </label>
                           </div>
@@ -141,9 +141,9 @@
                         </label>
                       </div>
                       <div class="col-18">
-                        <div v-show="isShowGoogle" class="apn-list">
+                        <div v-show="isShowGoogle && androidApps.length" class="app-list">
                           <div class="checkbox-group">
-                            <label v-for="app in apps" v-if="app.type===2" class="checkbox">
+                            <label v-for="app in androidApps" class="checkbox">
                               <input type="checkbox" v-model="model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                             </label>
                           </div>
@@ -152,7 +152,7 @@
                     </div>
                   </template>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.notifyTarget.touched && $validation.notifyTarget.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.notify_type')}) }}</span>
+                    <span v-if="$validation.notifyTarget.touched && $validation.notifyTarget.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.notify_type')}) }}</span>
                   </div>
                 </div>
               </div>
@@ -201,8 +201,6 @@
 import api from 'src/api'
 import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
-import _ from 'lodash'
-import store from 'store'
 
 export default {
   name: 'RuleForm',
@@ -212,8 +210,6 @@ export default {
   components: {
     'x-select': Select
   },
-
-  store,
 
   vuex: {
     getters: {
@@ -269,6 +265,16 @@ export default {
      */
     isShowGoogle () {
       return _.includes(this.model.notify_target, 5)
+    },
+
+    // iOS 应用
+    iOSApps () {
+      return _.filter(this.apps, (item) => item.type === 1)
+    },
+
+    // Android 应用
+    androidApps () {
+      return _.filter(this.apps, (item) => item.type === 2)
     },
 
     /**
@@ -426,7 +432,7 @@ export default {
   .submit-btn
     width 120px
 
-.apn-list
+.app-list
   border 1px solid #ddd
   padding 5px
 </style>

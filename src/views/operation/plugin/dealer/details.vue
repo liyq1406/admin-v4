@@ -4,13 +4,6 @@
       <h2>经销商管理</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <!-- <div class="tool-bar">
-      <div class="tool-list">
-        <div class="tool-list-item">
-          <div class="trigger"><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/edit'"><i class="fa fa-pencil"></i><span class="trigger-text">编辑经销商信息</span></a></div>
-        </div>
-      </div>
-    </div> -->
     <div class="panel">
         <div class="titlemargin">{{dealer.name}}<a v-link="'/operation/plugins/dealer/' + $route.params.app_id + '/edit/' + $route.params.dealer_id"><i class="fa fa-edit"></i></a></div>
       <div class="panel-bd">
@@ -26,36 +19,6 @@
             <div class="listmargin">
               <info-list :info="dealerInfo"></info-list>
             </div>
-            <!-- <ul class="info-details">
-              <li class="row">
-                <div class="col-5 label">账号:</div>
-                <div class="clo-19 info">{{ dealer.username }}</div>
-              </li>
-              <li class="row">
-                <div class="col-5 label">登录密码:</div>
-                <div class="clo-19 info">{{ dealer.password }}</div>
-              </li>
-              <li class="row">
-                <div class="col-5 label">经销商名称:</div>
-                <div class="clo-19 info">{{ dealer.name }}</div>
-              </li>
-              <li class="row">
-                <div class="col-5 label">联系人:</div>
-                <div class="clo-19 info">{{ dealer.linkman }}</div>
-              </li>
-              <li class="row">
-                <div class="col-5 label">手机号:</div>
-                <div class="clo-19 info">{{ dealer.phone }}</div>
-              </li>
-              <li class="row">
-                <div class="col-5 label">负责区域:</div>
-                <div class="clo-19 info">{{ dealer.area }}</div>
-              </li>
-              <li class="row">
-                <div class="col-5 label">从属于:</div>
-                <div class="clo-19 info">{{ dealer.belong_to }}</div>
-              </li>
-            </ul> -->
           </div>
           <div class="col-10">
             <div class="row status">
@@ -76,13 +39,6 @@
         </div>
       </div>
       <div class="panel-bd">
-        <!-- <div class="action-bar">
-          <div class="action-group fr" style="display:inline-block">
-            <a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/add'">
-              <button class="btn btn-primary" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加销售记录</button>
-            </a>
-          </div>
-        </div> -->
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
@@ -90,7 +46,7 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getSales" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getSales">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getSales" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getSales">
                   <x-select width="100px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -99,36 +55,41 @@
                   <button slot="search-button" @click="getSales" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
+              <div class="filter-group-item">
+                <button @click="importDevices" class="btn btn-primary">{{ text.import_devices }}</button>
+              </div>
             </div>
             <h3>销售信息</h3>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
+                <th>设备MAC</th>
                 <th>销售时间</th>
                 <th>产品型号</th>
                 <th>序列号</th>
                 <th>客户名称</th>
                 <th>手机号</th>
-                <!-- <th class="tac">{{ $t("common.action") }}</th> -->
+                <th class="tac">{{ $t("common.action") }}</th>
               </tr>
             </thead>
             <tbody>
               <template v-if="sales.length > 0">
                 <tr v-for="sale in sales">
-                  <!-- <td>{{* dealer.name }}</td> -->
-                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/sales/' + sale.id" class="hl-red">{{* sale.sale_time | formatDate 'yyyy-MM-dd' true }}</a></td>
-                  <td>{{* sale.product_mod }}</td>
-                  <td>{{* sale.sn }}</td>
-                  <td>{{* sale.name }}</td>
-                  <td>{{* sale.phone }}</td>
-                  <!-- <td class="tac">
+                  <td v-if="sale.mac" ><a v-link="'/operation/products/' + sale.product_id + '/devices/' + sale.device_id + '/info'" class="hl-red">{{ sale.mac || '--' }}</a></td>
+                  <td v-if="!sale.mac"> {{ sale.mac || '--' }} </td>
+                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/sales/' + sale.id" class="hl-red">{{ sale.sale_time | formatDate 'yyyy-MM-dd' }}</a></td>
+                  <td>{{ sale.product_mod || '--' }}</td>
+                  <td>{{ sale.sn || '--' }}</td>
+                  <td>{{ sale.name || '--' }}</td>
+                  <td>{{ sale.phone || '--' }}</td>
+                  <td class="tac">
                     <button v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/edit/' + sale.id" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
-                  </td> -->
+                  </td>
                 </tr>
               </template>
               <tr v-if="sales.length === 0 && !loadingData">
-                <td colspan="5" class="tac">
+                <td colspan="7" class="tac">
                   <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
@@ -139,97 +100,6 @@
         <pager :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales" @count-update="onPageCountUpdate"></pager>
       </div>
     </div>
-    <!--修改经销商信息浮层-->
-   <modal :show.sync="editModal.show" width="600px">
-     <h3 slot="header">修改经销商信息</h3>
-     <div slot="body" class="form">
-       <form autocomplete="off" v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
-         <div class="form-row row">
-           <label class="form-control col-5">账号:</label>
-           <div class="controls col-19">
-             <div v-placeholder="$t('ui.dealer.placeholders.code')" class="input-text-wrap">
-               <input v-model="editModal.model.username" type="text" v-form-ctrl name="username" required minlength="2" maxlength="32" lazy class="input-text"/>
-             </div>
-             <div v-if="editValidation.$submitted && editValidation.username.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.username.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
-             <div v-if="editValidation.username.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.username.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
-               <!-- <span v-if="editValidation.username.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.username.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span> -->
-             </div>
-           </div>
-         </div>
-         <div class="form-row row">
-           <label class="form-control col-5">登录密码:</label>
-           <div class="controls col-19">
-             <div v-placeholder="$t('ui.dealer.placeholders.password')" class="input-text-wrap">
-               <input v-model="editModal.model.password" type="text" v-form-ctrl name="password" required minlength="6" maxlength="16" lazy class="input-text"/>
-             </div>
-             <div v-if="editValidation.$submitted && editValidation.password.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.password')}) }}</span></div>
-             <div v-if="editValidation.password.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.password')}) }}</span><span v-if="editValidation.password.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.password'), 2]) }}</span><span v-if="editValidation.username.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.password'), 32]) }}</span></div>
-           </div>
-         </div>
-         <div class="form-row row">
-           <label class="form-control col-5">经销商名称:</label>
-           <div class="controls col-19">
-             <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
-               <input v-model="editModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
-             </div>
-             <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span></div>
-             <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span></div>
-           </div>
-         </div>
-         <div class="form-row row">
-           <label class="form-control col-5">联系人:</label>
-           <div class="controls col-19">
-             <div v-placeholder="$t('ui.dealer.placeholders.contact')" class="input-text-wrap">
-               <input v-model="editModal.model.linkman" type="text" v-form-ctrl name="linkman" required minlength="2" maxlength="32" lazy class="input-text"/>
-             </div>
-             <div v-if="editValidation.$submitted && editValidation.linkman.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.linkman.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span></div>
-             <div v-if="editValidation.linkman.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.linkman.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span></div>
-           </div>
-         </div>
-         <div class="form-row row">
-           <label class="form-control col-5">手机号:</label>
-           <div class="controls col-19">
-             <div v-placeholder="$t('ui.dealer.placeholders.phone')" class="input-text-wrap">
-               <input v-model="editModal.model.phone" type="text" v-form-ctrl name="phone" required minlength="2" maxlength="32" lazy class="input-text"/>
-             </div>
-             <div v-if="editValidation.$submitted && editValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.phone')}) }}</span></div>
-             <div v-if="editValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.phone')}) }}</span><span v-if="editValidation.phone.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.phone'), 2]) }}</span><span v-if="editValidation.phone.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.phone'), 32]) }}</span></div>
-           </div>
-         </div>
-         <div class="form-row row">
-           <label class="form-control col-5">负责区域:</label>
-           <div class="controls col-19">
-             <div v-placeholder="$t('ui.dealer.placeholders.area')" class="input-text-wrap">
-               <input v-model="editModal.model.area" type="text" v-form-ctrl name="area" required minlength="2" maxlength="32" lazy class="input-text"/>
-             </div>
-             <div v-if="editValidation.$submitted && editValidation.area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span></div>
-             <div v-if="editValidation.area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span></div>
-           </div>
-         </div>
-         <div class="form-row row">
-           <label class="form-control col-5">从属于:</label>
-           <div class="controls col-19">
-             <!-- <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
-               <input v-model="editModal.model.belong_to" type="text" name="belong_to" required minlength="2" maxlength="32" lazy class="input-text"/>
-             </div> -->
-             <x-select width="100px" :label="belongType.label">
-               <select v-model="editModal.model.belong_to">
-                 <option v-for="option in belongs" :value="option.value">{{ option.label }}</option>
-               </select>
-             </x-select>
-           </div>
-         </div>
-         <div class="form-actions">
-           <label class="del-check">
-             <input type="checkbox" name="del" v-model="delChecked"/>删除此经销商
-           </label>
-           <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-           <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-         </div>
-       </form>
-     </div>
-   </modal>
-   <!-- 结束修改经销商信息浮层-->
   </div>
 </template>
 
@@ -237,7 +107,6 @@
   // import Vue from 'vue'
   // import locales from 'consts/locales/index'
   import api from 'api'
-  import _ from 'lodash'
   import RadioGroup from 'components/RadioGroup'
   import Pager from 'components/Pager'
   import Breadcrumb from 'components/Breadcrumb'
@@ -269,6 +138,9 @@
 
     data () {
       return {
+        text: {
+          import_devices: '导入设备'
+        },
         dealer: {
           // _id: '123',
           // username: '12345',
@@ -289,12 +161,8 @@
             label: '手机号',
             value: ''
           },
-          // password: {
-          //   label: '登录密码',
-          //   value: '102810821'
-          // },
           id: {
-            label: '账号',
+            label: '帐号',
             value: ''
           },
           area: {
@@ -376,17 +244,10 @@
       },
       queryCondition () {
         var condition = {
-          filter: ['name', 'id', 'email', 'phone', 'client_type', 'province', 'city', 'address', 'sn', 'sale_time', 'product_mod'],
+          filter: ['name', 'id', 'email', 'phone', 'client_type', 'province', 'city', 'address', 'sn', 'sale_time', 'product_mod', 'mac', 'product_id', 'device_id'],
           limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          // order: this.sortOrders,
-          query: {
-            // 'distributer_id': {$in: [this.$route.params.dealer_id]}
-          }
+          offset: (this.currentPage - 1) * this.countPerPage
         }
-        // if (this.query.length > 0) {
-        //   condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
-        // }
         if (this.query.length > 0) {
           condition.query[this.queryType.value] = {$in: [this.query]}
         }
@@ -406,16 +267,6 @@
     methods: {
       // 获取经销商信息
       getDealer () {
-        // var params = {
-        //   offset: 0,
-        //   limit: 10,
-        //   query: {
-        //     '_id': this.$route.params.dealer_id
-        //   }
-        // }
-        // if (typeof querying !== 'undefined') {
-        //   this.currentPage = 1
-        // }
         this.loadingData = true
         api.dealer.get(this.$route.params.dealer_id).then((res) => {
           this.dealer = res.data
@@ -452,7 +303,6 @@
         }
         this.loadingData = true
         api.dealer.getSales(this.$route.params.dealer_id, this.queryCondition).then((res) => {
-          // console.log(res)
           this.sales = res.data.list
           this.total = res.data.count
           this.loadingData = false
@@ -481,7 +331,7 @@
           } else {
             this.showNotice({
               type: 'error',
-              content: '账号已停用'
+              content: '帐号已停用'
             })
           }
           this.getDealer()
@@ -513,67 +363,8 @@
           this.getSales()
         }
       },
-      // 提交编辑表单
-      onEditSubmit () {
-        var self = this
-        var argvs = arguments
-        var fn = self.getDealer
-        if (this.delChecked && !this.editing) { // 删除
-          this.editing = true
-          api.dealer.delDealer(this.$route.params.app_id, this.dealer._id).then((res) => {
-            this.$route.router.go({path: '/plugins/dealer/' + this.$route.params.app_id + '/list'})
-            // this.resetEdit()
-            // this.getSales()
-            this.editing = false
-          }).catch((res) => {
-            self.handleError(res)
-            // this.handleError(res)
-            this.editing = false
-          })
-          // api.dealer.delDealer(this.$route.params.app_id, this.dealer._id).then((res) => {
-          //   if (res.status === 200) {
-          //     this.resetEdit()
-          //     this.getSales()
-          //   }
-          // }).catch((res) => {
-          //   this.handleError(res)
-          //   this.editing = false
-          // })
-        } else if (this.editValidation.$valid && !this.editing) { // 更新
-          this.editing = true
-          api.dealer.updateDealer(this.$route.params.app_id, this.dealer._id, this.editModal.model).then((res) => {
-            this.resetEdit()
-            this.getDealer()
-            this.getSales()
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'dealer'
-            }
-            self.handlePluginError(err, env)
-            // this.handleError(res)
-            this.editing = false
-          })
-          // api.dealer.updateDealer(this.$route.params.app_id, this.dealer._id, this.editModal.model).then((res) => {
-          //   if (res.status === 200) {
-          //     this.resetEdit()
-          //     this.getSales()
-          //   }
-          // }).catch((res) => {
-          //   this.handleError(res)
-          //   this.editing = false
-          // })
-        }
-      },
-      // 编辑表单钩子
-      editFormHook (form) {
-        this.editModal.form = form
-      },
-      // 取消编辑
-      onEditCancel () {
-        this.resetEdit()
+      importDevices () {
+        this.$route.router.go(this.$route.params.dealer_id + '/import_devices')
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>告警分析</h2>
+      <h2>{{ $t('operation.alert.analysis.title')}}</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fr">
@@ -12,7 +12,7 @@
       <div class="filter-group">
         <div class="filter-group-item">
           <x-select :label="selectedProduct.name" width="110px" size="small">
-            <span slot="label">产品</span>
+            <span slot="label">{{ $t('operation.alert.analysis.product')}}</span>
             <select v-model="selectedProduct" @change="onProductSelect">
               <option v-for="product in products" :value="product">{{ product.name }}</option>
             </select>
@@ -59,8 +59,8 @@
                 <thead>
                   <tr>
                     <th>{{currTag}}</th>
-                    <th class="wp20">数量</th>
-                    <th class="wp15">占比</th>
+                    <th class="wp20">{{ $t('operation.alert.analysis.number')}}</th>
+                    <th class="wp15">{{ $t('operation.alert.analysis.percent')}}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -98,7 +98,6 @@ import Statistic from 'components/Statistic2'
 import Chart from 'components/Chart'
 import formatDate from 'filters/format-date'
 import { patchLostDates } from 'utils'
-import _ from 'lodash'
 
 export default {
   name: 'Analysis',
@@ -135,22 +134,22 @@ export default {
       ruleTotal: 0,
       summary: {
         unread: {
-          title: '待处理告警',
+          title: this.$t('operation.alert.analysis.untreated'),
           total: 0,
           change: 0
         },
         today: {
-          title: '今日告警',
+          title: this.$t('operation.alert.analysis.today_add'),
           total: 0,
           change: 0
         },
         week: {
-          title: '7天告警数',
+          title: this.$t('operation.alert.analysis.sevent_add'),
           total: 0,
           change: 0
         },
         month: {
-          title: '30天告警数',
+          title: this.$t('operation.alert.analysis.thirty_add'),
           total: 0,
           change: 0
         }
@@ -251,7 +250,7 @@ export default {
           data: _.map(this.ruleData, 'name')
         },
         series: [{
-          name: '数量',
+          name: this.$t('operation.alert.analysis.number'),
           type: 'pie',
           radius: '55%',
           center: ['50%', '60%'],

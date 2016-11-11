@@ -1,13 +1,13 @@
 <template>
   <div class="auth-form">
     <div class="auth-msg-box" v-show="activateSuccess">
-      <x-alert :cols="16" type="success" :title="$t('ui.auth.activate_success')">
-        <p>{{ $t("ui.auth.activate_success_msg") }}</p>
+      <x-alert :cols="16" type="success" :title="$t('auth.activate_success')">
+        <p>{{ $t("auth.activate_success_msg") }}</p>
       </x-alert>
     </div>
     <div class="auth-msg-box" v-show="activateFail">
-      <x-alert :cols="16" type="error" :title="$t('ui.auth.activate_fail')">
-        <p>{{ $t("ui.auth.activate_fail_msg") }}</p>
+      <x-alert :cols="16" type="error" :title="$t('auth.activate_fail')">
+        <p>{{ $t("auth.activate_fail_msg") }}</p>
       </x-alert>
     </div>
   </div>

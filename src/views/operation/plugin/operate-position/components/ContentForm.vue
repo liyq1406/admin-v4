@@ -8,14 +8,14 @@
       <div class="panel-bd">
         <div class="form content-form">
           <div class="form-row row">
-            <label class="form-control col-4">内容:</label>
+            <label class="form-control col-4"><i class="hl-red">*</i> 内容:</label>
             <div class="controls col-20">
               <a class="hl-red control-text" v-show="selectedContent.name" @click="selectContent">{{ selectedContent.name }}</a>
-              <button class="btn btn-ghost w100" v-show="!selectedContent.name" @click="selectContent"><i class="fa fa-plus"></i>选择{{ typeLabel }}</button>
+              <button class="btn btn-ghost w100" v-show="!selectedContent.name && !loadingContent" @click="selectContent"><i class="fa fa-plus"></i>选择{{ typeLabel }}</button>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-4">运营图片:</label>
+            <label class="form-control col-4"><i class="hl-red">*</i> 运营图片:</label>
             <div class="controls col-20">
               <div class="img-box">
                 <image-uploader :images="images" @modified="onModifiedImages(images)"></image-uploader>
@@ -35,7 +35,7 @@
           <form autocomplete="off" @submit.prevent="confirmSelect">
             <div class="form-row row">
               <div class="action-bar">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.ingredient.placeholders.search_condi')" @cancel="getContentList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getContentList(true)">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getContentList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getContentList(true)">
                   <button slot="search-button" @click.prevent.stop="getContentList(true)" class="btn">{{ $t('common.search') }}</button>
                 </search-box>
               </div>
@@ -98,7 +98,6 @@ import Breadcrumb from 'components/Breadcrumb'
 import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'ContentForm',
@@ -131,6 +130,7 @@ export default {
     return {
       contentAppId: '',
       isShowSelectedModal: false,
+      loadingContent: false,
       loadingData: false,
       selecting: false,
       query: '',
@@ -201,7 +201,9 @@ export default {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         order: {'create_time': -1},
-        query: {}
+        query: {
+          status: 1
+        }
       }
 
       if (this.query.length > 0) {
@@ -259,11 +261,13 @@ export default {
         }
       }
 
+      this.loadingContent = true
       api.operate.getOperatePositionContent(this.$route.params.app_id, this.token, condition).then((res) => {
         if (res.status === 200) {
           let data = res.data.list[0]
           this.selectedContent = data
           this.images = data.images
+          this.loadingContent = false
         }
       })
     }
@@ -371,6 +375,7 @@ export default {
     confirmSelect () {
       this.selectedContent = this.modalSelectedContent
       this.isShowSelectedModal = false
+      this.query = ''
     },
     /**
      * 取消选择内容
@@ -378,6 +383,7 @@ export default {
      */
     cancelSelect () {
       this.currentPage = 1
+      this.query = ''
       this.isShowSelectedModal = false
     },
     /**
@@ -401,13 +407,19 @@ export default {
      * 处理提交
      */
     onSubmit () {
+      // 不上传图片不允许提交
       if (!this.selectedContent.name) {
-        this.showNotice({
-          type: 'error',
-          content: '请选择内容'
-        })
+        this.showError('请选择内容')
         return
       }
+
+      // 不选取内容不允许提交
+      let images = _.compact(this.images)
+      if (!images.length) {
+        this.showError('请添加图片')
+        return
+      }
+
       const MODULES = {
         article: 'contents',
         recipes: 'recipes',

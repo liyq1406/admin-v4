@@ -63,10 +63,12 @@
                 <div class="form-row row">
                   <label class="form-control col-5 dealer-label">固件文件:</label>
                   <div class="controls col-19 row line32">
-                    <div v-if="firmware.file_url.length > 0">{{firmware.file_url}}</div>
-                    <label :class="{'disabled':unableAdd}" class="btn btn-ghost btn-upload mbt10">
-                      <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('firmware', 'addFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
-                    </label>
+                    <file-upload :input="firmwareInput" :input-value="inputValue" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess" @reset="onResetUpload">
+                      <div v-if="firmware.file_url.length > 0" class="file-url">url: {{ firmware.file_url }}</div>
+                      <label class="btn btn-ghost btn-upload mb10 mt10">
+                        <input type="file" name="firmwareInput" @change.prevent="uploadFirmware($event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
+                      </label>
+                    </file-upload>
                   </div>
                 </div>
                 <div class="form-row row">
@@ -92,133 +94,129 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
-  import Select from 'components/Select'
-  import RadioButtonGroup from 'components/RadioButtonGroup'
-  import store from 'store'
-  import * as config from 'consts/config'
-  import api from 'api'
-  import Breadcrumb from 'components/Breadcrumb'
-  // import { createDayRange } from 'utils'
+import { globalMixins } from 'src/mixins'
+import api from 'api'
+import Breadcrumb from 'components/Breadcrumb'
+import FileUpload from 'components/FileUpload'
+import { API_SERVER } from 'consts/config'
 
-  export default {
-    name: 'AddBroadcast',
+export default {
+  name: 'EditFirmware',
 
-    mixins: [globalMixins],
+  mixins: [globalMixins],
 
-    store,
+  vuex: {
+    getters: {
+      products: ({ products }) => products.all
+    }
+  },
 
-    vuex: {
-      getters: {
-        products: ({ products }) => products.all,
-        plugins: ({ plugins }) => plugins.all
-      }
-    },
+  components: {
+    FileUpload,
+    Breadcrumb
+  },
 
-    components: {
-      'x-select': Select,
-      RadioButtonGroup,
-      Breadcrumb
-    },
-
-    data () {
-      return {
-        firmware: {
-          name: '产品1',
-          type: 1,
-          identify: 123,
-          mod: '型号一',
-          version: '111',
-          file_url: '4654dasd',
-          file_md5: '',
-          file_size: ''
-        },
-        currProduct: {},
-        adding: false,
-        emptyArr: [],
-        addModelType: { label: 'WIFI', value: 1 },
-        selectProduct: {},
-        needVerificationUsers: false,
-        needVerification: false,
-        title: '',
-        content: '',
-        timeType: 1,
+  data () {
+    return {
+      inputValue: '',
+      firmwareInput: null,
+      firmware: {
+        name: '',
         type: 1,
-        style: '',
+        identify: 123,
+        mod: '',
         version: '',
-        breadcrumbNav: [{
-          label: '全部',
-          link: '/dev/firmware/manage'
-        }, {
-          label: '编辑固件版本'
-        }]
-      }
-    },
-
-    computed: {
-      // unableAdd () {
-      //   var unable = true
-      //   if (this.selectProduct.id) {
-      //     unable = false
-      //   } else {
-      //     unable = true
-      //   }
-      //   return unable
-      // }
-    },
-    watch: {
-      products () {
-        this.getProductName()
-      }
-    },
-
-    created () {
-      this.getProductName()
-    },
-    // route: {
-    //   data () {
-    //     this.selectProduct = this.products[0]
-    //   }
-    // },
-    //
-    ready () {
-      this.getFirmware()
-      this.getProductName()
-    },
-    methods: {
-      // 获取当前产品名称
-      getProductName () {
-        this.products.forEach((product) => {
-          if (product.id === this.$route.params.product_id) {
-            this.currProduct = product
-          }
-        })
+        file_url: '',
+        file_md5: '',
+        file_size: ''
       },
-      /**
-       * 获取固件信息
-       */
-      getFirmware () {
-        api.product.getFirmware(this.$route.params.product_id, this.$route.params.id).then((res) => {
+      currProduct: {},
+      adding: false,
+      emptyArr: [],
+      selectProduct: {},
+      title: '',
+      content: '',
+      timeType: 1,
+      type: 1,
+      style: '',
+      version: '',
+      breadcrumbNav: [{
+        label: '全部',
+        link: '/dev/firmware/manage'
+      }, {
+        label: '编辑固件版本'
+      }],
+      uploadApi: '' // 固件上传 API 地址
+    }
+  },
+
+  watch: {
+    products () {
+      this.getProductName()
+    }
+  },
+
+  created () {
+    this.getProductName()
+  },
+
+  ready () {
+    this.uploadApi = `${API_SERVER.default}/v2/upload/product/${this.$route.params.product_id}/firmware`
+    this.getFirmware()
+    this.getProductName()
+  },
+
+  methods: {
+    // 获取当前产品名称
+    getProductName () {
+      this.products.forEach((product) => {
+        if (product.id === this.$route.params.product_id) {
+          this.currProduct = product
+        }
+      })
+    },
+    /**
+     * 获取固件信息
+     */
+    getFirmware () {
+      api.product.getFirmware(this.$route.params.product_id, this.$route.params.id).then((res) => {
+        if (res.status === 200) {
+          this.firmware = res.data
+          // this.total = res.data.count
+          // this.loadingFirmwares = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingFirmwares = false
+      })
+    },
+    // 编辑固件版本操作
+    onEditSubmit () {
+      this.adding = true
+      api.product.updateFirmware(this.$route.params.product_id, this.firmware).then((res) => {
+        if (res.status === 200) {
+          // this.resetAdd()
+          // this.getFirmwares()
+          this.showNotice({
+            type: 'info',
+            content: '修改成功！'
+          })
+          this.$route.router.go('/dev/firmware/manage')
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.adding = false
+      })
+    },
+    // 删除固件版本
+    delSubmit () {
+      var result = window.confirm('确认删除该版本吗?')
+      if (result === true) {
+        api.product.deleteFirmware(this.$route.params.product_id, this.firmware.id).then((res) => {
           if (res.status === 200) {
-            this.firmware = res.data
-            // this.total = res.data.count
-            // this.loadingFirmwares = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingFirmwares = false
-        })
-      },
-      // 编辑固件版本操作
-      onEditSubmit () {
-        this.adding = true
-        api.product.updateFirmware(this.$route.params.product_id, this.firmware).then((res) => {
-          if (res.status === 200) {
-            // this.resetAdd()
-            // this.getFirmwares()
             this.showNotice({
               type: 'info',
-              content: '修改成功！'
+              content: '删除成功！'
             })
             this.$route.router.go('/dev/firmware/manage')
           }
@@ -226,82 +224,46 @@
           this.handleError(res)
           this.adding = false
         })
-      },
-      // 删除固件版本
-      delSubmit () {
-        var result = window.confirm('确认删除该版本吗?')
-        if (result === true) {
-          api.product.deleteFirmware(this.$route.params.product_id, this.firmware.id).then((res) => {
-            if (res.status === 200) {
-              this.showNotice({
-                type: 'info',
-                content: '删除成功！'
-              })
-              this.$route.router.go('/dev/firmware/manage')
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.adding = false
-          })
-        }
-      },
-      showErrors (str) {
-        this.showNotice({
-          type: 'error',
-          content: str
-        })
-      },
-      // 上传固件文件
-      uploadFirmware (model, firmwareFile, event) {
-        var file = this.$els[firmwareFile].files[0]
-        var input = event.target
-
-        if (file && file.size > config.MAX_FIRMWARE_FILE_SIZE * 1024 * 1024) {
-          this.showNotice({
-            type: 'error',
-            content: this.$t('ui.upload.file_size_msg', {max: config.MAX_FIRMWARE_FILE_SIZE})
-          })
-          return
-        }
-
-        if (window.File && window.FileReader && window.FileList && window.Blob) {
-          var reader = new window.FileReader()
-          reader.onerror = (evt) => {
-            this.showNotice({
-              type: 'error',
-              content: this.$t('ui.upload.read_err')
-            })
-          }
-          // 读取完成
-          reader.onloadend = (evt) => {
-            if (evt.target.readyState === window.FileReader.DONE) {
-              if (!this.uploading) {
-                this.uploading = true
-                api.upload.firmware(this.currProduct.id, evt.target.result).then((res) => {
-                  if (res.status === 200) {
-                    input.value = ''
-                    this[model].file_url = res.data.url
-                    this[model].file_md5 = res.data.md5
-                    this[model].file_size = res.data.size
-                    this.uploading = false
-                  }
-                }).catch((res) => {
-                  this.handleError(res)
-                  this.uploading = false
-                })
-              }
-            }
-          }
-          reader.readAsArrayBuffer(file)
-        } else {
-          this.showNotice({
-            type: 'error',
-            content: this.$t('ui.upload.compatiblity')
-          })
-        }
       }
+    },
+    showErrors (str) {
+      this.showNotice({
+        type: 'error',
+        content: str
+      })
+    },
+
+    /**
+     * 上传固件文件
+     * @author shengzhi
+     * @param {HTMLDOMEvent} e 事件
+     */
+    uploadFirmware (e) {
+      this.inputValue = e.target.value
+      this.firmwareInput = e.target
+    },
+
+    /**
+     * 固件上传成功处理
+     * @author shengzhi
+     * @param {Object} data 上传成功后服务器返回的数据
+     */
+    onUploadSuccess (data) {
+      this.firmware.file_url = data.url
+      this.firmware.file_md5 = data.md5
+      this.firmware.file_size = data.size
+    },
+
+    /**
+     * 上传重置处理
+     * @author shengzhi
+     */
+    onResetUpload (input) {
+      input.value = ''
+      this.inputValue = ''
     }
   }
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -367,8 +329,4 @@
         margin-top 0
         padding-bottom 10px
         border-bottom 1px solid #d9d9d9
-  .select-group
-    .x-select
-      display inline-block
-
 </style>

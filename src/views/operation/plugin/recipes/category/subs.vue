@@ -29,7 +29,6 @@ import Breadcrumb from 'components/Breadcrumb'
 import Table from 'components/Table'
 import CategoryModal from './components/CategoryModal'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'SubCategoryList',
@@ -96,8 +95,8 @@ export default {
       let result = []
       this.subCategories.forEach((item) => {
         result.push({
-          name: `<a class="hl-red">${item.name}</a>`,
-          instructions: item.instructions || '-',
+          name: item.name,
+          instructions: item.instructions || '<span class="hl-gray">描述类别的内容</span>',
           operation: '<a class="hl-red">编辑</a>',
           prototype: item
         })

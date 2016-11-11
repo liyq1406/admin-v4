@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title bordered">
-      <h2>告警信息</h2>
+      <h2>{{ $t('operation.product.alert.title') }}</h2>
     </div>
     <div class="row statistic-group mb20">
       <div class="col-6">
@@ -52,15 +52,15 @@ export default {
       productID: null,
       trendData: [],
       serious: {
-        name: '严重',
+        name: this.$t('operation.product.alert.danger'),
         data: []
       },
       normal: {
-        name: '通知',
+        name: this.$t('operation.product.alert.info'),
         data: []
       },
       light: {
-        name: '轻微',
+        name: this.$t('operation.product.alert.warning'),
         data: []
       },
       loadingData: false,
@@ -68,22 +68,22 @@ export default {
         unhandle: {
           total: '',
           change: '',
-          title: '待处理告警'
+          title: this.$t('operation.product.alert.untreated')
         },
         message: {
           total: '',
           change: '',
-          title: '今日告警'
+          title: this.$t('operation.product.alert.today_add')
         },
         thirtyday: {
           total: '',
           change: '',
-          title: '30天告警数'
+          title: this.$t('operation.product.alert.thirty_add')
         },
         sevenday: {
           total: '',
           change: '',
-          title: '7天告警数'
+          title: this.$t('operation.product.alert.sevent_add')
         }
       }
     }

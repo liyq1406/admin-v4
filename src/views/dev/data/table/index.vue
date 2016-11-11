@@ -94,12 +94,12 @@
                 <input v-model="addModal.model.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="64" required lazy class="input-text"/>
               </div>
               <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error">
-                <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.table.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.table.fields.name')}) }}</span>
               </div>
               <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error">
-                <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.table.fields.name')}) }}</span>
-                <span v-if="addValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.table.fields.name'), 2]) }}</span>
-                <span v-if="addValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.table.fields.name'), 64]) }}</span>
+                <span v-if="addValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.table.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.minlength">{{ $t('common.validation.minlength', [ $t('ui.table.fields.name'), 2]) }}</span>
+                <span v-if="addValidation.name.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.table.fields.name'), 64]) }}</span>
               </div>
             </div>
           </div>
@@ -445,7 +445,6 @@ import IntelligentTable from 'components/IntelligentTable'
 import DatePicker from 'components/DatePicker'
 import TimePicker from 'components/TimePicker2'
 import Select from 'components/Select'
-import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 
 export default {

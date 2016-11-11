@@ -3,9 +3,9 @@
     <div class="thumb" v-if="!thumbHidden"><img :src="picture"/></div>
     <div class="info">
       <slot>
-        <h3>{{ info.title }}</h3>
+        <h3>{{ $t('components.tip') }}</h3>
         <div class="desc">
-          <span :class="{'on-line':info.online, 'off-line':!info.online}" v-text="info.online?'在线':'下线'"></span><span>{{ info.time }}</span>
+          <span :class="{'on-line':info.online, 'off-line':!info.online}" v-text="info.online ? $t('common.online') : $t('common.offline')"></span><span>{{ info.time }}</span>
         </div>
       </slot>
     </div>

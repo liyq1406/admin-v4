@@ -5,6 +5,10 @@ import VueVlidator from 'vue-validator'
 import i18n from 'vue-i18n'
 import browser from 'utils/browser'
 
+// 注册全局组件
+import components from 'src/components'
+Vue.use(components)
+
 // 多语言配置文件
 import locales from './consts/locales/index'
 
@@ -39,9 +43,12 @@ Vue.use(VueVlidator)
 // 加载多语言插件
 // 手动切换语言设置 `Vue.config.lang = 'en-us'`
 // 详见：https://github.com/kazupon/vue-i18n
+let browserLang = browser.language === 'zh-cn' || browser.language === 'zh-tw' ? 'zh-cn' : 'en-us'
+let lang = window.localStorage.getItem('lang')
+
 Vue.use(i18n, {
   // 根据浏览器语言自动进行语言切换，默认为'en-us'
-  lang: browser.language === 'zh-cn' || browser.language === 'zh-tw' ? 'zh-cn' : 'en-us',
+  lang: lang || browserLang,
   // lang: 'zh-cn',
   locales: locales
 })
@@ -62,54 +69,6 @@ Object.keys(filters).forEach((key) => {
 // ------------------------------
 Object.keys(validators).forEach((key) => {
   Vue.validator(key, validators[key])
-})
-
-/**
- * 食材/菜谱类别过滤器
- */
-Vue.filter('formatCategories', {
-  read (val) {
-    let cateStr = ''
-    val.map((category, index) => {
-      cateStr += category.main
-      if (category.sub.length) {
-        cateStr += ':'
-        category.sub.map((item, i) => {
-          cateStr += item
-          if (i < category.sub.length - 1) {
-            cateStr += ','
-          }
-        })
-      }
-      if (index < val.length - 1) {
-        cateStr += '\n'
-      }
-    })
-    return cateStr
-  },
-
-  write (val, oldVal) {
-    let ret = []
-    let arr = val.split('\n')
-    arr.map((item, index) => {
-      if (item.length) {
-        let obj = {}
-        let temp = item.split(':')
-        obj.main = temp[0].trim()
-        if (temp[1]) {
-          let subArr = temp[1].split(',')
-          subArr = subArr.map((item) => {
-            return item.trim()
-          })
-          obj.sub = subArr
-        } else {
-          obj.sub = []
-        }
-        ret.push(obj)
-      }
-    })
-    return ret
-  }
 })
 
 /**
@@ -154,33 +113,6 @@ Vue.filter('formatTags', {
         //   string.sub = []
         // }
         ret.push(string)
-      }
-    })
-    return ret
-  }
-})
-
-/**
- * 推送规则过滤器
- */
-Vue.filter('formatRules', {
-  read (val) {
-    let ruleStr = ''
-    val.map((rule, index) => {
-      ruleStr += rule
-      if (index < val.length - 1) {
-        ruleStr += '\n'
-      }
-    })
-    return ruleStr
-  },
-
-  write (val, oldVal) {
-    let ret = []
-    let arr = val.split('\n')
-    arr.map((item, index) => {
-      if (item.trim().length) {
-        ret.push(item.trim())
       }
     })
     return ret

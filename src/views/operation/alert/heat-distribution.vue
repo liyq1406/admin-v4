@@ -68,7 +68,7 @@
                 <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">
+                <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')">
                   <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -114,13 +114,12 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
-import convertData from 'components/Chart/convert-data'
+import convertData from 'components/chart/convert-data'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import formatDate from 'filters/format-date'

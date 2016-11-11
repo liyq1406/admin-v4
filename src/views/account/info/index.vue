@@ -9,7 +9,7 @@
         <div class="col-16">
           <div v-stretch="182">
             <info-list :info="accountInfo">
-              <a href="#" class="hl-red" @click.prevent="editPwd" slot="password">修改密码</a>
+              <a href="#" class="hl-red" @click.prevent="editPwd" slot="password">{{ $t('account.info.change_password') }}</a>
             </info-list>
           </div>
         </div>
@@ -18,7 +18,7 @@
 
     <!-- 编辑帐号信息浮层 start -->
     <modal :show.sync="isShowEditModal">
-      <h3 slot="header">编辑帐号信息</h3>
+      <h3 slot="header">{{ $t('account.info.edit_account_msg') }}</h3>
       <div slot="body" class="form">
         <edit-info-form :model="editModel" :submitting="editing" @form-submit="onSubmitEditInfo" @cancel="onEditInfoCancel"></edit-info-form>
       </div>
@@ -27,43 +27,43 @@
 
     <!-- 修改密码浮层 start -->
     <modal :show.sync="isShowModal" width="400px">
-      <h3 slot="header">{{ $t("ui.auth.reset") }}</h3>
+      <h3 slot="header">{{ $t("auth.reset") }}</h3>
       <div slot="body" class="form">
         <validator name="validation">
           <form autocomplete="off" novalidate @submit.prevent="onSubmitPwd">
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t('ui.account.fields.old_password') }}</label>
-              <div class="controls col-18">
+              <label class="form-control col-10">{{ $t('account.info.fields.old_password') }}</label>
+              <div class="controls col-14">
                 <div class="input-text-wrap">
                   <input type="password" v-model="model.oldpassword" name="model.oldpassword" v-validate:oldpassword="{required: true}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.oldpassword.touched && $validation.oldpassword.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.old_password')}) }}</span>
+                  <span v-if="$validation.oldpassword.touched && $validation.oldpassword.required">{{ $t('common.validation.required', {field: $t('account.info.fields.old_password')}) }}</span>
                 </div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t('ui.account.fields.new_password') }}</label>
-              <div class="controls col-18">
+              <label class="form-control col-10">{{ $t('account.info.fields.new_password') }}</label>
+              <div class="controls col-14">
                 <div class="input-text-wrap">
                   <input type="password" v-model="model.newpassword" name="model.newpassword" v-validate:newpassword="{required: true, minlength: 8, maxlength: 16}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.newpassword.touched && $validation.newpassword.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.new_password')}) }}</span>
-                  <span v-if="$validation.newpassword.touched && $validation.newpassword.minlength">{{ $t('ui.validation.minlength', [$t('ui.account.fields.new_password'), 8]) }}</span>
-                  <span v-if="$validation.newpassword.touched && $validation.newpassword.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.account.fields.new_password'), 16]) }}</span>
+                  <span v-if="$validation.newpassword.touched && $validation.newpassword.required">{{ $t('common.validation.required', {field: $t('account.info.fields.new_password')}) }}</span>
+                  <span v-if="$validation.newpassword.touched && $validation.newpassword.minlength">{{ $t('common.validation.minlength', [$t('account.info.fields.new_password'), 8]) }}</span>
+                  <span v-if="$validation.newpassword.touched && $validation.newpassword.maxlength">{{ $t('common.validation.maxlength', [$t('account.info.fields.new_password'), 16]) }}</span>
                 </div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t('ui.auth.fields.confirm_password') }}</label>
-              <div class="controls col-18">
+              <label class="form-control col-10">{{ $t('auth.fields.confirm_password') }}</label>
+              <div class="controls col-14">
                 <div class="input-text-wrap">
                   <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.newpassword}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
-                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.equal">{{ $t('ui.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
+                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('auth.fields.confirm_password')}) }}</span>
+                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('auth.fields.confirm_password'), $t('auth.fields.password')]) }}</span>
                 </div>
               </div>
             </div>
@@ -84,21 +84,17 @@ import { globalMixins } from 'src/mixins'
 import { editPasswordMixin } from '../mixins'
 import InfoList from 'components/InfoList'
 import Modal from 'components/Modal'
-import store from 'store'
 import formatDate from 'filters/format-date'
 import api from 'api'
 import Select from 'components/Select'
 import EditInfoForm from './components/EditInfoForm'
 import { setCurrentMember } from 'store/actions/system'
-// import _ from 'lodash'
 
 export default {
   name: 'Info',
 
   // editPasswordMixin提供编辑密码的逻辑
   mixins: [globalMixins, editPasswordMixin],
-
-  store,
 
   vuex: {
     getters: {
@@ -140,27 +136,27 @@ export default {
     accountInfo () {
       return {
         role: {
-          label: '角色',
-          value: this.MEMBER_TYPES[this.currentMember.role]
+          label: this.$t('account.info.role'),
+          value: this.locales.data.MEMBER_TYPES[this.currentMember.role]
         },
         password: {
-          label: '密码',
+          label: this.$t('account.info.password'),
           slot: true
         },
         phone: {
-          label: '手机',
+          label: this.$t('account.info.phone'),
           value: this.currentMember.phone
         },
         email: {
-          label: '邮箱',
+          label: this.$t('account.info.email'),
           value: this.currentMember.email
         },
         lastAuthTime: {
-          label: '最后登录',
+          label: this.$t('account.info.last_login'),
           value: formatDate(this.currentMember.last_auth_time)
         },
         createTime: {
-          label: '创建时间',
+          label: this.$t('account.info.create_time'),
           value: formatDate(this.currentMember.create_time)
         }
       }
@@ -190,7 +186,7 @@ export default {
     init () {
       this.role = {
         value: this.currentMember.role,
-        label: this.MEMBER_TYPES[this.currentMember.role]
+        label: this.locales.data.MEMBER_TYPES[this.currentMember.role]
       }
     },
 
@@ -218,7 +214,7 @@ export default {
         this.onEditInfoCancel()
         this.showNotice({
           type: 'success',
-          content: '更新成功'
+          content: this.$t('common.action_success')
         })
         this.getMember()
       }).catch((res) => {
@@ -291,7 +287,7 @@ export default {
         if (res.status === 200) {
           this.showNotice({
             type: 'success',
-            content: this.$t('ui.account.password_msg')
+            content: this.$t('account.info.password_msg')
           })
         }
         this.onEditPwdCancel()

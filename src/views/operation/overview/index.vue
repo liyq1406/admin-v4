@@ -1,20 +1,21 @@
 <template>
   <div class="main">
     <div class="main-title bordered">
-      <h2>概览</h2>
+      <h2>{{ $t('operation.overview.main_title') }}</h2>
     </div>
     <div class="row statistic mt10">
       <div class="col-6">
-        <statistic :total="statistic.devices.total.count" :change="statistic.devices.total.change" title="设备总数" tooltip="企业的设备总量" color="gray" :titletop="true"></statistic>
+        <statistic
+          :total="statistic.devices.total.count" :change="statistic.devices.total.change" :title="$t('operation.overview.total.count')" :tooltip="$t('operation.overview.total.tooltip')" color="gray" :titletop="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.devices.activated.count" :change="statistic.devices.activated.change" title="激活数" tooltip="已联网激活的设备数量" color="green" :titletop="true"></statistic>
+        <statistic :total="statistic.devices.activated.count" :change="statistic.devices.activated.change" :title="$t('operation.overview.activated.count')" :tooltip="$t('operation.overview.activated.tooltip')" color="green" :titletop="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.devices.online.count" :change="statistic.devices.online.change" change-unit="%" title="在线量" tooltip="当前在线的设备数量" color="blue" :titletop="true"></statistic>
+        <statistic :total="statistic.devices.online.count" :change="statistic.devices.online.change" change-unit="%" :title="$t('operation.overview.online.count')" :tooltip="$t('operation.overview.online.tooltip')" color="blue" :titletop="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.users.count" :change="statistic.users.change" title="用户总数" tooltip="企业的用户数量" color="orange" :titletop="true"></statistic>
+        <statistic :total="statistic.users.count" :change="statistic.users.change" :title="$t('operation.overview.users.count')" :tooltip="$t('operation.overview.users.tooltip')" color="orange" :titletop="true"></statistic>
       </div>
     </div>
     <div class="row">

@@ -19,7 +19,10 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDealer(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDealer(true)">
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="key" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDealer(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDealer(true)">
                   <x-select width="100px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -35,7 +38,7 @@
             <thead>
               <tr>
                 <th>经销商名称</th>
-                <th>账号(经销商代码)</th>
+                <th>帐号(经销商代码)</th>
                 <th>联系人</th>
                 <th>手机号</th>
                 <th>负责区域</th>
@@ -48,7 +51,7 @@
             </thead>
             <tbody>
               <template v-if="total > 0">
-                <tr v-for="dealer in dealers">
+                <tr v-for="dealer in dealerList">
                   <!-- <td>{{* dealer.name }}</td> -->
                   <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + dealer.id" class="hl-red">{{* dealer.name }}</a></td>
                   <td>{{* dealer.email || '--'}}</td>
@@ -85,16 +88,20 @@
   import Select from 'components/Select'
   import SearchBox from 'components/SearchBox'
   import Pager from 'components/Pager'
+  import DatePicker from 'components/DatePicker'
+  import Modal from 'components/Modal'
 
   export default {
-    name: 'AddBroadcast',
+    name: 'DealerList',
 
     mixins: [globalMixins, pluginMixins],
 
     components: {
       'x-select': Select,
       SearchBox,
-      Pager
+      Pager,
+      Modal,
+      DatePicker
     },
 
     data () {
@@ -135,7 +142,7 @@
         editValidation: {},   // 修改验证
         queryTypeOptions: [
           { label: '名称', value: 'name' },
-          { label: '账号', value: 'email' },
+          { label: '帐号', value: 'email' },
           { label: '联系人', value: 'contacter' }
         ],
         belongs: [
@@ -153,29 +160,90 @@
         countPerPage: 10,
         currentPage: 1,
         key: '',
-        adding: false
+        adding: false,
+        exporting: false
       }
     },
 
     computed: {
-      queryCondition () {
-        var condition = {
-          filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time'],
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          query: {}
+      dealerList () {
+        let res = []
+        if (this.dealers.length) {
+          this.dealers.forEach((dealer) => {
+            if (dealer.upper_dealer_code) {
+              let upper = _.find(this.dealers, (item) => {
+                return item.dealer_code === dealer.upper_dealer_code
+              })
+              if (upper) {
+                dealer.belongTo = upper.name
+              }
+            }
+            res.push(_.clone(dealer))
+          })
         }
+        return res
+      },
+      // 基本筛选条件
+      baseCondition () {
+        let condition = {
+          filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time'],
+          query: {},
+          order: {
+            create_time: 'desc'
+          }
+        }
+
         if (this.key.length > 0) {
           condition.query[this.queryType.value] = {$in: [this.key]}
         }
+
+        return condition
+      },
+
+      // 列表查询条件
+      queryCondition () {
+        let condition = _.cloneDeep(this.baseCondition)
+
+        condition.limit = this.countPerPage
+        condition.offset = (this.currentPage - 1) * this.countPerPage
+
         return condition
       }
     },
+
     ready () {
       this.getDealer()
     },
 
     methods: {
+      /**
+       * 处理导出 CSV 按钮点击
+       */
+      onExportBtnClick () {
+        if (this.exporting) {
+          return
+        }
+
+        let postData = {
+          name: '经销商列表',
+          describe: '经销商列表',
+          type: 5,
+          params: this.baseCondition
+        }
+
+        this.exporting = true
+        api.exportTask.createTask(postData).then((res) => {
+          this.showNotice({
+            type: 'success',
+            content: this.$t('operation.settings.offline.export_success')
+          })
+          this.$route.router.go('/operation/settings/offline-data')
+        }).catch((res) => {
+          this.exporting = false
+          this.handleError(res)
+        })
+      },
+
       // 获取经销商列表
       getDealer (reset) {
         if (reset === true) {

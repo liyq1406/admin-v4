@@ -7,6 +7,7 @@ module.exports = {
     'html'
   ],
   globals: {
+    '_': true,
     'io': true,
     'alert': true,
     'AMap': true,

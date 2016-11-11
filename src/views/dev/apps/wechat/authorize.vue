@@ -72,7 +72,7 @@
               <div class="input-text-wrap">
                 <input v-model="setModel.product_id" type="text" name="product_id" placeholder="请输入微信产品ID" v-form-ctrl required class="input-text"/>
               </div>
-              <div v-if="setValidation.$submitted" class="form-tips form-tips-error"><span v-if="setValidation.product_id.$error.required">{{ $t('ui.validation.required', {field: $t('ui.wechat.product_id')}) }}</span></div>
+              <div v-if="setValidation.$submitted" class="form-tips form-tips-error"><span v-if="setValidation.product_id.$error.required">{{ $t('common.validation.required', {field: $t('ui.wechat.product_id')}) }}</span></div>
             </div>
           </div>
           <p class="hl-red">已经授权过的设备不支持更改产品ID</p>
@@ -276,7 +276,6 @@ import Modal from 'components/Modal'
 import Select from 'components/Select'
 import Tooltip from 'components/Tooltip'
 // import locales from 'consts/locales/index'
-import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -452,7 +451,6 @@ export default {
     onSetSubmit () {
       if (this.setValidation.$valid && !this.setting) {
         this.setting = true
-        console.log(JSON.stringify(this.setModel))
         api.app.empowerWechat(this.app.id, this.currProduct.id, this.setModel).then((res) => {
           if (res.status === 200) {
             this.resetSet()
@@ -490,7 +488,6 @@ export default {
           }
         } else {
           this.setModel = res.data.auth_config
-          this.setModel.product_id = res.data.product_id
         }
       }).catch((res) => {
         this.handleError(res)

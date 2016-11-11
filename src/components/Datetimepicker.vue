@@ -9,30 +9,30 @@
     </div>
     <div class="wrap month" v-if="monthShow">
       <ul>
-        <li class="btn" @click.stop="toggleToYear">{{ year }}年</li>
+        <li class="btn" @click.stop="toggleToYear">{{ year }}</li>
         <li v-for="item in months" :class="{ active: (month === $index + 1) }" @click.stop="chooseMonth($index + 1)">{{ item }}</li>
       </ul>
     </div>
     <div class="wrap date" v-if="dateShow">
       <ul>
-        <li class="btn" @click.stop="toggleToMonth">{{ year }}年 {{ months[month - 1] }}</li>
-        <li class="day">日</li>
-        <li class="day">一</li>
-        <li class="day">二</li>
-        <li class="day">三</li>
-        <li class="day">四</li>
-        <li class="day">五</li>
-        <li class="day">六</li>
+        <li class="btn" @click.stop="toggleToMonth">{{ year + '-' + months[month - 1] }}</li>
+        <li class="day">{{ $t('components.week.sun') }}</li>
+        <li class="day">{{ $t('components.week.mon') }}</li>
+        <li class="day">{{ $t('components.week.tue') }}</li>
+        <li class="day">{{ $t('components.week.wed') }}</li>
+        <li class="day">{{ $t('components.week.thu') }}</li>
+        <li class="day">{{ $t('components.week.fri') }}</li>
+        <li class="day">{{ $t('components.week.sat') }}</li>
 
         <li v-for="item in dates" :class="{ other: !item.thismonth, active: (date === item.date) && item.thismonth }" @click.stop="chooseDate(item.date, item.thismonth)">{{ item.date }}</li>
       </ul>
     </div>
     <div class="wrap time" v-if="timeShow">
       <ul>
-        <li class="btn" @click.stop="toggleToDate">{{ year + '年 ' + month + '月' + date + '日' }}</li>
+        <li class="btn" @click.stop="toggleToDate">{{ year + '-' + month + '-' + date }}</li>
       </ul>
       <input @click.stop="" type="tel" placeholder="00" v-model="hour" maxlength="2"> : <input @click.stop="" type="tel" placeholder="00" v-model="min" maxlength="2">
-      <div class="button" :class="{ able: isAble }" @click.stop="checkNow">确定</div>
+      <div class="button" :class="{ able: isAble }" @click.stop="checkNow">{{ $t('components.ensure') }}</div>
     </div>
     <div style="clear:both;margin-bottom:10px"></div>
   </div>
@@ -43,6 +43,7 @@ import EventListener from 'utils/event-listener'
 
 export default {
   name: 'timePicker',
+
   props: {
     microtime: {
       type: Number,

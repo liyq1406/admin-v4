@@ -19,7 +19,6 @@ import Sidebar from 'components/Sidebar'
 import AlertBar from 'components/AlertBar'
 import { globalMixins } from 'src/mixins'
 import { MAIN_NAV, IS_DEMO } from 'consts/config'
-import store from 'store/index'
 
 export default {
   name: 'Operation',
@@ -32,8 +31,6 @@ export default {
     Sidebar,
     AlertBar
   },
-
-  store,
 
   vuex: {
     getters: {
@@ -73,7 +70,7 @@ export default {
 
       // 产品管理标题
       result.subs.push({
-        label: '产品管理',
+        label: this.$t('operation.product_management'),
         type: 'title'
       })
 
@@ -98,12 +95,12 @@ export default {
 
       // 产品服务标题
       result.subs.push({
-        label: '产品服务',
+        label: this.$t('operation.product_service'),
         type: 'title'
       })
 
       // 其他固定导航
-      result.subs = result.subs.concat(subs.slice(1, subs.length))
+      result.subs = result.subs.concat(subs.slice(1, subs.length - 1))
 
       // 插件导航
       this.plugins.forEach((item) => {
@@ -161,10 +158,6 @@ export default {
             }, {
               alias: 'tags',
               url: `/plugins/recipes/${item.id}/tags`
-            // 暂时隐藏
-            // }, {
-            //   alias: 'heat',
-            //   url: `/plugins/warranty/${item.id}/heat`
             }]
             break
           case 'warranty': // 智能维保
@@ -236,7 +229,13 @@ export default {
           case 'content': // 内容管理
             sub.alias = 'content'
             sub.icon = 'newspaper-o'
-            sub.url = 'plugins/content'
+            sub.subs = [{
+              alias: 'articles',
+              url: `/plugins/content/${item.id}/articles`
+            }, {
+              alias: 'tags',
+              url: `/plugins/content/${item.id}/tags`
+            }]
             break
           default:
         }
@@ -249,6 +248,9 @@ export default {
           result.subs.push(sub)
         }
       })
+
+      // 最后的固定导航
+      result.subs = result.subs.concat(subs.slice(-1))
       return result
     }
   },
@@ -291,5 +293,5 @@ export default {
   fixed left top
   size 100%
   background rgba(0, 0, 0, .6)
-  z-index 10000
+  z-index 1000
 </style>

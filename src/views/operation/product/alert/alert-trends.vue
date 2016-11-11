@@ -4,7 +4,7 @@
       <div class="actions">
         <date-time-multiple-picker :periods="periods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
       </div>
-      <h2>趋势</h2>
+      <h2>{{ $t('operation.product.alert.trend') }}</h2>
     </div>
     <div class="panel-bd">
       <chart :options="trendOptions" :loading="loadingData"></chart>
@@ -19,7 +19,6 @@ import { patchLostDates } from 'utils'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
-import _ from 'lodash'
 
 export default {
   name: 'AlertTrends',

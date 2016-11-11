@@ -34,17 +34,15 @@
 </template>
 
 <script>
+import Modal from './components/Modal'
+import Topbar from 'components/Topbar'
+import Toast from './components/Toast'
+import api from './api'
 import store from 'store/index'
 import { globalMixins } from './mixins'
 import { removeError, hideError, setCurrentMember, setCorp, setLoadingStatus } from './store/actions/system'
 import { getAllProducts } from './store/actions/products'
 import { createPlugin, getAllPlugin } from './store/actions/plugins'
-import Vue from 'vue'
-import api from './api'
-import Modal from './components/Modal'
-import Topbar from 'components/Topbar'
-import Toast from './components/Toast'
-import _ from 'lodash'
 import { API_SERVER, IS_DEMO } from 'consts/config'
 
 export default {
@@ -70,7 +68,7 @@ export default {
       notices: ({ system }) => system.notices,
       corp: ({ system }) => system.corp,
       currentMember: ({ system }) => system.currentMember,
-      products: ({ products }) => products.all,
+      products: ({products}) => products.all,
       plugins: ({ plugins }) => plugins.all
     },
     actions: {
@@ -120,23 +118,21 @@ export default {
 
   ready () {
     // this.refreshToken()
-    document.title = Vue.config.lang === 'zh-cn' ? '云智易物联平台' : 'Xlink IOT Platform'
-    // 监听子组件的更新成员信息事件
-    this.$on('update-member', (member) => {
-      this.currUser = member
-    })
+    document.title = this.$t('layout.platform.name')
   },
 
   methods: {
     /**
      * 刷新token
-     * @return {[type]} [description]
+     * @return {void}
      */
     refreshToken () {
       // 定义需要刷新与否的标志位 默认是true
       let needRefresh = true
+
       // 定义常量 不需要刷新token的页面
       const NOREFRESHPATH = ['/login', '/register', '/fetch', '/forbidden', '/password-reset', '/member-activate', '/email-activate', '/user-password-reset', '/user-email-activate']
+
       // 判断当前页面是否需要刷新
       for (let i = 0; i < NOREFRESHPATH.length; i++) {
         let reg = new RegExp(`^${NOREFRESHPATH[i]}`)
@@ -145,22 +141,24 @@ export default {
           break
         }
       }
+
       // 如果不需要刷新 直接return
       if (!needRefresh) return
+
       // 刷新token逻辑
       this.refreshed = false
       var params = {
         'refresh_token': window.localStorage.getItem('refreshToken')
       }
-      var xmlhttp = new window.XMLHttpRequest()
-      xmlhttp.open('POST', `${API_SERVER.default}/v2/corp/token/refresh`, false) // 这里的false表示同步
-      xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
-      xmlhttp.setRequestHeader('Access-Token', window.localStorage.getItem('accessToken'))
-      xmlhttp.onreadystatechange = () => {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+      var xhr = new window.XMLHttpRequest()
+      xhr.open('POST', `${API_SERVER.default}/v2/corp/token/refresh`, false) // 这里的false表示同步
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+      xhr.setRequestHeader('Access-Token', window.localStorage.getItem('accessToken'))
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
           let res = {}
-          res.status = xmlhttp.status
-          res.data = JSON.parse(xmlhttp.responseText)
+          res.status = xhr.status
+          res.data = JSON.parse(xhr.responseText)
           let today = new Date()
           window.localStorage.setItem('accessToken', res.data.access_token)
           window.localStorage.setItem('refreshToken', res.data.refresh_token)
@@ -170,8 +168,9 @@ export default {
         }
         this.refreshed = true
       }
-      xmlhttp.send(JSON.stringify(params))
+      xhr.send(JSON.stringify(params))
     },
+
     /**
      * 获取企业信息
      * @author shengzhi
@@ -183,11 +182,12 @@ export default {
         this.setCorp(res.data)
       }).catch((res) => {
         this.loadingCorp = false
-        // this.handleError(res)
       })
     },
+
     /**
      * 判断是否是否包含某种布局
+     * @author shengzhi
      * @param  {String}  layout 目标布局
      * @return {Boolean}
      */
@@ -197,22 +197,27 @@ export default {
       }) >= 0
     },
 
-    // TODO token失效问题
+    /**
+     * 获取当前成员信息
+     * @author shengzhi
+     * @return {void}
+     */
     getMember () {
       api.corp.getMember(window.localStorage.getItem('memberId')).then((res) => {
         this.setCurrentMember(res.data)
         window.localStorage.memberRole = res.data.role
       }).catch((res) => {
-        // this.showNotice({
-        //   type: 'error',
-        //   content: '暂无当前用户信息'
-        // })
         if (!IS_DEMO) {
           this.$route.router.go('/login')
         }
       })
     },
 
+    /**
+     * 获取产品列表
+     * @author shengzhi
+     * @return {void}
+     */
     getProducts () {
       this.loadingProducts = true
       api.product.all().then((res) => {
@@ -224,6 +229,11 @@ export default {
       })
     },
 
+    /**
+     * 获取插件列表
+     * @author shengzhi
+     * @return {void}
+     */
     getPlugins () {
       api.plugin.all().then((res) => {
         if (res.status === 200) {

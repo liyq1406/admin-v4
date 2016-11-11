@@ -12,8 +12,8 @@
                   <input v-model="editModel.name" type="text" name="editModel.name" v-validate:name="{required: true, maxlength: 32}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span>
-                  <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.product.fields.name'), 32]) }}</span>
+                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.product.fields.name')}) }}</span>
+                  <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', [$t('ui.product.fields.name'), 32]) }}</span>
                 </div>
               </div>
             </div>
@@ -25,7 +25,7 @@
                   <input v-model="editModel.mode" type="text" name="editModel.mode" v-validate:mode="{maxlength: 64}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.mode.modified && $validation.mode.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.product.fields.mode'), 64]) }}</span>
+                  <span v-if="$validation.mode.modified && $validation.mode.maxlength">{{ $t('common.validation.maxlength', [$t('ui.product.fields.mode'), 64]) }}</span>
                 </div>
               </div>
             </div>
@@ -63,8 +63,8 @@
                   <textarea v-model="editModel.description" type="text" name="editModel.description" v-validate:description="{required: true, maxlength: 250}" lazy class="input-text"></textarea>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.description.touched && $validation.description.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span>
-                  <span v-if="$validation.description.modified && $validation.description.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.product.fields.desc'), 250]) }}</span>
+                  <span v-if="$validation.description.touched && $validation.description.required">{{ $t('common.validation.required', {field: $t('ui.product.fields.desc')}) }}</span>
+                  <span v-if="$validation.description.modified && $validation.description.maxlength">{{ $t('common.validation.maxlength', [$t('ui.product.fields.desc'), 250]) }}</span>
                 </div>
               </div>
             </div>
@@ -141,10 +141,8 @@ import api from 'api'
 // import * as config from 'consts/config'
 import { removeProduct, updateProduct } from 'store/actions/products'
 import { setCurrProductMixin } from '../../mixins'
-import store from 'store'
 import ImageUploader from 'components/ImageUploader'
 import Select from 'components/Select'
-import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -152,8 +150,6 @@ export default {
 
   // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
   mixins: [globalMixins, setCurrProductMixin],
-
-  store,
 
   vuex: {
     actions: {

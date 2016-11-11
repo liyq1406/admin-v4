@@ -12,7 +12,6 @@
 import PercentTable from 'components/PercentTable'
 import Chart from 'components/Chart/index'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'Age',
@@ -27,36 +26,36 @@ export default {
       headers: [
         {
           key: 'age',
-          title: '年龄'
+          title: this.$t('operation.user.portrait.age.label')
         },
         {
           key: 'count',
-          title: '数量'
+          title: this.$t('common.count')
         },
         {
           key: 'percent',
-          title: '占比',
+          title: this.$t('common.percent'),
           sortType: -1
         }
       ],
       lt19: {
-        age: '19岁以下',
+        age: this.$t('operation.user.portrait.age.lt19'),
         count: 0
       },
       lt29: {
-        age: '20-29岁',
+        age: this.$t('operation.user.portrait.age.lt29'),
         count: 0
       },
       lt39: {
-        age: '30-39岁',
+        age: this.$t('operation.user.portrait.age.lt39'),
         count: 0
       },
       lt49: {
-        age: '40-49岁',
+        age: this.$t('operation.user.portrait.age.lt49'),
         count: 0
       },
       lt100: {
-        age: '50岁以上',
+        age: this.$t('operation.user.portrait.age.gt50'),
         count: 0
       }
     }
@@ -113,7 +112,7 @@ export default {
           }
         },
         xAxis: {
-          data: ['19岁以下', '20-29岁', '30-39岁', '40-49岁', '50岁以上']
+          data: [this.$t('operation.user.portrait.age.lt19'), this.$t('operation.user.portrait.age.lt29'), this.$t('operation.user.portrait.age.lt39'), this.$t('operation.user.portrait.age.lt49'), this.$t('operation.user.portrait.age.gt50')]
         },
         yAxis: {
           axisLabel: {
@@ -123,7 +122,7 @@ export default {
           }
         },
         series: [{
-          name: '占比',
+          name: this.$t('common.percent'),
           type: 'bar',
           barMaxWidth: 40,
           data: this.data

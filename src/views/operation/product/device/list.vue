@@ -1,22 +1,22 @@
 <template>
-  <div class="main">
+  <div class="main device-list">
     <div class="main-title">
-      <h2>设备管理</h2>
+      <h2>{{ $t('operation.product.device.manager.title') }}</h2>
     </div>
 
     <!-- Start: 产品信息统计 -->
     <div class="row statistic-group mb30">
       <div class="col-6">
-        <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" title="设备总数" align="left"></statistic>
+        <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" :title="$t('operation.product.device.manager.sum.count')" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" title="激活设备数" align="left"></statistic>
+        <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" :title="$t('operation.product.device.manager.activated.count')" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" title="在线设备数" align="left"></statistic>
+        <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" :title="$t('operation.product.device.manager.online.count')" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.users.total" :change="statistic.users.change" title="用户总数" align="left"></statistic>
+        <statistic :total="statistic.users.total" :change="statistic.users.change" :title="$t('operation.product.device.manager.users.count')" align="left"></statistic>
       </div>
     </div>
     <!-- End: 产品信息统计 -->
@@ -29,17 +29,17 @@
             <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("ui.overview.import_devices") }}
           </label>
         </div> -->
-        <h2>设备列表</h2>
+        <h2>{{ $t('operation.product.device.manager.list') }}</h2>
       </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fr">
-              <!-- <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm"><i class="fa fa-reorder"></i></button>
-              </div> -->
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)" :max="(queryType.value === 'id'?2100000000: false)">
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)" :max="(queryType.value === 'id'?2100000000: false)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -51,11 +51,18 @@
             </div>
             <div class="filter-group">
               <x-select width="90px" size="small" :label="visibility.label">
-                <span slot="label">{{ $t('common.display') }}：</span>
+                <span slot="label">{{ $t('common.display') }}: </span>
                 <select v-model="visibility" @change="getDevices">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
+              <span class="ml10">{{ $t('operation.product.device.manager.active_date') }}: </span>
+              <x-select width="98px" size="small" :label="rangeOption.label">
+                <select v-model="rangeOption" @change="onRangeOptionChange">
+                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </x-select>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
             </div>
           </div>
           <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
@@ -73,8 +80,8 @@ import Pager from 'components/Pager'
 import Modal from 'components/Modal'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import locales from 'consts/locales/index'
-import _ from 'lodash'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import { productSummaryMixin, setCurrProductMixin } from '../mixins'
@@ -92,6 +99,7 @@ export default {
     'modal': Modal,
     'search-box': SearchBox,
     'pager': Pager,
+    DateTimeRangePicker,
     Statistic
   },
 
@@ -109,15 +117,23 @@ export default {
     })
 
     return {
+      exporting: false,
+      startDate: '',
+      endDate: '',
       query: '',
       sortKey: '',
       sortOrders: sortOrders,
       searching: false,
       visibility: {
-        label: '全部',
+        label: this.$t('common.all'),
         value: 'all'
       },
       visibilityOptions: locales[Vue.config.lang].data.DEVICE_VISIBILITY_OPTIONS,
+      rangeOption: {
+        label: this.$t('common.any'),
+        value: 'any'
+      },
+      timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
       devices: [],
       total: 0,
       currentPage: 1,
@@ -125,9 +141,9 @@ export default {
       // querying: false,
       loadingData: false,
       queryTypeOptions: [
-        { label: 'MAC', value: 'mac' },
-        { label: '设备ID', value: 'id' },
-        { label: '设备名称', value: 'name' }
+        { label: this.$t('operation.product.device.manager.mac'), value: 'mac' },
+        { label: this.$t('operation.product.device.manager.device_id'), value: 'id' },
+        { label: this.$t('operation.product.device.manager.device_name'), value: 'name' }
       ],
       queryType: {
         label: 'MAC',
@@ -136,25 +152,25 @@ export default {
       headers: [
         {
           key: 'mac',
-          title: 'MAC'
+          title: this.$t('operation.product.device.manager.mac')
         },
         {
           key: 'id',
-          title: '设备ID'
+          title: this.$t('operation.product.device.manager.device_id')
         },
         {
           key: 'is_active',
-          title: '是否激活',
-          tooltip: '设备已联网激活'
+          title: this.$t('operation.product.device.manager.is_active.label'),
+          tooltip: this.$t('operation.product.device.manager.is_active.tooltip')
         },
         {
           key: 'active_date',
-          title: '激活时间',
+          title: this.$t('operation.product.device.manager.active_date'),
           sortType: -1
         },
         {
           key: 'is_online',
-          title: '在线状态',
+          title: this.$t('operation.product.device.manager.is_online'),
           sortType: -1
         }
       ],
@@ -191,7 +207,9 @@ export default {
             data: []
           }
         }
-      }
+      },
+      startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+      endTime: new Date()
     }
   },
 
@@ -213,9 +231,9 @@ export default {
         var device = {
           id: item.id,
           mac: '<a class="hl-red">' + item.mac + '</a>',
-          is_active: item.is_active ? '是' : '否',
+          is_active: item.is_active ? this.$t('common.yes') : this.$t('common.no'),
           active_date: formatDate(item.active_date),
-          is_online: item.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>',
+          is_online: item.is_online ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>',
           prototype: item
         }
         result.push(device)
@@ -223,12 +241,10 @@ export default {
       return result
     },
 
-    // 筛选条件
-    queryCondition () {
+    // 基本筛选条件
+    baseCondition () {
       var condition = {
         filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
         order: this.sortOrders,
         query: {}
       }
@@ -236,6 +252,13 @@ export default {
       if (this.query.length > 0) {
         this.currentPage = 1
         condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+      }
+
+      if (this.rangeOption.value === 'specified') {
+        condition.query['active_date'] = {
+          '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+          '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
+        }
       }
 
       switch (this.visibility.value) {
@@ -255,6 +278,32 @@ export default {
       }
 
       return condition
+    },
+
+    // 列表查询条件
+    queryCondition () {
+      let condition = _.cloneDeep(this.baseCondition)
+
+      condition.limit = this.countPerPage
+      condition.offset = (this.currentPage - 1) * this.countPerPage
+
+      return condition
+    },
+
+    // 导出CSV条件参数
+    exportParams () {
+      let condition = _.cloneDeep(this.baseCondition)
+      condition.filter = ['id', 'name', 'mac', 'sn', 'is_active', 'active_date', 'is_online', 'last_login', 'mcu_mod', 'mcu_version', 'firmware_mod', 'firmware_version', 'corp_id', 'product_id', 'region_id', 'create_time']
+
+      return {
+        name: '设备列表',
+        describe: '设备列表',
+        type: 1,
+        params: condition,
+        extend: {
+          product_id: this.$route.params.id
+        }
+      }
     }
   },
 
@@ -271,6 +320,49 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理导出 CSV 按钮点击
+     */
+    onExportBtnClick () {
+      if (this.exporting) {
+        return
+      }
+
+      this.exporting = true
+      api.exportTask.createTask(this.exportParams).then((res) => {
+        this.showNotice({
+          type: 'success',
+          content: this.$t('operation.settings.offline.export_success')
+        })
+        this.$route.router.go('/operation/settings/offline-data')
+        // this.onExportCancel()
+      }).catch((res) => {
+        this.exporting = false
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 处理时间区段改变
+     */
+    onRangeOptionChange () {
+      if (this.rangeOption.value === 'any') {
+        this.getDevices()
+      }
+    },
+
+    /**
+     * 时间范围改变
+     * @param  {[type]} startDate [description]
+     * @param  {[type]} endDate   [description]
+     * @return {[type]}           [description]
+     */
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getDevices()
+    },
+
     /**
      * 当前页码改变
      * @author shengzhi
@@ -306,7 +398,7 @@ export default {
         if (this.query - 0 > 2100000000) {
           this.showNotice({
             type: 'error',
-            content: '设备ID不可超过2100000000'
+            content: this.$t('operation.product.device.manager.query_device_id_error')
           })
           return
         }

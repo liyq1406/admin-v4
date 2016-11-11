@@ -2,7 +2,7 @@
   <div class="not-found">
     <div style="text-align:center">
       <i class="fa fa-exclamation-circle "></i>
-      <p>抱歉，您访问的URL有误</p>
+      <p>{{ $t('errors.not_found') }}</p>
     </div>
   </div>
 </template>

@@ -70,7 +70,6 @@
   import SearchBox from 'components/SearchBox'
   import Table from 'components/Table'
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
-  import store from 'store'
   import api from 'api'
   import Statistic from 'components/Statistic'
 
@@ -78,8 +77,6 @@
     name: 'OrderList',
 
     mixins: [globalMixins, warrantyMixins],
-
-    store,
 
     vuex: {
       getters: {

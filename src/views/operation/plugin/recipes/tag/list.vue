@@ -35,11 +35,11 @@
               <label class="form-control col-6">名称:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap required-sign" v-placeholder="'请输入1-20字符'">
-                  <input v-model="model.label" name="model.label" type="text" v-validate:label="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" class="input-text"/>
+                  <input v-model="model.label" name="model.label" type="text" v-validate:label="{required: true, maxlength: 20, format: 'trim'}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.label.touched && $validation.label.required">请输入名称</span>
-                  <span v-if="$validation.label.modified && $validation.label.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.recipe.fields.name'), 20]) }}</span>
+                  <span v-if="$validation.label.modified && $validation.label.maxlength">{{ $t('common.validation.maxlength', [$t('ui.recipe.fields.name'), 20]) }}</span>
                   <span v-if="$validation.label.touched && $validation.label.format">名称不允许前后带空格</span>
                 </div>
               </div>
@@ -67,7 +67,6 @@ import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
-import _ from 'lodash'
 
 export default {
   name: 'TagList',

@@ -13,8 +13,8 @@
                 <div v-placeholder="$t('ui.mail_templates.placeholders.sender')" class="input-text-wrap">
                   <input v-model="sender" type="text" v-form-ctrl name="sender" required custom-validator="noSpaces" class="input-text"/>
                 </div>
-                <div v-if="validation.$submitted && validation.sender.$pristine" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.sender')}) }}</span></div>
-                <div v-if="validation.sender.$dirty" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.sender')}) }}</span><span v-if="validation.sender.$error.customValidator">前后不能有空格</span></div>
+                <div v-if="validation.$submitted && validation.sender.$pristine" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.sender')}) }}</span></div>
+                <div v-if="validation.sender.$dirty" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.sender')}) }}</span><span v-if="validation.sender.$error.customValidator">前后不能有空格</span></div>
               </div>
             </div>
             <div class="form-actions row">
@@ -44,8 +44,8 @@
                 <div class="input-text-wrap">
                   <input v-model="activateModel.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
-                <div v-if="activateValidation.$submitted && activateValidation.subject.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
-                <div v-if="activateValidation.subject.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="activateValidation.$submitted && activateValidation.subject.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation.subject.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="activateValidation.subject.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation.subject.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
             <div class="form-row row">
@@ -54,8 +54,8 @@
                 <div class="input-text-wrap">
                   <textarea v-model="activateModel.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
-                <div v-if="activateValidation.$submitted && activateValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
-                <div v-if="activateValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="activateValidation.$submitted && activateValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="activateValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
             <div class="form-actions row">
@@ -73,8 +73,8 @@
                 <div class="input-text-wrap">
                   <input v-model="activateModel2.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
-                <div v-if="activateValidation2.$submitted && activateValidation2.subject.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation2.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
-                <div v-if="activateValidation2.subject.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation2.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="activateValidation2.$submitted && activateValidation2.subject.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation2.subject.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="activateValidation2.subject.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation2.subject.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
             <div class="form-row row">
@@ -83,8 +83,8 @@
                 <div class="input-text-wrap">
                   <textarea v-model="activateModel2.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
-                <div v-if="activateValidation2.$submitted && activateValidation2.content.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation2.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
-                <div v-if="activateValidation2.content.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation2.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="activateValidation2.$submitted && activateValidation2.content.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation2.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="activateValidation2.content.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation2.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
             <div class="form-actions row">
@@ -114,8 +114,8 @@
                 <div class="input-text-wrap">
                   <input v-model="resetModel.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
-                <div v-if="resetValidation.$submitted && resetValidation.subject.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
-                <div v-if="resetValidation.subject.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="resetValidation.$submitted && resetValidation.subject.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation.subject.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="resetValidation.subject.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation.subject.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
             <div class="form-row row">
@@ -124,8 +124,8 @@
                 <div class="input-text-wrap">
                   <textarea v-model="resetModel.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
-                <div v-if="resetValidation.$submitted && resetValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
-                <div v-if="resetValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="resetValidation.$submitted && resetValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="resetValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
             <div class="form-actions row">
@@ -143,8 +143,8 @@
                 <div class="input-text-wrap">
                   <input v-model="resetModel2.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
-                <div v-if="resetValidation2.$submitted && resetValidation2.subject.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation2.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
-                <div v-if="resetValidation2.subject.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation2.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="resetValidation2.$submitted && resetValidation2.subject.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation2.subject.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="resetValidation2.subject.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation2.subject.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
             <div class="form-row row">
@@ -153,8 +153,8 @@
                 <div class="input-text-wrap">
                   <textarea v-model="resetModel2.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
-                <div v-if="resetValidation2.$submitted && resetValidation2.content.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation2.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
-                <div v-if="resetValidation2.content.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation2.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="resetValidation2.$submitted && resetValidation2.content.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation2.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="resetValidation2.content.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation2.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
             <div class="form-actions row">

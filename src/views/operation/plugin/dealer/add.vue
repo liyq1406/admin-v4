@@ -14,13 +14,13 @@
             <div class="row">
               <div class="form col-14 max-width">
                 <div class="form-row row">
-                  <label class="form-control col-5 dealer-label">账号:</label>
+                  <label class="form-control col-5 dealer-label">帐号:</label>
                   <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.code')" class="input-text-wrap">
                       <input v-model="dealer.username" type="email" name="dealer.username" minlength="2" maxlength="32" v-validate:username="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.username.touched && $autoValidation.username.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
+                      <span v-if="$autoValidation.username.touched && $autoValidation.username.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -31,7 +31,7 @@
                       <input v-model="dealer.password" type="text" name="dealer.password" minlength="6" maxlength="16" v-validate:password="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.password.touched && $autoValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.password')}) }}</span>
+                      <span v-if="$autoValidation.password.touched && $autoValidation.password.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.password')}) }}</span>
                     </div>
                   </div>
                   <div class="controls col-19" v-else>
@@ -61,7 +61,7 @@
                       <input type="text" v-model="dealer.name" name="dealer.name" minlength="2" maxlength="32" v-validate:name="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.name.touched && $autoValidation.name.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span>
+                      <span v-if="$autoValidation.name.touched && $autoValidation.name.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -72,7 +72,7 @@
                       <input type="text" v-model="dealer.linkman" name="dealer.linkman" minlength="6" maxlength="16" v-validate:linkman="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.linkman.touched && $autoValidation.linkman.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span>
+                      <span v-if="$autoValidation.linkman.touched && $autoValidation.linkman.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -83,7 +83,7 @@
                       <input type="text" v-model="dealer.phone" name="dealer.phone" minlength="6" maxlength="16" v-validate:phone="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.phone.touched && $autoValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.phone')}) }}</span>
+                      <span v-if="$autoValidation.phone.touched && $autoValidation.phone.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.phone')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -94,7 +94,7 @@
                       <input type="text" v-model="dealer.address" name="dealer.address" minlength="6" maxlength="16" v-validate:address="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.address.touched && $autoValidation.address.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.address')}) }}</span>
+                      <span v-if="$autoValidation.address.touched && $autoValidation.address.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.address')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -105,7 +105,7 @@
                       <input type="text" v-model="dealer.area" name="dealer.area" minlength="6" maxlength="16" v-validate:dutyarea="{required: true}" lazy  class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.dutyarea.touched && $autoValidation.dutyarea.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span>
+                      <span v-if="$autoValidation.dutyarea.touched && $autoValidation.dutyarea.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -148,7 +148,6 @@
 <script>
   // import locales from 'consts/locales/index'
   import api from 'api'
-  // import _ from 'lodash'
   import Breadcrumb from 'components/Breadcrumb'
   import Select from 'components/Select'
   import { globalMixins } from 'src/mixins'
@@ -324,9 +323,7 @@
           region: this.dealer.area,
           sale_goal: this.dealer.sale_goal
         }
-        console.log(this.belongType.code)
         if (this.belongType.code) {
-          console.log(this.belongType.code)
           params.upper_dealer_code = this.belongType.code
         }
         api.dealer.update(this.$route.params.id, params).then((res) => {

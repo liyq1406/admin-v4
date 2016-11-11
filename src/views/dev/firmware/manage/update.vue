@@ -108,13 +108,12 @@
             </div>
             <div class="panel-bd">
               <div class="controls">
-                <!-- <label :class="{'disabled':uploading}" class="btn btn-ghost btn-upload btn-sm">
-                  <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="" :disabled="uploading"/><i class="fa fa-reply-all"></i>上传固件文件
-                </label> -->
-                <label :class="{'disabled':unableAdd}" class="btn btn-ghost btn-upload mbt10">
-                  <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('addmodel', 'addFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
-                </label>
-                <div v-if="addmodel.file_url.length > 0" class="file-url">url: {{ addmodel.file_url }}</div>
+                <file-upload :input="firmwareInput" :input-value="inputValue" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess" @reset="onResetUpload">
+                  <label :class="{'disabled':unableAdd}" class="btn btn-ghost btn-upload mb10 mt10">
+                    <input type="file" name="firmwareInput" @change.prevent="uploadFirmware($event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
+                  </label>
+                  <div v-if="addmodel.file_url.length > 0" class="file-url">url: {{ addmodel.file_url }}</div>
+                </file-upload>
               </div>
             </div>
           </div>
@@ -147,255 +146,238 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
-  import store from 'store'
-  import * as config from 'consts/config'
-  import api from 'api'
-  // import { createDayRange } from 'utils'
+import { globalMixins } from 'src/mixins'
+import FileUpload from 'components/FileUpload'
+import { API_SERVER } from 'consts/config'
+import api from 'api'
 
-  export default {
-    name: 'AddBroadcast',
+export default {
+  name: 'UploadFirmware',
 
-    mixins: [globalMixins],
+  mixins: [globalMixins],
 
-    store,
+  components: {
+    FileUpload
+  },
 
-    vuex: {
-      getters: {
-        products: ({ products }) => products.all,
-        plugins: ({ plugins }) => plugins.all
-      }
-    },
+  vuex: {
+    getters: {
+      products: ({ products }) => products.all,
+      plugins: ({ plugins }) => plugins.all
+    }
+  },
 
-    data () {
-      return {
-        adding: false,
-        emptyArr: [],
-        addModelType: { label: 'WIFI', value: 1 },
-        selectProduct: {},
-        needVerificationUsers: false,
-        needVerification: false,
-        title: '',
-        content: '',
-        timeType: 1,
-        type: 1,
-        style: '',
+  data () {
+    return {
+      inputValue: '',
+      adding: false,
+      emptyArr: [],
+      addModelType: { label: 'WIFI', value: 1 },
+      selectProduct: {},
+      title: '',
+      content: '',
+      timeType: 1,
+      type: 1,
+      style: '',
+      version: '',
+      firmwareInput: null,
+      addmodel: {
+        mod: '',
         version: '',
-        addmodel: {
-          mod: '',
-          version: '',
-          file_url: '',
-          file_md5: '',
-          file_size: '',
-          description: '',
-          release_date: '',
-          is_release: '',
-          type: '',
-          identify: ''
-        }
-      }
-    },
-
-    computed: {
-      unableAdd () {
-        var unable = true
-        if (this.selectProduct && this.selectProduct.id) {
-          unable = false
-        } else {
-          unable = true
-        }
-        return unable
-      }
-    },
-    watch: {
-      products () {
-        this.selectProduct = this.products[0]
-      }
-    },
-
-    created () {
-      this.selectProduct = this.products[0]
-    },
-    // route: {
-    //   data () {
-    //     this.selectProduct = this.products[0]
-    //   }
-    // },
-    methods: {
-      // 添加固件版本操作
-      onAddSubmit () {
-        if (this.adding) return
-
-        if (this.$validation.invalid) {
-          this.$validate(true)
-          return
-        }
-        if (!this.addmodel.file_url.length) {
-          this.showNotice({
-            type: 'error',
-            content: '请上传固件文件'
-          })
-          return
-        }
-        this.adding = true
-        this.addmodel.type = this.addModelType.value
-        this.addmodel.is_release = true
-        this.addmodel.release_date = new Date()
-        api.product.addFirmware(this.selectProduct.id, this.addmodel).then((res) => {
-          if (res.status === 200) {
-            // this.resetAdd()
-            // this.getFirmwares()
-            this.showNotice({
-              type: 'info',
-              content: '成功创建版本！'
-            })
-            this.adding = false
-            this.$route.router.go('/dev/firmware/manage')
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.adding = false
-        })
-        // if (!this.$validation.valid) {
-        //   this.$validation.mod.touched = true
-        //   this.$validation.version.touched = true
-        //   return
-        // }
-        // if (!this.selectProduct.id) {
-        //   this.showErrors('请选择产品！')
-        //   return
-        // }
-        // if (!this.addmodel.file_url) {
-        //   this.showErrors('请上传固件！')
-        //   return
-        // }
-        // if (!this.addmodel.description) {
-        //   this.showErrors('请添加版本说明，250字以内！')
-        //   return
-        // }
+        file_url: '',
+        file_md5: '',
+        file_size: '',
+        description: '',
+        release_date: '',
+        is_release: '',
+        type: '',
+        identify: ''
       },
-      showErrors (str) {
+      uploadApi: '' // 固件上传 API 地址
+    }
+  },
+
+  computed: {
+    unableAdd () {
+      var unable = true
+      if (this.selectProduct && this.selectProduct.id) {
+        unable = false
+      } else {
+        unable = true
+      }
+      return unable
+    }
+  },
+
+  watch: {
+    products () {
+      this.init()
+    }
+  },
+
+  ready () {
+    this.init()
+  },
+
+  methods: {
+    init () {
+      if (this.products.length) {
+        this.selectProduct = this.products[0]
+        this.uploadApi = `${API_SERVER.default}/v2/upload/product/${this.selectProduct.id}/firmware`
+      }
+    },
+
+    // 添加固件版本操作
+    onAddSubmit () {
+      if (this.adding) return
+
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
+      }
+      if (!this.addmodel.file_url.length) {
         this.showNotice({
           type: 'error',
-          content: str
+          content: '请上传固件文件'
         })
-      },
-      // 上传固件文件
-      uploadFirmware (model, firmwareFile, event) {
-        var file = this.$els[firmwareFile].files[0]
-        var input = event.target
-
-        if (file && file.size > config.MAX_FIRMWARE_FILE_SIZE * 1024 * 1024) {
-          this.showNotice({
-            type: 'error',
-            content: this.$t('ui.upload.file_size_msg', {max: config.MAX_FIRMWARE_FILE_SIZE})
-          })
-          return
-        }
-
-        if (window.File && window.FileReader && window.FileList && window.Blob) {
-          var reader = new window.FileReader()
-          reader.onerror = (evt) => {
-            this.showNotice({
-              type: 'error',
-              content: this.$t('ui.upload.read_err')
-            })
-          }
-          // 读取完成
-          reader.onloadend = (evt) => {
-            if (evt.target.readyState === window.FileReader.DONE) {
-              if (!this.uploading) {
-                this.uploading = true
-                api.upload.firmware(this.selectProduct.id, evt.target.result).then((res) => {
-                  if (res.status === 200) {
-                    input.value = ''
-                    this[model].file_url = res.data.url
-                    this[model].file_md5 = res.data.md5
-                    this[model].file_size = res.data.size
-                    this.uploading = false
-                  }
-                }).catch((res) => {
-                  this.handleError(res)
-                  this.uploading = false
-                })
-              }
-            }
-          }
-          reader.readAsArrayBuffer(file)
-        } else {
-          this.showNotice({
-            type: 'error',
-            content: this.$t('ui.upload.compatiblity')
-          })
-        }
+        return
       }
+      this.adding = true
+      this.addmodel.type = this.addModelType.value
+      this.addmodel.is_release = true
+      this.addmodel.release_date = new Date()
+      api.product.addFirmware(this.selectProduct.id, this.addmodel).then((res) => {
+        if (res.status === 200) {
+          // this.resetAdd()
+          // this.getFirmwares()
+          this.showNotice({
+            type: 'info',
+            content: '成功创建版本！'
+          })
+          this.adding = false
+          this.$route.router.go('/dev/firmware/manage')
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.adding = false
+      })
+      // if (!this.$validation.valid) {
+      //   this.$validation.mod.touched = true
+      //   this.$validation.version.touched = true
+      //   return
+      // }
+      // if (!this.selectProduct.id) {
+      //   this.showErrors('请选择产品！')
+      //   return
+      // }
+      // if (!this.addmodel.file_url) {
+      //   this.showErrors('请上传固件！')
+      //   return
+      // }
+      // if (!this.addmodel.description) {
+      //   this.showErrors('请添加版本说明，250字以内！')
+      //   return
+      // }
+    },
+    showErrors (str) {
+      this.showNotice({
+        type: 'error',
+        content: str
+      })
+    },
+
+    /**
+     * 上传固件文件
+     * @author shengzhi
+     * @param {HTMLDOMEvent} e 事件
+     */
+    uploadFirmware (e) {
+      this.inputValue = e.target.value
+      this.firmwareInput = e.target
+    },
+
+    /**
+     * 固件上传成功处理
+     * @author shengzhi
+     * @param {Object} data 上传成功后服务器返回的数据
+     */
+    onUploadSuccess (data) {
+      this.addmodel.file_url = data.url
+      this.addmodel.file_md5 = data.md5
+      this.addmodel.file_size = data.size
+    },
+
+    /**
+     * 上传重置处理
+     * @author shengzhi
+     */
+    onResetUpload (input) {
+      input.value = ''
+      this.inputValue = ''
     }
   }
+}
 </script>
 
 <style lang="stylus" scoped>
-  @import '../../../../assets/stylus/common'
-  .mbt10
-    margin-top 10px
-    margin-bottom 10px
-  .widbtn
-    width 100px
-    margin-right 10px
-  .inb
-    display inline-block
-  .inbradio
-    margin-right 10px
-  .number
-    display inline-block
-    width 20px
-    height 20px
-    line-height 20px
-    border-radius 50%
-    text-align center
-    background #2389c5
-    color #fff
-    font-size 12px
-    position relative
-    bottom 2px
-  .form
-    max-width 640px
-    padding-left 30px
-    box-sizing border-box
-    .directional .form-row.userTag
+@import '../../../../assets/stylus/common'
+.widbtn
+  width 100px
+  margin-right 10px
+.inb
+  display inline-block
+.inbradio
+  margin-right 10px
+.number
+  display inline-block
+  width 20px
+  height 20px
+  line-height 20px
+  border-radius 50%
+  text-align center
+  background #2389c5
+  color #fff
+  font-size 12px
+  position relative
+  bottom 2px
+.form
+  max-width 640px
+  padding-left 30px
+  box-sizing border-box
+  .directional .form-row.userTag
+    height auto
+  .tips
+    height 50px
+    line-height 50px
+    border-bottom 1px dashed #ccc
+    color #666
+    .fa
+      font-size 18px
+      margin 0 5px
+  .textarea
+    height 150px
+  .directional
+  .single
+    .form-row
+      padding-top 5px
+      padding-bottom 10px
       height auto
-    .tips
-      height 50px
-      line-height 50px
+      /*line-height 40px*/
       border-bottom 1px dashed #ccc
-      color #666
-      .fa
-        font-size 18px
-        margin 0 5px
-    .textarea
-      height 150px
-    .directional
-    .single
-      .form-row
-        padding-top 5px
-        padding-bottom 10px
-        height auto
-        /*line-height 40px*/
-        border-bottom 1px dashed #ccc
 
-    .check-group-box
-      padding-bottom 5px
-      .label
-        line-height 26px
-  .panel
-    border-bottom 0
-    .panel-hd
-      h3
-        margin-bottom 0
-        margin-top 0
-        padding-bottom 10px
-        border-bottom 1px solid #d9d9d9
-  .select-group
-    .x-select
-      display inline-block
-
+  .check-group-box
+    padding-bottom 5px
+    .label
+      line-height 26px
+.panel
+  border-bottom 0
+  .panel-hd
+    h3
+      margin-bottom 0
+      margin-top 0
+      padding-bottom 10px
+      border-bottom 1px solid #d9d9d9
+.select-group
+  .x-select
+    display inline-block
 </style>

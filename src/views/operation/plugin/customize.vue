@@ -72,13 +72,13 @@
                 <input v-model="addModel.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" custom-validator="noSpacesPrefixAndSuffix" required lazy class="input-text"/>
               </div>
               <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error">
-                <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
               </div>
               <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error">
-                <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
-                <span v-if="addValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span>
-                <span v-if="addValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span>
-                <span v-if="addValidation.name.$error.customValidator">{{ $t('ui.validation.format', {field: $t('ui.app.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.minlength">{{ $t('common.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span>
+                <span v-if="addValidation.name.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span>
+                <span v-if="addValidation.name.$error.customValidator">{{ $t('common.validation.format', {field: $t('ui.app.fields.name')}) }}</span>
               </div>
             </div>
           </div>
@@ -120,17 +120,13 @@
   import locales from 'consts/locales/index'
   import api from 'api'
   import Modal from 'components/Modal'
-  import store from 'store/index'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
-  import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'Applications',
 
     mixins: [globalMixins],
-
-    store,
 
     vuex: {
       getters: {

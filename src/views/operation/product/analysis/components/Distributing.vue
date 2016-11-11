@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-hd bordered panel-hd-full">
-      <h2>热力分布</h2>
+      <h2>{{ $t('operation.product.analysis.hot.title') }}</h2>
     </div>
     <div class="panel-bd">
       <div class="row">
@@ -44,11 +44,10 @@
 <script>
 import api from 'api'
 import Chart from 'components/Chart/index'
-import convertData from 'components/Chart/convert-data'
+import convertData from 'components/chart/convert-data'
 import { globalMixins } from 'src/mixins'
 import {numToPercent} from 'utils'
 import PercentTable from 'components/PercentTable'
-import _ from 'lodash'
 
 export default {
   name: 'Distributing',
@@ -75,15 +74,15 @@ export default {
       headers: [
         {
           key: 'region',
-          title: '地域'
+          title: this.$t('operation.product.analysis.hot.region')
         },
         {
           key: 'count',
-          title: '设备数量'
+          title: this.$t('operation.product.analysis.hot.device_count')
         },
         {
           key: 'percent',
-          title: '占比',
+          title: this.$t('operation.product.analysis.hot.percent'),
           sortType: -1
         }
       ]
@@ -129,7 +128,7 @@ export default {
           }
         },
         series: [{
-          name: '设备数量',
+          name: this.$t('operation.product.analysis.hot.device_count'),
           type: 'scatter',
           coordinateSystem: 'geo',
           data: convertData(this.regionData),

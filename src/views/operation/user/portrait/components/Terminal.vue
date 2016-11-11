@@ -48,24 +48,24 @@
           },
           yAxis: {
             type: 'category',
-            data: ['系统']
+            data: [this.$t('operation.user.portrait.terminal.title')]
           },
           series: [{
             name: 'iOS',
             type: 'bar',
-            stack: '系统',
+            stack: this.$t('operation.user.portrait.terminal.system'),
             barMaxWidth: 40, // 柱条的最大宽度
             data: this.data['ios']
           }, {
             name: 'Android',
             type: 'bar',
-            stack: '系统',
+            stack: this.$t('operation.user.portrait.terminal.system'),
             barMaxWidth: 40, // 柱条的最大宽度
             data: this.data['android']
           }, {
-            name: '其他',
+            name: this.$t('operation.user.portrait.terminal.other'),
             type: 'bar',
-            stack: '系统',
+            stack: this.$t('operation.user.portrait.terminal.system'),
             barMaxWidth: 40, // 柱条的最大宽度
             data: this.data['others']
           }]

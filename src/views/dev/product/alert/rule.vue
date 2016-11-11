@@ -48,7 +48,7 @@
                   <span class="limit-width">{{rule.content }}</span></td>
                 <td>{{* rule.type | ruleLabel }}</td>
                 <td>
-                  <span class="text-label w50" :class="tagStyle(rule.tag)">{{rule.tag}}</span>
+                  <span class="text-label" :class="tagStyle(rule.tag)">{{rule.tag}}</span>
                   <!-- <span class="text-label text-label-warning level-style">{{rule.tag}}</span> -->
                 </td>
                 <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
@@ -79,7 +79,6 @@
   import locales from 'consts/locales/index'
   import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
-  import _ from 'lodash'
 
   export default {
     name: 'Alert',

@@ -318,17 +318,13 @@
   import AreaSelect from 'components/AreaSelect'
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import TagInput from 'components/TagInput'
-  import store from 'store'
   import api from 'api'
-  import _ from 'lodash'
   import { createDayRange } from 'utils'
 
   export default {
     name: 'AddBroadcast',
 
     mixins: [globalMixins],
-
-    store,
 
     vuex: {
       getters: {

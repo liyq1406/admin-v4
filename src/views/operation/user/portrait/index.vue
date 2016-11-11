@@ -1,12 +1,12 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>人群画像</h2>
+      <h2>{{ $t('operation.user.portrait.main_title') }}</h2>
     </div>
     <div class="panel">
       <!-- 性别 -->
       <div class="panel-hd panel-hd-full bordered">
-        <h2>性别</h2>
+        <h2>{{ $t('operation.user.portrait.sex.title') }}</h2>
       </div>
       <div class="panel-bd">
         <sex></sex>
@@ -14,7 +14,7 @@
 
       <!-- 年龄 -->
       <div class="panel-hd panel-hd-full bordered">
-        <h2>年龄分布</h2>
+        <h2>{{ $t('operation.user.portrait.age.title') }}</h2>
       </div>
       <div class="panel-bd">
         <age></age>
@@ -22,7 +22,7 @@
 
       <!-- 语言 -->
       <div class="panel-hd panel-hd-full bordered">
-        <h2>语言</h2>
+        <h2>{{ $t('operation.user.portrait.lang.title') }}</h2>
       </div>
       <div class="panel-bd">
         <language></language>
@@ -30,7 +30,7 @@
 
       <!-- 终端分布 -->
       <div class="panel-hd panel-hd-full bordered">
-        <h2>终端分布</h2>
+        <h2>{{ $t('operation.user.portrait.terminal.title') }}</h2>
       </div>
       <div class="panel-bd">
         <terminal></terminal>
@@ -38,7 +38,7 @@
 
       <!-- 机型 -->
       <div class="panel-hd panel-hd-full bordered">
-        <h2>机型分布TOP10</h2>
+        <h2>{{ $t('operation.user.portrait.device.title') }}</h2>
       </div>
       <div class="panel-bd">
         <devices></devices>

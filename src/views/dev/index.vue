@@ -17,8 +17,6 @@ import AlertBar from 'components/AlertBar'
 import { globalMixins } from 'src/mixins'
 import { MAIN_NAV } from 'consts/config'
 // import api from 'api'
-// import _ from 'lodash'
-import store from 'store/index'
 
 export default {
   name: 'dev',
@@ -31,8 +29,6 @@ export default {
     Sidebar,
     AlertBar
   },
-
-  store,
 
   vuex: {
     getters: {
@@ -62,7 +58,7 @@ export default {
 
       // 产品开发标题
       result.subs.push({
-        label: '产品开发',
+        label: this.$t('dev.product_development'),
         type: 'title'
       })
 

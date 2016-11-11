@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-hd panel-hd-full bordered">
-      <h2>用户分布</h2>
+      <h2>{{ $t('operation.user.overview.distribution.title') }}</h2>
     </div>
     <div class="panel-bd">
       <div class="row">
@@ -23,7 +23,6 @@ import Panel from 'components/Panel'
 import { globalMixins } from 'src/mixins'
 import {getUserRegion} from '../api-user'
 import {numToPercent} from 'utils'
-import _ from 'lodash'
 
 export default {
   name: 'distribution',
@@ -46,15 +45,15 @@ export default {
       headers: [
         {
           key: 'region',
-          title: '地域'
+          title: this.$t('operation.user.overview.distribution.region')
         },
         {
           key: 'count',
-          title: '用户数量'
+          title: this.$t('operation.user.overview.distribution.user_count')
         },
         {
           key: 'percent',
-          title: '占比',
+          title: this.$t('operation.user.overview.distribution.percent'),
           sortType: -1
         }
       ]
@@ -94,11 +93,11 @@ export default {
           max: this.max,
           left: 10,
           bottom: 20,
-          text: ['高', '低'],
+          text: [this.$t('common.high'), this.$t('common.low')],
           calculable: true
         },
         series: [{
-          name: '设备数量',
+          name: this.$t('operation.user.overview.distribution.device_count'),
           type: 'map',
           mapType: 'china',
           roam: false,

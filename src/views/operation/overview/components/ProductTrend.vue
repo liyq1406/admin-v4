@@ -1,14 +1,15 @@
 <template>
   <div class="panel mt20 mb20">
     <div class="panel-hd">
-      <h2>产品趋势</h2>
+      <h2>{{ $t('operation.overview.product_trend.title') }}</h2>
     </div>
     <div class="tab-s2 tab-s2-full mt10 mb5">
       <div class="actions">
-        <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group>
+        <!-- <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group> -->
+        <date-time-multiple-picker :periods="periods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
       </div>
       <ul>
-        <li v-for="item in locales.data.PRODUCT_FILTERS" @click="tabIndex = $index" :class="{'active': tabIndex === $index}">{{ item.label }}</li>
+        <li v-for="item in locales.data.PRODUCT_FILTERS" class="tab-s2-item" @click="tabIndex = $index" :class="{'active': tabIndex === $index}">{{ item.label }}</li>
       </ul>
     </div>
     <div class="row min-height">
@@ -21,11 +22,11 @@
       <div class="col-9 col-offset-1">
         <div class="row">
           <div class="col-20 col-offset-4">
-            <statistic :total="avg.count" :change="avg.change" :title="avgTitle" :tooltip="avgTooltip" color="orange" :titletop="true">
+            <statistic :total="avg.count" :change="avg.change" :title="$t('common.avg_increase', {period: period})" :tooltip="$t('common.avg_increase', {period: period})" color="orange" :titletop="true">
           </div>
         </div>
         <div class="top">
-          <h3>{{period}}天激活TOP<span v-show="!loadingTrend">{{topOptions.series[0].data.length}}</span></h3>
+          <h3><span v-show="!loadingTrend">{{ $t('operation.overview.product_trend.top', {period: period, n: topOptions.series[0].data.length}) }}</span></h3>
           <chart :options="topOptions" :loading="loadingTrend" height="120px"></chart>
         </div>
       </div>
@@ -35,7 +36,7 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import RadioButtonGroup from 'components/RadioButtonGroup'
+// import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 import Statistic from 'components/Statistic2'
 import { createDayRange, patchLostDates } from 'utils'
@@ -43,7 +44,7 @@ import api from 'api'
 import truncate from 'filters/truncate'
 import formatDate from 'filters/format-date'
 import { CHART_COLORS } from 'consts/config'
-import _ from 'lodash'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 
 export default {
   name: 'ProductTrend',
@@ -51,9 +52,10 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    RadioButtonGroup,
+    // RadioButtonGroup,
     Chart,
-    Statistic
+    Statistic,
+    DateTimeMultiplePicker
   },
 
   vuex: {
@@ -75,20 +77,15 @@ export default {
         series: [],
         xAxis: []
       },
+      periods: [7, 30, 90],
+      defaultPeriod: 7,
+      beforeTime: 1,
       doubled: 0, // 两倍时间段数据总和
       latest: 0 // 时间段数据总和
     }
   },
 
   computed: {
-    avgTitle () {
-      return this.period + '天平均增长'
-    },
-
-    avgTooltip () {
-      return this.period + '天平均增长'
-    },
-
     avg () {
       return {
         count: parseInt((this.latest * 2 - this.doubled) / this.period), // (后段 - 前段) / 时间段
@@ -199,7 +196,7 @@ export default {
         },
         series: [
           {
-            name: `${this.period}天激活数`,
+            name: this.$t('operation.overview.product_trend.activated', {period: this.period}),
             type: 'bar',
             barMaxWidth: 16, // 柱条的最大宽度
             itemStyle: {
@@ -236,6 +233,15 @@ export default {
     },
 
     /**
+     * 时间组件时间改变回调
+     */
+    onTimeChange (start, end) {
+      this.period = parseInt((end - start) / 1000 / 60 / 60 / 24) + 1
+      this.beforeTime = parseInt((new Date() - end) / 1000 / 60 / 60 / 24)
+      this.getTrend()
+    },
+
+    /**
      * 获取产品激活趋势数据
      * 遍历产品列表，获取每种产品的激活趋势数据
      * @author shengzhi
@@ -251,7 +257,7 @@ export default {
       this.loaded = 0
       this.releasedProducts.forEach((product, index) => {
         // 数据日期范围
-        let range = createDayRange(1, this.period * 2)
+        let range = createDayRange(this.beforeTime, this.period * 2)
 
         api.statistics.getProductTrend(product.id, range.start, range.end).then((res) => {
           // 日期数据补全，缺失的日期数据全部补0
@@ -307,5 +313,6 @@ export default {
     text-indent 100px
     text-align left
     margin 10px 0 5px
+    height 20px
     color gray
 </style>

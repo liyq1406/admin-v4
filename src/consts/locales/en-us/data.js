@@ -2,7 +2,7 @@
  * 英文数据翻译
  */
 
-// 账号类型
+// 账户类型
 export const ACCOUNT_TYPES = [
   { value: 1, label: 'Consumer electronics' },
   { value: 2, label: 'Smart Home' },
@@ -15,165 +15,175 @@ export const ACCOUNT_TYPES = [
 ]
 
 // 告警类型
-export const ALERT_TYPES = ['通知类型', '告警类型']
+export const ALERT_TYPES = ['Message Type', 'Alert Type']
 
 // 通知类型
-export const INFORM_TYPES = ['通知与预警']
+export const INFORM_TYPES = ['Notification And Alert']
 
 // 默认时间段
 export const PERIODS = [
-  { label: '7天', value: 7 },
-  { label: '30天', value: 30 },
-  { label: '90天', value: 90 }
+  { label: '7 Day', value: 7 },
+  { label: '30 Day', value: 30 },
+  { label: '90 Day', value: 90 }
 ]
 
 // 包含全部时间段
 export const AllPERIODS = [
-  { label: '7天', value: 7 },
-  { label: '30天', value: 30 },
-  { label: '全部', value: 'all' }
+  { label: '7 Day', value: 7 },
+  { label: '30 Day', value: 30 },
+  { label: 'All', value: 'all' }
 ]
 
 // 一天到三十天时间段
 export const PERIODS_MAP = {
-  1: '24h',
-  7: '7天',
-  15: '15天',
-  30: '30天',
-  60: '60天',
-  90: '90天'
+  1: '1 Day',
+  7: '7 Day',
+  15: '15 Day',
+  30: '30 Day',
+  60: '60 Day',
+  90: '90 Day'
 }
 
-// 设备类型
-export const DEVICE_TYPES = ['WiFi设备', 'Zigbee网关', '蓝牙设备', '蓝牙Mesh设备', 'PC设备']
+// Device Type
+export const DEVICE_TYPES = ['WiFi Device', 'Zigbee Gateway', 'Bluetooth Device', 'Bluetooth Mesh Device', 'PC Device']
 
-// 产品类型
+// Product Type
 export const PRODUCT_TYPES = [
-  { label: '未定义', value: 0 },
-  { label: '消费电子', value: 1 },
-  { label: '智能家居', value: 2 },
-  { label: '智能安防', value: 3 },
-  { label: '商用/工控设备', value: 4 },
-  { label: '照明电工', value: 5 },
-  { label: '生活电器', value: 6 },
-  { label: '暖通空气', value: 7 },
-  { label: '其他', value: 8 }
+  { label: 'Undefined', value: 0 },
+  { label: 'Consumer Electronics', value: 1 },
+  { label: 'Smart Furnishing', value: 2 },
+  { label: 'Smart Security', value: 3 },
+  { label: 'Commercial/Industrial Equipment', value: 4 },
+  { label: 'Eletric Lightning', value: 5 },
+  { label: 'Electric Appliance', value: 6 },
+  { label: 'Central Heating', value: 7 },
+  { label: 'Others', value: 8 }
 ]
 
-// 产品扫描订阅策略类型
+// Order Type
 export const SCAN_MODES = [
-  { label: '只允许单个用户订阅设备', value: 1 },
-  { label: '允许多用户订阅设备', value: 2 }
+  { label: 'Single user order only.', value: 1 },
+  { label: 'Accept multi-user order.', value: 2 }
 ]
 
-// 设备筛选待选项
+// Device Filter
 export const DEVICE_VISIBILITY_OPTIONS = [
-  { label: '全部', value: 'all' },
-  { label: '在线', value: 'online' },
-  { label: '下线', value: 'offline' },
-  { label: '激活', value: 'active' },
-  { label: '未激活', value: 'inactive' }
+  { label: 'All', value: 'all' },
+  { label: 'Online', value: 'online' },
+  { label: 'Offline', value: 'offline' },
+  { label: 'Activated', value: 'active' },
+  { label: 'Inactivated', value: 'inactive' }
 ]
 
-// 固件类型
+// 时间区段筛选待选项
+export const TIME_RANGE_OPTIONS = [
+  { label: 'Any', value: 'any' },
+  { label: 'Specified', value: 'specified' }
+]
+
+// Firmware Type
 export const FIRMWARE_TYPES = [
   { label: 'WIFI', value: 1 },
   { label: 'MCU', value: 2 },
-  { label: '子设备', value: 3 }
+  { label: 'Sub-device', value: 3 }
 ]
 
 // 产品活跃时间段
 export const ACTIVE_PERIODS = [
-  { label: '1天', value: 1 },
-  { label: '7天', value: 7 },
-  { label: '30天', value: 30 }
+  { label: '1 day', value: 1 },
+  { label: '7 days', value: 7 },
+  { label: '30 days', value: 30 }
 ]
 
 // 平均时间段
 export const AVG_PERIODS = [
-  { label: '近7天', value: 7 },
-  { label: '近30天', value: 30 }
+  { label: '7 days', value: 7 },
+  { label: '30 days', value: 30 }
 ]
 
 // 产品过滤器
 export const PRODUCT_FILTERS = [
-  { label: '激活设备', value: 'added' },
+  { label: 'New Activated', value: 'added' },
   // { label: '在线设备', value: 'online' },
-  { label: '累计激活', value: 'all' }
+  { label: 'Total Activated', value: 'all' }
 ]
 
 // 用户过滤器
 export const USER_FILTERS = [
-  { label: '新增用户', value: 'added' },
-  { label: '活跃用户', value: 'active' },
-  { label: '累计用户', value: 'all' }
+  { label: 'New User', value: 'added' },
+  { label: 'Active User', value: 'active' },
+  { label: 'Total User', value: 'all' }
 ]
 
 // 成员类型
-export const MEMBER_TYPES = ['管理员', '普通成员']
+export const MEMBER_TYPES = {
+  '1': 'Administrator',
+  '2': 'Operator',
+  '3': 'Developer'
+}
 
 // 成员状态类型
-export const MEMBER_STATUS_TYPES = ['待激活', '启用', '已停用']
+export const MEMBER_STATUS_TYPES = ['To be Activated', 'Enable', 'Disabled']
 
 // 数据端点类型
 export const DATAPOINT_TYPES = [
-  { value: 1, label: '布尔类型' },
-  { value: 2, label: '单字节(无符号)', min: 0, max: 255 },
-  { value: 3, label: '16位短整型(有符号)', min: -32768, max: 32767 },
-  { value: 4, label: '32位整型(有符号)', min: -2147483648, max: 2147483647 },
-  { value: 5, label: '浮点', min: -9223372036854775808, max: 9223372036854775807 },
-  { value: 6, label: '字符串' },
-  { value: 7, label: '字节数组' },
-  { value: 8, label: '16位短整型(无符号)', min: 0, max: 65535 },
-  { value: 9, label: '32位整型(无符号)', min: 0, max: 4294967295 }
+  { value: 1, label: 'Boolean' },
+  { value: 2, label: 'Single Byte(Unsigned)', min: 0, max: 255 },
+  { value: 3, label: 'Short Integer(Signed)', min: -32768, max: 32767 },
+  { value: 4, label: 'Integer(Signed)', min: -2147483648, max: 2147483647 },
+  { value: 5, label: 'Float', min: -9223372036854775808, max: 9223372036854775807 },
+  { value: 6, label: 'String' },
+  { value: 7, label: 'Char Array' },
+  { value: 8, label: 'Short Integer(UnSigned)', min: 0, max: 65535 },
+  { value: 9, label: 'Integer(Unsigned)', min: 0, max: 4294967295 }
 ]
 
 // 数据端点规则
-export const RULE_TYPES = ['数据端点', '设备状态']
+export const RULE_TYPES = ['Data Endpoint', 'Device Status']
 
 // 比对类型
-export const RULE_COMPARE_TYPES = ['等于', '大于', '小于', '大于或等于', '小于或等于', '不等于']
+export const RULE_COMPARE_TYPES = ['Equal', 'Large than', 'Less than', 'Large than or equal', 'Less than or equal', 'Not equal']
 
 // 通知类型
 export const RULE_INFORM_TYPES = [
   {
-    label: '通知类型',
+    label: 'Notification Type',
     value: 1
   },
   {
-    label: '告警类型',
+    label: 'Alert Type',
     value: 2
   }
 ]
 
 // 通知方式
-export const RULE_NOTIFY_TYPES = ['短信', '邮箱', '应用内推送', 'APN推送', 'Google推送']
+export const RULE_NOTIFY_TYPES = ['SMS', 'Email', 'App Push', 'APN Push', 'Google Push']
 
 // 可见范围类型
-export const RULE_SCOPE_TYPES = ['企业可见', '用户可见', '全部可见']
+export const RULE_SCOPE_TYPES = ['Enterprise Only', 'User Only', 'All']
 
 // 候选标签
-export const RULE_CANDIDATE_TAGS = ['严重', '轻微', '通知']
+export const RULE_CANDIDATE_TAGS = ['Critical', 'Warning', 'Notification']
 
 // 数据表类型
-export const TABLE_TYPES = ['用户公开表', '用户私有表', '应用数据表']
+export const TABLE_TYPES = ['User Public Table', 'User Private Table', 'Application Data Table']
 
 // 数据表字段类型
 export const TABLE_FIELD_TYPES = [
-  { label: '字符串', value: 'string' },
-  { label: '32位整形数字', value: 'int' },
-  { label: '布尔类型', value: 'boolean' },
-  { label: '浮点类型', value: 'float' },
-  { label: '日期类型', value: 'date' }
+  { label: 'String', value: 'string' },
+  { label: 'Integer', value: 'int' },
+  { label: 'Boolean', value: 'boolean' },
+  { label: 'Float', value: 'float' },
+  { label: 'Date', value: 'date' }
 ]
 
 // 数据表权限类型
 export const TABLE_PERMISSION_TYPES = [
-  { label: '添加', value: 'create' },
-  { label: '获取', value: 'get' },
-  { label: '查找', value: 'find' },
-  { label: '修改', value: 'update' },
-  { label: '删除', value: 'delete' }
+  { label: 'Create', value: 'create' },
+  { label: 'Get', value: 'get' },
+  { label: 'Find', value: 'find' },
+  { label: 'Update', value: 'update' },
+  { label: 'Delete', value: 'delete' }
 ]
 
 // APP 类型
@@ -181,21 +191,21 @@ export const APP_TYPES = [
   { disabled: false, label: 'iOS' },
   { disabled: false, label: 'Android' },
   { disabled: false, label: 'Web' },
-  { disabled: false, label: '微信' }
+  { disabled: false, label: 'Wechat' }
 ]
 
 // 加密类型
 export const APP_ENCRYPT_TYPES = [
-  { label: '明文模式', info: '明文模式下，不使用消息体加解密功能，安全系数较低' },
-  { label: '兼容模式', info: '兼容模式下，明文、密文将共存，方便开发者调试和维护' },
-  { label: '安全模式（推荐）', info: '安全模式下，消息包为纯密文，需要开发者加密和解密，安全系数高' }
+  { label: 'Plaintext Mode', info: 'Under plaintext mode, no encryption/decryption function is used in message body, the security coefficient is comparatively low.' },
+  { label: 'Compatible Mode', info: 'Under compatible mode, plain text and ciphertext coexist, which is convenient for developers to debug and maintain.' },
+  { label: 'Safe Mode (Recommended)', info: 'Under safe mode, messages are all ciphertext, encryption and decryption are needed, but with high security coefficient.' }
 ]
 
 // 支持转发数据的类型
-export const DATA_FORWARD_TYPES = ['设备上线', '设备下线', '设备激活', 'Pipe包', '设备同步包', '用户上线', '用户下线']
+export const DATA_FORWARD_TYPES = ['Device Online', 'Device Offline', 'Activated', 'Pipe Package', 'Device Sync Package', 'User Online', 'User Offline']
 
 // 数据目的地
-export const DATA_DESTINATIONS = ['转发到外部url', '转发到内部插件处理单元']
+export const DATA_DESTINATIONS = ['Forward to outgoing url', 'Forward to the internal plugin processing unit']
 
 // 邮件模板语言
 export const MAIL_TEMPLATE_LANGUAGES = [
@@ -205,35 +215,39 @@ export const MAIL_TEMPLATE_LANGUAGES = [
 
 // 产品快照存储时间间隔
 export const SNAPSHOT_INTERVAL = [
-  { label: '10分钟', value: 10 },
-  { label: '20分钟', value: 20 },
-  { label: '30分钟', value: 30 },
-  { label: '1小时', value: 60 }
+  { label: '10min', value: 10 },
+  { label: '20min', value: 20 },
+  { label: '30min', value: 30 },
+  { label: '1hr', value: 60 }
 ]
 
 // 问题类型
 export const ISSUE_TYPES = [
-  { label: '新增问题', value: 0 },
-  { label: '待处理问题', value: 1 }
+  { label: 'New Issue', value: 0 },
+  { label: 'Pending Issue', value: 1 }
 ]
 
 // 告警级别
 export const ALERT_LEVELS = {
-  blue: '通知',
-  orange: '轻微',
-  red: '严重'
+  blue: 'Notification',
+  orange: 'Warning',
+  red: 'Critical'
 }
 
 // 企业成员操作类型
 export const OPERATE_TYPES = [
-  { label: '只读', value: 1 },
-  { label: '更新', value: 2 },
-  { label: '删除', value: 3 },
-  { label: '新增', value: 4 }
+  { label: 'Read only', value: 1 },
+  { label: 'Update', value: 2 },
+  { label: 'Delete', value: 3 },
+  { label: 'Create', value: 4 }
 ]
+
+export const WEEK_RANGE = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
+
+export const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
 // 警告信息
 export const ALERT_MESSAGES = {
-  not_published: '您尚未发布产品，请在开发平台完成产品发布。如需了解运营平台功能您可以通过<a class="hl-red" href="http://ap.xlink.cn/#!/auto-login" target="_blank">查看demo</a>了解示例',
-  not_authorized: '您尚未获得此应用的使用权限，请联系商务获取支持，<a class="hl-red" href="http://www.xlink.cn/about.html" target="_blank">查看联系方式</a>'
+  not_published: 'You have not released product. Please release your product in the development platform. If you need to learn about the functions of the operation platform, you could run <a class="hl-red" href="http://ap.xlink.cn/#!/auto-login" target="_blank">view demo</a> to view the examples',
+  not_authorized: 'You have not got the access permission of this application. Please contact business for support. <a class="hl-red" href="http://www.xlink.cn/about.html" target="_blank">view contact information</a>'
 }

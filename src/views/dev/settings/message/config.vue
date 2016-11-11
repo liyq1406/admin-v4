@@ -7,18 +7,18 @@
             <form autocomplete="off" v-form name="validation">
               <div class="form-row row borbot">
                 <label class="checkbox">
-                  <input type="checkbox" v-model="codeEnable"/>
+                  <input type="checkbox" v-model="codeEnable" @change="setCaptcha"/>
                   <span>强制使用图形验证码</span>
                 </label>
               </div>
               <div class="form-row row">
                 <label class="radio">
-                  <input type="radio" v-model="selectType" :value=1 @change="" number/>使用云智易默认短信运营商
+                  <input type="radio" v-model="selectType" :value=1 @change="getThird" number/>使用云智易默认短信运营商
                 </label>
               </div>
               <div class="form-row row">
                 <label class="radio">
-                  <input type="radio" v-model="selectType" :value=2 @change="" number/>使用厂商自由短信运营商渠道
+                  <input type="radio" v-model="selectType" :value=2 @change="getThird" number/>使用厂商自由短信运营商渠道
                 </label>
                 <div v-if="this.selectType===2" class="form">
                   <div class="form-row row">
@@ -51,7 +51,7 @@
               <div class="form-row row">
                 <div class="form-control col-7">
                   <label class="radio">
-                    <input type="radio" v-model="selectType" :value=3 @change="" number/>使用自定义短信运营商
+                    <input type="radio" v-model="selectType" :value=3 @change="getThird" number/>使用自定义短信运营商
                   </label>
                 </div>
                 <div v-if="this.selectType===3 && this.operators.length" class="col-8">
@@ -169,8 +169,50 @@
     },
     ready () {
       this.getMessageAcount()
+      this.firstGetThird()
+      this.getCaptcha()
     },
     methods: {
+      getCaptcha () {
+        api.message.getCaptcha().then((res) => {
+          if (res.status === 200) {
+            console.log(res.data)
+            if (res.data.need_captcha_times === 0) {
+              // 启用图形验证码
+              this.codeEnable = true
+            } else {
+              this.codeEnable = res.data.need_captcha_times
+              this.codeEnable = false
+            }
+          }
+        }).catch((res) => {
+          this.loadingData = false
+          this.handleError(res)
+        })
+      },
+      setCaptcha () {
+        var obj = {
+          need_captcha_times: ''
+        }
+        if (this.codeEnable === false) {
+          // 未设置图形验证码
+          obj.need_captcha_times = 6
+        } else if (this.codeEnable === true) {
+          obj.need_captcha_times = 0
+        }
+        api.message.setCaptcha(obj).then((res) => {
+          if (res.status === 200) {
+            this.showNotice({
+              type: 'success',
+              content: '图形验证码设置成功！'
+            })
+          }
+        }).catch((res) => {
+          this.loadingData = false
+          this.codeEnable = !this.codeEnable
+          this.handleError(res)
+        })
+      },
       verificateUrl () {
         if (this.customizeModel.checking) {
           return
@@ -198,6 +240,30 @@
           this.handleError(res)
         })
       },
+      getThird () {
+        if (this.selectType === 2) {
+          api.message.getThirdAcount().then((res) => {
+            if (res.status === 200) {
+              this.customizeModel.url = res.data.url
+              this.customizeModel.token = res.data.token
+            }
+          }).catch((res) => {
+            this.loadingData = false
+            this.handleError(res)
+          })
+        }
+      },
+      firstGetThird () {
+        api.message.getThirdAcount().then((res) => {
+          if (res.status === 200) {
+            this.customizeModel.url = res.data.url
+            this.customizeModel.token = res.data.token
+          }
+        }).catch((res) => {
+          this.loadingData = false
+          this.handleError(res)
+        })
+      },
       /**
        * 获取列表
        */
@@ -214,7 +280,7 @@
             this.loadingData = false
             this.currentPage = 1
             this.operators = res.data.carrier
-            // 遍历列表是否有已设置的账号
+            // 遍历列表是否有已设置的帐号
             this.operators.forEach((item) => {
               if (item.default === true) {
                 this.curtomAble = true
@@ -239,8 +305,25 @@
         }
         api.message.setMessageAcount(params).then((res) => {
           if (res.status === 200) {
+            if (this.selectType === 2) {
+              var code = {
+                url: this.customizeModel.url,
+                token: this.customizeModel.token
+              }
+              api.message.addThirdAcount(code).then((res) => {
+                if (res.status === 200) {
+                  this.loadingData = false
+                  this.getMessageAcount()
+                }
+              }).catch((res) => {
+                this.loadingData = false
+                this.handleError(res)
+              })
+            } else {
+              this.getMessageAcount()
+            }
             this.loadingData = false
-            this.getMessageAcount()
+            // this.getMessageAcount()
             this.showNotice({
               type: 'success',
               content: '设置成功！'

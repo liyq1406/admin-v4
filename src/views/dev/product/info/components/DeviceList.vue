@@ -4,7 +4,7 @@
       <div class="filter-bar" slot="filter-bar">
         <div class="filter-group fr">
           <div class="filter-group-item">
-            <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" :max="(queryType.value === 'id'?2100000000: false)" @search="handleSearch" @press-enter="getDevices(true)">
+            <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" :max="(queryType.value === 'id'?2100000000: false)" @search="handleSearch" @press-enter="getDevices(true)">
               <x-select width="90px" :label="queryType.label" size="small">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -56,8 +56,6 @@ import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import Modal from 'components/Modal'
 import Select from 'components/Select'
-import store from 'store'
-import _ from 'lodash'
 import formatDate from 'filters/format-date'
 // import BatchExportQr from './batch-export-qr'
 
@@ -65,8 +63,6 @@ export default {
   name: 'deviceList',
 
   mixins: [globalMixins],
-
-  store,
 
   vuex: {
     actions: {

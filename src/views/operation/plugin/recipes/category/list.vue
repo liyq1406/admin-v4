@@ -26,7 +26,6 @@ import Table from 'components/Table'
 import CategoryModal from './components/CategoryModal'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
-import _ from 'lodash'
 
 export default {
   name: 'CategoryList',
@@ -96,7 +95,7 @@ export default {
       this.categories.forEach((item) => {
         result.push({
           name: `<a class="hl-red">${item.name}</a>`,
-          instructions: item.instructions || '<span class="hl-gray">暂无描述</span>',
+          instructions: item.instructions || '<span class="hl-gray">描述类别的内容</span>',
           operation: '<a class="hl-red">编辑</a>',
           origin: item
         })

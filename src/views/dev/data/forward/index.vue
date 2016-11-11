@@ -25,7 +25,7 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')"></search-box>
+                <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')"></search-box>
               </div>
             </div>
           </div>
@@ -75,7 +75,6 @@ import Pager from 'components/Pager'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 // import locales from 'consts/locales/index'
-// import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
 

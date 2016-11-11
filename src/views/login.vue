@@ -1,52 +1,57 @@
 <template>
   <div class="auth-form login-form">
     <div class="inner">
-      <div class="form-legend">云智易物联云平台企业管理台</div>
+      <div class="form-legend">{{ $t('layout.platform.name') }}</div>
       <div class="form">
         <validator name="authValidation">
           <form novalidate @submit.prevent="onSubmit">
             <div class="form-row">
-              <div v-placeholder="$t('ui.auth.email_phone')" class="input-text-wrap">
+              <div v-placeholder="$t('auth.email_phone')" class="input-text-wrap">
                 <input type="text" v-model="model.account" name="model.account" v-validate:account="{required: true}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.account.touched && $authValidation.account.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.account')}) }}</span>
+                <span v-if="$authValidation.account.touched && $authValidation.account.required">{{ $t('common.validation.required', {field: $t('auth.fields.account')}) }}</span>
               </div>
             </div>
             <div class="form-row">
-              <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
+              <div v-placeholder="$t('auth.password')" class="input-text-wrap">
                 <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
+                <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
               </div>
             </div>
             <div class="form-row row-check">
-              <a v-link="{ path: '/fetch-password-bymail' }">{{ $t("ui.auth.forget") }}</a>
+              <a v-link="{ path: '/fetch-password-bymail' }">{{ $t("auth.forget") }}</a>
               <label class="checkbox">
-                <input type="checkbox" v-model="rememberPwd"/>{{ $t("ui.auth.remember") }}
+                <input type="checkbox" v-model="rememberPwd"/>{{ $t("auth.remember") }}
               </label>
             </div>
             <div class="form-actions">
-              <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('ui.auth.login_submitting') : $t('ui.auth.login_submit')" class="btn btn-primary btn-xlg btn-pill focus-input">{{ $t("ui.auth.login_submit") }}</button>
+              <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submitting') : $t('auth.login_submit')" class="btn btn-primary btn-xlg btn-pill focus-input">{{ $t("auth.login_submit") }}</button>
             </div>
-            <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("ui.auth.register") }}</a></div>
+            <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a></div>
           </form>
         </validator>
       </div>
     </div>
-    <div class="old-entrance" v-if="isShowOldEntrance">
-      <a href="http://admin-v3.xlink.cn/" target="_blank">登录旧版管理台 &gt;</a>
+    <div class="extra-actions">
+      <div class="old-entrance" v-if="isShowOldEntrance">
+        <a href="http://admin-v3.xlink.cn/" target="_blank">{{ $t('auth.old_entrance') }} &gt;</a>
+      </div>
+      <div class="lang-switcher">
+        <a href="#" :class="{'active': currLang === 'zh-cn'}" @click.prevent.stop="switchLanguage('zh-cn')">中文</a> / <a href="#" :class="{'active': currLang === 'en-us'}"  @click.prevent.stop="switchLanguage('en-us')">English</a>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
   import api from 'api'
   import { globalMixins } from 'src/mixins'
   import { setLoadingStatus } from 'store/actions/system'
   import { IS_SHOW_OLD_ENTRANCE } from 'consts/config'
-  import store from 'store/index'
 
   export default {
     name: 'LoginForm',
@@ -54,8 +59,6 @@
     layouts: ['auth'],
 
     mixins: [globalMixins],
-
-    store,
 
     vuex: {
       getters: {
@@ -68,6 +71,7 @@
 
     data () {
       return {
+        currLang: window.localStorage.getItem('lang'),
         isShowOldEntrance: IS_SHOW_OLD_ENTRANCE,
         model: {
           account: '',
@@ -86,7 +90,7 @@
         if (this.isLoginSuccess) {
           this.showNotice({
             type: 'success',
-            content: '登录成功！'
+            content: this.$t('auth.login_success')
           })
         }
       }
@@ -102,6 +106,18 @@
     },
 
     methods: {
+      /**
+       * 切换语言
+       */
+      switchLanguage (lang) {
+        if (lang !== this.currLang) {
+          this.currLang = lang
+          window.localStorage.setItem('lang', lang)
+          Vue.config.lang = lang
+          document.location.reload()
+        }
+      },
+
       // 设置 Cookies
       setCookie (name, value) {
         var Days = 30
@@ -208,12 +224,26 @@
         .btn
           cursor wait
 
-  .old-entrance
+  .extra-actions
     width 500px
     margin 10px auto 0
-    text-align right
+    color #CCC
+    clearfix()
 
     a
-      margin-right 10px
       color #CCC
+
+      &:hover
+        color #FFF
+        text-decoration underline
+
+      &.active
+        color #FFF
+
+    .lang-switcher
+      margin-left 10px
+
+    .old-entrance
+      float right
+      margin-right 10px
 </style>

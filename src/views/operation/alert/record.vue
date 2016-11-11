@@ -1,13 +1,13 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>告警记录</h2>
+      <h2>{{ $t('operation.alert.record.title') }}</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
           <x-select :label="currentProduct.name" width="110px" size="small">
-            <span slot="label">产品</span>
+            <span slot="label">{{ $t('operation.alert.record.product') }}</span>
             <select v-model="currentProduct" @change="productSelected">
               <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
               <option v-for="product in products" :value="product">{{ product.name }}</option>
@@ -36,7 +36,10 @@
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getAlerts(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getAlerts(true)">
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="getAlerts(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getAlerts(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -53,75 +56,32 @@
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
+
+              <template v-if="debug">
+                <span class="ml10">{{ $t('operation.product.device.alert.time') }}: </span>
+                <x-select width="98px" size="small" :label="rangeOption.label">
+                  <select v-model="rangeOption" @change="onRangeOptionChange">
+                    <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                  </select>
+                </x-select>
+                <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
+              </template>
+
             </div>
           </div>
           <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
-            <label>标记为:</label>
-            <button class="btn btn-ghost" @click="setDeal">已处理</button>
-            <button class="btn btn-ghost" @click="setUnDeal">未处理</button>
+            <label>{{ $t('operation.alert.record.sign') }}:</label>
+            <button class="btn btn-ghost" @click="setDeal">{{ $t('operation.alert.record.processed') }}</button>
+            <button class="btn btn-ghost" @click="setUnDeal">{{ $t('operation.alert.record.no_processed') }}</button>
           </div>
         </x-table>
       </div>
     </div>
-    <!-- 查看告警信息浮层-->
-    <modal :show.sync="showModal">
-      <h3 slot="header">{{ $t("ui.alert.info") }}</h3>
-      <table slot="body" class="table table-stripe table-bordered">
-        <tbody>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.product_name") }}</td>
-            <td>{{ model.product_name }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.alert_name") }}</td>
-            <td>{{ model.alert_name }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.content") }}</td>
-            <td>{{ model.content }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.tags") }}</td>
-            <td>
-              <template v-if="model.tags"><span v-for="tag in model.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>
-            </td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.type") }}</td>
-            <td><span>{{ informTypes[model.type - 1] }}</span></td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.notify_type") }}</td>
-            <td><span>{{ alertTypes[model.notify_type - 1] }}</span></td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.alert_value") }}</td>
-            <td>{{ model.alert_value }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.from") }}</td>
-            <td>{{ model.from }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.to") }}</td>
-            <td>{{ model.to }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.create_date") }}</td>
-            <td>{{ model.create_date | formatDate }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div slot="footer" class="modal-footer">
-        <button @click.prevent.stop="showModal = false" class="btn btn-primary">{{ $t("common.ok") }}</button>
-      </div>
-    </modal>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-// import _ from 'lodash'
 import api from 'api'
 import * as config from 'consts/config'
 import locales from 'consts/locales/index'
@@ -135,6 +95,7 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
 
 // TODO 消除代码冗余 #weijie
 
@@ -151,7 +112,8 @@ export default {
     DateTimeMultiplePicker,
     'x-select': Select,
     'x-table': Table,
-    SearchBox
+    SearchBox,
+    DateTimeRangePicker
   },
 
   vuex: {
@@ -162,6 +124,7 @@ export default {
 
   data () {
     return {
+      exporting: false,
       searching: false,
       defaultPeriod: 7,
       currentProduct: {},
@@ -170,7 +133,6 @@ export default {
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
-      showModal: false,
       model: {
         id: '',
         type: 1,
@@ -192,22 +154,22 @@ export default {
       informTypes: locales[Vue.config.lang].data.INFORM_TYPES,
       alertSummary: {
         unread: {
-          title: '待处理告警',
+          title: this.$t('operation.alert.record.untreated'),
           total: '--',
           change: 0
         },
         today: {
-          title: '今日告警',
+          title: this.$t('operation.alert.record.today_add'),
           total: '--',
           change: 0
         },
         week: {
-          title: '7天告警数',
+          title: this.$t('operation.alert.record.sevent_add'),
           total: '--',
           change: 0
         },
         month: {
-          title: '30天告警数',
+          title: this.$t('operation.alert.record.thirty_add'),
           total: '--',
           change: 0
         }
@@ -218,55 +180,59 @@ export default {
       endTimePick: '',
       queryTypeOptions: [
         { label: 'MAC', value: 'mac' },
-        { label: '设备ID', value: 'from' },
-        { label: '告警内容', value: 'content' }
+        { label: this.$t('operation.alert.record.device_id'), value: 'from' },
+        { label: this.$t('operation.alert.record.alert_content'), value: 'content' }
       ],
       queryType: {
         label: 'MAC',
         value: 'mac'
       },
       visibility: {
-        label: '全部等级',
+        label: this.$t('operation.alert.record.all_level'),
         value: 'all'
       },
       visibilityOptions: [
-        { label: '全部等级', value: 'all' },
-        { label: '通知', value: '通知' },
-        { label: '轻微', value: '轻微' },
-        { label: '严重', value: '严重' }
+        { label: this.$t('operation.product.alert.all_level'), value: 'all' },
+        { label: this.$t('operation.product.alert.info'), value: this.$t('operation.product.alert.info') },
+        { label: this.$t('operation.product.alert.warning'), value: this.$t('operation.product.alert.warning') },
+        { label: this.$t('operation.product.alert.danger'), value: this.$t('operation.product.alert.danger') }
       ],
       headers: [{
         key: 'content',
-        title: '告警内容'
+        title: this.$t('operation.product.device.alert.alert_content')
       }, {
         key: 'mac',
-        title: '设备MAC',
-        class: 'wp15'
+        title: this.$t('operation.product.device.alert.mac')
       }, {
         key: 'id',
-        title: '设备ID',
-        class: 'wp10'
+        title: this.$t('operation.product.device.alert.device_id')
       }, {
         key: 'create_date',
-        title: '时间',
-        sortType: -1,
-        class: 'wp15'
+        title: this.$t('operation.product.device.alert.time'),
+        sortType: -1
       }, {
         key: 'duration',
-        title: '持续时长',
+        title: this.$t('operation.product.device.alert.time_length'),
         class: 'wp10'
       }, {
         key: 'level',
-        title: '告警等级',
+        title: this.$t('operation.product.device.alert.alert_level'),
         class: 'wp8'
       }, {
         key: 'state',
-        title: '状态',
+        title: this.$t('operation.product.device.alert.state'),
         class: 'wp6'
       }],
       showBatchBtn: false,
       dealList: [],
-      selecting: true
+      selecting: true,
+      rangeOption: {
+        label: this.$t('common.any'),
+        value: 'any'
+      },
+      timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
+      startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+      endTime: new Date()
     }
   },
 
@@ -280,11 +246,10 @@ export default {
       }
     },
 
-    // 查询条件
-    queryCondition () {
+    // 基本筛选条件
+    baseCondition () {
       var condition = {
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
+        filter: ['alert_id', 'alert_name', 'content', 'create_date', 'from', 'id', 'is_read', 'location', 'mac', 'notify_type', 'product_id', 'product_name', 'tags', 'to', 'type'],
         order: {},
         query: {
           product_id: {
@@ -315,15 +280,22 @@ export default {
         }
       }
 
+      if (this.rangeOption.value === 'specified') {
+        condition.query['create_date'] = {
+          '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+          '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
+        }
+      }
+
       switch (this.visibility.value) {
-        case '通知':
-          condition.query['tags'] = { $in: ['通知'] }
+        case `${this.$t('operation.alert.record.info')}`:
+          condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.info')}`] }
           break
-        case '轻微':
-          condition.query['tags'] = { $in: ['轻微'] }
+        case `${this.$t('operation.alert.record.warning')}`:
+          condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.warning')}`] }
           break
-        case '严重':
-          condition.query['tags'] = { $in: ['严重'] }
+        case `${this.$t('operation.alert.record.danger')}`:
+          condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.danger')}`] }
           break
         default:
       }
@@ -337,12 +309,22 @@ export default {
       return condition
     },
 
+    // 列表查询条件
+    queryCondition () {
+      let condition = _.cloneDeep(this.baseCondition)
+
+      condition.limit = this.countPerPage
+      condition.offset = (this.currentPage - 1) * this.countPerPage
+
+      return condition
+    },
+
     tables () {
       var result = []
       this.alerts.forEach((item) => {
         let levelCls = ({
-          '轻微': 'text-label-warning',
-          '严重': 'text-label-danger'
+          [this.$t('operation.product.alert.warning')]: 'text-label-warning',
+          [this.$t('operation.product.alert.danger')]: 'text-label-danger'
         })[item.tags] || ''
 
         let content = '<a class="table-limit-width hl-red">' + item.content + '</a>'
@@ -352,8 +334,8 @@ export default {
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls} w50">${item.tags || '通知'}</div>`,
-          state: item.is_read ? '已处理' : '未处理',
+          level: `<div class="level level1 text-label ${levelCls}">${item.tags || this.$t('operation.product.alert.info')}</div>`,
+          state: item.is_read ? `<span class="hl-green">${this.$t('operation.product.alert.processed')}</span>` : `<span>${this.$t('operation.product.alert.no_processed')}</span>`,
           prototype: item
         }
         result.push(alert)
@@ -388,6 +370,56 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理时间区段改变
+     */
+    onRangeOptionChange () {
+      if (this.rangeOption.value === 'any') {
+        this.getAlerts(true)
+      }
+    },
+
+    /**
+     * 时间范围改变
+     * @param  {[type]} startDate [description]
+     * @param  {[type]} endDate   [description]
+     * @return {[type]}           [description]
+     */
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getAlerts(true)
+    },
+
+    /**
+     * 处理导出 CSV 按钮点击
+     */
+    onExportBtnClick () {
+      if (this.exporting) {
+        return
+      }
+
+      let postData = {
+        name: '告警列表',
+        describe: '告警列表',
+        type: 3,
+        params: this.baseCondition
+      }
+
+      this.exporting = true
+      api.exportTask.createTask(postData).then((res) => {
+        this.showNotice({
+          type: 'success',
+          content: this.$t('operation.settings.offline.export_success')
+        })
+        this.$route.router.go('/operation/settings/offline-data')
+        // this.onExportCancel()
+      }).catch((res) => {
+        this.exporting = false
+        this.handleError(res)
+      })
+    },
+
     productSelected () {
       this.getSummary()
       this.getAlerts(true)
@@ -441,13 +473,11 @@ export default {
      */
     prettyDuration (n) {
       let hours = (n / 3600000).toFixed(1)
-      let res = ''
       if (hours > 1) {
-        res = `${hours}小时`
+        return `${hours}${this.$t('operation.product.alert.hour')}`
       } else {
-        res = `${Math.floor(n / 60000)}分钟`
+        return `${Math.floor(n / 60000)}${this.$t('operation.product.alert.minutes')}`
       }
-      return res
     },
 
     // 切换搜索
@@ -521,21 +551,7 @@ export default {
         this.loadingData = false
       })
     },
-    /**
-     * 获取单条告警信息并弹出浮层显示
-     * @param  {Object} alert 目标告警信息
-     */
-    showAlert (alert) {
-      this.model = alert
-      this.showModal = true
-      api.alert.setAlertRead([alert.id]).then((res) => {
-        if (res.status === 200) {
-          alert.is_read = true
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
-    },
+
     selectChange (table) {
       var result = []
       table.forEach((item) => {

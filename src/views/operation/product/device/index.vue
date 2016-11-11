@@ -1,7 +1,7 @@
 <template>
   <div class="main device-details">
     <div class="main-title">
-      <h2>设备详情</h2>
+      <h2>{{ $t('operation.product.device.detail.title') }}</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt15 mb20 no-split-line">
@@ -19,7 +19,7 @@
           <div class="mt10 ml30">
             <x-map :location="deviceLocation" height="220px"></x-map>
             <div class="device-ip mt5">
-              <span v-show="!currVirtualDevice.ip"> 未激活 </span>
+              <span v-show="!currVirtualDevice.ip">{{ $t('operation.product.device.detail.not_actived') }}</span>
               <span v-show="currVirtualDevice.ip">{{ currVirtualDevice.ip }} </span>
               <span v-show="province">{{province}} {{city}}</span>
             </div>
@@ -40,7 +40,6 @@ import InfoList from 'components/InfoList'
 import Breadcrumb from 'components/Breadcrumb'
 import Map from 'components/Map'
 import { globalMixins } from 'src/mixins'
-import store from 'store'
 import { getCurrProduct, setCurrDevice, setCurrVirtualDevice } from 'store/actions/products'
 import formatDate from 'filters/format-date'
 
@@ -56,8 +55,6 @@ export default {
     InfoList,
     'x-map': Map
   },
-
-  store,
 
   vuex: {
     getters: {
@@ -79,10 +76,10 @@ export default {
       deviceLocation: [],
       secondaryNav: [],
       breadcrumbNav: [{
-        label: '全部',
+        label: this.$t('common.all'),
         link: `/operation/products/${this.$route.params.product_id}/devices`
       }, {
-        label: '设备详情'
+        label: this.$t('operation.product.device.detail.title')
       }]
     }
   },
@@ -99,7 +96,7 @@ export default {
 
     // 设备信息
     deviceInfo () {
-      let activeInfo = this.currDevice.is_active ? `已激活 ${formatDate(this.currDevice.active_date)}` : '未激活'
+      let activeInfo = this.currDevice.is_active ? this.$t('operation.product.device.detail.actived') + ' ' + formatDate(this.currDevice.active_date) : this.$t('operation.product.device.detail.not_actived')
       let onlineLongInfo = this.currVirtualDevice.online_count
 
       if (typeof onlineLongInfo !== 'undefined') {
@@ -110,31 +107,31 @@ export default {
 
       return {
         mac: {
-          label: 'MAC',
+          label: this.$t('operation.product.device.detail.mac'),
           value: this.currDevice.mac || '-'
         },
         onlineLong: {
-          label: '累计在线时长',
+          label: this.$t('operation.product.device.detail.online_long'),
           value: onlineLongInfo
         },
         isActive: {
-          label: '激活状态',
+          label: this.$t('operation.product.device.detail.active_status'),
           value: activeInfo
         },
         model: {
-          label: '型号',
+          label: this.$t('operation.product.device.detail.mode'),
           value: this.currentProduct.mode || '-'
         },
         firmware_mod: {
-          label: '固件版本',
+          label: this.$t('operation.product.device.detail.version'),
           value: this.currDevice.firmware_mod || '-'
         },
         id: {
-          label: '设备ID',
+          label: this.$t('operation.product.device.detail.device_id'),
           value: this.currDevice.id || '-'
         },
         sn: {
-          label: 'sn',
+          label: this.$t('operation.product.device.detail.sn'),
           value: this.currDevice.sn || '-'
         }
       }
@@ -154,26 +151,26 @@ export default {
 
       return {
         secondaryNav: [{
-          label: '设备状态',
+          label: this.$t('operation.product.device.detail.secondary.device'),
           link: { path: `${deviceDetailRoot}/info` }
         }, {
-          label: '历史数据',
+          label: this.$t('operation.product.device.detail.secondary.history'),
           link: { path: `${deviceDetailRoot}/history` }
         }, {
-          label: '告警信息',
+          label: this.$t('operation.product.device.detail.secondary.alert'),
           link: { path: `${deviceDetailRoot}/alerts` }
         }, {
-          label: '远程诊断',
+          label: this.$t('operation.product.device.detail.secondary.remote'),
           link: { path: `${deviceDetailRoot}/diagnose` }
         }, {
-          label: '用户信息',
+          label: this.$t('operation.product.device.detail.secondary.users'),
           link: { path: `${deviceDetailRoot}/users` }
         // 暂时隐藏
         // }, {
-        //   label: '维保记录',
+        //   label: this.$t('operation.product.device.detail.secondary.warranty'),
         //   link: { path: `${deviceDetailRoot}/warranty` }
         // }, {
-        //   label: '经销商',
+        //   label: this.$t('operation.product.device.detail.secondary.dealers'),
         //   link: { path: `${deviceDetailRoot}/dealers` }
         }]
       }

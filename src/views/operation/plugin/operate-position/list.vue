@@ -22,11 +22,11 @@
                 <label class="form-control col-6">名称：</label>
                 <div class="controls col-18">
                   <div class="input-text-wrap" v-placeholder="'请输入运营位名称'">
-                    <input type="text" class="input-text" v-model="modal.operationPostion.name" name="modal.operationPostion.name" v-validate:name="{required: true, minlength: 1, maxlength: 20, format: 'no-spaces-both-ends'}">
+                    <input type="text" class="input-text" v-model="modal.operationPostion.name" name="modal.operationPostion.name" v-validate:name="{required: true, minlength: 1, maxlength: 20, format: 'trim'}">
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: '名称'}) }}</span>
-                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', ['名称', 20]) }}</span>
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: '名称'}) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', ['名称', 20]) }}</span>
                     <span v-if="$validation.name.touched && $validation.name.format">名称不允许前后带空格</span>
                   </div>
                 </div>

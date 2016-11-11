@@ -138,7 +138,6 @@ import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
 import Switch from 'components/Switch'
 import Select from 'components/Select'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'Echo',

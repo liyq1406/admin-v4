@@ -97,7 +97,6 @@
   import LinkageItem from './components/LinkageItem'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   // import { pluginFactoryMixin } from '../../opration/plugin/mixins'
-  // import _ from 'lodash'
   import api from 'api'
 
   export default {

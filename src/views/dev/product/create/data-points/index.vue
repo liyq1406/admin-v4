@@ -190,7 +190,6 @@ import DataModel from './data-model'
 import { globalMixins } from 'src/mixins'
 import Validator from 'utils/Validator'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'Datapoints',

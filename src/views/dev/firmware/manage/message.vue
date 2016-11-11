@@ -47,7 +47,7 @@
         <div class="filter-bar">
           <!-- <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="" @search-activate="" @search-deactivate="" @search="" @press-enter="">
+              <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="" @search-activate="" @search-deactivate="" @search="" @press-enter="">
                 <x-select width="90px" :label="queryType.label" size="small">
                   <select v-model="queryType">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -82,7 +82,7 @@
                 <td><span v-if="firmware.type===1">WIFI</span><span v-if="firmware.type===2">MCU</span><span v-if="firmware.type===3">子设备</span></td>
                 <td><span v-if="firmware.identify===0">-</span><span v-else>{{ firmware.identify }}</span></td>
                 <td>{{ firmware.create_date | formatDate }}</td>
-                <td>{{ firmware.file_size | bytesPrettify }}</td>
+                <td>{{ firmware.file_size | prettyBytes }}</td>
                 <td>{{ firmware.file_md5 }}</td>
                 <td class="tac">
                   <!-- <button @click="onEditFirmware(firmware)" class="btn btn-link btn-mini">{{ $t('common.edit') }}</button> -->
@@ -111,7 +111,6 @@ import Pager from 'components/Pager'
 import Modal from 'components/Modal'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
-import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'
 import Statistic from 'components/Statistic2'

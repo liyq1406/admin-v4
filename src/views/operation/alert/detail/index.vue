@@ -1,7 +1,7 @@
 <template>
   <div class="main device-details">
     <div class="main-title">
-      <h2>告警详情</h2>
+      <h2>{{ $t('operation.alert.record.detail')}}</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt15 mb20 no-split-line">
@@ -11,8 +11,8 @@
             <div class="alert-record-summary">
 
               <div class="up">
-                <h3>{{ info.alert_name || '暂无'}}</h3>
-                <span v-for="tag in info.tags | toTags" :class="{'text-label-danger':info.tags==='严重', 'text-label-info':info.tags==='轻微'}" class="text-label">{{ info.tags || '暂无'}} </span>
+                <h3>{{ info.alert_name || $t('operation.alert.record.no') }}</h3>
+                <span v-for="tag in info.tags | toTags" :class="{'text-label-danger':info.tags===$t('operation.alert.record.danger'), 'text-label-info':info.tags===$t('operation.alert.record.warning')}" class="text-label">{{ info.tags || $t('operation.alert.record.no')}} </span>
               </div>
               <div class="down row">
                 <div class="col-12">
@@ -20,9 +20,9 @@
                   <!-- <span class="ml15">16:12:03</span> -->
                 </div>
                 <div class="col-12">
-                  <button class="btn btn-ghost fr ml10 hidden"><i class="fa fa-commenting"></i> 通知维保</button>
-                  <button class="btn btn-primary fr" v-if="info.is_read" @click="changeStyleUnread">重开任务</button>
-                  <button class="btn btn-ghost fr" v-else @click="changeStyle">标记为已处理</button>
+                  <button class="btn btn-ghost fr ml10 hidden"><i class="fa fa-commenting"></i>{{ $t('operation.alert.record.notice_warranty') }}</button>
+                  <button class="btn btn-primary fr" v-if="info.is_read" @click="changeStyleUnread">{{ $t('operation.alert.record.restart_task') }}</button>
+                  <button class="btn btn-ghost fr" v-else @click="changeStyle">{{ $t('operation.alert.record.sign_deal') }}</button>
                 </div>
               </div>
             </div>
@@ -37,7 +37,7 @@
           </div>
           <div class="mt10 ml30">
             <map v-if="this.deviceLocation.length > 0" :location="deviceLocation" height="220px"></map>
-            <div class="center" v-else>暂无地图数据</div>
+            <div class="center" v-else>{{ $t('operation.alert.record.no_map') }}</div>
           </div>
         </div>
       </div>
@@ -116,16 +116,16 @@ export default {
       //     value: '广东 顺德'
       //   },
       //   userId: {
-      //     label: '用户账号',
+      //     label: '用户帐号',
       //     value: '1992019201'
       //   }
       // },
       secondaryNav: [],
       breadcrumbNav: [{
-        label: '全部',
+        label: this.$t('common.all'),
         link: '/operation/alerts/record'
       }, {
-        label: '告警信息'
+        label: this.$t('operation.alert.record.alert_info')
       }],
       deviceLocation: []
     }
@@ -137,7 +137,7 @@ export default {
 
       return {
         secondaryNav: [{
-          label: '告警历史',
+          label: this.$t('operation.alert.record.history'),
           link: { path: `${deviceDetailRoot}/history` }
         // }, {
         //   label: '维保记录',
@@ -151,27 +151,27 @@ export default {
     deviceInfo () {
       var info = {
         device: {
-          label: '告警设备',
+          label: this.$t('operation.alert.record.alert_device'),
           value: this.info.product_name || '-'
         },
         status: {
-          label: '状态',
-          value: this.info.is_read ? '已处理' : '未处理'
+          label: this.$t('operation.alert.record.alert_status'),
+          value: this.info.is_read ? this.$t('operation.alert.record.processed') : this.$t('operation.alert.record.no_processed')
         },
         duration: {
-          label: '持续时长',
+          label: this.$t('operation.alert.record.time_length'),
           value: this.info.lasting + 'h' || '-'
         },
         createTime: {
-          label: '处理时间',
+          label: this.$t('operation.alert.record.deal_time'),
           value: this.info.read_time ? formatDate(this.info.read_time) : '-'
         },
         area: {
-          label: '告警地区',
+          label: this.$t('operation.alert.record.alert_region'),
           value: this.info.location || '-'
         },
         userId: {
-          label: '用户账号',
+          label: this.$t('operation.alert.record.user_id'),
           value: this.accounts.join(',') || '-'
         }
       }

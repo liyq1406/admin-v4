@@ -235,7 +235,7 @@ export default {
           subs: {
             auth: '授权管理',
             members: '成员管理',
-            account: '账号信息',
+            account: '帐号信息',
             mail_templates: '邮件模板'
           }
         },
@@ -247,7 +247,7 @@ export default {
   },
 
   // 用户菜单
-  user_menu: {
+  account_menu: {
     account: '帐号信息',
     quit: '退出'
   },
@@ -321,7 +321,7 @@ export default {
   },
 
   upload: {
-    file_size_msg: '文件大小不能大于{max}MB',
+    file_size_msg: '文件超过限定大小{max}MB，请重新上传',
     type_tips: '不是文本文件不能上传',
     read_err: '文件读取失败。',
     success_msg: '设备导入成功!',
@@ -522,7 +522,8 @@ export default {
       max: '最大值',
       range: '取值范围',
       symbol: '单位符号',
-      description: '描述'
+      description: '描述',
+      mode: '端点类型'
     }
   },
   // 安卓版本信息配置
@@ -745,7 +746,7 @@ export default {
     }
   },
 
-  // 账号信息
+  // 帐号信息
   account: {
     personal: '个人信息',
     corp: '企业信息',
@@ -773,7 +774,7 @@ export default {
       target: '请输入年销售目标'
     },
     fields: {
-      username: '账号',
+      username: '帐号',
       password: '密码',
       name: '经销商名称',
       linkman: '联系人',
@@ -917,7 +918,7 @@ export default {
     }
   },
 
-  // 天际账号管理
+  // 天际帐号管理
   account_manage: {
     search_condi: '网点名称'
   },

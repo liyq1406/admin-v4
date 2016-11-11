@@ -11,7 +11,7 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')"></search-box>
+              <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')"></search-box>
             </div>
           </div>
         </div>
@@ -29,7 +29,6 @@ import * as config from 'consts/config'
 import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import api from 'api'
-// import _ from 'lodash'
 
 export default {
   name: 'ProductInfo',

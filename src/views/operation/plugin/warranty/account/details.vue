@@ -267,7 +267,6 @@ import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
 import api from 'api'
 import * as config from 'consts/config'
-import _ from 'lodash'
 
 export default {
   name: 'AccountDetails',

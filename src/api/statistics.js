@@ -342,5 +342,17 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/statistics/snapshot/${snapshotId}/snapshot_statistic/${statisticsId}/${deviceId}`, params
     )
+  },
+  /**
+   * 依照统计规则产品维度数据端点统计
+   * @param  {String} snapshotId 快照id
+   * @param  {String} statisticsId  统计id
+   * @param  {Object} params  查询参数
+   * @return {Promise}
+   */
+  getProductSnapshotStatistic (snapshotId, statisticsId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/statistics/product_snapshot/${snapshotId}/snapshot_datapoint/${statisticsId}`, params
+    )
   }
 }

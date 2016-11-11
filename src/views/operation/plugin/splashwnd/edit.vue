@@ -74,18 +74,12 @@
   import { globalMixins } from 'src/mixins'
   import ImageUploader from 'components/ImageUploaderSplashWnd'
   import Breadcrumb from 'components/Breadcrumb'
-  import store from 'store'
   import api from 'api'
-  // import formatDate from 'filters/format-date'
-  // import _ from 'lodash'
-  // import { createDayRange } from 'utils'
 
   export default {
     name: 'AddBroadcast',
 
     mixins: [globalMixins],
-
-    store,
 
     vuex: {
       getters: {

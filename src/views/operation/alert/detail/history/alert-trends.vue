@@ -18,7 +18,6 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import { patchLostDates } from 'utils'
-import _ from 'lodash'
 
 export default {
   name: 'AlertTrends',

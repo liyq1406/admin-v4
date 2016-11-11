@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>告警分析详情</h2>
+      <h2>{{ $t('operation.alert.analysis.detail')}}</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="left-actions blockdiv clearfix mt10" slot="left-actions">
@@ -24,7 +24,10 @@
       <div class="filter-bar filter-bar-head filter-bar-lr">
         <div class="filter-group fr">
           <div class="filter-group-item">
-            <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getList(true)">
+            <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+          </div>
+          <div class="filter-group-item">
+            <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="getList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getList(true)">
               <x-select width="90px" :label="queryType.label" size="small">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -34,15 +37,15 @@
             </search-box>
           </div>
         </div>
-        <h3>告警列表</h3>
+        <h3>{{ $t('operation.alert.analysis.alert_list') }}</h3>
       </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
           <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange" @theader-create-date="sortBySomeKey" :selecting="selecting" @selected-change="selectChange">
             <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
-              <label>标记为:</label>
-              <button class="btn btn-ghost" @click="setDeal">已处理</button>
-              <button class="btn btn-ghost" @click="setUnDeal">未处理</button>
+              <label>{{ $t('operation.product.alert.sign') }}:</label>
+              <button class="btn btn-ghost" @click="setDeal">{{ $t('operation.product.alert.processed') }}</button>
+              <button class="btn btn-ghost" @click="setUnDeal">{{ $t('operation.product.alert.no_processed') }}</button>
             </div>
           </x-table>
         </div>
@@ -65,7 +68,6 @@ import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import locales from 'consts/locales/index'
 import Vue from 'vue'
-import _ from 'lodash'
 
 export default {
   name: 'Overview',
@@ -84,6 +86,7 @@ export default {
 
   data () {
     return {
+      exporting: false,
       alert: {
         tag: '',
         name: ''
@@ -98,7 +101,7 @@ export default {
       key: '',
       queryTypeOptions: [
         { label: 'MAC', value: 'mac' },
-        { label: '设备ID', value: 'from' }
+        { label: this.$t('operation.alert.analysis.device_id'), value: 'from' }
       ],
       queryType: {
         label: 'MAC',
@@ -109,28 +112,28 @@ export default {
       headers: [
         {
           key: 'mac',
-          title: '设备MAC'
+          title: this.$t('operation.alert.analysis.mac')
         },
         {
           key: 'id',
-          title: '设备ID'
+          title: this.$t('operation.alert.analysis.device_id')
         },
         {
           key: 'create_date',
-          title: '时间',
+          title: this.$t('operation.alert.analysis.time'),
           sortType: -1
         },
         {
           key: 'duration',
-          title: '持续时长'
+          title: this.$t('operation.alert.analysis.time_length')
         },
         {
           key: 'state',
-          title: '状态'
+          title: this.$t('operation.alert.analysis.state')
         }
       ],
       breadcrumbNav: [{
-        label: '告警分析',
+        label: this.$t('operation.alert.analysis.title'),
         link: '/operation/alerts/analysis'
       }, {
         label: '当前'
@@ -157,10 +160,11 @@ export default {
         countPerPage: this.countPerPage
       }
     },
-    queryCondition () {
-      var params = {
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
+
+    // 基本筛选条件
+    baseCondition () {
+      var condition = {
+        filter: ['alert_id', 'alert_name', 'content', 'create_date', 'from', 'id', 'is_read', 'location', 'mac', 'notify_type', 'product_id', 'product_name', 'tags', 'to', 'type'],
         order: {},
         query: {
           alert_id: {
@@ -181,11 +185,11 @@ export default {
             temp = 2100000000
           }
           // 设备ID不能用模糊匹配
-          params.query.from = {
+          condition.query.from = {
             '$in': [temp]
           }
         } else {
-          params.query[this.queryType.value] = {
+          condition.query[this.queryType.value] = {
             '$like': this.key
           }
         }
@@ -193,12 +197,23 @@ export default {
 
       this.headers.map((item) => {
         if (item.sortType) {
-          params.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
+          condition.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
         }
       })
 
-      return params
+      return condition
     },
+
+    // 列表查询条件
+    queryCondition () {
+      let condition = _.cloneDeep(this.baseCondition)
+
+      condition.limit = this.countPerPage
+      condition.offset = (this.currentPage - 1) * this.countPerPage
+
+      return condition
+    },
+
     tables () {
       var result = []
       this.records.map((item) => {
@@ -207,7 +222,7 @@ export default {
           id: item.from,
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
-          state: item.is_read ? '已处理' : '未处理',
+          state: item.is_read ? this.$t('operation.product.alert.processed') : this.$t('operation.product.alert.no_processed'),
           prototype: item
         }
         result.push(alert)
@@ -217,6 +232,35 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理导出 CSV 按钮点击
+     */
+    onExportBtnClick () {
+      if (this.exporting) {
+        return
+      }
+
+      let postData = {
+        name: '告警列表',
+        describe: '告警列表',
+        type: 3,
+        params: this.baseCondition
+      }
+
+      this.exporting = true
+      api.exportTask.createTask(postData).then((res) => {
+        this.showNotice({
+          type: 'success',
+          content: this.$t('operation.settings.offline.export_success')
+        })
+        this.$route.router.go('/operation/settings/offline-data')
+        // this.onExportCancel()
+      }).catch((res) => {
+        this.exporting = false
+        this.handleError(res)
+      })
+    },
+
     /**
      * 按某个属性排序
      * 国辉
@@ -312,13 +356,11 @@ export default {
      */
     prettyDuration (n) {
       let hours = (n / 3600000).toFixed(1)
-      let res = ''
       if (hours > 1) {
-        res = `${hours}小时`
+        return `${hours}${this.$t('operation.product.alert.hour')}`
       } else {
-        res `${Math.floor(n / 60000)}分钟`
+        return `${Math.floor(n / 60000)}${this.$t('operation.product.alert.minutes')}`
       }
-      return res
     },
     // 标记为已处理
     setDeal () {

@@ -57,9 +57,9 @@
               </div>
               <div class="controls col-18">
                 <div class="input-radio-wrap">
-                  <input v-model="connectModel.type" type="radio" value="0" name="connect-type"/>
+                  <input v-model="connectModel.type" type="radio" :value="0" name="connect-type"/>
                   <label>TLS</label>
-                  <input v-model="connectModel.type" type="radio" value="1" name="connect-type"/>
+                  <input v-model="connectModel.type" type="radio" :value="1" name="connect-type"/>
                   <label>SSL</label>
                 </div>
               </div>
@@ -72,7 +72,7 @@
                 <div class="input-text-wrap">
                   <input v-model="connectModel.email" type="text" placeholder="请输入邮箱帐号" class="input-text" v-validate:name="{required: true, format: 'email'}" lazy/>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span>
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span>
                     <span v-if="$validation.name.modified && $validation.name.format">邮箱格式不正确</span>
                   </div>
                 </div>
@@ -208,14 +208,19 @@ export default {
               this.emailType = 0
             } else if (res.data.type === 2) {
               this.emailType = 1
-              this.customizeModel.url = res.data.third || res.data.third.host
-              this.customizeModel.token = res.data.third || res.data.third.token
+              this.customizeModel.url = res.data.third.host || ''
+              this.customizeModel.token = res.data.third.token || ''
             } else if (res.data.type >= 3) {
               this.emailType = 2
-              this.connectModel.host = res.data.smtp || res.data.smtp.host
-              this.connectModel.port = res.data.smtp || res.data.smtp.port
-              this.connectModel.password = res.data.smtp || res.data.smtp.pwd
-              this.connectModel.email = res.data.smtp || res.data.smtp.user
+              this.connectModel.host = res.data.smtp.host || ''
+              this.connectModel.port = res.data.smtp.port || ''
+              this.connectModel.password = res.data.smtp.pwd || ''
+              this.connectModel.email = res.data.smtp.user || ''
+              if (res.data.type === 3) {
+                this.connectModel.type = 0
+              } else {
+                this.connectModel.type = 1
+              }
             }
           }
         }

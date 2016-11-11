@@ -27,8 +27,7 @@
 
       // 标题
       title: {
-        type: String,
-        default: '温馨提示'
+        type: String
       },
 
       // 类型

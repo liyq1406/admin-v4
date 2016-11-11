@@ -7,7 +7,7 @@
           <i @click.stop="deleteTag(tag)" class="fa fa-times"></i>
         </div>
       </template>
-      <input type="text" v-model="newTag" @keydown.enter.prevent="addTag($event)" @keyup.8="deleteLastTag" @input="setInputWidth($event)" class="text-input"/>
+      <input type="text" v-model="newTag" v-if="!inputDisabled" @keydown.enter.prevent="addTag($event)" @keyup.8="deleteLastTag" @input="setInputWidth($event)" class="text-input"/>
       <div v-text="newTag" class="temp-text"></div>
     </div>
     <div :style="styleCandidate" v-show="filteredTags.length && editing" class="candidate">
@@ -37,6 +37,12 @@
       editing: {
         type: Boolean,
         twoWay: true,
+        default: false
+      },
+
+      // 是否允许用户输入
+      inputDisabled: {
+        type: Boolean,
         default: false
       }
     },

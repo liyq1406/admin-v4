@@ -51,7 +51,6 @@
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import Table from 'components/Table'
   import Modal from 'components/Modal'
-  // import _ from 'lodash'
 
   export default {
     name: 'AndroidUpgrade',

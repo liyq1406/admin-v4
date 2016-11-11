@@ -1,13 +1,15 @@
 import formatDate from './format-date'
-import bytesPrettify from './bytes-prettify'
+import prettyBytes from './pretty-bytes'
 import toFixed from './to-fixed'
 import toPercentage from './to-percentage'
 import truncate from './truncate'
+import wrapTag from './wrap-tag'
 
 export default {
   formatDate,
-  bytesPrettify,
+  prettyBytes,
   toFixed,
   toPercentage,
-  truncate
+  truncate,
+  wrapTag
 }

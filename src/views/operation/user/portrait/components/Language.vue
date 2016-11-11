@@ -13,7 +13,6 @@
 import Chart from 'components/Chart/index'
 import PercentTable from 'components/PercentTable'
 import api from 'api'
-import _ from 'lodash'
 
 export default {
   name: 'portrait-model',
@@ -29,15 +28,15 @@ export default {
       headers: [
         {
           key: 'language',
-          title: '语言'
+          title: this.$t('operation.user.portrait.lang.title')
         },
         {
           key: 'value',
-          title: '数量'
+          title: this.$t('common.count')
         },
         {
           key: 'percent',
-          title: '占比',
+          title: this.$t('common.percent'),
           sortType: -1
         }
       ],
@@ -82,7 +81,7 @@ export default {
           data: _.map(this.languages, 'name')
         },
         series: [{
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'pie',
           radius: '55%',
           center: ['50%', '60%'],
