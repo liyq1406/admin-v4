@@ -140,6 +140,39 @@ export default {
         return
       }
 
+      if (window.File && window.FileReader && window.FileList && window.Blob) {
+        var reader = new window.FileReader()
+        reader.onerror = (evt) => {
+          this.showNotice({
+            type: 'error',
+            content: this.$t('common.upload.read_err')
+          })
+        }
+
+        // 读取完成
+        reader.onloadend = (evt) => {
+          if (evt.target.readyState === window.FileReader.DONE) {
+            if (this.status !== 'uploading') {
+              this.xhrUpload(evt.target.result)
+            }
+          }
+        }
+
+        reader.readAsArrayBuffer(file)
+      } else {
+        this.showNotice({
+          type: 'error',
+          content: this.$t('common.upload.compatiblity')
+        })
+      }
+    },
+
+    /**
+     * XHR 上传
+     * @author shengzhi
+     * @param {Object} data 待上传数据
+     */
+    xhrUpload (data) {
       // 上传开始
       this.status = 'uploading'
       this.showModal = true
@@ -167,23 +200,18 @@ export default {
         this.total = evt.total
       }
 
+      // 监听上传过程中网络中断事件
       window.addEventListener('offline', (e) => {
         this.status = 'upload-error'
         this.xhr.abort()
         this.xhr = null
       })
 
-      // this.xhr.onerror = (evt) => {
-      //   this.status = 'upload-error'
-      // }
-
-      // 发送请求
-      let formData = new window.FormData()
-      formData.append(this.input.name, file)
+      // 设置请求头参数并发送数据
       this.xhr.open('post', this.apiUrl)
       this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
       this.xhr.setRequestHeader('Access-Token', window.localStorage.getItem('accessToken'))
-      this.xhr.send(formData)
+      this.xhr.send(data)
     }
   }
 }
