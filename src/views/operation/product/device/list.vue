@@ -288,6 +288,22 @@ export default {
       condition.offset = (this.currentPage - 1) * this.countPerPage
 
       return condition
+    },
+
+    // 导出CSV条件参数
+    exportParams () {
+      let condition = _.cloneDeep(this.baseCondition)
+      condition.filter = ['id', 'name', 'mac', 'sn', 'is_active', 'active_date', 'is_online', 'last_login', 'mcu_mod', 'mcu_version', 'firmware_mod', 'firmware_version', 'corp_id', 'product_id', 'region_id', 'create_time']
+
+      return {
+        name: '设备列表',
+        describe: '设备列表',
+        type: 1,
+        params: condition,
+        extend: {
+          product_id: this.$route.params.id
+        }
+      }
     }
   },
 
@@ -312,21 +328,8 @@ export default {
         return
       }
 
-      let condition = _.cloneDeep(this.baseCondition)
-      condition.filter = ['id', 'name', 'mac', 'sn', 'is_active', 'active_date', 'is_online', 'last_login', 'mcu_mod', 'mcu_version', 'firmware_mod', 'firmware_version', 'corp_id', 'product_id', 'region_id', 'create_time']
-
-      let postData = {
-        name: '设备列表',
-        describe: '设备列表',
-        type: 1,
-        params: condition,
-        extend: {
-          product_id: this.$route.params.id
-        }
-      }
-
       this.exporting = true
-      api.exportTask.createTask(postData).then((res) => {
+      api.exportTask.createTask(this.exportParams).then((res) => {
         this.showNotice({
           type: 'success',
           content: this.$t('operation.settings.offline.export_success')
