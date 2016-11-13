@@ -1,11 +1,13 @@
 // 表单类
 import Editor from './form/editor/Editor'
+import DatePicker2 from './form/date-picker/DatePicker'
 
 // 导航类
 import Pagination from './navigation/pagination/Pagination'
 
 const components = {
   Editor,
+  DatePicker2,
   Pagination
 }
 
