@@ -274,7 +274,6 @@
 import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
-import Modal from 'components/Modal'
 import Select from 'components/Select'
 import Tooltip from 'components/Tooltip'
 // import locales from 'consts/locales/index'
@@ -286,7 +285,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'modal': Modal,
     'pager': Pager,
     'v-select': Select,
     'v-tooltip': Tooltip

@@ -62,7 +62,6 @@
 import api from 'api'
 // import * as config from 'consts/config'
 import Select from 'components/Select'
-import Modal from 'components/Modal'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
@@ -80,7 +79,6 @@ export default {
   },
 
   components: {
-    Modal,
     SearchBox,
     'v-select': Select,
     'x-table': Table

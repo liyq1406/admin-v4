@@ -149,7 +149,6 @@
   import { warrantyMixins } from '../mixins'
   import SearchBox from 'components/SearchBox'
   import Pager from 'components/Pager'
-  import Modal from 'components/Modal'
   import AreaSelect from 'components/AreaSelect'
   import api from 'api'
   import * as config from 'consts/config'
@@ -161,7 +160,6 @@
 
     components: {
       AreaSelect,
-      Modal,
       SearchBox,
       Pager
     },

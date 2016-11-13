@@ -94,7 +94,6 @@
 import { globalMixins } from 'src/mixins'
 import { editPasswordMixin } from '../mixins'
 import InfoList from 'components/InfoList'
-import Modal from 'components/Modal'
 import Breadcrumb from 'components/Breadcrumb'
 import formatDate from 'filters/format-date'
 import Select from 'components/Select'
@@ -114,7 +113,6 @@ export default {
 
   components: {
     InfoList,
-    Modal,
     'x-select': Select,
     Breadcrumb
   },

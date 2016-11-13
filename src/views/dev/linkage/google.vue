@@ -90,7 +90,6 @@
 </template>
 
 <script>
-  import Modal from 'components/Modal'
   import { globalMixins } from 'src/mixins'
   import Switch from 'components/Switch'
   import PicTxt from 'components/PicTxt'
@@ -103,7 +102,6 @@
     name: 'Nest',
 
     components: {
-      Modal,
       'x-switch': Switch,
       'pic-txt': PicTxt,
       'linkage-item': LinkageItem

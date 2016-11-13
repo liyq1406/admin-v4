@@ -440,7 +440,6 @@
 import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
-import Modal from 'components/Modal'
 import IntelligentTable from 'components/IntelligentTable'
 import DatePicker from 'components/DatePicker'
 import TimePicker from 'components/TimePicker2'
@@ -456,7 +455,6 @@ export default {
     'x-table': IntelligentTable,
     'date-picker': DatePicker,
     'time-picker': TimePicker,
-    'modal': Modal,
     'pager': Pager,
     'x-select': Select
   },

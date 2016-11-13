@@ -158,7 +158,6 @@
 
 <script>
 import SearchBox from 'components/SearchBox'
-import Modal from 'components/Modal'
 import Select from 'components/Select'
 import api from 'api'
 import * as config from 'consts/config'
@@ -173,7 +172,6 @@ export default {
 
   components: {
     'search-box': SearchBox,
-    'modal': Modal,
     'pager': Pager,
     'x-select': Select
   },

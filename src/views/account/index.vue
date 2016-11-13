@@ -46,9 +46,6 @@ export default {
     }
   },
 
-  components: {
-  },
-
   data () {
     return {
       nav: [{

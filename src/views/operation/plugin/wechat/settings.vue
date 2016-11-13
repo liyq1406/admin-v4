@@ -86,7 +86,6 @@
   import Vue from 'vue'
   import locales from 'consts/locales/index'
   import api from 'api'
-  // import Modal from 'components/Modal'
   import { globalMixins } from 'src/mixins'
   import { updatePlugin, removePlugin } from 'store/actions/plugins'
 

@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import Modal from './components/Modal'
 import Topbar from 'components/Topbar'
 import Toast from './components/Toast'
 import api from './api'
@@ -49,7 +48,6 @@ export default {
   name: 'App',
 
   components: {
-    Modal,
     Toast,
     Topbar
   },

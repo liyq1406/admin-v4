@@ -21,7 +21,6 @@
 </template>
 
 <script>
-  import Modal from 'components/Modal'
   import Switch from 'components/Switch'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { globalMixins } from 'src/mixins'
@@ -41,7 +40,6 @@
     },
 
     components: {
-      'modal': Modal,
       'switch': Switch
     },
 

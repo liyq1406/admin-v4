@@ -177,7 +177,6 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import InstructionsForm from '../components/InstructionsForm'
 import TipsForm from '../components/TipsForm'
-import Modal from 'components/Modal'
 import Select from 'components/Select'
 import api from 'api'
 
@@ -189,7 +188,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    Modal,
     'x-select': Select,
     InstructionsForm,
     TipsForm

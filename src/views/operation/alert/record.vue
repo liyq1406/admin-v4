@@ -86,7 +86,6 @@ import api from 'api'
 import * as config from 'consts/config'
 import locales from 'consts/locales/index'
 import Pager from 'components/Pager'
-import Modal from 'components/Modal'
 import Statistic from 'components/Statistic'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import Select from 'components/Select'
@@ -106,7 +105,6 @@ export default {
 
   components: {
     Pager,
-    Modal,
     RadioButtonGroup,
     Statistic,
     DateTimeMultiplePicker,

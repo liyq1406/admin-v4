@@ -103,7 +103,6 @@
   import { globalMixins } from 'src/mixins'
   import api from 'src/api'
   import Select from 'components/Select'
-  import Modal from 'components/Modal'
   import SearchBox from 'components/SearchBox'
   import Switch from 'components/Switch'
   // import locales from 'consts/locales/index'
@@ -121,7 +120,6 @@
     components: {
       'x-select': Select,
       SearchBox,
-      Modal,
       Switch
     },
 

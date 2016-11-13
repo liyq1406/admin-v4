@@ -90,7 +90,6 @@
 </template>
 
 <script>
-import Modal from 'components/Modal'
 import ImageUploader from 'components/ImageUploader'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
@@ -106,7 +105,6 @@ export default {
 
   components: {
     Pager,
-    Modal,
     SearchBox,
     Breadcrumb,
     ImageUploader

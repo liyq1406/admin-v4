@@ -50,8 +50,6 @@
   import { globalMixins } from 'src/mixins'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import Table from 'components/Table'
-  import Modal from 'components/Modal'
-
   export default {
     name: 'AndroidUpgrade',
 
@@ -69,7 +67,6 @@
     },
 
     components: {
-      Modal,
       'x-table': Table
     },
 

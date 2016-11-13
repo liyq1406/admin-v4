@@ -31,7 +31,6 @@
 <script>
   import MenuForm from './MenuForm'
   import CodeForm from './CodeForm'
-  import Modal from 'components/Modal'
   export default {
     name: 'TreeItem',
 
@@ -49,8 +48,7 @@
 
     components: {
       MenuForm,
-      CodeForm,
-      Modal
+      CodeForm
     },
 
     data () {

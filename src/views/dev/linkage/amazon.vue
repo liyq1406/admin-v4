@@ -132,7 +132,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import Modal from 'components/Modal'
 import PicTxt from 'components/PicTxt'
 import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
 import Switch from 'components/Switch'
@@ -143,7 +142,6 @@ export default {
   name: 'Echo',
 
   components: {
-    Modal,
     PicTxt,
     'x-switch': Switch,
     'x-select': Select

@@ -66,8 +66,6 @@ import { updateProduct } from 'store/actions/products'
 import { setCurrProductMixin } from '../../mixins'
 import { globalMixins } from 'src/mixins'
 import Table from 'components/Table'
-import Modal from 'components/Modal'
-
 export default {
   name: 'Qrcode',
 
@@ -81,7 +79,6 @@ export default {
   },
 
   components: {
-    Modal,
     'x-table': Table
   },
 

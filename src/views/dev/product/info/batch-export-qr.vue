@@ -85,14 +85,10 @@
 </template>
 
 <script>
-  import Modal from 'components/Modal'
   import { API_SERVER } from 'consts/config'
 
   export default {
     name: 'batch-export-qr',
-    components: {
-      Modal
-    },
     props: {
       show: {
         type: Boolean,

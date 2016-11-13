@@ -109,7 +109,6 @@ import api from 'api'
 // import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-import Modal from 'components/Modal'
 import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 
@@ -119,7 +118,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    Modal,
     SearchBox,
     'x-table': Table
   },

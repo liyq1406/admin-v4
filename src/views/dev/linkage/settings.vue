@@ -88,7 +88,6 @@
   import Alert from 'components/Alert'
   import Select from 'components/Select'
   import Switch from 'components/Switch'
-  import Modal from 'components/Modal'
   import api from 'api'
 
   export default {
@@ -97,7 +96,6 @@
     mixins: [globalMixins],
 
     components: {
-      Modal,
       'x-alert': Alert,
       'x-select': Select,
       'x-switch': Switch

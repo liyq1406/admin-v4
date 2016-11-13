@@ -163,8 +163,6 @@ import AndroidUpgrade from './android/upgrade'
 import WebSettings from './web/settings'
 import WechatSettings from './wechat/settings'
 import WechatAuthorize from './wechat/authorize'
-import Modal from 'components/Modal'
-
 export default {
   name: 'Data',
 
@@ -182,7 +180,6 @@ export default {
 
   components: {
     'x-select': Select,
-    Modal,
     IosSettings,
     AndroidSettings,
     AndroidUpgrade,

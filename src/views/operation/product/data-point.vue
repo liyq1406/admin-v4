@@ -260,7 +260,6 @@
   import api from 'api'
   import * as config from 'consts/config'
   import locales from 'consts/locales/index'
-  import Modal from 'components/Modal'
   import Pager from 'components/Pager'
   import Select from 'components/Select'
   import { globalMixins } from 'src/mixins'
@@ -271,7 +270,6 @@
     mixins: [globalMixins],
 
     components: {
-      'modal': Modal,
       'pager': Pager,
       'x-select': Select
     },

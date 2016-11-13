@@ -57,17 +57,12 @@
 </template>
 
 <script>
-import Modal from 'components/Modal'
 import { globalMixins } from 'src/mixins'
 
 export default {
   name: 'import-datapoints-model',
 
   mixins: [globalMixins],
-
-  components: {
-    Modal
-  },
 
   props: {
     show: {

@@ -57,7 +57,6 @@
 <script>
 import * as config from 'consts/config'
 import api from 'api'
-import Modal from 'components/Modal'
 import Select from 'components/Select'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Statistic from 'components/Statistic'
@@ -75,7 +74,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Modal,
     'x-select': Select,
     DateTimeMultiplePicker,
     'x-table': Table,

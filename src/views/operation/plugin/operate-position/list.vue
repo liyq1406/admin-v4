@@ -101,7 +101,6 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import Modal from 'components/Modal'
 import Table from 'components/Table'
 import * as config from 'consts/config'
 
@@ -117,7 +116,6 @@ export default {
   },
 
   components: {
-    Modal,
     'x-table': Table
   },
 

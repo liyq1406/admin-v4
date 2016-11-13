@@ -82,7 +82,6 @@ import api from 'api'
 import * as config from 'consts/config'
 import Select from 'components/Select'
 import Pager from 'components/Pager'
-import Modal from 'components/Modal'
 import SearchBox from 'components/SearchBox'
 import Progress from 'components/Progress'
 import Table from 'components/Table'
@@ -101,7 +100,6 @@ export default {
   components: {
     'x-select': Select,
     'x-table': Table,
-    Modal,
     SearchBox,
     Pager,
     Statistic,

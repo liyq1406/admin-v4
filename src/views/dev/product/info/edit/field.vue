@@ -115,7 +115,6 @@ import api from 'api'
 // import * as config from 'consts/config'
 import Select from 'components/Select'
 import Switch from 'components/Switch'
-import Modal from 'components/Modal'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -125,8 +124,7 @@ export default {
 
   components: {
     'x-select': Select,
-    Switch,
-    Modal
+    Switch
   },
 
   data () {

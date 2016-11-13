@@ -92,7 +92,6 @@ import Table from 'components/Table'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
-import Modal from 'components/Modal'
 
 export default {
   name: 'recipeList',
@@ -102,8 +101,7 @@ export default {
   components: {
     SearchBox,
     'v-select': Select,
-    'x-table': Table,
-    Modal
+    'x-table': Table
   },
 
   data () {

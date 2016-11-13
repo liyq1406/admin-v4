@@ -37,7 +37,6 @@ import api from 'api'
 import * as config from 'consts/config'
 import Select from 'components/Select'
 import Table from 'components/Table'
-import Modal from 'components/Modal'
 import formatDate from 'filters/format-date'
 import wrapTag from 'filters/wrap-tag'
 import toPercentage from 'filters/to-percentage'
@@ -49,8 +48,7 @@ export default {
 
   components: {
     'x-select': Select,
-    'x-table': Table,
-    Modal
+    'x-table': Table
   },
 
   data () {

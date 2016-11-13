@@ -77,7 +77,6 @@ import api from 'api'
 import * as config from 'consts/config'
 import Select from 'components/Select'
 import Pager from 'components/Pager'
-import Modal from 'components/Modal'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
@@ -96,7 +95,6 @@ export default {
   components: {
     'x-select': Select,
     'x-table': Table,
-    'modal': Modal,
     'search-box': SearchBox,
     'pager': Pager,
     DateTimeRangePicker,

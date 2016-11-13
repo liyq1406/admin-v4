@@ -262,7 +262,6 @@ import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
 import Pager from 'components/Pager'
-import Modal from 'components/Modal'
 import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
 import api from 'api'
@@ -357,7 +356,6 @@ export default {
     'x-select': Select,
     SearchBox,
     Pager,
-    Modal,
     Breadcrumb,
     InfoCard,
     InfoList
@@ -570,7 +568,7 @@ export default {
         })
       } else if (this.editValidation.$valid && !this.editing) { // 更新
         this.editing = true
-        api.warranty.UpdateBranch(this.$route.params.app_id, this.editModal, this.$route.params.id).then((res) => {
+        api.warranty.UpdateBranch(this.$route.params.app_id, this.editthis.$route.params.id).then((res) => {
           if (res.status === 200) {
             this.resetEdit()
             this.getBranchList()

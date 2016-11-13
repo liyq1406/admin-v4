@@ -435,7 +435,6 @@
   import * as config from 'consts/config'
   import locales from 'consts/locales/index'
   import Pager from 'components/Pager'
-  import Modal from 'components/Modal'
   import Select from 'components/Select'
   import TagInput from 'components/TagInput'
   import { globalMixins } from 'src/mixins'
@@ -446,7 +445,6 @@
     mixins: [globalMixins],
 
     components: {
-      'modal': Modal,
       'pager': Pager,
       'x-select': Select,
       'tag-input': TagInput

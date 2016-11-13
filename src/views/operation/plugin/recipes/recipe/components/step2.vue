@@ -127,7 +127,6 @@
 <script>
 // import Vue from 'vue'
 import api from 'api'
-import Modal from 'components/Modal'
 import Pager from 'components/Pager'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
@@ -145,7 +144,6 @@ export default {
     'v-select': Select,
     'search-box': SearchBox,
     'pager': Pager,
-    'modal': Modal,
     'image-uploader': ImageUploader,
     'tag-input': TagInput
   },

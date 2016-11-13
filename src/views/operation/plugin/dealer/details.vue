@@ -112,7 +112,6 @@
   import Breadcrumb from 'components/Breadcrumb'
   import SearchBox from 'components/SearchBox'
   import Select from 'components/Select'
-  import Modal from 'components/Modal'
   import IntelligentTable from 'components/IntelligentTable'
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
@@ -126,7 +125,6 @@
 
     components: {
       'x-alert': Alert,
-      Modal,
       RadioGroup,
       SearchBox,
       InfoList,

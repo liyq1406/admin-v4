@@ -95,17 +95,12 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import Modal from 'components/Modal'
 import api from 'api'
 
 export default {
   name: 'Authorize',
 
   mixins: [globalMixins],
-
-  components: {
-    Modal
-  },
 
   data () {
     return {

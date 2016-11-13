@@ -103,7 +103,6 @@
   // import Vue from 'vue'
   // import locales from 'consts/locales/index'
   import * as config from 'consts/config'
-  import Modal from 'components/Modal'
   import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
@@ -115,7 +114,6 @@
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      'modal': Modal,
       'pager': Pager
     },
 

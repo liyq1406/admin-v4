@@ -155,7 +155,6 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
-import Modal from 'components/Modal'
 import IntelligentTable from 'components/IntelligentTable'
 import Chart from 'components/Chart/index'
 import { globalMixins } from 'src/mixins'
@@ -170,7 +169,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Modal,
     RadioButtonGroup,
     SearchBox,
     Pager,

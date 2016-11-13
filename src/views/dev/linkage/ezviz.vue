@@ -63,7 +63,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import Modal from 'components/Modal'
 import Switch from 'components/Switch'
 import PicTxt from 'components/PicTxt'
 import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
@@ -73,7 +72,6 @@ export default {
   name: 'Ezviz',
 
   components: {
-    Modal,
     PicTxt,
     'x-switch': Switch
   },

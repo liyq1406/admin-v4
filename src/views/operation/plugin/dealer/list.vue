@@ -89,8 +89,6 @@
   import SearchBox from 'components/SearchBox'
   import Pager from 'components/Pager'
   import DatePicker from 'components/DatePicker'
-  import Modal from 'components/Modal'
-
   export default {
     name: 'DealerList',
 
@@ -100,7 +98,6 @@
       'x-select': Select,
       SearchBox,
       Pager,
-      Modal,
       DatePicker
     },
 

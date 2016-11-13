@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import Modal from 'components/Modal'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 
@@ -36,10 +35,6 @@ export default {
   layout: 'admin',
 
   mixins: [globalMixins, pluginMixins],
-
-  components: {
-    'modal': Modal
-  },
 
   props: {
     type: {

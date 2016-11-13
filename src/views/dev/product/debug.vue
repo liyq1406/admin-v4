@@ -272,7 +272,6 @@ import SearchBox from 'components/SearchBox'
 import Pager from 'components/Pager'
 import Range from 'components/Range1'
 import Switch from 'components/Switch'
-import Modal from 'components/Modal'
 import Alert from 'components/Alert'
 import api from 'api'
 
@@ -285,7 +284,6 @@ export default {
 
   components: {
     'search-box': SearchBox,
-    Modal,
     Pager,
     Switch,
     Range,

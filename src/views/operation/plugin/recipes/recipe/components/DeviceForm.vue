@@ -56,7 +56,6 @@
 </template>
 
 <script>
-import Modal from 'components/Modal'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import Select from 'components/Select'
@@ -69,7 +68,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    'modal': Modal,
     'x-select': Select
   },
   vuex: {

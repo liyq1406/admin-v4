@@ -60,7 +60,6 @@ import api from 'api'
 import * as config from 'consts/config'
 import locales from 'consts/locales/index'
 import Pager from 'components/Pager'
-import Modal from 'components/Modal'
 import Select from 'components/Select'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
@@ -76,7 +75,6 @@ export default {
 
   components: {
     Pager,
-    Modal,
     'x-select': Select,
     'x-table': Table
   },

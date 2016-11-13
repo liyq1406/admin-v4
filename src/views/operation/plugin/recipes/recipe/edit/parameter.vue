@@ -97,7 +97,6 @@
 
 <script>
 import api from 'api'
-import Modal from 'components/Modal'
 import TreeItem from '../components/TreeItem'
 import Pager from 'components/Pager'
 import Select from 'components/Select'
@@ -121,10 +120,8 @@ export default {
     'v-select': Select,
     'search-box': SearchBox,
     'pager': Pager,
-    'modal': Modal,
     'image-uploader': ImageUploader,
     'tag-input': TagInput,
-    Modal,
     CodeForm,
     MenuForm,
     'x-select': Select

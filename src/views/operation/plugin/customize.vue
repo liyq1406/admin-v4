@@ -119,7 +119,6 @@
   import Vue from 'vue'
   import locales from 'consts/locales/index'
   import api from 'api'
-  import Modal from 'components/Modal'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { globalMixins } from 'src/mixins'
 
@@ -137,10 +136,6 @@
         updatePlugin,
         removePlugin
       }
-    },
-
-    components: {
-      'modal': Modal
     },
 
     data () {

@@ -160,7 +160,6 @@
 <script>
 import api from 'api'
 import Breadcrumb from 'components/Breadcrumb'
-import Modal from 'components/Modal'
 // import AreaSelect from 'components/AreaSelect'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
@@ -172,7 +171,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    Modal,
     // AreaSelect,
     Breadcrumb,
     InfoList
