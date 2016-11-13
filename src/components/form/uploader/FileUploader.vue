@@ -1,5 +1,5 @@
 <template>
-  <div class="x-file-upload">
+  <div class="x-file-uploader">
     <slot></slot>
     <modal :show.sync="showModal" @close="reset" width="540px">
       <h3 slot="header">上传固件</h3>
@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import Modal from './Modal'
 import { globalMixins } from 'src/mixins'
 import { MAX_UPLOAD_FILE_SIZE } from 'consts/config'
 
@@ -59,10 +58,6 @@ export default {
     maxSize: {
       type: Number
     }
-  },
-
-  components: {
-    Modal
   },
 
   data () {
@@ -218,9 +213,9 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../assets/stylus/common'
+@import '../../../assets/stylus/common'
 
-.x-file-upload
+.x-file-uploader
   .progress-bar
     background #DDD
     height 16px

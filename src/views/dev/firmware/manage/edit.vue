@@ -63,12 +63,12 @@
                 <div class="form-row row">
                   <label class="form-control col-5 dealer-label">固件文件:</label>
                   <div class="controls col-19 row line32">
-                    <file-upload :input="firmwareInput" :input-value="inputValue" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess" @reset="onResetUpload">
+                    <file-uploader :input="firmwareInput" :input-value="inputValue" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess" @reset="onResetUpload">
                       <div v-if="firmware.file_url.length > 0" class="file-url">url: {{ firmware.file_url }}</div>
                       <label class="btn btn-ghost btn-upload mb10 mt10">
                         <input type="file" name="firmwareInput" @change.prevent="uploadFirmware($event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
                       </label>
-                    </file-upload>
+                    </file-uploader>
                   </div>
                 </div>
                 <div class="form-row row">
@@ -97,7 +97,6 @@
 import { globalMixins } from 'src/mixins'
 import api from 'api'
 import Breadcrumb from 'components/Breadcrumb'
-import FileUpload from 'components/FileUpload'
 import { API_SERVER } from 'consts/config'
 
 export default {
@@ -112,7 +111,6 @@ export default {
   },
 
   components: {
-    FileUpload,
     Breadcrumb
   },
 

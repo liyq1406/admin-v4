@@ -108,12 +108,12 @@
             </div>
             <div class="panel-bd">
               <div class="controls">
-                <file-upload :input="firmwareInput" :input-value="inputValue" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess" @reset="onResetUpload">
+                <file-uploader :input="firmwareInput" :input-value="inputValue" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess" @reset="onResetUpload">
                   <label :class="{'disabled':unableAdd}" class="btn btn-ghost btn-upload mb10 mt10">
                     <input type="file" name="firmwareInput" @change.prevent="uploadFirmware($event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
                   </label>
                   <div v-if="addmodel.file_url.length > 0" class="file-url">url: {{ addmodel.file_url }}</div>
-                </file-upload>
+                </file-uploader>
               </div>
             </div>
           </div>
@@ -147,7 +147,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import FileUpload from 'components/FileUpload'
 import { API_SERVER } from 'consts/config'
 import api from 'api'
 
@@ -155,10 +154,6 @@ export default {
   name: 'UploadFirmware',
 
   mixins: [globalMixins],
-
-  components: {
-    FileUpload
-  },
 
   vuex: {
     getters: {
