@@ -36,8 +36,8 @@
                 </x-select>
 
                 <template v-if="debug">
-                  <span class="ml10">{{ $t('common.create_time') }}</span>
                   <x-select width="98px" size="small" :label="rangeOption.label">
+                    <span slot="label" class="ml10">{{ $t('common.create_time') }}</span>
                     <select v-model="rangeOption" @change="onRangeOptionChange">
                       <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
                     </select>
