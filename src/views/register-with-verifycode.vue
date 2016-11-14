@@ -90,7 +90,6 @@
   import Vue from 'vue'
   import * as config from 'consts/config'
   import locales from 'consts/locales/index'
-  import Captcha from 'components/Captcha'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -99,10 +98,6 @@
     layouts: ['auth'],
 
     mixins: [globalMixins],
-
-    components: {
-      'captcha': Captcha
-    },
 
     data () {
       return {

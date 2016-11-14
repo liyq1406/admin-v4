@@ -70,7 +70,6 @@
 <script>
   import api from 'api'
   import * as config from 'consts/config'
-  import Captcha from 'components/Captcha'
   import base64 from 'utils/base64'
   import { globalMixins } from 'src/mixins'
 
@@ -80,10 +79,6 @@
     layouts: ['auth'],
 
     mixins: [globalMixins],
-
-    components: {
-      'captcha': Captcha
-    },
 
     data () {
       return {

@@ -6,6 +6,8 @@
 
 <script>
   export default {
+    name: 'Captcha',
+
     props: {
       value: {
         type: String,

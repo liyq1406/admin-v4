@@ -163,7 +163,6 @@
 <script>
   import api from 'api'
   import * as config from 'consts/config'
-  import Captcha from 'components/Captcha'
   import Alert from 'components/Alert'
   import { globalMixins } from 'src/mixins'
 
@@ -175,7 +174,6 @@
     mixins: [globalMixins],
 
     components: {
-      'captcha': Captcha,
       'x-alert': Alert
     },
 

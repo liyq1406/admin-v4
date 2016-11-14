@@ -7,6 +7,7 @@ import DatePicker2 from './form/date-picker/DatePicker'
 import FileUploader from './form/uploader/FileUploader'
 import XSelect from './form/select/Select'
 import Switch from './form/switch/Switch'
+import Captcha from './form/captcha/Captcha'
 
 // 导航类
 import Pagination from './navigation/pagination/Pagination'
@@ -15,10 +16,11 @@ const components = {
   Editor,
   DatePicker2,
   FileUploader,
-  Pagination,
   Modal,
   XSelect,
-  Switch
+  Switch,
+  Captcha,
+  Pagination
 }
 
 const install = function (Vue, opts = {}) {
