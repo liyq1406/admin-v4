@@ -9,14 +9,16 @@ import alert from './alert'
 import user from './user'
 import snapshot from './snapshot'
 import settings from './settings'
+import dealer from './dealer'
 
 export default {
-  product_management: '产品管理',
-  product_service: '产品服务',
+  product_management: 'Product  Management',
+  product_service: 'Product Service',
   overview,
   product,
   alert,
   user,
   snapshot,
-  settings
+  settings,
+  dealer
 }

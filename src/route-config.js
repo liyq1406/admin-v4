@@ -1482,6 +1482,13 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        'plugins/dealer/:app_id/analysis': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/dealer/analysis'))
+            }, 'admin')
+          }
+        },
         // 添加经销商
         'plugins/dealer/:app_id/add': {
           component (resolve) {
