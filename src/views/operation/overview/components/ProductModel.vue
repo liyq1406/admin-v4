@@ -5,7 +5,7 @@
     </div>
     <div class="row">
       <div class="col-8">
-        <chart :options="modelOptions" :loading="loading"></chart>
+        <chart :options="modelOptions"></chart>
       </div>
     </div>
   </div>
@@ -39,7 +39,6 @@ export default {
       },
       activated: 0,
       total: 0,
-      loading: false,
       productsDevices: [],
       inited: false
     }
