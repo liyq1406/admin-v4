@@ -49,6 +49,9 @@ export default {
       scope: rule.scope,
       tag: rule.tag
     }
+    if (params.type === 3) {
+      params.interval = rule.interval
+    }
 
     return http.put(
       `${API_SERVER.default}/v2/alert/rule/${rule.id}`, params

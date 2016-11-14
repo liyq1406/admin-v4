@@ -21,7 +21,7 @@
               </div>
               <div class="form-row row">
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.condition") }}:</label>
-                <div class="controls col-19">
+                <!-- <div class="controls col-19">
                   <div class="row">
                     <div class="col-5">
                       <x-select :label="locales.data.RULE_TYPES[model.type-1]">
@@ -69,6 +69,133 @@
                               <option value="offline">{{ $t("common.offline") }}</option>
                             </select>
                           </x-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="controls col-19">
+                  <div class="radio-button-wrap">
+                    <radio-button-group :items="ruleTypes"
+                                         color="red"
+                                   :value.sync="selectedType"
+                                       @select="">
+                    </radio-button-group>
+                  </div>
+                  <div class="quotas-detail mt30">
+                    <div class="{{ arrowClass }}"></div>
+                    <div class="arrow-cover"></div>
+                    <div class="content">
+                      <div class="row" v-if="selectedType===1">
+                        <div class="col-5">
+                          <x-select :label="locales.data.RULE_TYPES[model.type-1]">
+                            <select v-model="model.type" name="type" number @input="onTypeSelect">
+                              <option v-for="type in locales.data.RULE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                            </select>
+                          </x-select>
+                        </div>
+                        <div class="col-19" v-show="model.type === 1 && !datapoints.length">
+                          <a class="control-text ml20 hl-red">无数据端点，请点击添加</a>
+                        </div>
+                        <div class="col-8">
+                          <div v-show="model.type === 1 && datapoints.length" class="ml10">
+                            <div class="select">
+                              <x-select :label="datapointName">
+                                <select v-model="model.param" name="param">
+                                  <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
+                                </select>
+                              </x-select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div v-show="model.type === 1 && datapoints.length" class="ml10">
+                            <div class="select">
+                              <x-select :label="locales.data.RULE_COMPARE_TYPES[model.compare-1]">
+                                <select v-model="model.compare" name="compare" number>
+                                  <option v-for="type in locales.data.RULE_COMPARE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                                </select>
+                              </x-select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-5">
+                          <div class="ml10">
+                            <div class="input-text-wrap" v-show="model.type === 1 && datapoints.length">
+                              <input v-model="value1" type="text"
+                             name="value" required lazy class="input-text"/>
+                            </div>
+                            <div class="select" v-show="model.type === 2">
+                              <x-select :label="$t('common.'+value2)">
+                                <select v-model="value2"
+                                 name="value">
+                                  <option value="online">{{ $t("common.online") }}</option>
+                                  <option value="offline">{{ $t("common.offline") }}</option>
+                                </select>
+                              </x-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" v-if="selectedType===2">
+                        <div class="col-4">
+                          <div class="">
+                            <div class="select">
+                              <div class="input-text-wrap">
+                                <span class="certime">数据端点</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-20" v-show="!datapoints.length">
+                          <a class="control-text ml20 hl-red">无数据端点，请点击添加</a>
+                        </div>
+                        <div class="col-5">
+                          <div v-show="datapoints.length" class="ml10">
+                            <div class="select">
+                              <x-select :label="datapointName">
+                                <select v-model="model.param" name="param">
+                                  <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
+                                </select>
+                              </x-select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div v-show="datapoints.length" class="ml10">
+                            <div class="select">
+                              <div class="input-text-wrap">
+                                <span class="certime">固定时间</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-3">
+                          <div class="ml10">
+                            <div class="input-text-wrap" v-show="datapoints.length">
+                              <input v-model="interval" placeholder="分钟" type="number"
+                             name="interval" required lazy class="input-text"/>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-5">
+                          <div v-show="datapoints.length" class="ml10">
+                            <div class="select">
+                              <x-select :label="locales.data.RULE_COMPARE_TYPES[model.compare-1]">
+                                <select v-model="model.compare" name="compare" number>
+                                  <option v-for="type in locales.data.RULE_COMPARE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                                </select>
+                              </x-select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-3">
+                          <div class="ml10">
+                            <div class="input-text-wrap" v-show="datapoints.length">
+                              <input v-model="value1" type="text"
+                             name="value" required lazy class="input-text"/>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -200,6 +327,8 @@
 <script>
 import api from 'src/api'
 import Select from 'components/Select'
+import RadioButtonGroup from 'components/RadioButtonGroup'
+import RadioGroup from 'components/RadioGroup'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -208,7 +337,9 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select
+    'x-select': Select,
+    RadioButtonGroup,
+    RadioGroup
   },
 
   vuex: {
@@ -226,6 +357,12 @@ export default {
 
   data () {
     return {
+      interval: '',
+      ruleTypes: [
+        { label: '普通', value: 1 },
+        { label: '固定时间值', value: 2 }
+      ],
+      selectedType: 1,
       datapoints: [],
       originModel: {           // 添加数据模型
         product_id: this.$route.params.id,
@@ -251,6 +388,11 @@ export default {
   },
 
   computed: {
+    arrowClass () {
+      let res = 'arrow arrow-left-'
+      return res + this.selectedType
+    },
+
     /**
      * 是否显示 APN推送
      * @author shengzhi
@@ -335,8 +477,12 @@ export default {
           })
           if (this.model.type === 1) {
             this.value1 = this.model.value
-          } else {
+          } else if (this.model.type === 2) {
             this.value2 = this.model.value
+          } else if (this.model.type === 3) {
+            this.value1 = this.model.value
+            this.selectedType = 2
+            this.interval = this.model.interval
           }
         }
       }).catch((res) => {
@@ -359,13 +505,23 @@ export default {
           this.$validate(true)
           return
         }
-
-        this.model.value = this.model.type === 1 ? this.value1 : this.value2
+        var param = _.clone(this.model)
+        if (this.selectedType === 2) {
+          param.type = 3
+          param.interval = this.interval - 0 || 0
+        }
+        if (param.type === 1 || param.type === 3) {
+          param.value = this.value1
+        } else if (param.type === 2) {
+          param.value = this.value2
+        }
+        console.log(param)
+        // this.model.value = this.model.type === 1 ? this.value1 : this.value2
         if (this.type === 'add') { // 添加
-          process = api.alert.addRule(this.model)
+          process = api.alert.addRule(param)
         } else { // 编辑
-          this.model.notify_apps = this.selectedApps
-          process = api.alert.updateRule(this.model, this.$route.params.id)
+          param.notify_apps = this.selectedApps
+          process = api.alert.updateRule(param, this.$route.params.id)
         }
       }
 
@@ -417,13 +573,49 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
+.certime
+  display inline-block
+  height 30px
+  width 100%
+  text-align center
+  line-height 30px
+  border 1px solid #d9d9d9
+.radio-button-wrap
+  .btn
+    width 100px!important
+    text-align center
+.quotas-detail
+  border 1px solid #DA4E37
+  position relative
+  .content
+    padding 15px 15px 15px
+  .arrow
+    position absolute
+    left 265px
+    top -9px
+    width 18px
+    height 18px
+    background #DA4E37
+    transform rotate(45deg)
+  .arrow-cover
+    position absolute
+    width 100%
+    top 0
+    left 0
+    z-index 1
+    height 15px
+    background white
+  .arrow-left-1
+    left 40px
+  .arrow-left-2
+    left 135px
 .alert-label
   line-height 32px
   padding-left 20px
   box-sizing border-box
 .alert-max
-  max-width 700px
+  max-width 820px
 
 .form-actions
   border-top 1px solid #DDDDDD
