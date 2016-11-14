@@ -24,6 +24,7 @@
         <product-active></product-active>
         <product-distribution></product-distribution>
         <user-trend></user-trend>
+        <product-model></product-model>
       </div>
     </div>
   </div>
@@ -37,6 +38,7 @@ import ProductTrend from './components/ProductTrend'
 import ProductActive from './components/ProductActive'
 import ProductDistribution from './components/ProductDistribution'
 import UserTrend from './components/UserTrend'
+import ProductModel from './components/ProductModel'
 
 export default {
   name: 'Dashboard',
@@ -51,6 +53,7 @@ export default {
     ProductTrend,
     ProductActive,
     ProductDistribution,
+    ProductModel,
     UserTrend
   },
 
