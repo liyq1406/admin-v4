@@ -40,7 +40,8 @@ export default {
       activated: 0,
       total: 0,
       loading: false,
-      productsDevices: []
+      productsDevices: [],
+      inited: false
     }
   },
 
@@ -86,7 +87,8 @@ export default {
 
   methods: {
     init () {
-      if (this.releasedProducts.length) {
+      if (this.releasedProducts.length && !this.inited) {
+        this.inited = true
         this.productsDevices = []
         this.releasedProducts.forEach((item) => {
           this.getProductSummary(item)

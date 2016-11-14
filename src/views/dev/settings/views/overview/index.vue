@@ -547,7 +547,10 @@ export default {
       proxy.setCustomOverviewConfig(this.selectProduct, params).then((res) => {
         if (res.status === 200) {
           // 设置成功
-          console.log('设置成功')
+          this.showNotice({
+            type: 'success',
+            content: '设置成功'
+          })
         }
         this.editing = false
       }).catch((res) => {
