@@ -211,6 +211,9 @@ export default {
             sub.subs = [{
               alias: 'list',
               url: `/plugins/dealer/${item.id}/list`
+            }, {
+              alias: 'analysis',
+              url: `/plugins/dealer/${item.id}/analysis`
             }]
             break
           case 'operateposition': // 运营位管理

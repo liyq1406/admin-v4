@@ -171,7 +171,8 @@ export default {
         dealer: {
           label: 'Dealers',
           subs: {
-            list: 'Dealers List'
+            list: 'Dealers List',
+            analysis: 'Dealers Analysis'
           }
         },
         recipes: {

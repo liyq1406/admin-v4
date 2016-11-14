@@ -164,7 +164,8 @@ export default {
         dealer: {
           label: '经销商管理',
           subs: {
-            list: '经销商列表'
+            list: '经销商列表',
+            analysis: '经销商分析'
           }
         },
         recipes: {

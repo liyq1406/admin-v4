@@ -9,6 +9,7 @@ import alert from './alert'
 import user from './user'
 import snapshot from './snapshot'
 import settings from './settings'
+import dealer from './dealer'
 
 export default {
   product_management: 'Product  Management',
@@ -18,5 +19,6 @@ export default {
   alert,
   user,
   snapshot,
-  settings
+  settings,
+  dealer
 }
