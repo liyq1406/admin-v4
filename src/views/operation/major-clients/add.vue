@@ -14,14 +14,11 @@
 
 <script>
 import ClientForm from './form'
-import Breadcrumb from 'components/Breadcrumb'
-
 export default {
   name: 'add-vip-client',
 
   components: {
-    ClientForm,
-    Breadcrumb
+    ClientForm
   },
 
   data () {

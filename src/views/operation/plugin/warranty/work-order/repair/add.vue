@@ -107,7 +107,6 @@
   </div>
 </template>
 <script>
-  import Breadcrumb from 'components/Breadcrumb'
   import ImageUploader from 'components/ImageUploader'
   import { globalMixins } from 'src/mixins'
   import { warrantyMixins } from '../../mixins'
@@ -125,7 +124,6 @@
     },
 
     components: {
-      Breadcrumb,
       ImageUploader
     },
 

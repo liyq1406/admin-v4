@@ -60,7 +60,6 @@
   import api from 'api'
   import SearchBox from 'components/SearchBox'
   import Table from 'components/Table'
-  import Breadcrumb from 'components/Breadcrumb'
   import formatDate from 'filters/format-date'
 
   export default {
@@ -70,8 +69,7 @@
 
     components: {
       'x-table': Table,
-      SearchBox,
-      Breadcrumb
+      SearchBox
     },
 
     vuex: {

@@ -14,14 +14,11 @@
 
 <script>
 import ForwardForm from './ForwardForm'
-import Breadcrumb from 'components/Breadcrumb'
-
 export default {
   name: 'Creation',
 
   components: {
-    ForwardForm,
-    Breadcrumb
+    ForwardForm
   },
 
   data () {

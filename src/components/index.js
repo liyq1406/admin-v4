@@ -11,6 +11,7 @@ import Captcha from './form/captcha/Captcha'
 
 // 导航类
 import Pagination from './navigation/pagination/Pagination'
+import Breadcrumb from './navigation/breadcrumb/Breadcrumb'
 
 const components = {
   Editor,
@@ -20,7 +21,8 @@ const components = {
   XSelect,
   Switch,
   Captcha,
-  Pagination
+  Pagination,
+  Breadcrumb
 }
 
 const install = function (Vue, opts = {}) {

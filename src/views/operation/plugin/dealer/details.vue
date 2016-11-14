@@ -109,7 +109,6 @@
   import api from 'api'
   import RadioGroup from 'components/RadioGroup'
   import Pager from 'components/Pager'
-  import Breadcrumb from 'components/Breadcrumb'
   import SearchBox from 'components/SearchBox'
   import IntelligentTable from 'components/IntelligentTable'
   import { globalMixins } from 'src/mixins'
@@ -128,8 +127,7 @@
       SearchBox,
       InfoList,
       Pager,
-      IntelligentTable,
-      Breadcrumb
+      IntelligentTable
     },
 
     data () {

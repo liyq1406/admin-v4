@@ -16,7 +16,6 @@
 import api from 'api'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-import Breadcrumb from 'components/Breadcrumb'
 import Tab from 'components/Tab'
 
 export default {
@@ -27,7 +26,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    Breadcrumb,
     Tab
   },
 

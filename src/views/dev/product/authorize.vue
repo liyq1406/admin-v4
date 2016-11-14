@@ -171,7 +171,6 @@ import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from './mixins'
 import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
-import Breadcrumb from 'components/Breadcrumb'
 import Statistic from 'components/Statistic2'
 import Alert from 'components/Alert'
 import formatDate from 'filters/format-date'
@@ -190,7 +189,6 @@ export default {
   components: {
     'x-table': Table,
     Pager,
-    Breadcrumb,
     Statistic,
     SearchBox,
     Alert

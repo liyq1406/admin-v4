@@ -49,7 +49,6 @@
 import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 import SearchBox from 'components/SearchBox'
-import Breadcrumb from 'components/Breadcrumb'
 import Table from 'components/Table'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import formatDate from 'filters/format-date'
@@ -61,7 +60,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Breadcrumb,
     SearchBox,
     DateTimeRangePicker,
     'x-table': Table

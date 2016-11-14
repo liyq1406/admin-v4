@@ -14,14 +14,11 @@
 
 <script>
 import SnapshotForm from './SnapshotForm'
-import Breadcrumb from 'components/Breadcrumb'
-
 export default {
   name: 'Creation',
 
   components: {
-    SnapshotForm,
-    Breadcrumb
+    SnapshotForm
   },
 
   data () {

@@ -159,7 +159,6 @@
 
 <script>
 import api from 'api'
-import Breadcrumb from 'components/Breadcrumb'
 // import AreaSelect from 'components/AreaSelect'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
@@ -172,7 +171,6 @@ export default {
 
   components: {
     // AreaSelect,
-    Breadcrumb,
     InfoList
   },
 

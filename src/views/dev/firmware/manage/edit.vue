@@ -96,7 +96,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import api from 'api'
-import Breadcrumb from 'components/Breadcrumb'
 import { API_SERVER } from 'consts/config'
 
 export default {
@@ -111,7 +110,6 @@ export default {
   },
 
   components: {
-    Breadcrumb
   },
 
   data () {

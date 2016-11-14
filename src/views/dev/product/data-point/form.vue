@@ -130,8 +130,6 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import Breadcrumb from 'components/Breadcrumb'
-
 export default {
   name: 'Authorize',
 
@@ -144,7 +142,6 @@ export default {
   },
 
   components: {
-    Breadcrumb
   },
 
   data () {

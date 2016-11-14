@@ -94,7 +94,6 @@
 import { globalMixins } from 'src/mixins'
 import { editPasswordMixin } from '../mixins'
 import InfoList from 'components/InfoList'
-import Breadcrumb from 'components/Breadcrumb'
 import formatDate from 'filters/format-date'
 import api from 'api'
 
@@ -111,8 +110,7 @@ export default {
   },
 
   components: {
-    InfoList,
-    Breadcrumb
+    InfoList
   },
 
   data () {

@@ -25,7 +25,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
-import Breadcrumb from 'components/Breadcrumb'
 import Table from 'components/Table'
 import CategoryModal from './components/CategoryModal'
 import api from 'api'
@@ -38,7 +37,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    Breadcrumb,
     CategoryModal,
     'x-table': Table
   },

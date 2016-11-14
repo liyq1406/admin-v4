@@ -72,7 +72,6 @@
 </template>
 
 <script>
-import Breadcrumb from 'components/Breadcrumb'
 import Dropdown from 'components/Dropdown'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
@@ -85,7 +84,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Breadcrumb,
     Dropdown
   },
 

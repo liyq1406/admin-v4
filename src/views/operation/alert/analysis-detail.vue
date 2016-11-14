@@ -59,7 +59,6 @@ import * as config from 'consts/config'
 import api from 'api'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Statistic from 'components/Statistic'
-import Breadcrumb from 'components/Breadcrumb'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
@@ -76,7 +75,6 @@ export default {
     DateTimeMultiplePicker,
     'x-table': Table,
     Statistic,
-    Breadcrumb,
     SearchBox
   },
 

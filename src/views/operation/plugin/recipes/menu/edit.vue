@@ -15,7 +15,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
-import Breadcrumb from 'components/Breadcrumb'
 import MenuForm from './components/MenuForm'
 
 export default {
@@ -24,7 +23,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    Breadcrumb,
     MenuForm
   },
 

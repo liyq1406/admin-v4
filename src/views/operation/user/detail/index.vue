@@ -42,7 +42,6 @@
 <script>
   import api from 'api'
   import { globalMixins } from 'src/mixins'
-  import Breadcrumb from 'components/Breadcrumb'
   import InfoCard from 'components/InfoCard'
   import InfoList from 'components/InfoList'
   import formatDate from 'filters/format-date'
@@ -55,7 +54,6 @@
     mixins: [globalMixins],
 
     components: {
-      Breadcrumb,
       InfoCard,
       InfoList,
       Tab,

@@ -14,14 +14,11 @@
 
 <script>
 import OperatorForm from './OperatorForm'
-import Breadcrumb from 'components/Breadcrumb'
-
 export default {
   name: 'Creation',
 
   components: {
-    OperatorForm,
-    Breadcrumb
+    OperatorForm
   },
 
   data () {

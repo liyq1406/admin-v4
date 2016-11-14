@@ -123,7 +123,6 @@
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import { warrantyMixins } from '../../mixins'
-import Breadcrumb from 'components/Breadcrumb'
 import api from 'api'
 import InfoCard from 'components/InfoCard'
 import SearchBox from 'components/SearchBox'
@@ -136,7 +135,6 @@ export default {
   mixins: [globalMixins, pluginMixins, warrantyMixins],
 
   components: {
-    Breadcrumb,
     InfoCard,
     InfoList,
     'x-table': Table,

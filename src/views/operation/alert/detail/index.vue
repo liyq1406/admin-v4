@@ -53,7 +53,6 @@ import api from 'api'
 import Tab from 'components/Tab'
 import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
-import Breadcrumb from 'components/Breadcrumb'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import Map from 'components/Map'
@@ -65,7 +64,6 @@ export default {
 
   components: {
     Tab,
-    Breadcrumb,
     InfoCard,
     InfoList,
     Map

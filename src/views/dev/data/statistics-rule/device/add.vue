@@ -14,14 +14,11 @@
 
 <script>
 import StatictisRuleForm from './form'
-import Breadcrumb from 'components/Breadcrumb'
-
 export default {
   name: 'StatictisRuleDetail',
 
   components: {
-    StatictisRuleForm,
-    Breadcrumb
+    StatictisRuleForm
   },
 
   data () {

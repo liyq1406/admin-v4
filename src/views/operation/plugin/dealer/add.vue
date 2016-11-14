@@ -148,7 +148,6 @@
 <script>
   // import locales from 'consts/locales/index'
   import api from 'api'
-  import Breadcrumb from 'components/Breadcrumb'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -157,7 +156,6 @@
     mixins: [globalMixins],
 
     components: {
-      Breadcrumb
     },
 
     data () {

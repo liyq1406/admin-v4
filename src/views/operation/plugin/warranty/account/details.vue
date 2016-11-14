@@ -259,7 +259,6 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 import { warrantyMixins } from '../mixins'
 import SearchBox from 'components/SearchBox'
-import Breadcrumb from 'components/Breadcrumb'
 import Pager from 'components/Pager'
 import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
@@ -354,7 +353,6 @@ export default {
   components: {
     SearchBox,
     Pager,
-    Breadcrumb,
     InfoCard,
     InfoList
   },

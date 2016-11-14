@@ -24,7 +24,6 @@
 </template>
 
 <script>
-  import Breadcrumb from 'components/Breadcrumb'
   import { globalMixins } from 'src/mixins'
   import Vue from 'vue'
   import locales from 'consts/locales/index'
@@ -42,7 +41,6 @@
     },
 
     components: {
-      Breadcrumb
     },
 
     data () {

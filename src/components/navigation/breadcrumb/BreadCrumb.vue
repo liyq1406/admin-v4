@@ -22,14 +22,6 @@ export default {
     }
   },
 
-  data () {
-    return {
-    }
-  },
-
-  computed: {
-  },
-
   methods: {
     LastLink () {
       var last = this.nav[this.nav.length - 2].link
@@ -40,7 +32,8 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../assets/stylus/common'
+@import '../../../assets/stylus/common'
+
 .x-breadcrumb
   border-bottom 1px solid default-border-color
   padding 5px 15px 10px

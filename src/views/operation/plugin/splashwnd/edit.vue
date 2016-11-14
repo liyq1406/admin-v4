@@ -73,7 +73,6 @@
 <script>
   import { globalMixins } from 'src/mixins'
   import ImageUploader from 'components/ImageUploaderSplashWnd'
-  import Breadcrumb from 'components/Breadcrumb'
   import api from 'api'
 
   export default {
@@ -89,7 +88,6 @@
     },
 
     components: {
-      Breadcrumb,
       'image-uploader': ImageUploader
     },
 

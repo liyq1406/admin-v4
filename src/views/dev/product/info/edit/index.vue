@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import Breadcrumb from 'components/Breadcrumb'
 import Tab from 'components/Tab'
 import { globalMixins } from 'src/mixins'
 
@@ -20,8 +19,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Tab,
-    Breadcrumb
+    Tab
   },
 
   data () {

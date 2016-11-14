@@ -75,7 +75,6 @@
 <script>
   // import locales from 'consts/locales/index'
   import api from 'api'
-  import Breadcrumb from 'components/Breadcrumb'
   import { globalMixins } from 'src/mixins'
   import AreaSelect from 'components/AreaSelect'
   import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
@@ -86,7 +85,6 @@
     mixins: [globalMixins],
 
     components: {
-      Breadcrumb,
       DateTimeSinglePicker,
       'area-select': AreaSelect
     },

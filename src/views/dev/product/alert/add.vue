@@ -8,7 +8,6 @@
   </div>
 </template>
 <script>
-import Breadcrumb from 'components/Breadcrumb'
 import RuleForm from './components/RuleForm'
 import { globalMixins } from 'src/mixins'
 
@@ -18,8 +17,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    RuleForm,
-    Breadcrumb
+    RuleForm
   },
 
   data () {

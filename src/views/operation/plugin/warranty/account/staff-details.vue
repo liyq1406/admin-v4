@@ -91,7 +91,6 @@
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 import { warrantyMixins } from '../mixins'
-import Breadcrumb from 'components/Breadcrumb'
 import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
 import api from 'api'
@@ -144,7 +143,6 @@ export default {
   },
 
   components: {
-    Breadcrumb,
     InfoCard,
     InfoList
   },

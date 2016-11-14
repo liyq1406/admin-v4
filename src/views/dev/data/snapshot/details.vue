@@ -158,7 +158,6 @@ import IntelligentTable from 'components/IntelligentTable'
 import Chart from 'components/Chart/index'
 import { globalMixins } from 'src/mixins'
 import Alert from 'components/Alert'
-import Breadcrumb from 'components/Breadcrumb'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import formatDate from 'filters/format-date'
 
@@ -172,7 +171,6 @@ export default {
     SearchBox,
     Pager,
     IntelligentTable,
-    Breadcrumb,
     Chart,
     'x-alert': Alert,
     DateTimeMultiplePicker

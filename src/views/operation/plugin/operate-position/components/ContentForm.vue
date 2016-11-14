@@ -93,7 +93,6 @@
 import ImageUploader from 'components/ImageUploader'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
-import Breadcrumb from 'components/Breadcrumb'
 import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
@@ -106,7 +105,6 @@ export default {
   components: {
     Pager,
     SearchBox,
-    Breadcrumb,
     ImageUploader
   },
 
