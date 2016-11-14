@@ -232,6 +232,12 @@ export default {
             analysis: '用户行为分析'
           }
         },
+        major_clients: {
+          label: '大客户管理',
+          subs: {
+            list: '大客户管理'
+          }
+        },
         settings: {
           label: '设置',
           subs: {

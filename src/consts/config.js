@@ -256,6 +256,14 @@ export const MAIN_NAV = {
       //   url: '/users/analysis'
       }]
     }, {
+      alias: 'major_clients', // 大客户管理
+      icon: 'users',
+      unfold: true, // 展开子级菜单
+      subs: [{
+        alias: 'list',
+        url: '/major-clients'
+      }]
+    }, {
       alias: 'snapshots', // 快照分析
       icon: 'line-chart',
       url: 'snapshots'

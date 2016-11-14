@@ -223,13 +223,19 @@ export default {
           label: 'Snapshot Analysis'
         },
         users: {
-          label: 'User Management',
+          label: 'User',
           subs: {
             overview: 'Overview',
             list: 'User List',
-            major_clients: 'VIP Management',
+            major_clients: 'VIP',
             portrait: 'Portrait',
             analysis: 'User Performance Analysis'
+          }
+        },
+        major_clients: {
+          label: 'VIP',
+          subs: {
+            list: 'VIP'
           }
         },
         settings: {
