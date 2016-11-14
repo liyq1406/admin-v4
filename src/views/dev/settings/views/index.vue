@@ -24,9 +24,9 @@ export default {
   data () {
     return {
       secondaryNav: [{
-      //   label: '字段设置',
-      //   link: { path: '/dev/settings/views/field' }
-      // }, {
+        label: '字段设置',
+        link: { path: '/dev/settings/views/field' }
+      }, {
         label: '自定义产品概览',
         link: { path: '/dev/settings/views/overview' }
       }]
