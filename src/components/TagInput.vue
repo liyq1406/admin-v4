@@ -20,8 +20,10 @@
 
 <script>
   import EventListener from 'utils/event-listener'
+  import { globalMixins } from 'src/mixins'
 
   export default {
+    mixins: [globalMixins],
     props: {
       value: {
         type: String,
@@ -38,6 +40,10 @@
         type: Boolean,
         twoWay: true,
         default: false
+      },
+      limit: {
+        type: Number,
+        default: Number.INFINITE
       },
 
       // 是否允许用户输入
@@ -91,7 +97,7 @@
       tags () {
         this.value = this.tags.join(',')
         this.$nextTick(() => {
-          // this.setCandidateTop()
+          this.setCandidateTop()
         })
       },
 
@@ -112,6 +118,13 @@
       },
 
       selectTag (tag) {
+        if (this.tags.length === this.limit) {
+          this.showNotice({
+            type: 'error',
+            content: '标签最多只能填写20个！'
+          })
+          return
+        }
         this.tags.push(tag)
       },
 
