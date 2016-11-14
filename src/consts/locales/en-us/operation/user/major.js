@@ -7,6 +7,7 @@ export default {
   main_title: 'VIP Customer Management',
   list_title: 'VIP Customer List',
   new: 'Add VIP Customer',
+  edit: 'Edit VIP Customer',
   search_placeholder: 'Enter Customer Name',
   password: 'password',
   comfirm_password: 'Confirm',

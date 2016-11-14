@@ -1061,6 +1061,22 @@ let configRouter = (router) => {
           }
         },
 
+        'major-client/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/major-clients/add'))
+            }, 'admin')
+          }
+        },
+
+        'major-client/edit/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/major-clients/edit'))
+            }, 'admin')
+          }
+        },
+
         // 大客户详情
         'major-clients/:id': {
           component (resolve) {

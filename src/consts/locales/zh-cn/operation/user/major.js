@@ -7,6 +7,7 @@ export default {
   main_title: '大客户管理',
   list_title: '大客户列表',
   new: '新增大客户',
+  edit: '修改大客户',
   search_placeholder: '搜索客户名称',
   password: '密码',
   comfirm_password: '确认密码',
