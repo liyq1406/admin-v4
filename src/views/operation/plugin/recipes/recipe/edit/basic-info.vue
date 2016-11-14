@@ -123,12 +123,20 @@
                           <div class="row">
                             <div class="col-12">
                               <div class="input-text-wrap">
-                                <input placeholder="请填写材料" v-model="major.name" type="text" name="major.name" lazy class="input-text"/>
+                                <input placeholder="请填写材料" v-model="major.name" type="text" name="major.name" lazy class="input-text" :field="'majorname' + $index" v-validate="{required: true, maxlength: 20}"/>
+                              </div>
+                              <div class="form-tips form-tips-error">
+                                <span v-if="$validation['majorname' + $index].touched && $validation['majorname' + $index].required">主料名称不能为空</span>
+                                <span v-if="$validation['majorname' + $index].modified && $validation['majorname' + $index].maxlength">{{ $t('ui.validation.maxlength', ['主料名称', 20]) }}</span>
                               </div>
                             </div>
                             <div class="col-8 col-offset-1">
                               <div class="input-text-wrap">
-                                <input placeholder="用量" v-model="major.unit" type="text" name="major.unit" lazy class="input-text"/>
+                                <input placeholder="用量" v-model="major.unit" type="text" name="major.unit" lazy class="input-text" :field="'majorunit' + $index" v-validate="{required: true, maxlength: 10}"/>
+                              </div>
+                              <div class="form-tips form-tips-error">
+                                <span v-if="$validation['majorunit' + $index].touched && $validation['majorunit' + $index].required">主料用量不能为空</span>
+                                <span v-if="$validation['majorunit' + $index].modified && $validation['majorunit' + $index].maxlength">{{ $t('ui.validation.maxlength', ['主料用量', 10]) }}</span>
                               </div>
                             </div>
                             <div class="col-3">
@@ -138,7 +146,7 @@
                         </div>
                       </div>
                       <div class="operations col-offset-3">
-                        <button @click.prevent="addMajor" class="btn btn-primary"><i class="fa fa-plus"></i>添加主料</button>
+                        <button @click.prevent="addMajor" class="btn btn-primary" :class="{'disabled': major_ingredients.length === 20}" :disabled="major_ingredients.length === 20"><i class="fa fa-plus"></i>添加主料</button>
                       </div>
                     </div>
                     <div class="form-row row">
@@ -148,12 +156,20 @@
                           <div class="row">
                             <div class="col-12">
                               <div class="input-text-wrap">
-                                <input placeholder="请填写材料" v-model="minor.name" type="text" name="minor.name" lazy class="input-text"/>
+                                <input placeholder="请填写材料" v-model="minor.name" type="text" name="minor.name" lazy class="input-text" :field="'minorname' + $index" v-validate="{required: true, maxlength: 20}"/>
+                              </div>
+                              <div class="form-tips form-tips-error">
+                                <span v-if="$validation['minorname' + $index].touched && $validation['minorname' + $index].required">辅料名称不能为空</span>
+                                <span v-if="$validation['minorname' + $index].modified && $validation['minorname' + $index].maxlength">{{ $t('ui.validation.maxlength', ['辅料名称', 20]) }}</span>
                               </div>
                             </div>
                             <div class="col-8 col-offset-1">
                               <div class="input-text-wrap">
-                                <input placeholder="用量" v-model="minor.unit" type="text" name="minor.unit" lazy class="input-text"/>
+                                <input placeholder="用量" v-model="minor.unit" type="text" name="minor.unit" lazy class="input-text" :field="'minorunit' + $index" v-validate="{required: true, maxlength: 10}"/>
+                              </div>
+                              <div class="form-tips form-tips-error">
+                                <span v-if="$validation['minorunit' + $index].touched && $validation['minorunit' + $index].required">辅料用量不能为空</span>
+                                <span v-if="$validation['minorunit' + $index].modified && $validation['minorunit' + $index].maxlength">{{ $t('ui.validation.maxlength', ['辅料用量', 10]) }}</span>
                               </div>
                             </div>
                             <div class="col-3">
@@ -163,7 +179,7 @@
                         </div>
                       </div>
                       <div class="operations col-offset-3">
-                        <button @click.prevent="addMinor" class="btn btn-primary"><i class="fa fa-plus"></i>添加辅料</button>
+                        <button @click.prevent="addMinor" class="btn btn-primary" :class="{'disabled': minor_ingredients.length === 20}" :disabled="minor_ingredients.length === 20"><i class="fa fa-plus"></i>添加辅料</button>
                       </div>
                     </div>
                   </div>
@@ -185,7 +201,7 @@
                     <div class="form-row row">
                       <label class="form-control col-3">标签:</label>
                       <div class="controls col-21">
-                        <tag-input :value.sync="tag" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true" :input-disabled="true"></tag-input>
+                        <tag-input :value.sync="tag" :limit=20 :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true" :input-disabled="true"></tag-input>
                       </div>
                     </div>
                   </div>
@@ -268,7 +284,9 @@
                 </div>
                 <div class="preview-panel-bd">
                   <p v-for="step in cooking_steps">
-                    {{$index+1}}、{{step.description}}
+                    <span class="previewstep">第{{$index+1}}/{{cooking_steps.length}}步</span>
+                    <span>{{step.description}}</span>
+                    <image class="previewpic" :src="step.images[0]"></image>
                   </p>
                 </div>
               </div>
@@ -363,8 +381,8 @@ export default {
       show: false,
       difficulties: ['不限', '新手', '初级', '中级', '高级', '厨神'],
       cookingtimes: ['5分钟', '10分钟', '15分钟', '30分钟', '60分钟', '90分钟', '2小时', '数小时', '1天', '数天'],
-      major_ingredients: [{name: '', unit: ''}],
-      minor_ingredients: [{name: '', unit: ''}],
+      major_ingredients: [],
+      minor_ingredients: [],
       devices: [],
       // allDevices: DEVICES,
       allDevices: '',
@@ -775,6 +793,15 @@ export default {
 
 <style lang="stylus" scoped>
   @import '../../../../../../assets/stylus/common'
+  .previewstep
+    display block
+    font-size 16px
+  .previewpic
+    width 280px
+    height 210px
+    display block
+    margin-left auto
+    margin-right auto
   .line32
     line-height 32px
     height 32px

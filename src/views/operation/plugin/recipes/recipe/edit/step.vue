@@ -22,7 +22,11 @@
                         </div>
                         <div class="info-text">
                           <div class="input-text-wrap">
-                            <textarea v-model="cooking_step.description" type="text" lazy placeholder="请填写步骤的描述" class="input-text"></textarea>
+                            <textarea v-model="cooking_step.description"  name="cooking_step.description" lazy placeholder="请填写步骤的描述" class="input-text" :field="'step' + $index" v-validate="{required: true, maxlength: 100}"></textarea>
+                          </div>
+                          <div class="form-tips form-tips-error">
+                            <span v-if="$validation['step' + $index].touched && $validation['step' + $index].required">步骤描述不能为空</span>
+                            <span v-if="$validation['step' + $index].modified && $validation['step' + $index].maxlength">{{ $t('ui.validation.maxlength', ['步骤描述', 100]) }}</span>
                           </div>
                           <div class="button-list">
                             <div v-show="cooking_steps.length>1&&$index>0" @click="handleStepEvent('MOVE_UP', cooking_step, $index)" class="control-button button-up"><i class="icon fa fa-long-arrow-up"></i></div>
@@ -86,6 +90,7 @@
           </div>
         </div>
         <!-- 第二步骤END -->
+      </validator>
       <div v-show="isShowPreview" transition="modal" class="mask">
         <div class="preview-wrapper">
           <div :style="dialogStyle" class="preview-dialog">
@@ -201,11 +206,7 @@ export default {
       images: [''], // 成品图
       difficulty: '不限',
       instructions: '',
-      cooking_steps: [{
-        description: '',
-        time: '',
-        images: ['']
-      }],
+      cooking_steps: [],
       properties: {
         user_cooking_time: '',
         cooking_time: '5分钟',
