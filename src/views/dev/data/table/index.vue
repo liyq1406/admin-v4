@@ -443,7 +443,6 @@ import Pager from 'components/Pager'
 import IntelligentTable from 'components/IntelligentTable'
 import DatePicker from 'components/DatePicker'
 import TimePicker from 'components/TimePicker2'
-import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -455,8 +454,7 @@ export default {
     'x-table': IntelligentTable,
     'date-picker': DatePicker,
     'time-picker': TimePicker,
-    'pager': Pager,
-    'x-select': Select
+    'pager': Pager
   },
 
   data () {

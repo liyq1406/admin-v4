@@ -35,7 +35,6 @@
 
 <script>
   import * as config from 'consts/config'
-  import Select from 'components/Select'
   import Table from 'components/Table'
   import SearchBox from 'components/SearchBox'
   import { globalMixins } from 'src/mixins'
@@ -51,7 +50,6 @@
     mixins: [globalMixins],
 
     components: {
-      'x-select': Select,
       'x-table': Table,
       'search-box': SearchBox,
       Statistic,

@@ -89,7 +89,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import Select from 'components/Select'
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import SearchBox from 'components/SearchBox'
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
@@ -143,7 +142,6 @@
 
     components: {
       'x-table': Table,
-      'x-select': Select,
       'x-alert': Alert,
       RadioButtonGroup,
       DateTimeRangePicker,

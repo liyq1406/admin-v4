@@ -266,7 +266,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import Select from 'components/Select'
 import Pager from 'components/Pager'
 import api from 'api'
 
@@ -276,7 +275,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
     Pager
   },
 

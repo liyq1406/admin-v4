@@ -68,7 +68,6 @@
 <script>
 import SearchBox from 'components/SearchBox'
 import Pager from 'components/Pager'
-import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -78,8 +77,7 @@ export default {
 
   components: {
     SearchBox,
-    Pager,
-    'x-select': Select
+    Pager
   },
 
   data () {

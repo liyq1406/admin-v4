@@ -177,7 +177,6 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import InstructionsForm from '../components/InstructionsForm'
 import TipsForm from '../components/TipsForm'
-import Select from 'components/Select'
 import api from 'api'
 
 export default {
@@ -188,7 +187,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    'x-select': Select,
     InstructionsForm,
     TipsForm
   },

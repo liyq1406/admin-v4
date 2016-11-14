@@ -21,36 +21,36 @@
             </div>
             <div class="filter-group">
               <div class="filter-group-item">
-                <v-select size="small" width="90px" placeholder="请选择类别" :label="category.label">
+                <x-select size="small" width="90px" placeholder="请选择类别" :label="category.label">
                   <span slot="label">分类：</span>
                   <select v-model="category" @change="getRecipes">
                     <option v-for="opt in categoryOptions" :value="opt">{{ opt.label }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
               <div class="filter-group-item">
-                <v-select size="small" width="90px" placeholder="请选择来源" :label="source.label">
+                <x-select size="small" width="90px" placeholder="请选择来源" :label="source.label">
                   <span slot="label">来源：</span>
                   <select v-model="source" @change="getRecipes">
                     <option v-for="opt in sourceOptions" :value="opt">{{ opt.label }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
               <div class="filter-group-item">
-                <v-select size="small" width="90px" placeholder="请选择状态" :label="status.label">
+                <x-select size="small" width="90px" placeholder="请选择状态" :label="status.label">
                   <span slot="label">状态：</span>
                   <select v-model="status" @change="getRecipes">
                     <option v-for="opt in statusOptions" :value="opt">{{ opt.label }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
               <div class="filter-group-item">
-                <v-select size="small" width="90px" placeholder="请选择类型" :label="type.label">
+                <x-select size="small" width="90px" placeholder="请选择类型" :label="type.label">
                   <span slot="label">类型：</span>
                   <select v-model="type" @change="getRecipes">
                     <option v-for="opt in typeOptions" :value="opt">{{ opt.label }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
           </div>
@@ -61,12 +61,12 @@
       <h3 slot="header">请选择菜谱类型</h3>
       <div slot="body" class="form">
         <div class="form-row row">
-          <!-- <v-select size="small" width="120px" placeholder="请选择类型" :label="selectedType.label">
+          <!-- <x-select size="small" width="120px" placeholder="请选择类型" :label="selectedType.label">
             <span slot="label">类型：</span>
             <select v-model="selectedType">
               <option v-for="opt in menuTypeOptions" :value="opt">{{ opt.label }}</option>
             </select>
-          </v-select> -->
+          </x-select> -->
           <label class="form-control col-6">菜谱类型:</label>
           <div class="radio-group col-18">
             <label v-for="opt in menuTypeOptions" class="radio">
@@ -86,7 +86,6 @@
 <script>
 import api from 'api'
 import * as config from 'consts/config'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import formatDate from 'filters/format-date'
@@ -100,7 +99,6 @@ export default {
 
   components: {
     SearchBox,
-    'v-select': Select,
     'x-table': Table
   },
 

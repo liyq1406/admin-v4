@@ -36,7 +36,6 @@ import api from 'api'
 import { globalMixins } from 'src/mixins'
 import SearchBox from 'components/SearchBox'
 import Dropdown from 'components/Dropdown'
-import Select from 'components/Select'
 import Pager from 'components/Pager'
 import Table from 'components/Table'
 import formatDate from 'filters/format-date'
@@ -49,7 +48,6 @@ export default {
   components: {
     SearchBox,
     Dropdown,
-    'x-select': Select,
     'x-table': Table,
     Pager
   },

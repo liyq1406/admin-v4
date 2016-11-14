@@ -120,7 +120,6 @@ import Pager from 'components/Pager'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 import convertData from 'components/chart/convert-data'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
@@ -134,7 +133,6 @@ export default {
   components: {
     Pager,
     RadioButtonGroup,
-    'x-select': Select,
     SearchBox,
     Chart
   },

@@ -592,7 +592,6 @@
 <script>
 import api from 'api'
 import Pager from 'components/Pager'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import ImageUploader from 'components/ImageUploader'
 import { globalMixins } from 'src/mixins'
@@ -621,7 +620,6 @@ export default {
     'image-uploader': ImageUploader,
     'tag-input': TagInput,
     DeviceForm,
-    'x-select': Select,
     InstructionsForm,
     TipsForm
   },

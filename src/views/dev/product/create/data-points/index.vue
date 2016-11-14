@@ -185,7 +185,6 @@
 </template>
 
 <script>
-import Select from 'components/Select'
 import DataModel from './data-model'
 import { globalMixins } from 'src/mixins'
 import Validator from 'utils/Validator'
@@ -197,7 +196,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
     DataModel
   },
 

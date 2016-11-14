@@ -313,7 +313,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import Select from 'components/Select'
   import DatePicker from 'components/DateTimeSinglePicker'
   import AreaSelect from 'components/AreaSelect'
   import RadioButtonGroup from 'components/RadioButtonGroup'
@@ -337,8 +336,7 @@
       DatePicker,
       AreaSelect,
       TagInput,
-      RadioButtonGroup,
-      'x-select': Select
+      RadioButtonGroup
     },
 
     data () {

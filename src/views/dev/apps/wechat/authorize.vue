@@ -2,12 +2,12 @@
   <div class="wechat-authorize mt15">
     <div class="action-bar row">
       <div class="col-12">
-        <v-select width="200px" :label="currProduct.name" size="small">
+        <x-select width="200px" :label="currProduct.name" size="small">
           <span slot="label">选择产品:</span>
           <select v-model="currProduct" @change="getAppStatus">
             <option v-for="product in allProducts" :value="product">{{ product.name }}</option>
           </select>
-        </v-select>
+        </x-select>
       </div>
       <div class="col-12">
         <button @click.prevent.stop="stopProductEmpower" v-if="empowering" class="btn btn-ghost fr">{{ $t('common.unempower') }}</button>
@@ -274,7 +274,6 @@
 import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
-import Select from 'components/Select'
 import Tooltip from 'components/Tooltip'
 // import locales from 'consts/locales/index'
 import { globalMixins } from 'src/mixins'
@@ -286,7 +285,6 @@ export default {
 
   components: {
     'pager': Pager,
-    'v-select': Select,
     'v-tooltip': Tooltip
   },
 

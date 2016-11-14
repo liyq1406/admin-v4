@@ -57,7 +57,6 @@
 <script>
 import * as config from 'consts/config'
 import api from 'api'
-import Select from 'components/Select'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Statistic from 'components/Statistic'
 import Breadcrumb from 'components/Breadcrumb'
@@ -74,7 +73,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
     DateTimeMultiplePicker,
     'x-table': Table,
     Statistic,

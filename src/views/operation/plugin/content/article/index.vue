@@ -15,23 +15,23 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="query" :placeholder="'请输入' + searchType.label" @cancel="getArticleList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getArticleList(true)">
-                  <v-select width="80px" :label="searchType.label" size="small">
+                  <x-select width="80px" :label="searchType.label" size="small">
                     <select v-model="searchType">
                       <option v-for="option in searchTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                   <button slot="search-button" class="btn" @click="getArticleList(true)">搜索</button>
                 </search-box>
               </div>
             </div>
             <div class="filter-group">
               <div class="filter-group-item">
-                <v-select width="100px" :label="queryType.label" size="small">
+                <x-select width="100px" :label="queryType.label" size="small">
                   <label slot='label'>状态</label>
                   <select v-model="queryType" @change='getArticleList(true)'>
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
           </div>
@@ -44,7 +44,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import SearchBox from 'components/SearchBox'
-import Select from 'components/Select'
 import Pager from 'components/Pager'
 import Table from 'components/Table'
 import formatDate from 'filters/format-date'
@@ -60,7 +59,6 @@ export default {
   components: {
     SearchBox,
     Pager,
-    'v-select': Select,
     'x-table': Table
   },
 

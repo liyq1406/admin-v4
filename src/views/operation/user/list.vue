@@ -67,7 +67,6 @@
 <script>
   import Vue from 'vue'
   import SearchBox from 'components/SearchBox'
-  import Select from 'components/Select'
   import api from 'api'
   import * as config from 'consts/config'
   import Table from 'components/Table'
@@ -86,7 +85,6 @@
     components: {
       'search-box': SearchBox,
       'api': api,
-      'x-select': Select,
       'x-table': Table,
       Statistic,
       DateTimeRangePicker

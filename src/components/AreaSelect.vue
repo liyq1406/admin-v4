@@ -29,13 +29,10 @@
 </template>
 
 <script>
-import Select from '../components/Select'
-
 export default {
   name: 'AreaSelect',
 
   components: {
-    'x-select': Select
   },
 
   props: {

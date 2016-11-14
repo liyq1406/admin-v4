@@ -90,7 +90,6 @@
   import Vue from 'vue'
   import * as config from 'consts/config'
   import locales from 'consts/locales/index'
-  import Select from 'components/Select'
   import Captcha from 'components/Captcha'
   import { globalMixins } from 'src/mixins'
 
@@ -102,8 +101,7 @@
     mixins: [globalMixins],
 
     components: {
-      'captcha': Captcha,
-      'x-select': Select
+      'captcha': Captcha
     },
 
     data () {

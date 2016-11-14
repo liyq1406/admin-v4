@@ -39,7 +39,6 @@
 <script>
   import Vue from 'vue'
   import api from 'src/api'
-  import Select from 'components/Select'
   import SearchBox from 'components/SearchBox'
   import locales from 'consts/locales/index'
   import Pager from 'components/Pager'
@@ -53,7 +52,6 @@
     mixins: [globalMixins],
 
     components: {
-      'x-select': Select,
       SearchBox,
       Pager,
       'x-table': Table

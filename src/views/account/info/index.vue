@@ -85,7 +85,6 @@ import { editPasswordMixin } from '../mixins'
 import InfoList from 'components/InfoList'
 import formatDate from 'filters/format-date'
 import api from 'api'
-import Select from 'components/Select'
 import EditInfoForm from './components/EditInfoForm'
 import { setCurrentMember } from 'store/actions/system'
 
@@ -106,8 +105,7 @@ export default {
 
   components: {
     InfoList,
-    EditInfoForm,
-    'x-select': Select
+    EditInfoForm
   },
 
   data () {

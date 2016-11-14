@@ -326,7 +326,6 @@
 
 <script>
 import api from 'src/api'
-import Select from 'components/Select'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import RadioGroup from 'components/RadioGroup'
 import { globalMixins } from 'src/mixins'
@@ -337,7 +336,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
     RadioButtonGroup,
     RadioGroup
   },

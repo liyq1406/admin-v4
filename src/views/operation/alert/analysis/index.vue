@@ -92,7 +92,6 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import Select from 'components/Select'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Statistic from 'components/Statistic2'
 import Chart from 'components/Chart'
@@ -107,8 +106,7 @@ export default {
   components: {
     DateTimeMultiplePicker,
     Statistic,
-    Chart,
-    'x-select': Select
+    Chart
   },
 
   vuex: {

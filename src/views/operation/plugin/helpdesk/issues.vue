@@ -57,7 +57,6 @@
 <script>
 // import Vue from 'vue'
 import * as config from 'consts/config'
-import Select from 'components/Select'
 import Pager from 'components/Pager'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
@@ -79,7 +78,6 @@ export default {
   },
 
   components: {
-    'x-select': Select,
     Pager,
     RadioButtonGroup,
     DateTimeRangePicker

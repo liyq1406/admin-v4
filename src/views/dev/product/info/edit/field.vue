@@ -113,7 +113,6 @@
 <script>
 import api from 'api'
 // import * as config from 'consts/config'
-import Select from 'components/Select'
 import Switch from 'components/Switch'
 import { globalMixins } from 'src/mixins'
 
@@ -123,7 +122,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
     Switch
   },
 

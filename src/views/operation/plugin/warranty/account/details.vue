@@ -258,7 +258,6 @@
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 import { warrantyMixins } from '../mixins'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
 import Pager from 'components/Pager'
@@ -353,7 +352,6 @@ export default {
   },
 
   components: {
-    'x-select': Select,
     SearchBox,
     Pager,
     Breadcrumb,

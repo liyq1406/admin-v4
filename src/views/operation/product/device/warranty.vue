@@ -35,13 +35,11 @@
 <script>
   import SearchBox from 'components/SearchBox'
   // import AreaSelect from 'components/AreaSelect'
-  import Select from 'components/Select'
   import Table from 'components/Table'
   import formatDate from 'filters/format-date'
 
   export default {
     components: {
-      'x-select': Select,
       'x-table': Table,
       // 'area-select': AreaSelect,
       'search-box': SearchBox

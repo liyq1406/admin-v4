@@ -36,7 +36,6 @@
     },
 
     components: {
-      'x-select': Select
     },
 
     computed: {

@@ -72,7 +72,6 @@
 // import Vue from 'vue'
 // import * as config from 'consts/config'
 import Pager from 'components/Pager'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 // import locales from 'consts/locales/index'
 import { globalMixins } from 'src/mixins'
@@ -91,8 +90,7 @@ export default {
 
   components: {
     Pager,
-    SearchBox,
-    'x-select': Select
+    SearchBox
   },
 
   data () {

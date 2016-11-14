@@ -165,7 +165,6 @@ import api from 'api'
 import InfoCard from 'components/InfoCard'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
-import Select from 'components/Select'
 import InfoList from 'components/InfoList'
 import formatDate from 'filters/format-date'
 import * as config from 'consts/config'
@@ -180,7 +179,6 @@ export default {
     InfoCard,
     InfoList,
     'x-table': Table,
-    'x-select': Select,
     SearchBox
   },
 

@@ -100,7 +100,6 @@ import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import locales from 'consts/locales/index'
 import Range from 'components/Range1'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 
 var socket = null
@@ -111,7 +110,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
     Switch,
     Range,
     SearchBox

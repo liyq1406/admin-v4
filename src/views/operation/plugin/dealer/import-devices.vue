@@ -58,7 +58,6 @@
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
   import api from 'api'
-  import Select from 'components/Select'
   import SearchBox from 'components/SearchBox'
   import Table from 'components/Table'
   import Breadcrumb from 'components/Breadcrumb'
@@ -71,7 +70,6 @@
 
     components: {
       'x-table': Table,
-      'x-select': Select,
       SearchBox,
       Breadcrumb
     },

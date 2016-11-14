@@ -63,7 +63,6 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import Select from 'components/Select'
 import Pager from 'components/Pager'
 import Vue from 'vue'
 // import * as config from 'consts/config'
@@ -75,7 +74,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
     Pager
   },
 

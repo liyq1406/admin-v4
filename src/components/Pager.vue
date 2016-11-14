@@ -34,7 +34,6 @@
 <script>
 // import { COUNT_PER_PAGE } from 'consts/config'
 import { globalMixins } from '../mixins'
-import Select from 'components/Select'
 import ButtonGroup from 'components/ButtonGroup'
 
 export default {
@@ -43,7 +42,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
     ButtonGroup
   },
 

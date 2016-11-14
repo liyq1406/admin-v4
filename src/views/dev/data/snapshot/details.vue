@@ -154,7 +154,6 @@ import api from 'api'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
-import Select from 'components/Select'
 import IntelligentTable from 'components/IntelligentTable'
 import Chart from 'components/Chart/index'
 import { globalMixins } from 'src/mixins'
@@ -175,7 +174,6 @@ export default {
     IntelligentTable,
     Breadcrumb,
     Chart,
-    'x-select': Select,
     'x-alert': Alert,
     DateTimeMultiplePicker
   },

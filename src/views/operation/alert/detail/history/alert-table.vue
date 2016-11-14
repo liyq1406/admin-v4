@@ -57,7 +57,6 @@
 import Vue from 'vue'
 import api from 'api'
 import locales from 'consts/locales/index'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import formatDate from 'filters/format-date'
@@ -72,7 +71,6 @@ export default {
 
   components: {
     'x-table': Table,
-    'x-select': Select,
     SearchBox,
     DateTimeRangePicker
   },

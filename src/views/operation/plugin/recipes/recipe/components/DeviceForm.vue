@@ -58,8 +58,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-import Select from 'components/Select'
-
 export default {
   name: 'DeviceForm',
 
@@ -68,7 +66,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    'x-select': Select
   },
   vuex: {
     getters: {

@@ -106,7 +106,6 @@
 <script>
 import api from 'api'
 import * as config from 'consts/config'
-import Select from 'components/Select'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
@@ -121,7 +120,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
     'x-table': Table,
     'search-box': SearchBox,
     'pager': Pager,

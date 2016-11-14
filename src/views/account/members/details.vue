@@ -96,7 +96,6 @@ import { editPasswordMixin } from '../mixins'
 import InfoList from 'components/InfoList'
 import Breadcrumb from 'components/Breadcrumb'
 import formatDate from 'filters/format-date'
-import Select from 'components/Select'
 import api from 'api'
 
 export default {
@@ -113,7 +112,6 @@ export default {
 
   components: {
     InfoList,
-    'x-select': Select,
     Breadcrumb
   },
 

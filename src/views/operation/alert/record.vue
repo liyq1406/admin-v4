@@ -88,7 +88,6 @@ import locales from 'consts/locales/index'
 import Pager from 'components/Pager'
 import Statistic from 'components/Statistic'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Table from 'components/Table'
@@ -108,7 +107,6 @@ export default {
     RadioButtonGroup,
     Statistic,
     DateTimeMultiplePicker,
-    'x-select': Select,
     'x-table': Table,
     SearchBox,
     DateTimeRangePicker

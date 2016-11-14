@@ -135,7 +135,6 @@ import { globalMixins } from 'src/mixins'
 import PicTxt from 'components/PicTxt'
 import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
 import Switch from 'components/Switch'
-import Select from 'components/Select'
 import api from 'api'
 
 export default {
@@ -143,8 +142,7 @@ export default {
 
   components: {
     PicTxt,
-    'x-switch': Switch,
-    'x-select': Select
+    'x-switch': Switch
   },
 
   mixins: [globalMixins],

@@ -172,7 +172,6 @@
 import Vue from 'vue'
 import api from 'api'
 import SearchBox from 'components/SearchBox'
-import Select from 'components/Select'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic2'
@@ -190,7 +189,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
     'x-table': Table,
     AreaSelect,
     SearchBox,

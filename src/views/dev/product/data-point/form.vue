@@ -37,11 +37,11 @@
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.type") }}:</label>
                 <div class="controls col-18">
                   <div class="select">
-                    <v-select :label="modelType.label">
+                    <x-select :label="modelType.label">
                       <select v-model="modelType" name="type">
                         <option v-for="type in locales.data.DATAPOINT_TYPES" :value="type">{{ type.label }}</option>
                       </select>
-                    </v-select>
+                    </x-select>
                   </div>
                 </div>
               </div>
@@ -129,7 +129,6 @@
 
 <script>
 import api from 'api'
-import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 import Breadcrumb from 'components/Breadcrumb'
 
@@ -145,7 +144,6 @@ export default {
   },
 
   components: {
-    'v-select': Select,
     Breadcrumb
   },
 

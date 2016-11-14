@@ -99,7 +99,6 @@
 import api from 'api'
 import TreeItem from '../components/TreeItem'
 import Pager from 'components/Pager'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import ImageUploader from 'components/ImageUploader'
 import { globalMixins } from 'src/mixins'
@@ -117,14 +116,12 @@ export default {
 
   components: {
     'tree-item': TreeItem,
-    'v-select': Select,
     'search-box': SearchBox,
     'pager': Pager,
     'image-uploader': ImageUploader,
     'tag-input': TagInput,
     CodeForm,
-    MenuForm,
-    'x-select': Select
+    MenuForm
   },
 
   vuex: {
@@ -1138,7 +1135,7 @@ export default {
       .status-bar
         padding 0
         border 0
-        .v-select
+        .x-select
           float left
           display inline-block
           padding-left 10px

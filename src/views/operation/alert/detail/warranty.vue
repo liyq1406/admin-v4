@@ -70,11 +70,8 @@
 <script>
   import SearchBox from 'components/SearchBox'
   import AreaSelect from 'components/AreaSelect'
-  import Select from 'components/Select'
-
   export default {
     components: {
-      'x-select': Select,
       'area-select': AreaSelect,
       'search-box': SearchBox
     },

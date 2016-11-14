@@ -277,7 +277,6 @@
 
 <script>
   import api from 'api'
-  import Select from 'components/Select'
   import * as config from 'consts/config'
   import { globalMixins } from 'src/mixins'
 
@@ -287,7 +286,6 @@
     mixins: [globalMixins],
 
     components: {
-      'x-select': Select
     },
 
     data () {

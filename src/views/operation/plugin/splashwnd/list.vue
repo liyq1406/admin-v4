@@ -60,7 +60,6 @@ import api from 'api'
 import * as config from 'consts/config'
 import locales from 'consts/locales/index'
 import Pager from 'components/Pager'
-import Select from 'components/Select'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
@@ -75,7 +74,6 @@ export default {
 
   components: {
     Pager,
-    'x-select': Select,
     'x-table': Table
   },
 

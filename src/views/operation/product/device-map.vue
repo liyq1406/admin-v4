@@ -57,7 +57,6 @@ import { setCurrProductMixin } from './mixins'
 import api from 'api'
 import * as config from 'consts/config'
 // import AMap from 'AMap'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Alert from 'components/Alert'
 import Pager from 'components/Pager'
@@ -69,7 +68,6 @@ export default {
   mixins: [globalMixins, setCurrProductMixin],
 
   components: {
-    'x-select': Select,
     'x-alert': Alert,
     SearchBox,
     Pager

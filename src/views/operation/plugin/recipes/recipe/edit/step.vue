@@ -164,7 +164,6 @@
 <script>
 import api from 'api'
 import Pager from 'components/Pager'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import ImageUploader from 'components/ImageUploader'
 import { globalMixins } from 'src/mixins'
@@ -178,11 +177,9 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    'v-select': Select,
     'search-box': SearchBox,
     'pager': Pager,
-    'image-uploader': ImageUploader,
-    'x-select': Select
+    'image-uploader': ImageUploader
   },
 
   vuex: {
@@ -1076,7 +1073,7 @@ export default {
       .status-bar
         padding 0
         border 0
-        .v-select
+        .x-select
           float left
           display inline-block
           padding-left 10px

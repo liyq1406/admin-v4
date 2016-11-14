@@ -158,7 +158,6 @@
 
 <script>
 import SearchBox from 'components/SearchBox'
-import Select from 'components/Select'
 import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
@@ -172,8 +171,7 @@ export default {
 
   components: {
     'search-box': SearchBox,
-    'pager': Pager,
-    'x-select': Select
+    'pager': Pager
   },
 
   vuex: {

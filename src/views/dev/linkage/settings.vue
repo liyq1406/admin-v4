@@ -86,7 +86,6 @@
 <script>
   import { globalMixins } from 'src/mixins'
   import Alert from 'components/Alert'
-  import Select from 'components/Select'
   import Switch from 'components/Switch'
   import api from 'api'
 
@@ -97,7 +96,6 @@
 
     components: {
       'x-alert': Alert,
-      'x-select': Select,
       'x-switch': Switch
     },
 

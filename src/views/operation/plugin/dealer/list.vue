@@ -85,7 +85,6 @@
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
   import api from 'api'
-  import Select from 'components/Select'
   import SearchBox from 'components/SearchBox'
   import Pager from 'components/Pager'
   import DatePicker from 'components/DatePicker'
@@ -95,7 +94,6 @@
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      'x-select': Select,
       SearchBox,
       Pager,
       DatePicker

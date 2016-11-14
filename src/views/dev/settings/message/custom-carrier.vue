@@ -61,7 +61,6 @@
 <script>
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
-import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
 
@@ -71,8 +70,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'pager': Pager,
-    'x-select': Select
+    'pager': Pager
   },
 
   vuex: {

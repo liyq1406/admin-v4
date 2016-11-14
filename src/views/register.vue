@@ -129,7 +129,6 @@
 import api from 'api'
 // import Vue from 'vue'
 // import locales from 'consts/locales/index'
-import Select from 'components/Select'
 import Alert from 'components/Alert'
 import { globalMixins } from 'src/mixins'
 
@@ -141,7 +140,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
     'x-alert': Alert
   },
 

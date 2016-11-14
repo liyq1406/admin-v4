@@ -81,7 +81,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-import Select from 'components/Select'
 import api from 'api'
 
 export default {
@@ -92,7 +91,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    'x-select': Select
   },
 
   vuex: {

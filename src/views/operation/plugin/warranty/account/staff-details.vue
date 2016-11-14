@@ -91,7 +91,6 @@
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 import { warrantyMixins } from '../mixins'
-import Select from 'components/Select'
 import Breadcrumb from 'components/Breadcrumb'
 import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
@@ -145,7 +144,6 @@ export default {
   },
 
   components: {
-    'x-select': Select,
     Breadcrumb,
     InfoCard,
     InfoList

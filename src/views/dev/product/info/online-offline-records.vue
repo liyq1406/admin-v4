@@ -48,7 +48,6 @@
 <script>
 import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
-import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
 import Table from 'components/Table'
@@ -65,7 +64,6 @@ export default {
     Breadcrumb,
     SearchBox,
     DateTimeRangePicker,
-    'x-select': Select,
     'x-table': Table
   },
 
