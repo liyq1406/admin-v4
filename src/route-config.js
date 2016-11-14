@@ -1050,6 +1050,60 @@ let configRouter = (router) => {
             }
           }
         },
+
+        /* ************************* 大客户管理 ********************************/
+        // 大客户管理(列表)
+        'major-clients': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/major-clients'))
+            }, 'admin')
+          }
+        },
+
+        // 大客户详情
+        'major-clients/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/major-clients/details/index'))
+            }, 'admin')
+          },
+          subRoutes: {
+            // 设备列表
+            'device': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/major-clients/details/device'))
+                }, 'admin')
+              }
+            },
+            // 账户管理
+            'account': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/major-clients/details/account'))
+                }, 'admin')
+              }
+            },
+            // 组织架构
+            'organization': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/major-clients/details/organization'))
+                }, 'admin')
+              }
+            },
+            // 独立配置入口
+            'config': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/major-clients/details/config'))
+                }, 'admin')
+              }
+            }
+          }
+        },
+
         // 快照分析
         'snapshots': {
           component (resolve) {
@@ -1808,7 +1862,8 @@ let configRouter = (router) => {
     '/operation/plugins': '/operation/plugins/extensions',
     '/operation/alerts': '/operation/alerts/record',
     '/operation/alerts/detail/:id': '/operation/alerts/detail/:id/history',
-    '/dev/firmware/manage': '/dev/firmware/manage/message'
+    '/dev/firmware/manage': '/dev/firmware/manage/message',
+    '/operation/major-clients/:id': '/operation/major-clients/:id/device'
   })
 
   router.beforeEach((transition) => {
