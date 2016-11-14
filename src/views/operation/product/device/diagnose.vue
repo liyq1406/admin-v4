@@ -94,7 +94,6 @@
 import Vue from 'vue'
 // import v-form from 'vue'
 import api from 'api'
-import Switch from 'components/Switch'
 import io from 'socket.io-client'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
@@ -110,7 +109,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Switch,
     Range,
     SearchBox
   },

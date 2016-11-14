@@ -12,7 +12,7 @@
           </pic-txt>
           <!-- <div class="" style="margin-left:110px">
             <span class="mr5">开启萤石联动服务</span>
-            <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></x-switch>
+            <switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></x-switch>
           </div> -->
         </div>
 
@@ -53,7 +53,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import Switch from 'components/Switch'
   import PicTxt from 'components/PicTxt'
   import LinkageItem from './components/LinkageItem'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
@@ -64,7 +63,6 @@
     name: 'Nest',
 
     components: {
-      'x-switch': Switch,
       'pic-txt': PicTxt,
       'linkage-item': LinkageItem
     },

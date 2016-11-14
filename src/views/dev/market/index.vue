@@ -27,7 +27,7 @@
                   <p>{{ plugin.description }} <a class="pluginlink hl-red" v-if="plugin.enable === true && plugin.platform_status > 1" v-link="{path:'/operation/plugins/' + plugin.alias + '/' + plugin.id}">点此进入</a></p>
                 </div>
                 <span class="status">
-                  <x-switch :disabled="plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)" @disabled-click="pluginToggle(plugin)"></x-switch>
+                  <switch :disabled="plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)" @disabled-click="pluginToggle(plugin)"></x-switch>
                 </span>
               </div>
             </div>
@@ -52,7 +52,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import Switch from 'components/Switch'
   // import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { pluginFactoryMixin } from './mixins'
 
@@ -70,7 +69,6 @@
     },
 
     components: {
-      'x-switch': Switch
     },
 
     data () {

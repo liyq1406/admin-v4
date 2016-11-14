@@ -12,9 +12,9 @@
           </pic-txt>
           <div class="tal mt20" style="padding-left: 126px">
             <span class="mr5">开启萤石联动服务</span>
-            <!-- <x-switch size="small" :disabled="loading" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)"></x-switch> -->
-            <!-- <x-switch size="small" :disabled="loading || true" :value.sync="plugin.enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch> -->
-            <x-switch :disabled="plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch>
+            <!-- <switch size="small" :disabled="loading" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)"></x-switch> -->
+            <!-- <switch size="small" :disabled="loading || true" :value.sync="plugin.enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch> -->
+            <switch :disabled="plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch>
           </div>
         </div>
       </div>
@@ -63,7 +63,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import Switch from 'components/Switch'
 import PicTxt from 'components/PicTxt'
 import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
 import api from 'api'
@@ -72,8 +71,7 @@ export default {
   name: 'Ezviz',
 
   components: {
-    PicTxt,
-    'x-switch': Switch
+    PicTxt
   },
 
   mixins: [globalMixins],

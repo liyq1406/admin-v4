@@ -144,7 +144,6 @@
 <script>
   import { globalMixins } from 'src/mixins'
   import api from 'src/api'
-  import Switch from 'components/Switch'
   import SearchBox from 'components/SearchBox'
   // import locales from 'consts/locales/index'
 
@@ -159,8 +158,7 @@
       }
     },
     components: {
-      SearchBox,
-      Switch
+      SearchBox
     },
     data () {
       return {

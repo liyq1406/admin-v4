@@ -35,7 +35,6 @@
 <script>
   import Tab from 'components/Tab'
   import { globalMixins } from 'src/mixins'
-  import Switch from 'components/Switch'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { pluginFactoryMixin } from './mixins'
 
@@ -53,8 +52,7 @@
     },
 
     components: {
-      'tab': Tab,
-      'switch': Switch
+      'tab': Tab
     },
 
     data () {

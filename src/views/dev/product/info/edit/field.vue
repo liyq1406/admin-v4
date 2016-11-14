@@ -113,7 +113,6 @@
 <script>
 import api from 'api'
 // import * as config from 'consts/config'
-import Switch from 'components/Switch'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -122,7 +121,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Switch
   },
 
   data () {

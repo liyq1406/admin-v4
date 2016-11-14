@@ -13,8 +13,8 @@
         </div>
         <div class="tal mt20" style="padding-left: 126px">
           <span class="mr5">开启philips hue联动服务</span>
-          <!-- <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></x-switch> -->
-          <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></x-switch>
+          <!-- <switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></x-switch> -->
+          <switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></x-switch>
         </div>
       </div>
       <div class="row mt20 mb20" v-show="plugins[0].enable" transition="bottomToTop">
@@ -63,7 +63,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import Switch from 'components/Switch'
   import PicTxt from 'components/PicTxt'
   import LinkageItem from './components/LinkageItem'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
@@ -74,7 +73,6 @@
     name: 'Nest',
 
     components: {
-      'x-switch': Switch,
       'pic-txt': PicTxt,
       'linkage-item': LinkageItem
     },

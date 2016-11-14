@@ -21,7 +21,6 @@
 </template>
 
 <script>
-  import Switch from 'components/Switch'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { globalMixins } from 'src/mixins'
   import { pluginFactoryMixin } from './mixins'
@@ -40,7 +39,6 @@
     },
 
     components: {
-      'switch': Switch
     },
 
     data () {

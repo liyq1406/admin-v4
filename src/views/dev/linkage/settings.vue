@@ -46,12 +46,12 @@
                     <!-- <td>{{ datapoint.create_date | formatDate }}</td> -->
                     <td class="tac">
                       <span class="status">
-                        <x-switch size="small" :value="datapoint.isControlable" :disabled="true" @switch-toggle="toggleControlable(datapoint)" @disabled-click="toggleControlable(datapoint)"></x-switch>
+                        <switch size="small" :value="datapoint.isControlable" :disabled="true" @switch-toggle="toggleControlable(datapoint)" @disabled-click="toggleControlable(datapoint)"></x-switch>
                       </span>
                     </td>
                     <td class="tac">
                       <span class="status">
-                        <x-switch size="small" :value="datapoint.isEnable" :disabled="true"  @switch-toggle="toggleEnable(datapoint)" @disabled-click="toggleEnable(datapoint)"></x-switch>
+                        <switch size="small" :value="datapoint.isEnable" :disabled="true"  @switch-toggle="toggleEnable(datapoint)" @disabled-click="toggleEnable(datapoint)"></x-switch>
                       </span>
                     </td>
                   </tr>
@@ -86,7 +86,6 @@
 <script>
   import { globalMixins } from 'src/mixins'
   import Alert from 'components/Alert'
-  import Switch from 'components/Switch'
   import api from 'api'
 
   export default {
@@ -95,8 +94,7 @@
     mixins: [globalMixins],
 
     components: {
-      'x-alert': Alert,
-      'x-switch': Switch
+      'x-alert': Alert
     },
 
     data () {

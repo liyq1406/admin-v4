@@ -14,7 +14,7 @@
         </div>
         <div class="mt20" style="padding-left: 126px">
           <span class="mr5">开启amazon echo联动服务</span>
-          <x-switch :disabled="plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch>
+          <switch :disabled="plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch>
         </div>
       </div>
       <div class="row mt20 mb20" v-show="plugin.enable && plugin.platform_status===2" transition="bottomToTop">
@@ -134,15 +134,13 @@
 import { globalMixins } from 'src/mixins'
 import PicTxt from 'components/PicTxt'
 import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
-import Switch from 'components/Switch'
 import api from 'api'
 
 export default {
   name: 'Echo',
 
   components: {
-    PicTxt,
-    'x-switch': Switch
+    PicTxt
   },
 
   mixins: [globalMixins],

@@ -14,8 +14,8 @@
         </div>
         <div class="col-8 tar">
           <span class="mr5">开启nest服务</span>
-          <!-- <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></x-switch> -->
-          <x-switch size="small" :disabled="loading || true" :value.sync="plugins[0].enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch>
+          <!-- <switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></x-switch> -->
+          <switch size="small" :disabled="loading || true" :value.sync="plugins[0].enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch>
         </div>
       </div>
       <div class="row mt20 mb20" v-show="plugins[0].enable" transition="bottomToTop">
@@ -54,7 +54,7 @@
               <span class="label-text">联动服务：</span>
             </div>
             <div class="col-20">
-              <x-switch size="small" :value.sync="enableThermostat" :disabled="enableNest"></x-switch>
+              <switch size="small" :value.sync="enableThermostat" :disabled="enableNest"></x-switch>
               <span v-if="!enableThermostat" class="label-text">未开启</span>
               <span v-else class="label-text">已开启</span>
             </div>
@@ -67,7 +67,7 @@
               <span class="label-text">联动服务：</span>
             </div>
             <div class="col-20">
-              <x-switch size="small" :value.sync="enableSmoke" :disabled="enableNest"></x-switch>
+              <switch size="small" :value.sync="enableSmoke" :disabled="enableNest"></x-switch>
               <span v-if="!enableSmoke" class="label-text">未开启</span>
               <span v-else class="label-text">已开启</span>
             </div>
@@ -91,7 +91,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import Switch from 'components/Switch'
   import PicTxt from 'components/PicTxt'
   import LinkageItem from './components/LinkageItem'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
@@ -102,7 +101,6 @@
     name: 'Nest',
 
     components: {
-      'x-switch': Switch,
       'pic-txt': PicTxt,
       'linkage-item': LinkageItem
     },
