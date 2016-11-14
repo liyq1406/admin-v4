@@ -12,8 +12,8 @@ import settings from './settings'
 import dealer from './dealer'
 
 export default {
-  product_management: 'Product  Management',
-  product_service: 'Product Service',
+  product_management: '产品管理',
+  product_service: '产品服务',
   overview,
   product,
   alert,
