@@ -5,6 +5,7 @@ import Modal from './view/modal/Modal'
 import Editor from './form/editor/Editor'
 import DatePicker2 from './form/date-picker/DatePicker'
 import FileUploader from './form/uploader/FileUploader'
+import XSelect from './form/select/Select'
 
 // 导航类
 import Pagination from './navigation/pagination/Pagination'
@@ -14,7 +15,8 @@ const components = {
   DatePicker2,
   FileUploader,
   Pagination,
-  Modal
+  Modal,
+  XSelect
 }
 
 const install = function (Vue, opts = {}) {
