@@ -66,6 +66,7 @@ export default {
 
   data () {
     return {
+      intervalId: 0,
       geoCoordMap: {},
       // 总数
       total: 0,
@@ -427,11 +428,15 @@ export default {
       this.getCityData()
       this.getList()
 
-      window.setInterval(() => {
+      this.intervalId = setInterval(() => {
         this.getCityData()
         this.getList()
       }, 60000)
     }
+  },
+
+  destroyed () {
+    clearInterval(this.intervalId)
   },
 
   methods: {
