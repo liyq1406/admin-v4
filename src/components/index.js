@@ -12,6 +12,7 @@ import InfoCard from './view/info/InfoCard'
 import InfoList from './view/info/InfoList'
 import SearchBox from './view/search/SearchBox'
 import PercentageBar from './view/progress/PercentageBar'
+import Tree1 from './view/tree/Tree1'
 
 // 表单类
 import Editor from './form/editor/Editor'
@@ -70,7 +71,8 @@ const components = {
   Range,
   TagInput,
   Pagination,
-  Breadcrumb
+  Breadcrumb,
+  Tree1
 }
 
 const install = function (Vue, opts = {}) {
