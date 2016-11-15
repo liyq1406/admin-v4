@@ -290,19 +290,6 @@
                   </p>
                 </div>
               </div>
-              <div class="preview-panel">
-                <ul class="introlist">
-                  <li><i class="fa fa-star"></i> 收藏菜谱</li>
-                  <li><i class="fa fa-plus-circle"></i> 添加到我的常用菜</li>
-                </ul>
-              </div>
-              <div class="preview-panel device-panel">
-                <h4>选择厨具并开始烹饪</h4>
-                <div class="cooking-devices">
-                  <div class="cooking-device-item device1"></div>
-                  <div class="cooking-device-item device2"></div>
-                </div>
-              </div>
             </div>
             <span @click="dismiss" class="fa fa-times-circle"></span>
           </div>
