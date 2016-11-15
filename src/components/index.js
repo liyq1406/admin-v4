@@ -26,7 +26,7 @@ import ImageUploader from './form/uploader/ImageUploader'
 import ImageUploaderSplashWnd from './form/uploader/ImageUploaderSplashWnd'
 import XSelect from './form/select/Select'
 import Switch from './form/switch/Switch'
-import Radio from './form/radio/Radio'
+import RadioGroup from './form/radio/RadioGroup'
 import Captcha from './form/captcha/Captcha'
 import AreaSelect from './form/cascader/AreaSelect'
 import Range from './form/range/Range'
@@ -60,7 +60,7 @@ const components = {
   ImageUploaderSplashWnd,
   XSelect,
   Switch,
-  Radio,
+  RadioGroup,
   Captcha,
   AreaSelect,
   Range,

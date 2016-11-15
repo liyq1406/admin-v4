@@ -33,7 +33,7 @@
 </script>
 
 <style lang="stylus">
-  @import '../assets/stylus/common'
+  @import '../../../assets/stylus/common'
 
   .btn-group
     .btn
