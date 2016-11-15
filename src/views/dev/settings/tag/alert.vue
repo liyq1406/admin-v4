@@ -19,13 +19,10 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 // import api from 'api'
 
 export default {
   name: 'AlertSettings',
-
-  mixins: [globalMixins],
 
   data () {
     return {
