@@ -113,7 +113,7 @@
                             <div class="select">
                               <x-select :label="locales.data.RULE_COMPARE_TYPES[model.compare-1]">
                                 <select v-model="model.compare" name="compare" number>
-                                  <option v-for="type in locales.data.RULE_COMPARE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                                  <option v-for="type in locales.data.RULE_COMPARE_TYPES" :value="$index+1" >{{ type }}</option>
                                 </select>
                               </x-select>
                             </div>
@@ -183,7 +183,7 @@
                             <div class="select">
                               <x-select :label="locales.data.RULE_COMPARE_TYPES[model.compare-1]">
                                 <select v-model="model.compare" name="compare" number>
-                                  <option v-for="type in locales.data.RULE_COMPARE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                                  <option v-for="type in locales.data.RULE_COMPARE_TYPES" :value="$index+1">{{ type }}</option>
                                 </select>
                               </x-select>
                             </div>
@@ -553,12 +553,16 @@ export default {
      * @author shengzhi
      */
     onTypeSelect () {
-      if (this.model.type === 1) {
+      if (this.type === 'add') {
         this.model.compare = 1
         this.model.value = 'online'
-      } else {
-        this.model.value = ''
       }
+      // if (this.model.type === 1) {
+      //   this.model.compare = 1
+      //   this.model.value = 'online'
+      // } else {
+      //   this.model.value = ''
+      // }
     }
   }
 }
