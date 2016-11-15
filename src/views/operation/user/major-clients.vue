@@ -175,7 +175,6 @@ import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic2'
-import RadioButtonGroup from 'components/RadioButtonGroup'
 import formatDate from 'filters/format-date'
 import AreaSelect from 'components/AreaSelect'
 import { createDayRange } from 'utils'
@@ -190,8 +189,7 @@ export default {
     'x-table': Table,
     AreaSelect,
     SearchBox,
-    Statistic,
-    RadioButtonGroup
+    Statistic
   },
 
   data () {

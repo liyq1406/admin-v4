@@ -89,7 +89,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import RadioButtonGroup from 'components/RadioButtonGroup'
   import SearchBox from 'components/SearchBox'
   import InfoCard from 'components/InfoCard'
   import Alert from 'components/Alert'
@@ -142,7 +141,6 @@
     components: {
       'x-table': Table,
       'x-alert': Alert,
-      RadioButtonGroup,
       Chart,
       SearchBox,
       InfoCard,

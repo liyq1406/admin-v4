@@ -3,7 +3,7 @@
     <div class="main-title bordered">
       <h2>{{ $t('operation.product.overview.main_title') }}</h2>
     </div>
-    <panel>
+    <div class="panel">
       <div class="product-card">
         <div class="thumb"><img :src="deviceThumb"/></div>
         <div class="info">
@@ -34,7 +34,7 @@
           <!-- End: 产品信息统计 -->
         </div>
       </div>
-    </panel>
+    </div>
 
     <product-trend v-if="isShowTrend"></product-trend>
     <product-active v-if="isShowActive"></product-active>
@@ -44,7 +44,6 @@
 
 <script>
 import { removeProduct, updateProduct } from 'store/actions/products'
-import Panel from 'components/Panel'
 import Statistic from 'components/Statistic2'
 import Tooltip from 'components/Tooltip'
 import { globalMixins } from 'src/mixins'
@@ -72,7 +71,6 @@ export default {
   },
 
   components: {
-    Panel,
     Statistic,
     Tooltip,
     // IntervalIcon,

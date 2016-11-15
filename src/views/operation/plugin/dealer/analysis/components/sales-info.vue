@@ -15,7 +15,6 @@
   </div>
 </template>
 <script>
-import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 // import api from 'api'
 
@@ -23,8 +22,7 @@ export default {
   name: 'Age',
 
   components: {
-    Chart,
-    RadioButtonGroup
+    Chart
   },
   data () {
     return {

@@ -151,7 +151,6 @@
 
 <script>
 import api from 'api'
-import RadioButtonGroup from 'components/RadioButtonGroup'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import IntelligentTable from 'components/IntelligentTable'
@@ -166,7 +165,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    RadioButtonGroup,
     SearchBox,
     Pager,
     IntelligentTable,

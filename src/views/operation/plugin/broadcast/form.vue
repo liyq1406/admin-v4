@@ -314,7 +314,6 @@
 <script>
   import { globalMixins } from 'src/mixins'
   import AreaSelect from 'components/AreaSelect'
-  import RadioButtonGroup from 'components/RadioButtonGroup'
   import TagInput from 'components/TagInput'
   import api from 'api'
   import { createDayRange } from 'utils'
@@ -333,8 +332,7 @@
 
     components: {
       AreaSelect,
-      TagInput,
-      RadioButtonGroup
+      TagInput
     },
 
     data () {

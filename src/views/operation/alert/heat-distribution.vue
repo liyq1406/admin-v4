@@ -117,7 +117,6 @@
 import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
-import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 import convertData from 'components/chart/convert-data'
 import SearchBox from 'components/SearchBox'
@@ -132,7 +131,6 @@ export default {
 
   components: {
     Pager,
-    RadioButtonGroup,
     SearchBox,
     Chart
   },

@@ -203,7 +203,6 @@
 
 <script>
 import api from 'api'
-import RadioButtonGroup from 'components/RadioButtonGroup'
 import { globalMixins } from 'src/mixins'
 import proxy from './proxy-api'
 import config from 'consts/custom-config'
@@ -231,7 +230,6 @@ export default {
   },
 
   components: {
-    RadioButtonGroup
   },
 
   data () {

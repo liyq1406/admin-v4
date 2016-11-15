@@ -171,7 +171,6 @@
 
 <script>
 import api from 'api'
-import RadioButtonGroup from 'components/RadioButtonGroup'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -180,7 +179,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    RadioButtonGroup
   },
 
   data () {

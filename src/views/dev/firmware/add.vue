@@ -158,7 +158,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import RadioButtonGroup from 'components/RadioButtonGroup'
   import api from 'api'
   // import { createDayRange } from 'utils'
 
@@ -179,7 +178,6 @@
     },
 
     components: {
-      RadioButtonGroup
     },
 
     data () {

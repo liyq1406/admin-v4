@@ -31,15 +31,12 @@
 import formatDate from 'filters/format-date'
 import EventListener from 'utils/event-listener'
 import { globalMixins } from 'src/mixins'
-import RadioButtonGroup from 'components/RadioButtonGroup'
-
 export default {
   name: 'DateTimeMultiplePicker',
 
   mixins: [globalMixins],
 
   components: {
-    RadioButtonGroup
   },
   props: {
     label: {

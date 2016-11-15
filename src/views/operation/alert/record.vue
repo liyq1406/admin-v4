@@ -87,7 +87,6 @@ import * as config from 'consts/config'
 import locales from 'consts/locales/index'
 import Pager from 'components/Pager'
 import Statistic from 'components/Statistic'
-import RadioButtonGroup from 'components/RadioButtonGroup'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
@@ -101,7 +100,6 @@ export default {
 
   components: {
     Pager,
-    RadioButtonGroup,
     Statistic,
     'x-table': Table,
     SearchBox

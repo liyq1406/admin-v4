@@ -51,7 +51,6 @@ import { globalMixins } from 'src/mixins'
 import Pager from 'components/Pager'
 import IntelligentTable from 'components/IntelligentTable'
 import api from 'src/api'
-import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 import Table from 'components/Table'
 import formatDate from 'filters/format-date'
@@ -66,7 +65,6 @@ export default {
     'pager': Pager,
     'x-table': Table,
     'intelligent-table': IntelligentTable,
-    RadioButtonGroup,
     Chart
   },
 

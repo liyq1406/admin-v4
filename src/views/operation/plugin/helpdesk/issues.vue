@@ -58,7 +58,6 @@
 // import Vue from 'vue'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
-import RadioButtonGroup from 'components/RadioButtonGroup'
 // import locales from 'consts/locales/index'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
@@ -77,8 +76,7 @@ export default {
   },
 
   components: {
-    Pager,
-    RadioButtonGroup
+    Pager
   },
 
   data () {

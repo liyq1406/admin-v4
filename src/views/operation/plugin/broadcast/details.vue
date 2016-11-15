@@ -127,7 +127,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic2'
-import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 import api from 'api'
 import { patchLostDates } from 'utils'
@@ -147,7 +146,6 @@ export default {
 
   components: {
     Statistic,
-    RadioButtonGroup,
     Chart
   },
 

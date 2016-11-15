@@ -31,7 +31,6 @@
 
 <script>
 import Panel from 'components/Panel'
-import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 import {getTrend} from '../api-user'
 import { globalMixins } from 'src/mixins'
@@ -47,7 +46,6 @@ export default {
 
   components: {
     Panel,
-    RadioButtonGroup,
     Chart
   },
 
