@@ -40,7 +40,8 @@ export default {
       activated: 0,
       total: 0,
       productsDevices: [],
-      inited: false
+      inited: false,
+      noNameCount: 0
     }
   },
 
@@ -89,17 +90,17 @@ export default {
       if (this.releasedProducts.length && !this.inited) {
         this.inited = true
         this.productsDevices = []
+        this.noNameCount = 0
         this.releasedProducts.forEach((item) => {
           this.getProductSummary(item)
         })
       }
     },
     getProductSummary (product) {
-      let i = 0
       api.statistics.getProductSummary(product.id).then((res) => {
         if (res.status === 200) {
           this.productsDevices.push({
-            name: product.mode || this.$t('operation.overview.model_analysis.other') + i++,
+            name: product.mode || this.$t('operation.overview.model_analysis.other') + ++this.noNameCount,
             value: res.data.total
           })
         }
