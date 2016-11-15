@@ -210,6 +210,9 @@ export const MAIN_NAV = {
       }, {
         alias: 'views',
         url: '/settings/views/field'
+      }, {
+        alias: 'tag',
+        url: '/settings/tag'
       }]
     }]
   },

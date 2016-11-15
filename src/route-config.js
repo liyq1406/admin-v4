@@ -787,6 +787,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 标签管理
+        'settings/tag': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/tag'))
+            }, 'admin')
+          }
+        },
 
         // 视图自定义
         'settings/views': {

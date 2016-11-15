@@ -93,7 +93,8 @@ export default {
             users: '用户设置',
             email: '邮件设置',
             message: '短信设置',
-            views: '视图自定义'
+            views: '视图自定义',
+            tag: '标签设置'
           }
         }
       }
