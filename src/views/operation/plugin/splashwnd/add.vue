@@ -36,7 +36,7 @@
                 <div class="controls col-19">
                   <div class="input-text-wrap">
                     <!-- <input v-model="" name="description" type="file" class="input-text"/> -->
-                    <image-uploader :images="model.images" @modified="onModifiedImages"></image-uploader>
+                    <image-uploader-splash-wnd :images="model.images" @modified="onModifiedImages"></image-uploader-splash-wnd>
                   </div>
                   <!-- <div class="form-tips form-tips-error">
                     <span v-if="$validation.description.touched && $validation.description.required">请输入任务描述</span>
@@ -59,7 +59,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import ImageUploader from 'components/ImageUploaderSplashWnd'
   import api from 'api'
 
   export default {
@@ -72,10 +71,6 @@
         products: ({ products }) => products.all,
         plugins: ({ plugins }) => plugins.all
       }
-    },
-
-    components: {
-      ImageUploader
     },
 
     data () {

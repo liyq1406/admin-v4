@@ -141,7 +141,6 @@ import api from 'api'
 // import * as config from 'consts/config'
 import { removeProduct, updateProduct } from 'store/actions/products'
 import { setCurrProductMixin } from '../../mixins'
-import ImageUploader from 'components/ImageUploader'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -158,7 +157,6 @@ export default {
   },
 
   components: {
-    ImageUploader
   },
 
   data () {

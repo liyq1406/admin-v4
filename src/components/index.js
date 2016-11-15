@@ -20,10 +20,13 @@ import DateTimeSinglePicker from './form/date-picker/DateTimeSinglePicker'
 import TimePicker from './form/date-picker/TimePicker'
 import TimePicker2 from './form/date-picker/TimePicker2'
 import FileUploader from './form/uploader/FileUploader'
+import ImageUploader from './form/uploader/ImageUploader'
+import ImageUploaderSplashWnd from './form/uploader/ImageUploaderSplashWnd'
 import XSelect from './form/select/Select'
 import Switch from './form/switch/Switch'
 import Captcha from './form/captcha/Captcha'
 import AreaSelect from './form/cascader/AreaSelect'
+import Range from './form/range/Range'
 
 // 导航类
 import Pagination from './navigation/pagination/Pagination'
@@ -47,10 +50,13 @@ const components = {
   TimePicker,
   TimePicker2,
   FileUploader,
+  ImageUploader,
+  ImageUploaderSplashWnd,
   XSelect,
   Switch,
   Captcha,
   AreaSelect,
+  Range,
   Pagination,
   Breadcrumb
 }

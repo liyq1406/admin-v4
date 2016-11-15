@@ -262,14 +262,10 @@
 </template>
 
 <script>
-// import Vue from 'vue'
 import io from 'socket.io-client'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
-// import locales from 'consts/locales/index'
-// import * as config from 'consts/config'
 import SearchBox from 'components/SearchBox'
-import Range from 'components/Range1'
 import Alert from 'components/Alert'
 import api from 'api'
 
@@ -282,12 +278,7 @@ export default {
 
   components: {
     'search-box': SearchBox,
-    Range,
     Alert
-    // 'api': api,
-    // 'x-select': Select,
-    // 'x-table': Table,
-    // Statistic
   },
   data () {
     return {

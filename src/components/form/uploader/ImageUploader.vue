@@ -1,34 +1,63 @@
 <template>
   <div class="image-uploader">
-    <div class="image-uploader-item" v-for="image in images" track-by="$index">
+    <div class="image-uploader-item" v-for="image in images" track-by="$index" :style="itemStyles">
       <label>
-        <img v-if="image.picture_url" :src="image.picture_url"/>
-        <input v-else type="file" @change.prevent="upload($event, $index)"/>
-        <i v-if="!image.picture_url" class="fa fa-plus"></i>
-        <span v-if="!image.picture_url" class="txt">添加图片</span>
+        <img v-if="image.length" :src="image"/>
+        <input type="file" @change.prevent="upload($event, $index)"/>
+        <i v-if="!image.length" class="fa fa-plus"></i>
+        <span v-if="!image.length" class="txt">添加图片</span>
       </label>
-      <i v-if="image.picture_url" @click.stop.prevent="removeImage($index)" class="fa fa-times"></i>
+      <i v-if="image.length" @click.stop.prevent="removeImage($index)" class="fa fa-times"></i>
     </div>
   </div>
 </template>
 
 <script>
-  import api from '../api'
+  import api from 'api'
   import * as config from 'consts/config'
+  import { globalMixins } from 'src/mixins'
 
   export default {
+    name: 'ImageUploader',
+
+    mixins: [globalMixins],
+
     props: {
       images: {
         type: Array,
         default () {
           return []
         }
+      },
+
+      imgWidth: {
+        type: String,
+        default: '160px'
+      },
+
+      imgHeight: {
+        type: String,
+        default: '120px'
+      },
+
+      uploadApi: {
+        type: Function,
+        default: api.upload.image
       }
     },
 
     data () {
       return {
         uploading: false
+      }
+    },
+
+    computed: {
+      itemStyles () {
+        return {
+          width: this.imgWidth,
+          height: this.imgHeight
+        }
       }
     },
 
@@ -39,8 +68,18 @@
        * @param  {Number}       index 索引
        */
       upload (event, index) {
+        console.log(this.uploadApi)
         var input = event.target
         var file = input.files[0]
+
+        // 导入文件类型不合法
+        if (!/\.(?:png|jpg|bmp|gif)$/i.test(file.name) || !file.size) {
+          this.showNotice({
+            type: 'error',
+            content: '请上传正确的图片文件'
+          })
+          return false
+        }
 
         if (file && file.size > config.MAX_IMAGE_FILE_SIZE * 1024 * 1024) {
           this.showNotice({
@@ -63,14 +102,14 @@
             if (evt.target.readyState === window.FileReader.DONE) {
               if (!this.uploading) {
                 this.uploading = true
-                api.plugin.updatePic(evt.target.result).then((res) => {
+                this.uploadApi(evt.target.result).then((res) => {
                   if (res.status === 200) {
-                    this.setImage(index, res.data)
+                    this.setImage(index, res.data.url)
                     input.value = ''
                     this.uploading = false
                   }
                 }).catch((res) => {
-                  this.handleError(res.data.error)
+                  this.handleError(res)
                   this.uploading = false
                 })
               }
@@ -98,8 +137,8 @@
        * @param {Number} index 图片索引
        * @param {String} image 图片路径
        */
-      setImage (index, obj) {
-        this.images.$set(index, obj)
+      setImage (index, image) {
+        this.images.$set(index, image)
         this.$emit('modified', this.images)
       }
     }
@@ -107,7 +146,7 @@
 </script>
 
 <style lang="stylus">
-  @import '../assets/stylus/common'
+  @import '../../../assets/stylus/common'
 
   .image-uploader
     clearfix()
@@ -115,7 +154,6 @@
   .image-uploader-item
     position relative
     float left
-    size 160px 120px
     border 1px solid default-border-color
     color gray-light
     cursor pointer

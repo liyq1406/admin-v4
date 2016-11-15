@@ -90,7 +90,6 @@
 </template>
 
 <script>
-import ImageUploader from 'components/ImageUploader'
 import SearchBox from 'components/SearchBox'
 import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
@@ -102,8 +101,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    SearchBox,
-    ImageUploader
+    SearchBox
   },
 
   vuex: {

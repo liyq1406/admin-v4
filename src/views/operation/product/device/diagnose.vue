@@ -92,13 +92,11 @@
 
 <script>
 import Vue from 'vue'
-// import v-form from 'vue'
 import api from 'api'
 import io from 'socket.io-client'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import locales from 'consts/locales/index'
-import Range from 'components/Range1'
 import SearchBox from 'components/SearchBox'
 
 var socket = null
@@ -109,7 +107,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Range,
     SearchBox
   },
 

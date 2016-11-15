@@ -72,7 +72,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import ImageUploader from 'components/ImageUploaderSplashWnd'
   import api from 'api'
 
   export default {
@@ -85,10 +84,6 @@
         products: ({ products }) => products.all,
         plugins: ({ plugins }) => plugins.all
       }
-    },
-
-    components: {
-      'image-uploader': ImageUploader
     },
 
     data () {

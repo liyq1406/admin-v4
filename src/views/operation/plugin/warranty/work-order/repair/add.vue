@@ -107,7 +107,6 @@
   </div>
 </template>
 <script>
-  import ImageUploader from 'components/ImageUploader'
   import { globalMixins } from 'src/mixins'
   import { warrantyMixins } from '../../mixins'
   import api from 'api'
@@ -124,7 +123,6 @@
     },
 
     components: {
-      ImageUploader
     },
 
     route: {

@@ -51,7 +51,6 @@
 
 <script>
 import api from 'api'
-import ImageUploader from 'components/ImageUploader'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 
@@ -96,7 +95,6 @@ export default {
   },
 
   components: {
-    ImageUploader
   },
 
   data () {

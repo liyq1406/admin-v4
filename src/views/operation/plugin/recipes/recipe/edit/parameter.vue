@@ -99,7 +99,6 @@
 import api from 'api'
 import TreeItem from '../components/TreeItem'
 import SearchBox from 'components/SearchBox'
-import ImageUploader from 'components/ImageUploader'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import TagInput from 'components/TagInput'
@@ -116,7 +115,6 @@ export default {
   components: {
     'tree-item': TreeItem,
     'search-box': SearchBox,
-    'image-uploader': ImageUploader,
     'tag-input': TagInput,
     CodeForm,
     MenuForm

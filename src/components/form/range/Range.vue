@@ -28,6 +28,8 @@
 <script>
   import { globalMixins } from 'src/mixins'
   module.exports = {
+    name: 'Range',
+
     mixins: [globalMixins],
     /**
      * 暴露的方法：内容改变（实时上报和非实时上报）
@@ -454,7 +456,7 @@
 </script>
 
 <style lang="stylus">
-  @import '../assets/stylus/common'
+  @import '../../../assets/stylus/common'
 
   .range-event-box
     width 100%
