@@ -34,16 +34,11 @@
 <script>
 // import { COUNT_PER_PAGE } from 'consts/config'
 import { globalMixins } from '../mixins'
-import ButtonGroup from 'components/ButtonGroup'
 
 export default {
   name: 'Pager',
 
   mixins: [globalMixins],
-
-  components: {
-    ButtonGroup
-  },
 
   props: {
     // 每页数量选项

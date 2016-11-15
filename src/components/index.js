@@ -1,3 +1,6 @@
+// 基础类
+import ButtonGroup from './base/button/ButtonGroup'
+
 // 视图类
 import Modal from './view/modal/Modal'
 
@@ -14,10 +17,11 @@ import Pagination from './navigation/pagination/Pagination'
 import Breadcrumb from './navigation/breadcrumb/Breadcrumb'
 
 const components = {
+  ButtonGroup,
+  Modal,
   Editor,
   DatePicker2,
   FileUploader,
-  Modal,
   XSelect,
   Switch,
   Captcha,

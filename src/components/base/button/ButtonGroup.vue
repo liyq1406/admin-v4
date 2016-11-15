@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../assets/stylus/common'
+@import '../../../assets/stylus/common'
 
 .x-btn-group
   font-size 0
