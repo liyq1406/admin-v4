@@ -1,5 +1,6 @@
 // 基础类
 import ButtonGroup from './base/button/ButtonGroup'
+import RadioButtonGroup from './base/button/RadioButtonGroup'
 
 // 视图类
 import Modal from './view/modal/Modal'
@@ -25,6 +26,7 @@ import Breadcrumb from './navigation/breadcrumb/Breadcrumb'
 
 const components = {
   ButtonGroup,
+  RadioButtonGroup,
   Modal,
   Editor,
   DatePicker,
