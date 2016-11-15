@@ -6,10 +6,12 @@ import RadioButtonGroup from './base/button/RadioButtonGroup'
 import Modal from './view/modal/Modal'
 import Gallery from './view/gallery/Gallery'
 import XTable from './view/table/XTable'
+import PercentTable from './view/table/PercentTable'
 import IntelligentTable from './view/table/IntelligentTable'
 import InfoCard from './view/info/InfoCard'
 import InfoList from './view/info/InfoList'
 import SearchBox from './view/search/SearchBox'
+import PercentageBar from './view/progress/PercentageBar'
 
 // 表单类
 import Editor from './form/editor/Editor'
@@ -42,10 +44,12 @@ const components = {
   Modal,
   Gallery,
   XTable,
+  PercentTable,
   IntelligentTable,
   InfoCard,
   InfoList,
   SearchBox,
+  PercentageBar,
   Editor,
   DatePicker,
   DatePicker2,

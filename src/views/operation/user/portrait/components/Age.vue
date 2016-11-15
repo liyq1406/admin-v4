@@ -9,7 +9,6 @@
   </div>
 </template>
 <script>
-import PercentTable from 'components/PercentTable'
 import Chart from 'components/Chart/index'
 import api from 'api'
 
@@ -17,7 +16,6 @@ export default {
   name: 'Age',
 
   components: {
-    PercentTable,
     Chart
   },
   data () {

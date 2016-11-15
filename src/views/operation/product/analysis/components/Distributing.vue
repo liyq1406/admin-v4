@@ -47,8 +47,6 @@ import Chart from 'components/Chart/index'
 import convertData from 'components/chart/convert-data'
 import { globalMixins } from 'src/mixins'
 import {numToPercent} from 'utils'
-import PercentTable from 'components/PercentTable'
-
 export default {
   name: 'Distributing',
 
@@ -62,7 +60,6 @@ export default {
   },
 
   components: {
-    PercentTable,
     Chart
   },
 

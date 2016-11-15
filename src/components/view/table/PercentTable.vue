@@ -40,14 +40,8 @@
   </div>
 </template>
 <script>
-  import PercentageBar from 'components/PercentageBar'
-
   export default {
     name: 'percentTable',
-
-    components: {
-      PercentageBar
-    },
 
     props: {
       // 颜色主题

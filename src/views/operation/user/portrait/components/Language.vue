@@ -11,15 +11,13 @@
 
 <script>
 import Chart from 'components/Chart/index'
-import PercentTable from 'components/PercentTable'
 import api from 'api'
 
 export default {
   name: 'portrait-model',
 
   components: {
-    Chart,
-    PercentTable
+    Chart
   },
 
   data () {

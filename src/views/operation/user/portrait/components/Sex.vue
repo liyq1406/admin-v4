@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import PercentTable from 'components/PercentTable'
 import Chart from 'components/Chart/index'
 import api from 'api'
 
@@ -13,7 +12,6 @@ export default {
   name: 'Sex',
 
   components: {
-    PercentTable,
     Chart
   },
 
