@@ -5,9 +5,11 @@ import VueVlidator from 'vue-validator'
 import i18n from 'vue-i18n'
 import browser from 'utils/browser'
 
-// 注册全局组件
+// 全局 Mixins
+import { globalMixins } from './mixins'
+
+// 全局组件
 import components from 'src/components'
-Vue.use(components)
 
 // 多语言配置文件
 import locales from './consts/locales/index'
@@ -32,6 +34,9 @@ var router
 // 调试模式
 Vue.config.debug = process.env.NODE_ENV === 'production'
 
+// 注册全局组件
+Vue.use(components)
+
 // 加载路由插件
 Vue.use(VueRouter)
 
@@ -52,6 +57,9 @@ Vue.use(i18n, {
   // lang: 'zh-cn',
   locales: locales
 })
+
+// 注册全局 Mixins
+Vue.mixin(globalMixins)
 
 // 注册全局指令
 // ------------------------------

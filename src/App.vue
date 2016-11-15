@@ -37,7 +37,6 @@
 import Topbar from 'components/other/layout/Topbar'
 import api from 'api'
 import store from 'store/index'
-import { globalMixins } from './mixins'
 import { removeError, hideError, setCurrentMember, setCorp, setLoadingStatus } from './store/actions/system'
 import { getAllProducts } from './store/actions/products'
 import { createPlugin, getAllPlugin } from './store/actions/plugins'
@@ -49,8 +48,6 @@ export default {
   components: {
     Topbar
   },
-
-  mixins: [globalMixins],
 
   // 状态管理
   store,
