@@ -29,7 +29,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { editPasswordMixin } from '../mixins'
-import InfoList from 'components/InfoList'
 import formatDate from 'filters/format-date'
 // import api from 'api'
 import { isEmpty } from 'src/utils'
@@ -50,7 +49,6 @@ export default {
   },
 
   components: {
-    InfoList
   },
 
   data () {

@@ -125,6 +125,8 @@
       // 表格头部内容
       // 名字： theader-{{key}} （key要转成非驼峰形式 即中划线）
     /** **************************************/
+    name: 'XTable',
+
     props: {
       page: {
         type: Object,
@@ -345,7 +347,7 @@
 </script>
 
 <style lang="stylus">
-@import '../assets/stylus/common'
+@import '../../../assets/stylus/common'
 
   .intelligent-table-box
     width 100%

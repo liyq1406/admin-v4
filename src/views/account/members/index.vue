@@ -61,7 +61,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > 0" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @count-update="getMembers(false)" @page-update="getMembers(false)" :simple="true"></pager>
+        <pagination v-if="total > 0" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @count-update="getMembers(false)" @page-update="getMembers(false)" :simple="true"></pagination>
       </div>
 
       <!-- 添加成员 -->
@@ -160,7 +160,6 @@
 import SearchBox from 'components/SearchBox'
 import api from 'api'
 import * as config from 'consts/config'
-import Pager from 'components/Pager'
 import { globalMixins } from 'src/mixins'
 import { editPasswordMixin } from '../mixins'
 
@@ -170,8 +169,7 @@ export default {
   mixins: [globalMixins, editPasswordMixin],
 
   components: {
-    'search-box': SearchBox,
-    'pager': Pager
+    'search-box': SearchBox
   },
 
   vuex: {

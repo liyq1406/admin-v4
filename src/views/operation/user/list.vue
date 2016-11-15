@@ -69,7 +69,6 @@
   import SearchBox from 'components/SearchBox'
   import api from 'api'
   import * as config from 'consts/config'
-  import Table from 'components/Table'
   import formatDate from 'filters/format-date'
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic2'
@@ -83,7 +82,6 @@
     components: {
       'search-box': SearchBox,
       'api': api,
-      'x-table': Table,
       Statistic
     },
 

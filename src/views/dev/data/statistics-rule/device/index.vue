@@ -25,7 +25,6 @@
 
 <script>
 import * as config from 'consts/config'
-import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
@@ -37,8 +36,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    SearchBox,
-    'x-table': Table
+    SearchBox
   },
 
   vuex: {

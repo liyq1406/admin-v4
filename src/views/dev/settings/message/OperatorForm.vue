@@ -266,7 +266,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import Pager from 'components/Pager'
 import api from 'api'
 
 export default {
@@ -275,7 +274,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Pager
   },
 
   vuex: {},

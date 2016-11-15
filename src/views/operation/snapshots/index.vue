@@ -62,7 +62,7 @@
               </tr>
             </tbody>
           </table>
-          <pager v-if="total > countPerPage" :total="total" :current="currentPage" :count-per-page="countPerPage" :simple="true" @page-update="onCurrentPageChange"></pager>
+          <pagination v-if="total > countPerPage" :total="total" :current="currentPage" :count-per-page="countPerPage" :simple="true" @page-update="onCurrentPageChange"></pagination>
         </div>
       </div>
       <div class="panel-bd layout-right">
@@ -90,13 +90,10 @@
 <script>
   import { globalMixins } from 'src/mixins'
   import SearchBox from 'components/SearchBox'
-  import InfoCard from 'components/InfoCard'
   import Alert from 'components/Alert'
   import Chart from 'components/Chart/index'
-  import Pager from 'components/Pager'
   import formatDate from 'filters/format-date'
   import api from 'api'
-  import Table from 'components/Table'
   import toFixed from 'filters/to-fixed'
 
   // const this.FINENESS_TYPE = {
@@ -139,12 +136,9 @@
     },
 
     components: {
-      'x-table': Table,
       'x-alert': Alert,
       Chart,
-      SearchBox,
-      InfoCard,
-      Pager
+      SearchBox
     },
 
     data () {

@@ -19,7 +19,6 @@
 
 <script>
 import SearchBox from 'components/SearchBox'
-import Table from 'components/Table'
 import api from 'api'
 // import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
@@ -31,7 +30,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-table': Table,
     SearchBox
   },
 

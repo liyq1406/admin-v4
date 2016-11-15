@@ -51,7 +51,7 @@
         </tbody>
       </table>
     </div>
-    <pager v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getWechatList"></pager>
+    <pagination v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getWechatList"></pagination>
 
     <!-- 授权设置浮层-->
     <modal :show.sync="showSetModal" @close="onSetCancel" width="640px">
@@ -273,7 +273,6 @@
 // import Vue from 'vue'
 import api from 'api'
 import * as config from 'consts/config'
-import Pager from 'components/Pager'
 import Tooltip from 'components/Tooltip'
 // import locales from 'consts/locales/index'
 import { globalMixins } from 'src/mixins'
@@ -284,7 +283,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'pager': Pager,
     'v-tooltip': Tooltip
   },
 

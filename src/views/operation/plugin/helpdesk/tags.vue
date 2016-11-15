@@ -36,7 +36,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getTags"></pager>
+        <pagination v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getTags"></pagination>
       </div>
     </div>
 
@@ -103,7 +103,6 @@
   // import Vue from 'vue'
   // import locales from 'consts/locales/index'
   import * as config from 'consts/config'
-  import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
   import api from 'api'
@@ -114,7 +113,6 @@
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      'pager': Pager
     },
 
     data () {

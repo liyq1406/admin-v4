@@ -57,7 +57,7 @@
           </table>
         </div>
         <!-- 分页-->
-        <!-- <pager v-if="rules.length > countPerPage" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager> -->
+        <!-- <pagination v-if="rules.length > countPerPage" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage"></pagination> -->
       </div>
     </div>
 
@@ -434,7 +434,6 @@
   import api from 'api'
   import * as config from 'consts/config'
   import locales from 'consts/locales/index'
-  import Pager from 'components/Pager'
   import TagInput from 'components/TagInput'
   import { globalMixins } from 'src/mixins'
 
@@ -444,7 +443,6 @@
     mixins: [globalMixins],
 
     components: {
-      'pager': Pager,
       'tag-input': TagInput
     },
 

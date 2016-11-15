@@ -91,8 +91,6 @@
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 import { warrantyMixins } from '../mixins'
-import InfoCard from 'components/InfoCard'
-import InfoList from 'components/InfoList'
 import api from 'api'
 import * as config from 'consts/config'
 
@@ -143,8 +141,6 @@ export default {
   },
 
   components: {
-    InfoCard,
-    InfoList
   },
 
   computed: {

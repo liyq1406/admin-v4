@@ -51,8 +51,6 @@
 import api from 'api'
 // import * as config from 'consts/config'
 import Tab from 'components/Tab'
-import InfoCard from 'components/InfoCard'
-import InfoList from 'components/InfoList'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import Map from 'components/Map'
@@ -64,8 +62,6 @@ export default {
 
   components: {
     Tab,
-    InfoCard,
-    InfoList,
     Map
   },
 

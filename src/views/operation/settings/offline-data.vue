@@ -35,7 +35,6 @@
 import { globalMixins } from 'src/mixins'
 import api from 'api'
 import * as config from 'consts/config'
-import Table from 'components/Table'
 import formatDate from 'filters/format-date'
 import wrapTag from 'filters/wrap-tag'
 import toPercentage from 'filters/to-percentage'
@@ -46,7 +45,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-table': Table
   },
 
   data () {

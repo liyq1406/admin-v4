@@ -105,7 +105,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import AreaSelect from 'components/AreaSelect'
 import api from 'api'
 
 export default {
@@ -114,7 +113,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    AreaSelect
   },
 
   props: {

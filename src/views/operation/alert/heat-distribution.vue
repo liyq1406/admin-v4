@@ -107,7 +107,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getAlerts"></pager>
+        <pagination v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getAlerts"></pagination>
       </div>
     </div> -->
   </div>
@@ -116,7 +116,6 @@
 <script>
 import api from 'api'
 import * as config from 'consts/config'
-import Pager from 'components/Pager'
 import Chart from 'components/Chart/index'
 import convertData from 'components/chart/convert-data'
 import SearchBox from 'components/SearchBox'
@@ -130,7 +129,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Pager,
     SearchBox,
     Chart
   },

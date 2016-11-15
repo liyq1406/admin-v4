@@ -4,6 +4,10 @@ import RadioButtonGroup from './base/button/RadioButtonGroup'
 
 // 视图类
 import Modal from './view/modal/Modal'
+import Gallery from './view/gallery/Gallery'
+import XTable from './view/table/XTable'
+import InfoCard from './view/info/InfoCard'
+import InfoList from './view/info/InfoList'
 
 // 表单类
 import Editor from './form/editor/Editor'
@@ -19,6 +23,7 @@ import FileUploader from './form/uploader/FileUploader'
 import XSelect from './form/select/Select'
 import Switch from './form/switch/Switch'
 import Captcha from './form/captcha/Captcha'
+import AreaSelect from './form/cascader/AreaSelect'
 
 // 导航类
 import Pagination from './navigation/pagination/Pagination'
@@ -28,6 +33,10 @@ const components = {
   ButtonGroup,
   RadioButtonGroup,
   Modal,
+  Gallery,
+  InfoCard,
+  InfoList,
+  XTable,
   Editor,
   DatePicker,
   DatePicker2,
@@ -41,6 +50,7 @@ const components = {
   XSelect,
   Switch,
   Captcha,
+  AreaSelect,
   Pagination,
   Breadcrumb
 }

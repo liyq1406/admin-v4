@@ -75,7 +75,7 @@
             </tbody>
           </table>
         </div>
-        <pager :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDealer"></pager>
+        <pagination :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDealer"></pagination>
       </div>
     </div>
   </div>
@@ -86,15 +86,13 @@
   import { pluginMixins } from '../mixins'
   import api from 'api'
   import SearchBox from 'components/SearchBox'
-  import Pager from 'components/Pager'
   export default {
     name: 'DealerList',
 
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      SearchBox,
-      Pager
+      SearchBox
     },
 
     data () {

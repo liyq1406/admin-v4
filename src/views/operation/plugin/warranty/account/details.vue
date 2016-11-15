@@ -106,8 +106,8 @@
         <!-- End: 客服人员列表 -->
 
         <!-- Start: 分页信息 -->
-        <!-- <pager :total="51" :current.sync="0" :count-per-page="10"></pager> -->
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getBranchStaffsList"></pager>
+        <!-- <pagination :total="51" :current.sync="0" :count-per-page="10"></pagination> -->
+        <pagination v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getBranchStaffsList"></pagination>
         <!-- End: 分页信息 -->
       </div>
     </div>
@@ -259,9 +259,6 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 import { warrantyMixins } from '../mixins'
 import SearchBox from 'components/SearchBox'
-import Pager from 'components/Pager'
-import InfoCard from 'components/InfoCard'
-import InfoList from 'components/InfoList'
 import api from 'api'
 import * as config from 'consts/config'
 
@@ -351,10 +348,7 @@ export default {
   },
 
   components: {
-    SearchBox,
-    Pager,
-    InfoCard,
-    InfoList
+    SearchBox
   },
 
   ready () {

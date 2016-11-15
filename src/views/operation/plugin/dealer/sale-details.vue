@@ -162,16 +162,13 @@ import api from 'api'
 // import AreaSelect from 'components/AreaSelect'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
-import InfoList from 'components/InfoList'
-
 export default {
   name: 'TableDetails',
 
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    // AreaSelect,
-    InfoList
+    // AreaSelect
   },
 
   data () {
@@ -274,21 +271,6 @@ export default {
     this.getSale()
   },
   methods: {
-    /**
-     * 处理图片点击
-     * @params {Number} index 图片索引
-     */
-    handleImgClick (index) {
-      this.currPicIndex = index
-      this.isShowGallery = true
-    },
-    /**
-     * 处理画廊关闭
-     * @param  {Boolean} visible 是否可见
-     */
-    handleGalleryClose (visible) {
-      this.isShowGallery = visible
-    },
     getSale () {
       this.loadingData = true
       // var params = {

@@ -35,7 +35,7 @@
                 </tr>
               </tbody>
             </table>
-            <pager v-if="records.length > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
+            <pagination v-if="records.length > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage"></pagination>
           </div>
         </div>
       </div>
@@ -80,7 +80,6 @@
 <script>
   import api from 'api'
   import * as config from 'consts/config'
-  import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -89,7 +88,6 @@
     mixins: [globalMixins],
 
     components: {
-      'pager': Pager
     },
 
     data () {

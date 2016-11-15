@@ -124,20 +124,13 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import { warrantyMixins } from '../../mixins'
 import api from 'api'
-import InfoCard from 'components/InfoCard'
 import SearchBox from 'components/SearchBox'
-import Table from 'components/Table'
-import InfoList from 'components/InfoList'
-
 export default {
   name: 'OrderDetails',
 
   mixins: [globalMixins, pluginMixins, warrantyMixins],
 
   components: {
-    InfoCard,
-    InfoList,
-    'x-table': Table,
     SearchBox
   },
 

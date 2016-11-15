@@ -74,7 +74,7 @@
                   </tbody>
                 </table>
               </div>
-              <pager v-if="total > countPerPage" :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="onPageUpdate" :simple="true"></pager>
+              <pagination v-if="total > countPerPage" :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="onPageUpdate" :simple="true"></pagination>
             </div>
             <div class="button-box">
               <div class="form-actions">
@@ -91,7 +91,6 @@
 
 <script>
 import ImageUploader from 'components/ImageUploader'
-import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
@@ -103,7 +102,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Pager,
     SearchBox,
     ImageUploader
   },

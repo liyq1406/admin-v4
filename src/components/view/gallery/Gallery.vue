@@ -1,5 +1,5 @@
 <template>
-  <div class="v-gallery">
+  <div class="x-gallery">
     <slot></slot>
     <div v-show="show" transition="lightbox" class="v-lightbox">
       <div class="v-lightbox-wrapper">
@@ -68,9 +68,9 @@
 </script>
 
 <style lang="stylus">
-  @import "../assets/stylus/common"
+  @import "../../../assets/stylus/common"
 
-  .v-gallery
+  .x-gallery
     display inline-block
 
   .v-lightbox

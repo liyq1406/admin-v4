@@ -35,9 +35,7 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
-import Table from 'components/Table'
 // import Select from 'components/Select'
-import AreaSelect from 'components/AreaSelect'
 import Chart from 'components/Chart/index'
 import 'echarts/extension/bmap/bmap'
 import formatDate from 'filters/format-date'
@@ -51,9 +49,7 @@ export default {
 
   components: {
     // 'x-select': Select,
-    'x-table': Table,
-    Chart,
-    AreaSelect
+    Chart
   },
 
   vuex: {

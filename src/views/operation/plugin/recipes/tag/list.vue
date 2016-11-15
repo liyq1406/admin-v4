@@ -62,7 +62,6 @@
 import api from 'api'
 // import * as config from 'consts/config'
 import SearchBox from 'components/SearchBox'
-import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 
@@ -78,8 +77,7 @@ export default {
   },
 
   components: {
-    SearchBox,
-    'x-table': Table
+    SearchBox
   },
 
   data () {

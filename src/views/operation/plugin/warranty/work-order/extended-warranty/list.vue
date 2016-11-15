@@ -67,7 +67,6 @@
   import { globalMixins } from 'src/mixins'
   import { warrantyMixins } from '../../mixins'
   import SearchBox from 'components/SearchBox'
-  import Table from 'components/Table'
   import api from 'api'
   import Statistic from 'components/Statistic'
 
@@ -84,7 +83,6 @@
 
     components: {
       'search-box': SearchBox,
-      'x-table': Table,
       Statistic
     },
 

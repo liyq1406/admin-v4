@@ -12,7 +12,6 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import Table from 'components/Table'
 import formatDate from 'filters/format-date'
 
 export default {
@@ -21,7 +20,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-table': Table
   },
 
   data () {

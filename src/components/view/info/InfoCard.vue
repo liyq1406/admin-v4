@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import deviceThumb from '../assets/images/device_thumb.png'
+import deviceThumb from '../../../assets/images/device_thumb.png'
 
 export default {
   name: 'InfoCard',
@@ -66,7 +66,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../assets/stylus/common'
+@import '../../../assets/stylus/common'
 
 .x-info-card
   margin-bottom 10px

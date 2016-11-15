@@ -64,7 +64,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" :simple="true"></pager>
+        <pagination v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" :simple="true"></pagination>
       </div>
     </div>
   </div>
@@ -72,7 +72,6 @@
 
 <script>
 import * as config from 'consts/config'
-import Pager from 'components/Pager'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
 
@@ -82,7 +81,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'pager': Pager
   },
 
   vuex: {

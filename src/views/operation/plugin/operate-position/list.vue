@@ -101,7 +101,6 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import Table from 'components/Table'
 import * as config from 'consts/config'
 
 export default {
@@ -116,7 +115,6 @@ export default {
   },
 
   components: {
-    'x-table': Table
   },
 
   data () {

@@ -98,7 +98,7 @@
           </tbody>
         </table>
       </div>
-      <pager v-if="total > 0" :total="total" :current.sync="currentPage"  :count-per-page="countPerPage "@count-update="pageCountUpdate"  @page-update="currentPageChange"></pager>
+      <pagination v-if="total > 0" :total="total" :current.sync="currentPage"  :count-per-page="countPerPage "@count-update="pageCountUpdate"  @page-update="currentPageChange"></pagination>
     </div>
   </div>
 </template>
@@ -106,9 +106,7 @@
 <script>
 import api from 'api'
 import * as config from 'consts/config'
-import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
-import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'
 import Statistic from 'components/Statistic2'
@@ -120,9 +118,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-table': Table,
     'search-box': SearchBox,
-    'pager': Pager,
     Statistic,
     Chart
   },

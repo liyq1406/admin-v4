@@ -41,18 +41,16 @@
           <x-table :headers="columns" :tables="currSnapshotInfo" :bordered="false"></x-table>
         </div>
       </div>
-      <pager v-if="total" :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pager>
+      <pagination v-if="total" :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pagination>
     </div>
   </div>
 </template>
 
 <script>
 import { globalMixins } from 'src/mixins'
-import Pager from 'components/Pager'
 import IntelligentTable from 'components/IntelligentTable'
 import api from 'src/api'
 import Chart from 'components/Chart/index'
-import Table from 'components/Table'
 import formatDate from 'filters/format-date'
 import { patchLostDates } from 'utils'
 
@@ -62,8 +60,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'pager': Pager,
-    'x-table': Table,
     'intelligent-table': IntelligentTable,
     Chart
   },

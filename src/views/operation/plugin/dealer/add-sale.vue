@@ -76,15 +76,12 @@
   // import locales from 'consts/locales/index'
   import api from 'api'
   import { globalMixins } from 'src/mixins'
-  import AreaSelect from 'components/AreaSelect'
-
   export default {
     name: 'TableDetails',
 
     mixins: [globalMixins],
 
     components: {
-      'area-select': AreaSelect
     },
 
     data () {

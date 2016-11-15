@@ -22,7 +22,6 @@
 
 <script>
 import api from 'api'
-import Table from 'components/Table'
 import CategoryModal from './components/CategoryModal'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
@@ -35,8 +34,7 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    CategoryModal,
-    'x-table': Table
+    CategoryModal
   },
 
   data () {

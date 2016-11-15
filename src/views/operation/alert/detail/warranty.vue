@@ -69,10 +69,8 @@
 
 <script>
   import SearchBox from 'components/SearchBox'
-  import AreaSelect from 'components/AreaSelect'
   export default {
     components: {
-      'area-select': AreaSelect,
       'search-box': SearchBox
     },
 

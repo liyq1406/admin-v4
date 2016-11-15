@@ -65,7 +65,7 @@
             <div class="selected-first-class" v-show="selectedFirstClass.selected">
               <div class="details-table">
                 <x-table :headers.sync="vHeaders" :tables.sync="vTables" :page="page" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></x-table>
-                <pager :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate"></pager>
+                <pagination :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate"></pagination>
               </div>
             </div>
             <div class="tips-box" v-show="!selectedFirstClass.selected">
@@ -439,7 +439,6 @@
 <script>
 import api from 'api'
 import * as config from 'consts/config'
-import Pager from 'components/Pager'
 import IntelligentTable from 'components/IntelligentTable'
 import { globalMixins } from 'src/mixins'
 
@@ -449,8 +448,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-table': IntelligentTable,
-    'pager': Pager
+    'x-table': IntelligentTable
   },
 
   data () {

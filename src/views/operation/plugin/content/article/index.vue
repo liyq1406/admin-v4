@@ -44,8 +44,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import SearchBox from 'components/SearchBox'
-import Pager from 'components/Pager'
-import Table from 'components/Table'
 import formatDate from 'filters/format-date'
 import api from 'api'
 
@@ -57,9 +55,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    SearchBox,
-    Pager,
-    'x-table': Table
+    SearchBox
   },
 
   data () {

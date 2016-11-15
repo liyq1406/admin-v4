@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import Panel from 'components/Panel'
 import Chart from 'components/Chart/index'
 import {getTrend} from '../api-user'
 import { globalMixins } from 'src/mixins'
@@ -45,7 +44,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Panel,
     Chart
   },
 

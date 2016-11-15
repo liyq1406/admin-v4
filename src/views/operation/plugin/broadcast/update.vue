@@ -170,15 +170,12 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import AreaSelect from 'components/AreaSelect'
-
   export default {
     name: 'AddBroadcast',
 
     mixins: [globalMixins],
 
     components: {
-      AreaSelect
     },
 
     data () {

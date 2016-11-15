@@ -71,7 +71,7 @@
             </tbody>
           </table>
       </div>
-      <pager v-if="total > countPerPage" :total="tasks.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
+      <pagination v-if="total > countPerPage" :total="tasks.length" :current.sync="currentPage" :count-per-page="countPerPage"></pagination>
     </div>
   </div>
 </template>
@@ -80,10 +80,8 @@
 import Vue from 'vue'
 import api from 'api'
 import * as config from 'consts/config'
-import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import Progress from 'components/Progress'
-import Table from 'components/Table'
 import locales from 'consts/locales/index'
 // import formatDate from 'filters/format-date'
 // import { globalMixins } from 'src/mixins'
@@ -97,9 +95,7 @@ export default {
   // mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
 
   components: {
-    'x-table': Table,
     SearchBox,
-    Pager,
     Statistic,
     Progress
   },

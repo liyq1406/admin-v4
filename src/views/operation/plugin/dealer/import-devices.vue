@@ -59,7 +59,6 @@
   import { pluginMixins } from '../mixins'
   import api from 'api'
   import SearchBox from 'components/SearchBox'
-  import Table from 'components/Table'
   import formatDate from 'filters/format-date'
 
   export default {
@@ -68,7 +67,6 @@
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      'x-table': Table,
       SearchBox
     },
 

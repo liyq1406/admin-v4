@@ -24,34 +24,6 @@
     <!-- Start: 反馈信息 -->
     <div class="panel-sub-hd bordered mt20">反馈信息</div>
     <div class="comment-list">
-      <!-- <div class="comment-list-item">
-        <div class="comment-metas">
-          <span>{{ issue.create_time | formatDate }}</span>
-        </div>
-        <div class="comment-desc">{{ issue.content }}</div>
-        <gallery :pics="pics" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
-          <div class="pic-grid">
-            <div class="pic" v-for="pic in pics" track-by="$index">
-              <img :src="pic" alt="" @click="handleImgClick($index)">
-            </div>
-          </div>
-        </gallery>
-        <div class="issue-reply" v-if="firstReply">
-          <div class="comment-metas">
-            <span>{{firstReply.name}}    {{firstReply.create_time | formatDate }}</span>
-          </div>
-          <div class="comment-desc">{{ firstReply.content }}</div>
-        </div>
-      </div> -->
-      <!-- <div class="comment-list-item">
-        <div class="comment-metas">
-          <span>2016-07-12 18:21:09</span>
-        </div>
-        <div class="comment-desc">烘烤模式还是不管用，是不是坏了</div>
-      </div> -->
-      <!-- begin 曾经用处理过的数组 -->
-      <!-- <div v-for="item in dealList" class="comment-list-item"> -->
-      <!-- end -->
       <div v-for="item in recordList" class="comment-list-item">
         <!-- 客户回复 -->
         <div v-if="item.source === 1" class="pd710">
@@ -101,9 +73,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
-import InfoCard from 'components/InfoCard'
-import InfoList from 'components/InfoList'
-import Gallery from 'components/Gallery'
 import api from 'api'
 import formatDate from 'filters/format-date'
 
@@ -196,9 +165,6 @@ export default {
   },
 
   components: {
-    Gallery,
-    InfoCard,
-    InfoList
   },
 
   ready () {

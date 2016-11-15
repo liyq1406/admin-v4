@@ -47,7 +47,7 @@
             </span>
           </div>
           <div class="pager-box">
-            <pager :simple="true" :current.sync="currentPage" :count-per-page="countPerPage" :total="total" @page-update="getDevices"></pager>
+            <pagination :simple="true" :current.sync="currentPage" :count-per-page="countPerPage" :total="total" @page-update="getDevices"></pagination>
           </div>
         </div>
       </div>
@@ -269,7 +269,6 @@ import formatDate from 'filters/format-date'
 // import locales from 'consts/locales/index'
 // import * as config from 'consts/config'
 import SearchBox from 'components/SearchBox'
-import Pager from 'components/Pager'
 import Range from 'components/Range1'
 import Alert from 'components/Alert'
 import api from 'api'
@@ -283,7 +282,6 @@ export default {
 
   components: {
     'search-box': SearchBox,
-    Pager,
     Range,
     Alert
     // 'api': api,

@@ -65,7 +65,6 @@ import api from 'api'
 import { updateProduct } from 'store/actions/products'
 import { setCurrProductMixin } from '../../mixins'
 import { globalMixins } from 'src/mixins'
-import Table from 'components/Table'
 export default {
   name: 'Qrcode',
 
@@ -79,7 +78,6 @@ export default {
   },
 
   components: {
-    'x-table': Table
   },
 
   data () {

@@ -149,7 +149,6 @@
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from './mixins'
 import SearchBox from 'components/SearchBox'
-import Pager from 'components/Pager'
 import Range from 'components/Range1'
 import api from 'api'
 
@@ -160,7 +159,6 @@ export default {
 
   components: {
     'search-box': SearchBox,
-    Pager,
     Range
     // 'api': api,
     // 'x-select': Select,

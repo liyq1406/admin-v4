@@ -35,8 +35,6 @@
 <script>
 import api from 'api'
 import Tab from 'components/Tab'
-import InfoCard from 'components/InfoCard'
-import InfoList from 'components/InfoList'
 import Map from 'components/Map'
 import { globalMixins } from 'src/mixins'
 import { getCurrProduct, setCurrDevice, setCurrVirtualDevice } from 'store/actions/products'
@@ -49,8 +47,6 @@ export default {
 
   components: {
     Tab,
-    InfoCard,
-    InfoList,
     'x-map': Map
   },
 

@@ -41,9 +41,7 @@
   import api from 'src/api'
   import SearchBox from 'components/SearchBox'
   import locales from 'consts/locales/index'
-  import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
-  import Table from 'components/Table'
   import formatDate from 'filters/format-date'
 
   export default {
@@ -52,9 +50,7 @@
     mixins: [globalMixins],
 
     components: {
-      SearchBox,
-      Pager,
-      'x-table': Table
+      SearchBox
     },
 
     props: {

@@ -127,7 +127,6 @@
 <script>
 // import Vue from 'vue'
 import api from 'api'
-import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import ImageUploader from 'components/ImageUploader'
 import { globalMixins } from 'src/mixins'
@@ -141,7 +140,6 @@ export default {
 
   components: {
     'search-box': SearchBox,
-    'pager': Pager,
     'image-uploader': ImageUploader,
     'tag-input': TagInput
   },

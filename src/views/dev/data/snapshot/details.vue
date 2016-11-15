@@ -47,7 +47,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <pager v-if="total > countPerPage" :total="total" :current="currentPage" :count-per-page="countPerPage" :simple="true" @page-update="onPageUpdate"></pager>
+                <pagination v-if="total > countPerPage" :total="total" :current="currentPage" :count-per-page="countPerPage" :simple="true" @page-update="onPageUpdate"></pagination>
               </div>
             </div>
             <div class="panel-bd layout-right">
@@ -100,7 +100,7 @@
                   </div>
                   <div class="table-box">
                     <intelligent-table :headers.sync="snapshotHeader" :tables="snapshots | limitBy countPerPage2 (currentPage2-1)*countPerPage2"></intelligent-table>
-                    <pager v-if="snapshots.length > countPerPage2" :total="snapshots.length" :current.sync="currentPage2" :count-per-page="countPerPage2" :simple="true"></pager>
+                    <pagination v-if="snapshots.length > countPerPage2" :total="snapshots.length" :current.sync="currentPage2" :count-per-page="countPerPage2" :simple="true"></pagination>
                   </div>
                 </div>
               </div>
@@ -135,7 +135,7 @@
              </table>
            </div>
            <div class="data-points-footer">
-             <pager v-if="datapoints.length > countPerPage3" :total="datapoints.length" :current.sync="currentPage3" :count-per-page="countPerPage3" @page-update=""></pager>
+             <pagination v-if="datapoints.length > countPerPage3" :total="datapoints.length" :current.sync="currentPage3" :count-per-page="countPerPage3" @page-update=""></pagination>
            </div>
          </div>
          <div class="form-actions snapshot-select mt10">
@@ -151,7 +151,6 @@
 
 <script>
 import api from 'api'
-import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import IntelligentTable from 'components/IntelligentTable'
 import Chart from 'components/Chart/index'
@@ -166,7 +165,6 @@ export default {
 
   components: {
     SearchBox,
-    Pager,
     IntelligentTable,
     Chart,
     'x-alert': Alert

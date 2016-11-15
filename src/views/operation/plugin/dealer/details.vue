@@ -97,7 +97,7 @@
           </table>
         </div>
         <!-- 分页-->
-        <pager :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales" @count-update="onPageCountUpdate"></pager>
+        <pagination :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales" @count-update="onPageCountUpdate"></pagination>
       </div>
     </div>
   </div>
@@ -108,14 +108,11 @@
   // import locales from 'consts/locales/index'
   import api from 'api'
   import RadioGroup from 'components/RadioGroup'
-  import Pager from 'components/Pager'
   import SearchBox from 'components/SearchBox'
   import IntelligentTable from 'components/IntelligentTable'
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
   import Alert from 'components/Alert'
-  import InfoList from 'components/InfoList'
-
   export default {
     name: 'TableDetails',
 
@@ -125,8 +122,6 @@
       'x-alert': Alert,
       RadioGroup,
       SearchBox,
-      InfoList,
-      Pager,
       IntelligentTable
     },
 

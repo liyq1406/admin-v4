@@ -126,10 +126,7 @@ import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from '../mixins'
 import { removeProduct, updateProduct } from 'store/actions/products'
 import * as config from 'consts/config'
-import InfoList from 'components/InfoList'
-import InfoCard from 'components/InfoCard'
 import Chart from 'components/Chart/index'
-import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import formatDate from 'filters/format-date'
 // import BatchExportQr from './batch-export-qr'
@@ -147,9 +144,6 @@ export default {
   },
 
   components: {
-    'x-table': Table,
-    InfoCard,
-    InfoList,
     SearchBox,
     Chart
   },

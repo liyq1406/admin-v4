@@ -66,7 +66,7 @@
         </table>
       </div>
       <!-- 分页-->
-      <!-- <pager v-if="true" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pager> -->
+      <!-- <pagination v-if="true" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pagination> -->
     </div>
   </div>
 </template>
@@ -76,7 +76,6 @@
   import api from 'src/api'
   import SearchBox from 'components/SearchBox'
   import locales from 'consts/locales/index'
-  import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -92,8 +91,7 @@
     },
 
     components: {
-      SearchBox,
-      Pager
+      SearchBox
     },
 
     data () {

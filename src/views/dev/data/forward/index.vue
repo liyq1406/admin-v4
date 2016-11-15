@@ -61,7 +61,7 @@
           </table>
         </div>
         <!-- <div class="data-points-footer">
-          <pager v-if="forwardRules.length > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getRule"></pager>
+          <pagination v-if="forwardRules.length > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getRule"></pagination>
         </div> -->
       </div>
     </div>
@@ -71,7 +71,6 @@
 <script>
 // import Vue from 'vue'
 // import * as config from 'consts/config'
-import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 // import locales from 'consts/locales/index'
 import { globalMixins } from 'src/mixins'
@@ -89,7 +88,6 @@ export default {
   },
 
   components: {
-    Pager,
     SearchBox
   },
 

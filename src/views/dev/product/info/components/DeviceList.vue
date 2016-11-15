@@ -52,7 +52,6 @@
 import api from 'api'
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
-import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import formatDate from 'filters/format-date'
 // import BatchExportQr from './batch-export-qr'
@@ -68,7 +67,6 @@ export default {
   },
 
   components: {
-    'x-table': Table,
     SearchBox
   },
 

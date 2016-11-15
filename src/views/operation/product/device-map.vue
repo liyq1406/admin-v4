@@ -39,7 +39,7 @@
             </div>
           </div>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getGeographies" :simple="true"></pager>
+        <pagination v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getGeographies" :simple="true"></pagination>
       </div>
     </div>
     <div class="device-map with-loading">
@@ -59,7 +59,6 @@ import * as config from 'consts/config'
 // import AMap from 'AMap'
 import SearchBox from 'components/SearchBox'
 import Alert from 'components/Alert'
-import Pager from 'components/Pager'
 import formatDate from 'filters/format-date'
 
 export default {
@@ -69,8 +68,7 @@ export default {
 
   components: {
     'x-alert': Alert,
-    SearchBox,
-    Pager
+    SearchBox
   },
 
   data () {

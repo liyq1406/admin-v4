@@ -95,7 +95,7 @@
                   </table>
                 </div>
                 <div class="data-points-footer">
-                  <pager v-if="datapoints.length > countPerPage" :total="datapoints.length" :current="currentPage" :count-per-page="countPerPage" @page-update="onPageUpdate" :simple="true"></pager>
+                  <pagination v-if="datapoints.length > countPerPage" :total="datapoints.length" :current="currentPage" :count-per-page="countPerPage" @page-update="onPageUpdate" :simple="true"></pagination>
                 </div>
               </div>
             </div>
@@ -120,7 +120,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import Pager from 'components/Pager'
 import api from 'api'
 
 export default {
@@ -129,7 +128,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Pager
   },
 
   vuex: {

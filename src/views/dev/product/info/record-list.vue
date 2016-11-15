@@ -52,10 +52,8 @@
 import api from 'api'
 import * as config from 'consts/config'
 // import locales from 'consts/locales/index'
-import Pager from 'components/Pager'
 import { globalMixins } from 'src/mixins'
 // import { setCurrProductMixin } from './mixins'
-import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import Statistic from 'components/Statistic2'
 import formatDate from 'filters/format-date'
@@ -73,8 +71,6 @@ export default {
   },
 
   components: {
-    'x-table': Table,
-    'pager': Pager,
     Statistic,
     'search-box': SearchBox,
     BatchExportQr

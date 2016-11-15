@@ -313,7 +313,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import AreaSelect from 'components/AreaSelect'
   import TagInput from 'components/TagInput'
   import api from 'api'
   import { createDayRange } from 'utils'
@@ -331,7 +330,6 @@
     },
 
     components: {
-      AreaSelect,
       TagInput
     },
 

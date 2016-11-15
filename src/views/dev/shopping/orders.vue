@@ -59,7 +59,7 @@
             </tbody>
           </table>
         </div>
-        <pager :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getOrders"></pager>
+        <pagination :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getOrders"></pagination>
       </div>
     </div>
   </div>
@@ -67,7 +67,6 @@
 
 <script>
 import SearchBox from 'components/SearchBox'
-import Pager from 'components/Pager'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -76,8 +75,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    SearchBox,
-    Pager
+    SearchBox
   },
 
   data () {

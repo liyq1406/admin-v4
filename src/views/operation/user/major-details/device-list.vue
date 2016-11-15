@@ -39,8 +39,6 @@ import api from 'api'
 import { globalMixins } from 'src/mixins'
 import SearchBox from 'components/SearchBox'
 import formatDate from 'filters/format-date'
-import Table from 'components/Table'
-
 export default {
   name: 'device-list',
 
@@ -53,9 +51,7 @@ export default {
   },
 
   components: {
-    SearchBox,
-    'x-table': Table
-
+    SearchBox
   },
 
   data () {

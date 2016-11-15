@@ -42,7 +42,7 @@
             </tbody>
           </table>
           <!-- 暂不分页 -->
-          <!-- <pager v-if="!loadingData && page.total > countPerPage" :total="page.total" :current="page.currentPage" :count-per-page="page.countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pager> -->
+          <!-- <pagination v-if="!loadingData && page.total > countPerPage" :total="page.total" :current="page.currentPage" :count-per-page="page.countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pagination> -->
         </div>
       </div>
     </div>

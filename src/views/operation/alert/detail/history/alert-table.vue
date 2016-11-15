@@ -58,7 +58,6 @@ import Vue from 'vue'
 import api from 'api'
 import locales from 'consts/locales/index'
 import SearchBox from 'components/SearchBox'
-import Table from 'components/Table'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
@@ -68,7 +67,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-table': Table,
     SearchBox
   },
 

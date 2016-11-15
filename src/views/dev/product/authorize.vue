@@ -166,10 +166,8 @@
 import api from 'api'
 import * as config from 'consts/config'
 // import locales from 'consts/locales/index'
-import Pager from 'components/Pager'
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from './mixins'
-import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import Statistic from 'components/Statistic2'
 import Alert from 'components/Alert'
@@ -187,8 +185,6 @@ export default {
   },
 
   components: {
-    'x-table': Table,
-    Pager,
     Statistic,
     SearchBox,
     Alert

@@ -60,7 +60,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getBranchList"></pager>
+        <pagination v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getBranchList"></pagination>
 
         <!-- 添加增加网点浮层-->
         <modal :show.sync="showAddModal" width="600px">
@@ -148,8 +148,6 @@
   import { globalMixins } from 'src/mixins'
   import { warrantyMixins } from '../mixins'
   import SearchBox from 'components/SearchBox'
-  import Pager from 'components/Pager'
-  import AreaSelect from 'components/AreaSelect'
   import api from 'api'
   import * as config from 'consts/config'
 
@@ -159,9 +157,7 @@
     mixins: [globalMixins, warrantyMixins],
 
     components: {
-      AreaSelect,
-      SearchBox,
-      Pager
+      SearchBox
     },
 
     data () {

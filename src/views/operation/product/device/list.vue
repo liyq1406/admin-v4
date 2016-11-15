@@ -75,9 +75,7 @@
 import Vue from 'vue'
 import api from 'api'
 import * as config from 'consts/config'
-import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
-import Table from 'components/Table'
 import locales from 'consts/locales/index'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
@@ -91,9 +89,7 @@ export default {
   mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
 
   components: {
-    'x-table': Table,
     'search-box': SearchBox,
-    'pager': Pager,
     Statistic
   },
 

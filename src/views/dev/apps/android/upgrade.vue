@@ -49,7 +49,6 @@
   // import Select from 'components/Select'
   import { globalMixins } from 'src/mixins'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
-  import Table from 'components/Table'
   export default {
     name: 'AndroidUpgrade',
 
@@ -67,7 +66,6 @@
     },
 
     components: {
-      'x-table': Table
     },
 
     props: {

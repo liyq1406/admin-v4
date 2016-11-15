@@ -42,8 +42,6 @@
 <script>
   import api from 'api'
   import { globalMixins } from 'src/mixins'
-  import InfoCard from 'components/InfoCard'
-  import InfoList from 'components/InfoList'
   import formatDate from 'filters/format-date'
   import Tab from 'components/Tab'
   import Map from 'components/Map'
@@ -54,8 +52,6 @@
     mixins: [globalMixins],
 
     components: {
-      InfoCard,
-      InfoList,
       Tab,
       'x-map': Map
     },

@@ -59,8 +59,6 @@ import Vue from 'vue'
 import api from 'api'
 import * as config from 'consts/config'
 import locales from 'consts/locales/index'
-import Pager from 'components/Pager'
-import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 // import { setCurrPlugin } from 'store/actions/plugins'
@@ -73,8 +71,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Pager,
-    'x-table': Table
   },
 
   vuex: {

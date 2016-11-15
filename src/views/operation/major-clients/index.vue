@@ -70,11 +70,9 @@
 import Vue from 'vue'
 import api from 'api'
 import SearchBox from 'components/SearchBox'
-import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic2'
 import formatDate from 'filters/format-date'
-import AreaSelect from 'components/AreaSelect'
 import locales from 'consts/locales/index'
 
 export default {
@@ -83,8 +81,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-table': Table,
-    AreaSelect,
     SearchBox,
     Statistic
   },

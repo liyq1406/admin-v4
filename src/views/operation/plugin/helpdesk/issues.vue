@@ -43,7 +43,7 @@
             </li>
           </ul>
           <!-- <div class="view-more tac"><a href="#">更多内容&gt;&gt;</a></div> -->
-          <pager v-if="total > countPerPage" :total="total" :simple="true" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getIssues"></pager>
+          <pagination v-if="total > countPerPage" :total="total" :simple="true" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getIssues"></pagination>
         </div>
         <div class="col-18" v-if="issues.length > 0">
           <router-view transition="view" transition-mode="out-in" class="view"></router-view>
@@ -57,7 +57,6 @@
 <script>
 // import Vue from 'vue'
 import * as config from 'consts/config'
-import Pager from 'components/Pager'
 // import locales from 'consts/locales/index'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
@@ -76,7 +75,6 @@ export default {
   },
 
   components: {
-    Pager
   },
 
   data () {
