@@ -23,7 +23,10 @@
   import { globalMixins } from 'src/mixins'
 
   export default {
+    name: 'TagInput',
+
     mixins: [globalMixins],
+
     props: {
       value: {
         type: String,
