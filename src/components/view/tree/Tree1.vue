@@ -1,20 +1,23 @@
 <template>
   <div class="x-tree-1">
-    <div class="list"
-    v-for="list in lists"
-    :class="{'selected': list.treeIndex === selectedTreeIndex}" :style="computedListStyle(list)" v-show="list.show">
-      <div class="content">
-        <i :class="computedIconClass(list)" @click.stop="onChangeShowHide(list)"></i>
-        <span @click="selectedTreeIndex = list.treeIndex">{{list.label}}</span>
-        <div
-        class="line"
-        :style="'width:' + (unitPadding - 15) + 'px;left: -' + (unitPadding - 5) + 'px'"
-        v-if="$index !== 0"
-        >
+    <label>
+      <input type="radio" class="hide-input" @blur="onBlur">
+      <div class="list"
+      v-for="list in lists"
+      :class="{'selected': list.treeIndex === selectedTreeIndex}" :style="computedListStyle(list)" v-show="list.show">
+        <div class="content">
+          <i :class="computedIconClass(list)" @click.stop="onChangeShowHide(list)"></i>
+          <span @click.stop="selectedTreeIndex = list.treeIndex">{{list.label}}</span>
+          <div
+          class="line"
+          :style="'width:' + (unitPadding - 15) + 'px;left: -' + (unitPadding - 5) + 'px'"
+          v-if="$index !== 0"
+          >
+          </div>
+          <div class="vertical-line" :style="'height: ' + verticalLineHeight(list, $index) + 'px; left: -' + (unitPadding - 5) + 'px'"></div>
         </div>
-        <div class="vertical-line" :style="'height: ' + verticalLineHeight(list, $index) + 'px; left: -' + (unitPadding - 5) + 'px'"></div>
       </div>
-    </div>
+    </label>
   </div>
 </template>
 
@@ -28,6 +31,10 @@
         default: function () {
           return []
         }
+      },
+      editing: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -38,7 +45,9 @@
         // 行高
         unitLineHeight: 32,
         // 已选择索引
-        selectedTreeIndex: '0-1',
+        selectedTreeIndex: '',
+        // 正在编辑
+        editing: false,
         // 对外暴露数据
         emitData: []
       }
@@ -74,10 +83,20 @@
       }
     },
 
+    watch: {
+      selectedTreeIndex (val) {
+        this.$emit('changed', val, this.data)
+      }
+    },
+
     ready () {
     },
 
     methods: {
+      onBlur () {
+        console.log('光标离开')
+        this.selectedTreeIndex = ''
+      },
       /**
        * 选择列表
        */
@@ -292,4 +311,10 @@
       top 50%
       transform translate(0, -50%)
       z-index 1
+    .hide-input
+      width 100%
+      height 100%
+      opacity 0.3
+      position absolute
+      left -9999px
 </style>
