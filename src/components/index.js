@@ -16,7 +16,6 @@ import InfoList from './view/info/InfoList'
 import PicTxt from './view/info/PicTxt'
 import Tooltip from './view/info/Tooltip'
 import Statistic from './view/info/Statistic'
-import Statistic2 from './view/info/Statistic2'
 import SearchBox from './view/search/SearchBox'
 import PercentageBar from './view/progress/PercentageBar'
 import Tree1 from './view/tree/Tree1'
@@ -65,7 +64,6 @@ const components = {
   PicTxt,
   Tooltip,
   Statistic,
-  Statistic2,
   SearchBox,
   PercentageBar,
   XMap,

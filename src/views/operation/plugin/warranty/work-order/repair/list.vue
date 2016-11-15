@@ -22,16 +22,16 @@
     </div>
     <div class="row statistic-group mb20">
       <div class="col-6">
-        <statistic :info="repairSummary.unrepair" :title="repairSummary.unrepair.title" align="left"></statistic>
+        <statistic :total="repairSummary.unrepair.total" :title="repairSummary.unrepair.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="repairSummary.repairing" :title="repairSummary.repairing.title" align="left"></statistic>
+        <statistic :total="repairSummary.repairing.total" :title="repairSummary.repairing.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="repairSummary.today" :title="repairSummary.today.title" align="left"></statistic>
+        <statistic :total="repairSummary.today.total" :change="repairSummary.today.change" :title="repairSummary.today.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="repairSummary.week" :title="repairSummary.week.title" align="left"></statistic>
+        <statistic :total="repairSummary.week.total" :change="repairSummary.today.change" :title="repairSummary.week.title" align="left"></statistic>
       </div>
     </div>
     <div class="panel mt10">
@@ -144,21 +144,21 @@ export default {
       branchs: [],
       repairSummary: {
         unrepair: {
-          total: 1,
+          total: 0,
           title: '待维修数'
         },
         repairing: {
-          total: 1,
+          total: 0,
           title: '正在维修中'
         },
         today: {
-          total: 1,
-          change: 1,
+          total: 0,
+          change: 0,
           title: '今日维修数'
         },
         week: {
-          total: 1,
-          change: 1,
+          total: 0,
+          change: 0,
           title: '7日维修数'
         }
       },

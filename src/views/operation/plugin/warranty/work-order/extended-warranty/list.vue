@@ -22,16 +22,16 @@
     </div>
     <div class="row statistic-group mb30">
       <div class="col-6">
-        <statistic :info="extendedSummary.rest" :title="extendedSummary.rest.title" :has-action="true" align="left"></statistic>
+        <statistic :total="extendedSummary.rest.total" :title="extendedSummary.rest.title" :has-action="true" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="extendedSummary.unfinished" :title="extendedSummary.unfinished.title" :has-target="true" align="left"></statistic>
+        <statistic :total="extendedSummary.unfinished.total" :title="extendedSummary.unfinished.title" :has-target="true" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="extendedSummary.today" :title="extendedSummary.today.title" align="left" :showchange="true"></statistic>
+        <statistic :total="extendedSummary.today.total" :title="extendedSummary.today.title" align="left" :showchange="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="extendedSummary.week" :title="extendedSummary.week.title" align="left" :has-action="true" :showchange="true">
+        <statistic :total="extendedSummary.week.total" :title="extendedSummary.week.title" align="left" :has-action="true" :showchange="true">
         </statistic>
       </div>
     </div>

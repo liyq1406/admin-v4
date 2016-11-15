@@ -18,16 +18,16 @@
     </div>
     <div class="row statistic-group mb30">
       <div class="col-6">
-        <statistic :info="alertSummary.unread" :title="alertSummary.unread.title" align="left"></statistic>
+        <statistic :total="alertSummary.unread.total" :title="alertSummary.unread.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="alertSummary.today" :title="alertSummary.today.title" align="left"></statistic>
+        <statistic :total="alertSummary.today.total" :title="alertSummary.today.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="alertSummary.week" :title="alertSummary.week.title" align="left"></statistic>
+        <statistic :total="alertSummary.week.total" :title="alertSummary.week.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="alertSummary.month" :title="alertSummary.month.title" align="left"></statistic>
+        <statistic :total="alertSummary.month.total" :title="alertSummary.month.title" align="left"></statistic>
       </div>
     </div>
     <div class="panel">

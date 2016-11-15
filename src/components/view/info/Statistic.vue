@@ -5,19 +5,23 @@
       <slot name="action"></slot>
     </div>
     <div class="tit" v-if="titletop">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
-    <div class="info" v-animated-number="info.total"></div>
-    <div class="unit" v-if="info.unit">{{info.unit}}</div>
-    <div class="change" v-if="info.change && info.change !== 0" :class="{'decrease': info.change < 0}">
-      <i class="fa" :class="{'fa-long-arrow-up': info.change > 0, 'fa-long-arrow-down': info.change < 0}"></i>
-      <span v-animated-number="info.change"></span>
-      <span v-if="info.changeunit">{{info.changeunit}}</span>
+
+    <div class="info" v-if="animated" v-animated-number="total"></div>
+    <div class="info" v-else>{{ total }}</div>
+
+    <div class="unit" v-if="totalUnit">{{totalUnit}}</div>
+    <div class="change" v-if="change !== 0" :class="{'decrease': change < 0}">
+      <i class="fa" :class="{'fa-long-arrow-up': change > 0, 'fa-long-arrow-down': change < 0}"></i>
+      <span v-if="animated" v-animated-number="change"></span>
+      <span v-else>{{ change }}</span>
+      <span v-if="changeUnit">{{changeUnit}}</span>
       <span class="ml10" v-if="showchange">{{ percentage }}</span>
     </div>
     <div class="tit" v-if="!titletop">{{ title }}<slot name="tips"></slot><i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
     <div class="target" v-if="hasTarget">
       <slot name="targetArea"></slot>
     </div>
-    <div class="hidden" :class="{'tac': align==='center'}">
+    <div :class="{'tac': align==='center'}">
       <div class="chart" v-if="hasChart">
         <slot></slot>
       </div>
@@ -42,15 +46,26 @@ export default {
       default: ''
     },
 
-    // 数据
-    info: {
-      type: Object,
-      default () {
-        return {
-          unit: '',
-          changeunit: ''
-        }
-      }
+    // 总量
+    total: {
+      default: 0
+    },
+
+    // 总量单位
+    totalUnit: {
+      type: String,
+      default: ''
+    },
+
+    // 变化
+    change: {
+      default: 0
+    },
+
+    // 变化单位
+    changeUnit: {
+      type: String,
+      default: ''
     },
 
     // 对齐方式
@@ -111,6 +126,12 @@ export default {
     digits: {
       type: Number,
       default: 2
+    },
+
+    // 是否播放动画
+    animated: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -135,7 +156,12 @@ export default {
     },
 
     percentage () {
-      return Math.abs(this.info.change / (this.info.total || 1) * 100).toFixed(this.digits) + '%'
+      let result = 0
+
+      if (!isNaN(this.total)) {
+        result = Math.abs(this.change / (this.total || 1) * 100).toFixed(this.digits) + '%'
+      }
+      return result
     }
   }
 }
@@ -169,7 +195,7 @@ export default {
     font-weight 100
 
   & > .change
-    absolute right 15px top 15px
+    absolute right 15px top 5px
     color green
     white-space nowrap
     font-size 0
@@ -191,7 +217,7 @@ export default {
 
 .x-statistic-left
   text-align left
-  padding 5px 15px 15px 30px
+  padding 5px 15px 15px 40px
   & > .tit
     color gray-light
 
@@ -200,7 +226,7 @@ export default {
   & > .change
     display inline-block
 
-.x-statistic-black
+.x-statistic-gray
   & > .tit
   & > .info
   & > .unit

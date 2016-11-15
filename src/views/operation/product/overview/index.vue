@@ -13,22 +13,18 @@
           <!-- Start: 产品信息统计 -->
           <div class="row">
             <div class="col-6">
-              <statistic :total="statisticsDisplay[1].total" :change="statisticsDisplay[1].change" :title="statisticsDisplay[1].title" :tooltip="statisticsDisplay[1].tooltip" color="gray" align="left" :titletop="true" :animated="false">
-              </statistic>
+              <statistic :total="statisticsDisplay[1].total" :change="statisticsDisplay[1].change" :title="statisticsDisplay[1].title" :tooltip="statisticsDisplay[1].tooltip" color="gray" align="left" :titletop="true" :animated="false"></statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statisticsDisplay[2].total" :change="statisticsDisplay[2].change" :title="statisticsDisplay[2].title" :tooltip="statisticsDisplay[2].tooltip" color="green" align="left" :titletop="true" :animated="false">
-              </statistic>
+              <statistic :total="statisticsDisplay[2].total" :change="statisticsDisplay[2].change" :title="statisticsDisplay[2].title" :tooltip="statisticsDisplay[2].tooltip" color="green" align="left" :titletop="true" :animated="false"></statistic>
             </div>
             <div class="col-6">
               <statistic :total="statisticsDisplay[3].total" :change="statisticsDisplay[3].change" :title="statisticsDisplay[3].title" :tooltip="statisticsDisplay[3].tooltip" color="blue" :titletop="true"
-              :animated="false">
-              </statistic>
+              :animated="false"></statistic>
             </div>
             <div class="col-6">
               <statistic :total="statisticsDisplay[4].total" :change="statisticsDisplay[4].change" :title="statisticsDisplay[4].title" :tooltip="statisticsDisplay[4].tooltip" color="orange" :titletop="true"
-              :animated="false">
-              </statistic>
+              :animated="false"></statistic>
             </div>
           </div>
           <!-- End: 产品信息统计 -->

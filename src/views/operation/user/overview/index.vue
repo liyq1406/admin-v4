@@ -5,16 +5,16 @@
     </div>
     <div class="row user-card mt15">
       <div class="col-6 total-box">
-        <statistic :info="statistic.total" :title="$t('operation.user.overview.total.count')" color="gray" align="left" :titletop="true"></statistic>
+        <statistic :total="statistic.all.total" :title="$t('operation.user.overview.total.count')" color="gray" align="left" :titletop="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="statistic.add" :title="$t('operation.user.overview.add.count')" color="green" align="left" :titletop="true"></statistic>
+        <statistic :total="statistic.add.total" :title="$t('operation.user.overview.add.count')" color="green" align="left" :titletop="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="statistic.active" :title="$t('operation.user.overview.active.count')" color="blue" align="left" :titletop="true"></statistic>
+        <statistic :total="statistic.active.total" :change="statistic.active.change" :title="$t('operation.user.overview.active.count')" color="blue" align="left" :titletop="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="statistic.seventTotal" :title="$t('operation.user.overview.sevent_total.count')" color="orange" align="left" :titletop="true"></statistic>
+        <statistic :total="statistic.seventTotal.total" :change="statistic.seventTotal.change" :title="$t('operation.user.overview.sevent_total.count')" color="orange" align="left" :titletop="true"></statistic>
       </div>
     </div>
     <user-trend></user-trend>
@@ -40,7 +40,7 @@ export default {
       // 统计
       statistic: {
         // 用户总数
-        total: {
+        all: {
           total: '',
           change: ''
         },
@@ -115,7 +115,7 @@ export default {
     },
     getUserCount () {
       getTotalUser().then((res) => {
-        this.statistic.total.total = res.total
+        this.statistic.all.total = res.total
         this.statistic.add.total = res.add
       }).catch((res) => {
         this.handleError(res)

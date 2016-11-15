@@ -22,7 +22,7 @@
       <div class="col-9 col-offset-1">
         <div class="row">
           <div class="col-20 col-offset-4">
-            <statistic :total="avg.count" :change="avg.change" :title="$t('common.avg_increase', {period: period})" :tooltip="$t('common.avg_increase', {period: period})" color="orange" :titletop="true">
+            <statistic :total="avg.count" :change="avg.change" :title="$t('common.avg_increase', {period: period})" :tooltip="$t('common.avg_increase', {period: period})" color="orange" :titletop="true"></statistic>
           </div>
         </div>
         <div class="top">

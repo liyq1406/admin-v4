@@ -5,16 +5,16 @@
     </div>
     <div class="row statistic-group mb20">
       <div class="col-6">
-        <statistic :info="alertSummary.unhandle" :title="alertSummary.unhandle.title" align="left"></statistic>
+        <statistic :total="alertSummary.unhandle.total" :title="alertSummary.unhandle.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="alertSummary.message" :title="alertSummary.message.title" align="left"></statistic>
+        <statistic :total="alertSummary.message.total" :title="alertSummary.message.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="alertSummary.sevenday" :title="alertSummary.sevenday.title" align="left"></statistic>
+        <statistic :total="alertSummary.sevenday.total" :title="alertSummary.sevenday.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="alertSummary.thirtyday" :title="alertSummary.thirtyday.title" align="left"></statistic>
+        <statistic :total="alertSummary.thirtyday.total" :title="alertSummary.thirtyday.title" align="left"></statistic>
       </div>
     </div>
     <alert-trends :product-id="productID"></alert-trends>

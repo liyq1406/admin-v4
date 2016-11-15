@@ -39,6 +39,7 @@ import Modal from 'components/view/modal/Modal'
 import Notification from 'components/view/notification/Notification'
 import api from 'api'
 import store from 'store/index'
+import { globalMixins } from 'src/mixins'
 import { removeError, hideError, setCurrentMember, setCorp, setLoadingStatus } from './store/actions/system'
 import { getAllProducts } from './store/actions/products'
 import { createPlugin, getAllPlugin } from './store/actions/plugins'
@@ -46,6 +47,8 @@ import { API_SERVER, IS_DEMO } from 'consts/config'
 
 export default {
   name: 'App',
+
+  mixins: [globalMixins],
 
   components: {
     Topbar,

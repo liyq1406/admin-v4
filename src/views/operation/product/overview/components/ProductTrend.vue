@@ -15,10 +15,10 @@
     <div class="row mt10">
       <div class="col-offset-12 col-12 row">
         <div class="col-12">
-          <statistic :total="today.count" :change="today.change" :title="$t('operation.product.overview.trend.today_add')" :tooltip="$t('operation.product.overview.trend.today_add')" color="green" :titletop="true">
+          <statistic :total="today.count" :change="today.change" :title="$t('operation.product.overview.trend.today_add')" :tooltip="$t('operation.product.overview.trend.today_add')" color="green" :titletop="true"></statistic>
         </div>
         <div class="col-12">
-          <statistic :total="avg.count" :change="avg.change" :title="$t('common.avg_increase', {period: period})" :tooltip="$t('common.avg_increase', {period: period})" color="orange" :titletop="true">
+          <statistic :total="avg.count" :change="avg.change" :title="$t('common.avg_increase', {period: period})" :tooltip="$t('common.avg_increase', {period: period})" color="orange" :titletop="true"></statistic>
         </div>
       </div>
     </div>

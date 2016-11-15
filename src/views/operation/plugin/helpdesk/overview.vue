@@ -30,16 +30,16 @@
     </div>
     <div class="row statistic-group mb30">
       <div class="col-6">
-        <statistic :info="summary.total" :title="summary.total.title" align="left"></statistic>
+        <statistic :total="summary.all.total" :title="summary.all.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="summary.untreatedTotal" :title="summary.untreatedTotal.title" align="left"></statistic>
+        <statistic :total="summary.untreatedTotal.total" :title="summary.untreatedTotal.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="summary.weekAdded" :title="summary.weekAdded.title" align="left"></statistic>
+        <statistic :total="summary.weekAdded.total" :title="summary.weekAdded.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="summary.monthAdded" :title="summary.monthAdded.title" align="left"></statistic>
+        <statistic :total="summary.monthAdded.total" :title="summary.monthAdded.title" align="left"></statistic>
       </div>
     </div>
     <div class="panel">
@@ -111,7 +111,7 @@ export default {
       defaultPeriod: 30,
       feedbacks: [],
       summary: {
-        total: {
+        all: {
           total: 0,
           title: '反馈数'
         },
@@ -259,7 +259,7 @@ export default {
       this.loadingData = true
       api.helpdesk.getFeedbackGroup(this.$route.params.app_id, this.groupQueryCondition).then((res) => {
         if (res.status !== 200) return
-        this.summary.total.total = res.data.total
+        this.summary.all.total = res.data.total
         this.summary.untreatedTotal.total = res.data.untreatedTotal
         this.summary.weekAdded.total = res.data.sevenCount
         this.summary.monthAdded.total = res.data.thirtyCount
