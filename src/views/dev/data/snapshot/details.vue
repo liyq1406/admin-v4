@@ -152,14 +152,10 @@
 <script>
 import api from 'api'
 import Chart from 'components/Chart/index'
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 
 export default {
   name: 'TableDetails',
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

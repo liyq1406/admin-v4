@@ -95,15 +95,11 @@ import Vue from 'vue'
 import api from 'api'
 import io from 'socket.io-client'
 import formatDate from 'filters/format-date'
-import { globalMixins } from 'src/mixins'
 import locales from 'consts/locales/index'
 var socket = null
 
 export default {
   name: 'DeviceDetails',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

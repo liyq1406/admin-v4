@@ -64,13 +64,12 @@
 <script>
   // import api from 'api'
   import * as config from 'consts/config'
-  import { globalMixins } from 'src/mixins'
   import { warrantyMixins } from '../../mixins'
   import api from 'api'
   export default {
     name: 'OrderList',
 
-    mixins: [globalMixins, warrantyMixins],
+    mixins: [warrantyMixins],
 
     vuex: {
       getters: {

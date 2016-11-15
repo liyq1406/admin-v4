@@ -135,7 +135,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 
 const SNAPSHOT_STATISTICS_TYPES = {
@@ -155,9 +154,6 @@ const SNAPSHOT_STATISTICS_FINENESS = {
 
 export default {
   name: 'StatisticRuleForm',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

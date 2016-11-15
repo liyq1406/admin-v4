@@ -18,7 +18,6 @@
 
 <script>
 import Chart from 'components/Chart/index'
-import { globalMixins } from 'src/mixins'
 import {getUserRegion} from '../api-user'
 import {numToPercent} from 'utils'
 
@@ -26,9 +25,6 @@ export default {
   name: 'distribution',
 
   layouts: ['topbar', 'sidebar'],
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

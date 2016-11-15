@@ -44,7 +44,6 @@
 
 <script>
 import { removeProduct, updateProduct } from 'store/actions/products'
-import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from '../mixins'
 import ProductTrend from './components/ProductTrend'
 import ProductActive from './components/ProductActive'
@@ -59,7 +58,7 @@ export default {
   layouts: ['topbar', 'sidebar'],
 
   // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
-  mixins: [globalMixins, setCurrProductMixin],
+  mixins: [setCurrProductMixin],
 
   vuex: {
     actions: {

@@ -25,7 +25,6 @@
 <script>
 // import Vue from 'vue'
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from '../mixins'
 import formatDate from 'filters/format-date'
 import AlertTable from './alert-table'
@@ -35,7 +34,7 @@ export default {
   name: 'Alert',
 
   // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
-  mixins: [globalMixins, setCurrProductMixin],
+  mixins: [setCurrProductMixin],
 
   components: {
     AlertTable,

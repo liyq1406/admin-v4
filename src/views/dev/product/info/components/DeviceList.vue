@@ -50,16 +50,12 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
 import formatDate from 'filters/format-date'
 // import BatchExportQr from './batch-export-qr'
 
 export default {
   name: 'deviceList',
-
-  mixins: [globalMixins],
-
   vuex: {
     actions: {
     }

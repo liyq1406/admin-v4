@@ -145,7 +145,6 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import { warrantyMixins } from '../mixins'
   import api from 'api'
   import * as config from 'consts/config'
@@ -153,7 +152,7 @@
   export default {
     // name: 'AccountList',
 
-    mixins: [globalMixins, warrantyMixins],
+    mixins: [warrantyMixins],
 
     components: {
     },

@@ -58,13 +58,9 @@ import Vue from 'vue'
 import locales from 'consts/locales/index'
 import api from 'api'
 import formatDate from 'filters/format-date'
-import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
 export default {
   name: 'AlertTable',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       currentProduct: ({ products }) => products.curr

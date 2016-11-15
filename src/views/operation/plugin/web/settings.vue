@@ -42,14 +42,10 @@
 
 <script>
   import api from 'api'
-  import { globalMixins } from 'src/mixins'
   import { updatePlugin, removePlugin } from 'store/actions/plugins'
 
   export default {
     name: 'updateForm',
-
-    mixins: [globalMixins],
-
     vuex: {
       actions: {
         updatePlugin,

@@ -91,16 +91,12 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import Chart from 'components/Chart/index'
 import formatDate from 'filters/format-date'
 import { patchLostDates } from 'utils'
 
 export default {
   name: 'Analysis',
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

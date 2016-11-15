@@ -69,14 +69,10 @@
   import api from 'api'
   import * as config from 'consts/config'
   import formatDate from 'filters/format-date'
-  import { globalMixins } from 'src/mixins'
   import {createDayRange} from 'utils'
   import locales from 'consts/locales/index'
   export default {
     name: 'UserList',
-
-    mixins: [globalMixins],
-
     components: {
       'api': api
     },

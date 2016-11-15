@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { warrantyMixins } from '../../mixins'
 import api from 'api'
 import * as config from 'consts/config'
@@ -79,7 +78,7 @@ import formatDate from 'filters/format-date'
 export default {
   name: 'OrderList',
 
-  mixins: [globalMixins, warrantyMixins],
+  mixins: [warrantyMixins],
 
   vuex: {
     getters: {

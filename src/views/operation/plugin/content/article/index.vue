@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import api from 'api'
 
@@ -50,9 +49,6 @@ export default {
   name: 'operate-article', // 运营管理-文章
 
   layout: 'admin',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

@@ -129,15 +129,10 @@
 import api from 'api'
 // import Vue from 'vue'
 // import locales from 'consts/locales/index'
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'RegisterForm',
 
   layouts: ['auth'],
-
-  mixins: [globalMixins],
-
   data () {
     return {
       model: {

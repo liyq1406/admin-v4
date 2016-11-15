@@ -83,13 +83,12 @@ import * as config from 'consts/config'
 import Progress from './components/Progress'
 import locales from 'consts/locales/index'
 // import formatDate from 'filters/format-date'
-// import { globalMixins } from 'src/mixins'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'
 export default {
   name: 'DeviceList',
 
   // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
-  // mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
+  // mixins: [productSummaryMixin, setCurrProductMixin],
 
   components: {
     Progress

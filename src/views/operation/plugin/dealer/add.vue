@@ -148,13 +148,8 @@
 <script>
   // import locales from 'consts/locales/index'
   import api from 'api'
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'TableDetails',
-
-    mixins: [globalMixins],
-
     components: {
     },
 

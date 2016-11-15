@@ -168,7 +168,6 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 
 export default {
@@ -176,7 +175,7 @@ export default {
 
   layout: 'admin',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   components: {
   },

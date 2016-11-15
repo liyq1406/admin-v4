@@ -13,14 +13,13 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 import MenuForm from './components/MenuForm'
 
 export default {
   name: 'AddMenu',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   components: {
     MenuForm

@@ -46,13 +46,9 @@
 
 <script>
   import api from 'api'
-  import { globalMixins } from 'src/mixins'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   export default {
     name: 'AndroidUpgrade',
-
-    mixins: [globalMixins],
-
     vuex: {
       getters: {
         corp: ({ system }) => system.corp

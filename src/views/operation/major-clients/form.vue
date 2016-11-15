@@ -104,14 +104,10 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 
 export default {
   name: 'vip-form',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

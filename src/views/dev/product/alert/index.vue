@@ -22,7 +22,6 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import Rule from './rule'
   import Record from './record'
   import { setCurrProductMixin } from '../mixins'
@@ -30,7 +29,7 @@
   export default {
     name: 'Alert',
 
-    mixins: [globalMixins, setCurrProductMixin],
+    mixins: [setCurrProductMixin],
 
     components: {
       Rule,

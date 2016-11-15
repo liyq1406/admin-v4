@@ -203,7 +203,6 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import proxy from './proxy-api'
 import config from 'consts/custom-config'
 
@@ -220,9 +219,6 @@ var QUOTAS_TYPES = [
 ]
 export default {
   name: 'custom-overview',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       releasedProduct: ({ products }) => products.released

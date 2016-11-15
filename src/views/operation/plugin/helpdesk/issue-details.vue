@@ -71,7 +71,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
 import api from 'api'
 import formatDate from 'filters/format-date'
@@ -79,7 +78,7 @@ import formatDate from 'filters/format-date'
 export default {
   name: 'IssueDetails',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   vuex: {
     getters: {

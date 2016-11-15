@@ -171,13 +171,8 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'MailTemplates',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

@@ -129,12 +129,8 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 export default {
   name: 'Authorize',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       products: ({ products }) => products.all

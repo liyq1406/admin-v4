@@ -26,12 +26,8 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'Range',
-
-    mixins: [globalMixins],
     /**
      * 暴露的方法：内容改变（实时上报和非实时上报）
      * @param  {[type]} 'change/changed'  方法名

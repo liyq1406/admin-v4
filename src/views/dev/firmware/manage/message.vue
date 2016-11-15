@@ -106,15 +106,11 @@
 <script>
 import api from 'api'
 import * as config from 'consts/config'
-import { globalMixins } from 'src/mixins'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'
 import Chart from 'components/Chart/index'
 
 export default {
   name: 'DeviceList',
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

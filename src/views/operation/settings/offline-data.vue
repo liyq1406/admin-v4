@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 import * as config from 'consts/config'
 import formatDate from 'filters/format-date'
@@ -41,9 +40,6 @@ import toPercentage from 'filters/to-percentage'
 
 export default {
   name: 'OfflineData',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

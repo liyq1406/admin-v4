@@ -91,7 +91,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { editPasswordMixin } from '../mixins'
 import formatDate from 'filters/format-date'
 import api from 'api'
@@ -100,7 +99,7 @@ export default {
   name: 'MemberDetails',
 
   // editPasswordMixin提供编辑密码的逻辑
-  mixins: [globalMixins, editPasswordMixin],
+  mixins: [editPasswordMixin],
 
   vuex: {
     getters: {

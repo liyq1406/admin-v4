@@ -75,13 +75,8 @@
   import Vue from 'vue'
   import api from 'src/api'
   import locales from 'consts/locales/index'
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'Alert',
-
-    mixins: [globalMixins],
-
     props: {
       productID: {
         type: String,

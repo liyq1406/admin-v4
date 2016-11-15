@@ -34,15 +34,11 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import { getCurrProduct, setCurrDevice, setCurrVirtualDevice } from 'store/actions/products'
 import formatDate from 'filters/format-date'
 
 export default {
   name: 'Device',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

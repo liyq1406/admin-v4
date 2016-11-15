@@ -131,15 +131,11 @@
 
 <script>
 import {get} from 'src/http'
-import { globalMixins } from 'src/mixins'
 import JSSHA from 'jssha'
 import api from 'api'
 
 export default {
   name: 'customize-email',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       corp: ({ system }) => system.corp

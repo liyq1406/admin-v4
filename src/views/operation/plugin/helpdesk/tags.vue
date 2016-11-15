@@ -103,14 +103,13 @@
   // import Vue from 'vue'
   // import locales from 'consts/locales/index'
   import * as config from 'consts/config'
-  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
   import api from 'api'
 
   export default {
     name: 'Tags',
 
-    mixins: [globalMixins, pluginMixins],
+    mixins: [pluginMixins],
 
     components: {
     },

@@ -120,14 +120,13 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import { warrantyMixins } from '../../mixins'
 import api from 'api'
 export default {
   name: 'OrderDetails',
 
-  mixins: [globalMixins, pluginMixins, warrantyMixins],
+  mixins: [pluginMixins, warrantyMixins],
 
   components: {
   },

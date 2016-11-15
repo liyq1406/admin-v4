@@ -263,7 +263,6 @@
 
 <script>
 import io from 'socket.io-client'
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import api from 'api'
 
@@ -271,9 +270,6 @@ var socket = null
 
 export default {
   name: 'DeviceDebug',
-
-  mixins: [globalMixins],
-
   data () {
     return {
       total: 0,

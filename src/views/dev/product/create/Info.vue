@@ -85,15 +85,11 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import { createProduct } from 'store/actions/products'
 import defaultDeviceThumb from 'assets/images/device_thumb.png'
 
 export default {
   name: 'Info',
-
-  mixins: [globalMixins],
-
   vuex: {
     actions: {
       createProduct

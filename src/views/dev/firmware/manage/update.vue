@@ -146,15 +146,11 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { API_SERVER } from 'consts/config'
 import api from 'api'
 
 export default {
   name: 'UploadFirmware',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       products: ({ products }) => products.all,

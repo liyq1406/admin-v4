@@ -15,13 +15,8 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'Link',
-
-    mixins: [globalMixins],
-
     components: {
     },
 

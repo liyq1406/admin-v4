@@ -148,16 +148,12 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 
 export default {
   name: 'Dashboard',
 
   layouts: ['topbar'],
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       corp: ({ system }) => system.corp

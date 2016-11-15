@@ -186,15 +186,11 @@
 
 <script>
 import DataModel from './data-model'
-import { globalMixins } from 'src/mixins'
 import Validator from 'utils/Validator'
 import api from 'api'
 
 export default {
   name: 'Datapoints',
-
-  mixins: [globalMixins],
-
   components: {
     DataModel
   },

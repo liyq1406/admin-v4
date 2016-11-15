@@ -50,13 +50,9 @@
 <script>
 import api from 'api'
 // import * as config from 'consts/config'
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 export default {
   name: 'Device',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

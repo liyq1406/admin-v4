@@ -84,14 +84,10 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import api from 'api'
 
   export default {
     name: 'Settings',
-
-    mixins: [globalMixins],
-
     data () {
       return {
         isShowAlertModel: false,

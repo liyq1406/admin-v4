@@ -171,16 +171,12 @@
 <script>
 import Vue from 'vue'
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import { createDayRange } from 'utils'
 import locales from 'consts/locales/index'
 
 export default {
   name: 'MajorClients',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

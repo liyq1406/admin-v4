@@ -108,14 +108,13 @@
   </div>
 </template>
 <script>
-  import { globalMixins } from 'src/mixins'
   import { warrantyMixins } from '../../mixins'
   import api from 'api'
 
   export default {
     name: 'add-warranty',
 
-    mixins: [globalMixins, warrantyMixins],
+    mixins: [warrantyMixins],
 
     vuex: {
       getters: {

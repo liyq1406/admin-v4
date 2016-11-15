@@ -125,7 +125,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import Chart from 'components/Chart/index'
 import api from 'api'
 import { patchLostDates } from 'utils'
@@ -133,9 +132,6 @@ import formatDate from 'filters/format-date'
 
 export default {
   name: 'BroadcastDetails',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       products: ({ products }) => products.released,

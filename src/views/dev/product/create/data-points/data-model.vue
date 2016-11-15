@@ -57,13 +57,8 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'import-datapoints-model',
-
-  mixins: [globalMixins],
-
   props: {
     show: {
       type: Boolean,

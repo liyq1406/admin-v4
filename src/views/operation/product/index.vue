@@ -17,13 +17,8 @@
 <script>
   import api from 'api'
   import { setCurrProduct } from 'store/actions/products'
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'Products',
-
-    mixins: [globalMixins],
-
     vuex: {
       getters: {
         currentProduct: ({ products }) => products.curr

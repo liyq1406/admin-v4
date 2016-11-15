@@ -16,16 +16,12 @@
 
 <script>
 import Sidebar from 'components/other/layout/Sidebar'
-import { globalMixins } from 'src/mixins'
 import { MAIN_NAV, IS_DEMO } from 'consts/config'
 
 export default {
   name: 'Operation',
 
   layouts: ['topbar', 'sidebar'],
-
-  mixins: [globalMixins],
-
   components: {
     Sidebar
   },

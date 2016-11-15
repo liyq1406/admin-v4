@@ -119,14 +119,10 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 
 export default {
   name: 'SnapshotForm',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

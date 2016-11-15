@@ -50,7 +50,6 @@
 
 <script>
 // import api from 'api'
-import { globalMixins } from 'src/mixins'
 import Sex from './components/Sex'
 import Age from './components/Age'
 import Language from './components/Language'
@@ -59,9 +58,6 @@ import Devices from './components/Devices'
 
 export default {
   name: 'Portrait',
-
-  mixins: [globalMixins],
-
   components: {
     Age,
     Language,

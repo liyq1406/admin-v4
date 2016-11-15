@@ -24,15 +24,11 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
 import api from 'api'
 
 export default {
   name: 'ProductInfo',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

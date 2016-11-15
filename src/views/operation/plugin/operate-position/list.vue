@@ -100,14 +100,10 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
 
 export default {
   name: 'OperationPostion', // 运营管理-运营位
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       currentMember: ({ system }) => system.currentMember

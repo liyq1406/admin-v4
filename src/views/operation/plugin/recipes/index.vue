@@ -15,15 +15,10 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'Recipe',
 
     layout: 'admin',
-
-    mixins: [globalMixins],
-
     components: {
     },
 

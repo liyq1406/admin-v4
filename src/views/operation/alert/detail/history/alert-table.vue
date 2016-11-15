@@ -58,13 +58,9 @@ import Vue from 'vue'
 import api from 'api'
 import locales from 'consts/locales/index'
 import formatDate from 'filters/format-date'
-import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
 export default {
   name: 'AlertTable',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

@@ -56,14 +56,13 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 export default {
   name: 'DeviceForm',
 
   layout: 'admin',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   components: {
   },

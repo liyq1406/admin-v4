@@ -82,13 +82,12 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
   import api from 'api'
   export default {
     name: 'DealerList',
 
-    mixins: [globalMixins, pluginMixins],
+    mixins: [pluginMixins],
 
     components: {
     },

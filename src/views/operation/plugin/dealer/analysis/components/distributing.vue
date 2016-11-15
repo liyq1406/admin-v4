@@ -45,14 +45,11 @@
 import api from 'api'
 import Chart from 'components/Chart/index'
 import convertData from 'components/chart/convert-data'
-import { globalMixins } from 'src/mixins'
 import {numToPercent} from 'utils'
 export default {
   name: 'Distributing',
 
   // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       currentProduct: ({ products }) => products.curr

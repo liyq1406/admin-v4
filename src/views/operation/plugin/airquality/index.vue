@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
 import Chart from 'components/Chart/index'
 import 'echarts/extension/bmap/bmap'
@@ -43,9 +42,6 @@ import api from 'api'
 
 export default {
   name: 'airquality',
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

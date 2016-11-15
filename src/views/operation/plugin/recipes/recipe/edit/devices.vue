@@ -173,7 +173,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import InstructionsForm from '../components/InstructionsForm'
 import TipsForm from '../components/TipsForm'
@@ -184,7 +183,7 @@ export default {
 
   layout: 'admin',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   components: {
     InstructionsForm,

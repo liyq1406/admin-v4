@@ -18,7 +18,6 @@
 
 <script>
 import Chart from 'components/Chart/index'
-import { globalMixins } from 'src/mixins'
 import {numToPercent} from 'utils'
 import { toPercentage } from 'filters/format-date'
 import PROVINCE_MAP from 'consts/mapping/provinces'
@@ -26,9 +25,6 @@ import api from 'api'
 
 export default {
   name: 'ProductDistribution',
-
-  mixins: [globalMixins],
-
   components: {
     // ChinaMap,
     Chart

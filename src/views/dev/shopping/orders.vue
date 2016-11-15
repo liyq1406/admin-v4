@@ -66,13 +66,8 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'Orders',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

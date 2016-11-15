@@ -59,13 +59,8 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'Completion',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       allProducts: ({ products }) => products.all

@@ -58,7 +58,6 @@
 // import Vue from 'vue'
 import * as config from 'consts/config'
 // import locales from 'consts/locales/index'
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
 import api from 'api'
 import formatDate from 'filters/format-date'
@@ -66,7 +65,7 @@ import formatDate from 'filters/format-date'
 export default {
   name: 'Issues',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   vuex: {
     getters: {

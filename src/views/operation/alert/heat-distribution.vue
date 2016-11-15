@@ -119,14 +119,10 @@ import * as config from 'consts/config'
 import Chart from 'components/Chart/index'
 import convertData from 'components/chart/convert-data'
 import formatDate from 'filters/format-date'
-import { globalMixins } from 'src/mixins'
 import {numToPercent} from 'utils'
 
 export default {
   name: 'Alerts',
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

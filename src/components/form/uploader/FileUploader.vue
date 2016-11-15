@@ -23,14 +23,10 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { MAX_UPLOAD_FILE_SIZE } from 'consts/config'
 
 export default {
   name: 'FileUploader',
-
-  mixins: [globalMixins],
-
   props: {
     // DOM
     input: {

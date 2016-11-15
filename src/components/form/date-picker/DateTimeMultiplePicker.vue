@@ -30,12 +30,8 @@
 <script>
 import formatDate from 'filters/format-date'
 import EventListener from 'utils/event-listener'
-import { globalMixins } from 'src/mixins'
 export default {
   name: 'DateTimeMultiplePicker',
-
-  mixins: [globalMixins],
-
   components: {
   },
   props: {

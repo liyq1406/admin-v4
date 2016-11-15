@@ -13,7 +13,6 @@
 
 <script>
 import Sidebar from 'components/other/layout/Sidebar'
-import { globalMixins } from 'src/mixins'
 import { MAIN_NAV } from 'consts/config'
 // import api from 'api'
 
@@ -21,9 +20,6 @@ export default {
   name: 'dev',
 
   layouts: ['topbar', 'sidebar'],
-
-  mixins: [globalMixins],
-
   components: {
     Sidebar
   },

@@ -34,16 +34,12 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 import { isEmpty } from 'utils'
 import { DEALER_SCOPE_SEPERATOR } from 'consts/config'
 
 export default {
   name: 'Dealers',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       currDevice: ({ products }) => products.currDevice

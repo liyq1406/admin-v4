@@ -265,14 +265,10 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 
 export default {
   name: 'OperateForm',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

@@ -76,13 +76,8 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'Order',
-
-  mixins: [globalMixins],
-
   data () {
     return {
       order: {}

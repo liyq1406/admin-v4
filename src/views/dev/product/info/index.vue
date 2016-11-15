@@ -122,7 +122,6 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from '../mixins'
 import { removeProduct, updateProduct } from 'store/actions/products'
 import * as config from 'consts/config'
@@ -133,7 +132,7 @@ import formatDate from 'filters/format-date'
 export default {
   name: 'ProductInfo',
 
-  mixins: [globalMixins, setCurrProductMixin],
+  mixins: [setCurrProductMixin],
 
   vuex: {
     actions: {

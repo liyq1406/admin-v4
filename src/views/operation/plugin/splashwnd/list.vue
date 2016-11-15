@@ -59,7 +59,6 @@ import Vue from 'vue'
 import api from 'api'
 import * as config from 'consts/config'
 import locales from 'consts/locales/index'
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 // import { setCurrPlugin } from 'store/actions/plugins'
 
@@ -67,9 +66,6 @@ import formatDate from 'filters/format-date'
 
 export default {
   name: 'Alerts',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

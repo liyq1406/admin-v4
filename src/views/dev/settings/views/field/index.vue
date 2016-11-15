@@ -14,14 +14,10 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 // import api from 'api'
 
 export default {
   name: 'field',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       corp: ({ system }) => system.corp

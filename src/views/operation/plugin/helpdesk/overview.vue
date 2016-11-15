@@ -85,14 +85,13 @@
 import api from 'api'
 import Chart from 'components/Chart/index'
 import formatDate from 'filters/format-date'
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
 import { getLastYearDate, patchLostDates } from 'utils'
 
 export default {
   name: 'Overview',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   components: {
     Chart

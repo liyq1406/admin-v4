@@ -7,13 +7,8 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'Completion',
-
-  mixins: [globalMixins],
-
   data () {
     return {
     }

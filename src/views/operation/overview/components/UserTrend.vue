@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import Chart from 'components/Chart/index'
 import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
@@ -45,9 +44,6 @@ import api from 'api'
 import formatDate from 'filters/format-date'
 export default {
   name: 'UserTrend',
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

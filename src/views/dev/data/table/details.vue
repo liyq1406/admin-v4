@@ -80,13 +80,8 @@
 <script>
   import api from 'api'
   import * as config from 'consts/config'
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'TableDetails',
-
-    mixins: [globalMixins],
-
     components: {
     },
 

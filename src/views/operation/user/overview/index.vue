@@ -24,16 +24,12 @@
 
 <script>
 // import api from 'api'
-import { globalMixins } from 'src/mixins'
 import UserTrend from './components/UserTrend'
 import UserDistribution from './components/UserDistribution'
 import {getTotalUser, getTrend} from './api-user'
 
 export default {
   name: 'Dashboard',
-
-  mixins: [globalMixins],
-
   components: {
     UserTrend,
     UserDistribution

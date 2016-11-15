@@ -146,14 +146,13 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from './mixins'
 import api from 'api'
 
 export default {
   name: 'VirtualDevices',
 
-  mixins: [globalMixins, setCurrProductMixin],
+  mixins: [setCurrProductMixin],
 
   components: {
   },

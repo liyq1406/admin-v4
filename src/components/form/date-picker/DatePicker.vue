@@ -44,13 +44,8 @@
 
 <script>
   import EventListener from 'utils/event-listener'
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'DatePicker',
-
-    mixins: [globalMixins],
-
     props: {
       // 值
       value: {

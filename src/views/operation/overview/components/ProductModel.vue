@@ -12,15 +12,11 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import Chart from 'components/Chart/index'
 import api from 'api'
 
 export default {
   name: 'ProductModel',
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

@@ -61,13 +61,12 @@
 <script>
 import api from 'api'
 // import * as config from 'consts/config'
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 
 export default {
   name: 'TagList',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   vuex: {
     getters: {

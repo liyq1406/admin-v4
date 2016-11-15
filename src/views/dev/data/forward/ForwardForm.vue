@@ -62,16 +62,12 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import Vue from 'vue'
 // import * as config from 'consts/config'
 import locales from 'consts/locales/index'
 
 export default {
   name: 'SnapshotForm',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

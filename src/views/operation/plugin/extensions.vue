@@ -22,13 +22,12 @@
 
 <script>
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
-  import { globalMixins } from 'src/mixins'
   import { pluginFactoryMixin } from './mixins'
 
   export default {
     name: 'Applications',
 
-    mixins: [globalMixins, pluginFactoryMixin],
+    mixins: [pluginFactoryMixin],
 
     vuex: {
       actions: {

@@ -58,14 +58,10 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import api from 'api'
 
   export default {
     name: 'AddBroadcast',
-
-    mixins: [globalMixins],
-
     vuex: {
       getters: {
         products: ({ products }) => products.all,

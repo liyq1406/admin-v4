@@ -55,7 +55,6 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
   import api from 'api'
   import formatDate from 'filters/format-date'
@@ -63,7 +62,7 @@
   export default {
     name: 'AddBroadcast',
 
-    mixins: [globalMixins, pluginMixins],
+    mixins: [pluginMixins],
 
     components: {
     },

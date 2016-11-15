@@ -68,15 +68,11 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { IS_DEMO } from 'consts/config'
 import { showAlertMask, removeAlertMask } from 'store/actions/system'
 
 export default {
   name: 'Topbar',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       loading: ({ system }) => system.loading,

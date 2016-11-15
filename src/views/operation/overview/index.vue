@@ -32,7 +32,6 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import ProductTrend from './components/ProductTrend'
 import ProductActive from './components/ProductActive'
 import ProductDistribution from './components/ProductDistribution'
@@ -43,9 +42,6 @@ export default {
   name: 'Dashboard',
 
   layouts: ['topbar', 'sidebar'],
-
-  mixins: [globalMixins],
-
   components: {
     // IntervalIcon,
     ProductTrend,

@@ -16,14 +16,10 @@
 import api from 'api'
 import Chart from 'components/Chart/index'
 import { patchLostDates } from 'utils'
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 
 export default {
   name: 'AlertTrends',
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

@@ -169,12 +169,8 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   export default {
     name: 'AddBroadcast',
-
-    mixins: [globalMixins],
-
     components: {
     },
 

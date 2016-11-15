@@ -166,14 +166,13 @@
 import api from 'api'
 import * as config from 'consts/config'
 // import locales from 'consts/locales/index'
-import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from './mixins'
 import formatDate from 'filters/format-date'
 
 export default {
   name: 'Authorize',
 
-  mixins: [globalMixins, setCurrProductMixin],
+  mixins: [setCurrProductMixin],
 
   vuex: {
     getters: {

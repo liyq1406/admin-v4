@@ -52,7 +52,6 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import LinkageItem from './components/LinkageItem'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   // import { pluginFactoryMixin } from '../../opration/plugin/mixins'
@@ -65,9 +64,7 @@
       LinkageItem
     },
 
-    // mixins: [globalMixins, pluginFactoryMixin],
-    mixins: [globalMixins],
-
+    // mixins: [pluginFactoryMixin],
     vuex: {
       actions: {
         createPlugin,

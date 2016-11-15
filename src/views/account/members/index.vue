@@ -159,13 +159,12 @@
 <script>
 import api from 'api'
 import * as config from 'consts/config'
-import { globalMixins } from 'src/mixins'
 import { editPasswordMixin } from '../mixins'
 
 export default {
   name: 'MemberSettings',
 
-  mixins: [globalMixins, editPasswordMixin],
+  mixins: [editPasswordMixin],
 
   components: {
   },

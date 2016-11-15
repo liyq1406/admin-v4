@@ -326,13 +326,8 @@
 
 <script>
 import api from 'src/api'
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'RuleForm',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       apps: ({ plugins }) => plugins.all

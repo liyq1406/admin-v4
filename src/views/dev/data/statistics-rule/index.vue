@@ -9,13 +9,8 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'statistics-rule',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

@@ -129,15 +129,11 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   // import api from 'src/api'
   // import locales from 'consts/locales/index'
 
   export default {
     name: 'user',
-
-    mixins: [globalMixins],
-
     vuex: {
       getters: {
         products: ({ products }) => products.all

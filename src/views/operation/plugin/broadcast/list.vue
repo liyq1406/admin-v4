@@ -35,15 +35,11 @@
 
 <script>
   import * as config from 'consts/config'
-  import { globalMixins } from 'src/mixins'
   import api from 'api'
   import formatDate from 'filters/format-date'
 
   export default {
     name: 'BroadcastHistory',
-
-    mixins: [globalMixins],
-
     components: {
     },
 

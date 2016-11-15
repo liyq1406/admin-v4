@@ -30,14 +30,13 @@
 <script>
 import api from 'api'
 // import * as config from 'consts/config'
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 import formatDate from 'filters/format-date'
 
 export default {
   name: 'MenuList',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   vuex: {
     getters: {

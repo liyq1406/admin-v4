@@ -71,15 +71,10 @@
   import api from 'api'
   import * as config from 'consts/config'
   import base64 from 'utils/base64'
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'MemberActivateForm',
 
     layouts: ['auth'],
-
-    mixins: [globalMixins],
-
     data () {
       return {
         validation: {},

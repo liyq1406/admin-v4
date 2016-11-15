@@ -33,14 +33,13 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { pluginFactoryMixin } from './mixins'
 
   export default {
     name: 'Data',
 
-    mixins: [globalMixins, pluginFactoryMixin],
+    mixins: [pluginFactoryMixin],
 
     vuex: {
       actions: {

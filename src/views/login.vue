@@ -49,7 +49,6 @@
 <script>
   import Vue from 'vue'
   import api from 'api'
-  import { globalMixins } from 'src/mixins'
   import { setLoadingStatus } from 'store/actions/system'
   import { IS_SHOW_OLD_ENTRANCE } from 'consts/config'
 
@@ -57,9 +56,6 @@
     name: 'LoginForm',
 
     layouts: ['auth'],
-
-    mixins: [globalMixins],
-
     vuex: {
       getters: {
         logining: ({ system }) => system.loading

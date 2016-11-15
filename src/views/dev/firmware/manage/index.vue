@@ -24,14 +24,10 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import Message from './message'
   import Update from './update'
   export default {
     name: 'Alert',
-
-    mixins: [globalMixins],
-
     components: {
       Message,
       Update

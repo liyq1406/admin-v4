@@ -14,14 +14,13 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 export default {
   name: 'EditRecipe',
 
   layout: 'admin',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   components: {
   },

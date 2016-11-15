@@ -98,7 +98,6 @@
 <script>
 import api from 'api'
 import TreeItem from '../components/TreeItem'
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import CodeForm from '../components/CodeForm'
 import MenuForm from '../components/MenuForm'
@@ -108,7 +107,7 @@ export default {
 
   layout: 'admin',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   components: {
     'tree-item': TreeItem,

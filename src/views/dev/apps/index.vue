@@ -153,7 +153,6 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
 import formatDate from 'filters/format-date'
 import IosSettings from './ios/settings'
@@ -166,9 +165,6 @@ export default {
   name: 'Data',
 
   layout: 'admin',
-
-  mixins: [globalMixins],
-
   vuex: {
     actions: {
       createPlugin,

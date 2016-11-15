@@ -87,13 +87,12 @@
 import api from 'api'
 import * as config from 'consts/config'
 import formatDate from 'filters/format-date'
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 
 export default {
   name: 'recipeList',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   components: {
   },

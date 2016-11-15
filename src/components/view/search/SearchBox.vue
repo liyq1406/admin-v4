@@ -10,13 +10,8 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'SearchBox',
-
-    mixins: [globalMixins],
-
     props: {
       max: false,
       key: {

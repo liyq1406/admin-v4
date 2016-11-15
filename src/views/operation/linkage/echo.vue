@@ -25,7 +25,6 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import LinkageItem from './components/LinkageItem'
 
   export default {
@@ -34,7 +33,5 @@
     components: {
       LinkageItem
     },
-
-    mixins: [globalMixins]
   }
 </script>

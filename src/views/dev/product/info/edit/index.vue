@@ -10,13 +10,8 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'edit',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

@@ -33,13 +33,8 @@
 import Info from './Info'
 import Order from './Order'
 import Completion from './Completion'
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'Creation',
-
-  mixins: [globalMixins],
-
   components: {
     Info,
     Order,

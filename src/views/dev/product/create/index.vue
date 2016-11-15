@@ -15,13 +15,8 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'Creation',
-
-  mixins: [globalMixins],
-
   data () {
     return {
       currStep: 0, // 当前步骤 [0|1|2|3]

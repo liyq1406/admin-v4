@@ -57,16 +57,12 @@
 <script>
 import * as config from 'consts/config'
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import locales from 'consts/locales/index'
 import Vue from 'vue'
 
 export default {
   name: 'Overview',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

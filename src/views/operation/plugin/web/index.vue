@@ -15,15 +15,11 @@
   </section>
 </template>
 <script>
-  import { globalMixins } from 'src/mixins'
   import { setCurrPlugin } from 'store/actions/plugins'
   import api from 'api'
 
   export default {
     name: 'Statistic',
-
-    mixins: [globalMixins],
-
     components: {
     },
 

@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import api from 'src/api'
 import Chart from 'components/Chart/index'
 import formatDate from 'filters/format-date'
@@ -55,9 +54,6 @@ import { patchLostDates } from 'utils'
 
 export default {
   name: 'History',
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

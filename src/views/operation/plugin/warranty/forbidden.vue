@@ -14,11 +14,7 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
-
   export default {
-    name: 'Forbidden',
-
-    mixins: [globalMixins]
+    name: 'Forbidden'
   }
 </script>

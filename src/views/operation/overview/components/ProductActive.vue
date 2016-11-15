@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import Chart from 'components/Chart/index'
 import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
@@ -28,9 +27,6 @@ import truncate from 'filters/truncate'
 import formatDate from 'filters/format-date'
 export default {
   name: 'ProductActive',
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

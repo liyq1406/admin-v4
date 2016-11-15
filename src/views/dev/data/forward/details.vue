@@ -24,16 +24,12 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import Vue from 'vue'
   import locales from 'consts/locales/index'
   import api from 'api'
 
   export default {
     name: 'TableDetails',
-
-    mixins: [globalMixins],
-
     vuex: {
       getters: {
         products: ({ products }) => products.all

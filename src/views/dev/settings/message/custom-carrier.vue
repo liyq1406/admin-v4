@@ -60,14 +60,10 @@
 
 <script>
 import * as config from 'consts/config'
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 
 export default {
   name: 'Snapshots',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

@@ -14,16 +14,12 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import ArticleForm from './components/ArticleForm'
 
 export default {
   name: 'EditArticle',
 
   layout: 'admin',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       currentMember: ({ system }) => system.currentMember

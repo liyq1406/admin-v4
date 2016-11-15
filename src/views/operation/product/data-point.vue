@@ -260,13 +260,8 @@
   import api from 'api'
   import * as config from 'consts/config'
   import locales from 'consts/locales/index'
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'DataPoint',
-
-    mixins: [globalMixins],
-
     components: {
     },
 

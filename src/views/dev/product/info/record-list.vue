@@ -52,16 +52,12 @@
 import api from 'api'
 import * as config from 'consts/config'
 // import locales from 'consts/locales/index'
-import { globalMixins } from 'src/mixins'
 // import { setCurrProductMixin } from './mixins'
 import formatDate from 'filters/format-date'
 import BatchExportQr from './batch-export-qr'
 
 export default {
   name: 'Authorize',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       products: ({ products }) => products.all

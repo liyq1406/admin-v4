@@ -30,15 +30,10 @@
 
 <script>
   import api from 'api'
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'FetchPwdByMailForm',
 
     layouts: ['auth'],
-
-    mixins: [globalMixins],
-
     data () {
       return {
         model: {},

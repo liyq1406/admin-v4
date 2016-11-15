@@ -32,7 +32,6 @@
 <script>
 import Chart from 'components/Chart/index'
 import {getTrend} from '../api-user'
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import {getLastYearDate} from 'utils'
 
@@ -40,9 +39,6 @@ export default {
   name: 'user-trend',
 
   layouts: ['topbar', 'sidebar'],
-
-  mixins: [globalMixins],
-
   components: {
     Chart
   },

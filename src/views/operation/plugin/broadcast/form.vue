@@ -312,15 +312,11 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import api from 'api'
   import { createDayRange } from 'utils'
 
   export default {
     name: 'AddBroadcast',
-
-    mixins: [globalMixins],
-
     vuex: {
       getters: {
         products: ({ products }) => products.released,

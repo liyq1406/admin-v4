@@ -23,7 +23,6 @@
 <script>
 import api from 'api'
 import CategoryModal from './components/CategoryModal'
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 
 export default {
@@ -31,7 +30,7 @@ export default {
 
   layout: 'admin',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   components: {
     CategoryModal

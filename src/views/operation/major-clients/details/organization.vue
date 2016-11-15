@@ -32,13 +32,8 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'organization',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

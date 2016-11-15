@@ -72,14 +72,10 @@
 // import Vue from 'vue'
 // import * as config from 'consts/config'
 // import locales from 'consts/locales/index'
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 
 export default {
   name: 'DataTables',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       products: ({ products }) => products.all

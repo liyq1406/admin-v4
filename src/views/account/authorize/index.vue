@@ -94,14 +94,10 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 
 export default {
   name: 'Authorize',
-
-  mixins: [globalMixins],
-
   data () {
     return {
       loadingData: true,

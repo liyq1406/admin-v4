@@ -88,7 +88,6 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
   import Chart from 'components/Chart/index'
   import formatDate from 'filters/format-date'
   import api from 'api'
@@ -124,9 +123,6 @@
 
   export default {
     name: 'snapshots',
-
-    mixins: [globalMixins],
-
     vuex: {
       getters: {
         releasedProduct: ({ products }) => products.released

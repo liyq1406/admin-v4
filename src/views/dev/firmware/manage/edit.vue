@@ -94,15 +94,11 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 import { API_SERVER } from 'consts/config'
 
 export default {
   name: 'EditFirmware',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       products: ({ products }) => products.all

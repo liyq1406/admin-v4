@@ -85,15 +85,11 @@ import Vue from 'vue'
 import api from 'api'
 import * as config from 'consts/config'
 import locales from 'consts/locales/index'
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 // TODO 消除代码冗余 #weijie
 
 export default {
   name: 'Alerts',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

@@ -16,13 +16,9 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'Forbidden',
 
     layout: 'admin',
-
-    mixins: [globalMixins]
   }
 </script>

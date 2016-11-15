@@ -6,14 +6,10 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import { setCurrVirtualDevice } from 'store/actions/products'
 
 export default {
   name: 'DeviceDetails',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

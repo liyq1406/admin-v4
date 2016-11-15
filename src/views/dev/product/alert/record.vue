@@ -40,14 +40,10 @@
   import Vue from 'vue'
   import api from 'src/api'
   import locales from 'consts/locales/index'
-  import { globalMixins } from 'src/mixins'
   import formatDate from 'filters/format-date'
 
   export default {
     name: 'Alert',
-
-    mixins: [globalMixins],
-
     components: {
     },
 

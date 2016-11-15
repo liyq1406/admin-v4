@@ -120,13 +120,8 @@
   import locales from 'consts/locales/index'
   import api from 'api'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'Applications',
-
-    mixins: [globalMixins],
-
     vuex: {
       getters: {
         plugins: ({ plugins }) => plugins.all

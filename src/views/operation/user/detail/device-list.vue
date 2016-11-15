@@ -33,14 +33,10 @@
 
 <script>
 import api from 'api'
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 
 export default {
   name: 'device-list',
-
-  mixins: [globalMixins],
-
   data () {
     return {
       searching: false,

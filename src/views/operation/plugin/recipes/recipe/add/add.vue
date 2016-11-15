@@ -9,14 +9,13 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import RecipeForm from '../components/RecipeForm'
 
 export default {
   name: 'AddRecipe',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [pluginMixins],
 
   components: {
     RecipeForm

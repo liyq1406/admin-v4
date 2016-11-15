@@ -31,15 +31,10 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
-
 export default {
   name: 'Account',
 
   layouts: ['topbar', 'account-sidebar'],
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       currentMember: ({ system }) => system.currentMember

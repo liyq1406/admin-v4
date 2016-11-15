@@ -33,13 +33,8 @@
 
 <script>
 // import { COUNT_PER_PAGE } from 'consts/config'
-import { globalMixins } from '../../../mixins'
-
 export default {
   name: 'Pagination',
-
-  mixins: [globalMixins],
-
   props: {
     // 每页数量选项
     countOptions: {

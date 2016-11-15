@@ -78,14 +78,11 @@
 
 <script>
   import api from 'api'
-  import { globalMixins } from 'src/mixins'
   import JSSHA from 'jssha'
   import {get} from 'src/http'
 
   export default {
     name: 'MessageSetting',
-
-    mixins: [globalMixins],
     vuex: {
       getters: {
         corp: ({ system }) => system.corp

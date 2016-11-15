@@ -25,15 +25,11 @@
 
 <script>
 import * as config from 'consts/config'
-import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import api from 'api'
 
 export default {
   name: 'statictis-rule',
-
-  mixins: [globalMixins],
-
   components: {
   },
 

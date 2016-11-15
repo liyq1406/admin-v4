@@ -15,13 +15,8 @@
 </template>
 
 <script>
-import { globalMixins } from '../../../mixins'
-
 export default {
   name: 'Tab',
-
-  mixins: [globalMixins],
-
   props: {
     nav: {
       type: Array,

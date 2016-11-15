@@ -72,16 +72,12 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import api from 'api'
 
 export default {
   name: 'operate-stall-details',
 
   layout: 'admin',
-
-  mixins: [globalMixins],
-
   data () {
     return {
       // 最大的允许添加数量

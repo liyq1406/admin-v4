@@ -62,15 +62,11 @@
 </template>
 
 <script>
-import { globalMixins } from 'src/mixins'
 import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
 import api from 'api'
 
 export default {
   name: 'Ezviz',
-
-  mixins: [globalMixins],
-
   vuex: {
     getters: {
       allPlugins: ({ plugins }) => plugins.all

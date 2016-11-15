@@ -8,14 +8,10 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
-
   export default {
     name: 'Not-found',
 
-    layouts: ['auth'],
-
-    mixins: [globalMixins]
+    layouts: ['auth']
   }
 </script>
 
