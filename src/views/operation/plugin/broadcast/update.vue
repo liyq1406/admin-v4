@@ -170,8 +170,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import DatePicker from 'components/DatePicker'
-  import TimePicker from 'components/TimePicker'
   import AreaSelect from 'components/AreaSelect'
 
   export default {
@@ -180,8 +178,6 @@
     mixins: [globalMixins],
 
     components: {
-      DatePicker,
-      TimePicker,
       AreaSelect
     },
 

@@ -62,8 +62,6 @@ import Table from 'components/Table'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
-
 export default {
   name: 'AlertTable',
 
@@ -71,8 +69,7 @@ export default {
 
   components: {
     'x-table': Table,
-    SearchBox,
-    DateTimeRangePicker
+    SearchBox
   },
 
   props: {

@@ -37,7 +37,6 @@ import api from 'api'
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from '../mixins'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Chart from 'components/Chart/index'
 import formatDate from 'filters/format-date'
 import Distributing from './components/Distributing'
@@ -55,7 +54,6 @@ export default {
   },
 
   components: {
-    DateTimeMultiplePicker,
     RadioButtonGroup,
     Distributing,
     Chart

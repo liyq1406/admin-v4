@@ -75,8 +75,6 @@
   import Statistic from 'components/Statistic2'
   import {createDayRange} from 'utils'
   import locales from 'consts/locales/index'
-  import DateTimeRangePicker from 'components/DateTimeRangePicker'
-
   export default {
     name: 'UserList',
 
@@ -86,8 +84,7 @@
       'search-box': SearchBox,
       'api': api,
       'x-table': Table,
-      Statistic,
-      DateTimeRangePicker
+      Statistic
     },
 
     data () {

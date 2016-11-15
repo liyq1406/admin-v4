@@ -42,7 +42,7 @@
 import EventListener from 'utils/event-listener'
 
 export default {
-  name: 'timePicker',
+  name: 'DateTimePicker',
 
   props: {
     microtime: {

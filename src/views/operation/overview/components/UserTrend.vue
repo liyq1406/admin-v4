@@ -45,8 +45,6 @@ import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
 // import truncate from 'filters/truncate'
 import formatDate from 'filters/format-date'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-
 export default {
   name: 'UserTrend',
 
@@ -55,8 +53,7 @@ export default {
   components: {
     RadioButtonGroup,
     Chart,
-    Statistic,
-    DateTimeMultiplePicker
+    Statistic
   },
 
   data () {

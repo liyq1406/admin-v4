@@ -420,7 +420,7 @@
               <!-- <date-picker :value.sync="userEditColumnModal.value"></date-picker> -->
               <date-picker :value.sync="datePicker.date"></date-picker>
               <span class="time-picker" v-show="datePicker.date">
-                <time-picker :value.sync="datePicker.time"></time-picker>
+                <time-picker2 :value.sync="datePicker.time"></time-picker2>
                 <!-- <input type="time" v-model="datePicker.time"> -->
               </span>
             </div>
@@ -441,8 +441,6 @@ import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
 import IntelligentTable from 'components/IntelligentTable'
-import DatePicker from 'components/DatePicker'
-import TimePicker from 'components/TimePicker2'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -452,8 +450,6 @@ export default {
 
   components: {
     'x-table': IntelligentTable,
-    'date-picker': DatePicker,
-    'time-picker': TimePicker,
     'pager': Pager
   },
 

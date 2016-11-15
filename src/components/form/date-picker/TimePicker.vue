@@ -9,8 +9,6 @@
 </template>
 
 <script>
-  import Select from './Select'
-
   export default {
     name: 'TimePicker',
 
@@ -33,9 +31,6 @@
         type: String,
         default: 'time-picker'
       }
-    },
-
-    components: {
     },
 
     computed: {
@@ -67,7 +62,7 @@
 </script>
 
 <style lang="stylus">
-  @import '../assets/stylus/common'
+  @import '../../../assets/stylus/common'
 
   .time-picker
     display inline-block

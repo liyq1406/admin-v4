@@ -1,41 +1,41 @@
 <template>
-  <div class="x-datepicker" :style="pickerStyle">
-    <div class="x-datepicker-value">
-      <div class="x-datepicker-showbox" @click="onShowboxClick">2016-12-28 12:38:47</div>
-      <!-- <i class="fa fa-times-circle x-datepicker-clear"></i> -->
-      <i class="fa fa-calendar x-datepicker-icon"></i>
+  <div :class="classes">
+    <!-- <pre>{{ currDate }}</pre> -->
+    <div class="input-text-wrap" :style="inputStyle">
+      <input type="text" v-model="value" @click="inputClick" lazy class="input-text"/>
     </div>
-    <div class="x-datepicker-panel" v-show="open">
-      <div class="x-datepicker-input-wrap">
-        <input v-model="dateStr" type="text" class="x-datepicker-input" placeholder="请输入时间">
+    <div v-show="displayDayView" class="date-picker-popup">
+      <div class="date-picker-inner">
+        <div class="date-picker-body">
+          <div class="date-picker-ctrl"><span @click="preNextMonthClick(0)" class="month-btn date-picker-prev-btn">&lt;</span><span @click="preNextMonthClick(1)" class="month-btn date-picker-next-btn">&gt;</span>
+            <p @click="switchMonthView">{{ stringifyDayHeader(currDate) }}</p>
+          </div>
+          <div class="date-picker-week-range"><span v-for="w in weekRange">{{ w }}</span></div>
+          <div class="date-picker-date-range"><span v-for="d in dateRange" v-bind:class="d.sclass" @click="daySelect(d.date)">{{ d.text }}</span></div>
+        </div>
       </div>
-      <div class="x-datepicker-date-panel">
-        <div class="x-datepicker-header">
-          <a href="#" class="fa fa-angle-double-left x-datepicker-prev-year-btn" @click.prevent="onPrevYearClick"></a>
-          <a href="#" class="fa fa-angle-left x-datepicker-prev-month-btn" @click.prevent="onPrevMonthClick"></a>
-          <span class="x-datepicker-my-select">
-            <a href="#" class="x-datepicker-month-select">{{ locale.months[month] }}</a>
-            <a href="#" class="x-datepicker-year-select">{{ year }}</a>
-          </span>
-          <a href="#" class="fa fa-angle-right x-datepicker-next-month-btn" @click.prevent="onNextMonthClick"></a>
-          <a href="#" class="fa fa-angle-double-right x-datepicker-next-year-btn" @click.prevent="onNextYearClick"></a>
-        </div>
-        <div class="x-datepicker-body">
-          <div class="x-datepicker-weekdays">
-            <div class="x-datepicker-weekday-item" v-for="weekday in locale.shorterWeekdays">{{ weekday }}</div>
+    </div>
+    <div v-show="displayMonthView" class="date-picker-popup">
+      <div class="date-picker-inner">
+        <div class="date-picker-body">
+          <div class="date-picker-ctrl"><span @click="preNextYearClick(0)" class="month-btn date-picker-prev-btn">&lt;</span><span @click="preNextYearClick(1)" class="month-btn date-picker-next-btn">&gt;</span>
+            <p @click="switchDecadeView">{{ stringifyYearHeader(currDate) }}</p>
           </div>
-          <div class="x-datepicker-days-list">
-            <div v-for="date in dateList" class="day-item" :class="{
-              'day-item--in-month': date.inMonth,
-              'day-item--today': isToday(date),
-              'day-item--selected': isSelected(date)
-              }">
-              <span class="day" @click="onDateClick(date)">{{ date.day }}</span>
-            </div>
+          <div class="date-picker-month-range">
+            <template v-for="m in monthNames"><span v-bind:class="{'date-picker-date-range-item-active': monthNames[parse(value).getMonth()] === m && (currDate.getFullYear() === parse(value).getFullYear())}" @click="monthSelect($index)">{{ m.substr(0,3) }}</span></template>
           </div>
         </div>
-        <div class="x-datepicker-footer">
-          <a href="#" class="x-datepicker-now-btn" @click.prevent="onNowBtnClick">{{ locale.now }}</a>
+      </div>
+    </div>
+    <div v-show="displayYearView" class="date-picker-popup">
+      <div class="date-picker-inner">
+        <div class="date-picker-body">
+          <div class="date-picker-ctrl"><span @click="preNextDecadeClick(0)" class="month-btn date-picker-prev-btn">&lt;</span><span @click="preNextDecadeClick(1)" class="month-btn date-picker-next-btn">&gt;</span>
+            <p>{{ stringifyDecadeHeader(currDate) }}</p>
+          </div>
+          <div class="date-picker-month-range decade-range">
+            <template v-for="decade in decadeRange"><span v-bind:class="{'date-picker-date-range-item-active': parse(value).getFullYear() === decade.text}" @click.stop="yearSelect(decade.text)">{{ decade.text }}</span></template>
+          </div>
         </div>
       </div>
     </div>
@@ -43,494 +43,437 @@
 </template>
 
 <script>
-import EventListener from 'utils/event-listener'
-import formaDate from 'filters/format-date'
+  import EventListener from 'utils/event-listener'
+  import { globalMixins } from 'src/mixins'
 
-export default {
-  name: 'DatePicker2',
+  export default {
+    name: 'DatePicker',
 
-  props: {
-    // 设置的日期值
-    value: {
-      type: Date
+    mixins: [globalMixins],
+
+    props: {
+      // 值
+      value: {
+        type: String,
+        twoWay: true
+      },
+
+      // 格式
+      format: {
+        default: 'yyyy-MM-dd'
+      },
+
+      // 宽度
+      width: {
+        type: String,
+        default: '120px'
+      },
+
+      // 尺寸
+      // 可选：['small' | 'normal' | 'large'], 默认为 'normal'
+      size: {
+        type: String,
+        default: 'normal'
+      },
+
+      // 类前缀
+      classPrefix: {
+        type: String,
+        default: 'date-picker'
+      }
     },
 
-    // 日期格式
-    format: {
-      type: String,
-      default: 'YYYY-MM-DD'
-    },
-
-    // 是否显示时间选择
-    showTime: {
-      type: Boolean,
-      default: false
-    },
-
-    // 日期选择的状态
-    open: {
-      type: Boolean,
-      default: true
-    },
-
-    // 是否禁用
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-
-    // 输入框的尺寸
-    size: {
-      type: String,
-      default: '28px'
-    },
-
-    // 多语言配置
-    locale: {
-      type: Object,
-      default () {
-        return {
-          now: '此刻',
-          months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-          shortMonths: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-          weekdays: ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-          shortWeekdays: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-          shorterWeekdays: ['日', '一', '二', '三', '四', '五', '六']
+    data () {
+      return {
+        weekRange: [],
+        dateRange: [],
+        decadeRange: [],
+        currDate: new Date(),
+        displayDayView: false,
+        displayMonthView: false,
+        displayYearView: false,
+        monthNames: [],
+        inputStyle: {
+          width: this.width
         }
       }
-    }
-  },
+    },
 
-  data () {
-    let now = new Date()
-    return {
-      year: now.getFullYear(),
-      month: now.getMonth(),
-      day: now.getDate(),
-      weekday: now.getDay(),
-      hour: now.getHours(),
-      minute: now.getMinutes(),
-      second: now.getSeconds(),
-      selecting: false,
-      selectedDate: null,
-      dateStr: ''
-    }
-  },
+    computed: {
+      // 类
+      classes () {
+        var result = [this.classPrefix]
+        var sizeCls = ({
+          'small': 'sm'
+        })[this.size] || ''
 
-  computed: {
-    // 样式
-    pickerStyle () {
-      return {
-        height: this.size
+        if (sizeCls) {
+          result.push(`${this.classPrefix}-${sizeCls}`)
+        }
+
+        return result.join(' ')
       }
     },
 
-    // 当前是否闰年
-    isLeapYear () {
-      return this.year % 4 === 0 && ((this.year % 100 !== 0) || (this.year % 400 === 0))
+    watch: {
+      value (value) {
+        if (!/\d\d\d\d\-\d\d\-\d\d/.test(value)) {
+          let date = new Date()
+          let year = date.getFullYear()
+          let month = date.getMonth() + 1
+          month = month > 9 ? month : ('0' + month)
+          let day = date.getDate()
+          day = day > 9 ? day : ('0' + day)
+          this.value = year + '-' + month + '-' + day
+        }
+        this.currDate = this.parse(this.value)
+      },
+      currDate () {
+        this.getDateRange()
+      }
     },
 
-    // 上一月份
-    prevMonth () {
-      let month = this.month - 1
-      if (month < 0) {
-        month = 11
-      }
-      return month
-    },
+    methods: {
+      close () {
+        this.displayDayView = this.displayMonthView = this.displayYearView = false
+      },
 
-    // 下一月份
-    nextMonth () {
-      let month = this.month + 1
-      if (month > 11) {
-        month = 0
-      }
-      return month
-    },
+      inputClick () {
+        if (this.displayMonthView || this.displayYearView) {
+          this.displayDayView = false
+        } else {
+          this.displayDayView = !this.displayDayView
+        }
+      },
 
-    // 当前月份天数
-    currMonthLength () {
-      return this._getMonthLength(this.month)
-    },
+      preNextDecadeClick (flag) {
+        var year = this.currDate.getFullYear()
+        var months = this.currDate.getMonth()
+        var date = this.currDate.getDate()
 
-    // 上一月份天数
-    prevMonthLength () {
-      return this._getMonthLength(this.prevMonth)
-    },
+        if (flag === 0) {
+          this.currDate = new Date(year - 10, months, date)
+        } else {
+          this.currDate = new Date(year + 10, months, date)
+        }
+      },
 
-    // 当前月份第一天星期几(0-6,0代表星期日)
-    startWeekday () {
-      let start = new Date(this.year, this.month, 1)
-      return start.getDay()
-    },
+      preNextMonthClick (flag) {
+        var year = this.currDate.getFullYear()
+        var month = this.currDate.getMonth()
+        var date = this.currDate.getDate()
 
-    // 日期列表
-    dateList () {
-      let prevYear = this.year
-      let nextYear = this.year
+        if (flag === 0) {
+          var preMonth = this.getYearMonth(year, month - 1)
+          this.currDate = new Date(preMonth.year, preMonth.month, date)
+        } else {
+          var nextMonth = this.getYearMonth(year, month + 1)
+          this.currDate = new Date(nextMonth.year, nextMonth.month, date)
+        }
+      },
 
-      if (this.prevMonth === 11) {
-        prevYear -= 1
-      }
+      preNextYearClick (flag) {
+        var year = this.currDate.getFullYear()
+        var months = this.currDate.getMonth()
+        var date = this.currDate.getDate()
 
-      if (this.nextMonth === 0) {
-        nextYear += 1
-      }
+        if (flag === 0) {
+          this.currDate = new Date(year - 1, months, date)
+        } else {
+          this.currDate = new Date(year + 1, months, date)
+        }
+      },
 
-      const currDateList = this._generateDaysList(this.year, this.month, true)
-      const prevDateList = this._generateDaysList(prevYear, this.prevMonth)
-      const nextDateList = this._generateDaysList(nextYear, this.nextMonth)
+      yearSelect (year) {
+        this.displayYearView = false
+        this.displayMonthView = true
+        this.currDate = new Date(year, this.currDate.getMonth(), this.currDate.getDate())
+      },
 
-      for (let i = this.prevMonthLength - 1; i > this.prevMonthLength - this.startWeekday - 1; i--) {
-        currDateList.unshift(prevDateList[i])
-      }
+      monthSelect (index) {
+        this.displayMonthView = false
+        this.displayDayView = true
+        this.currDate = new Date(this.currDate.getFullYear(), index, this.currDate.getDate())
+      },
 
-      for (let i = 0, len = 42 - currDateList.length; i < len; i++) {
-        currDateList.push(nextDateList[i])
-      }
+      daySelect (date) {
+        this.currDate = date
+        this.value = this.stringify(this.currDate)
+        this.displayDayView = false
+        this.$emit('select-day')
+      },
 
-      return currDateList
-    }
-  },
+      getYearMonth (year, month) {
+        if (month > 11) {
+          year++
+          month = 0
+        } else if (month < 0) {
+          year--
+          month = 11
+        }
+        return {year: year, month: month}
+      },
 
-  ready () {
-    this.$emit('created', this)
-    this._closeEvent = EventListener.listen(window, 'click', (e) => {
-      // 下拉选择器收起的条件：当前的点击不是选择日期并且点击的DOM不在组件里面
-      if (!this.selecting && !this.$el.contains(e.target)) {
-        this.open = false
-      }
-    })
-  },
+      switchMonthView () {
+        this.displayDayView = false
+        this.displayMonthView = true
+      },
 
-  beforeDestroy () {
-    if (this._closeEvent) {
-      this._closeEvent.remove()
-    }
-  },
+      switchDecadeView () {
+        this.displayMonthView = false
+        this.displayYearView = true
+      },
 
-  methods: {
-    /**
-     * 生成日期列表
-     */
-    _generateDaysList (year, month, inCurrentMonth = false) {
-      let result = []
-      const n = this._getMonthLength(month)
+      // 格式化当前日期头部
+      stringifyDayHeader (date) {
+        // return '2016年4月'
+        return date.getFullYear() + this.$t('components.year') + ' ' + this.monthNames[date.getMonth()]
+      },
 
-      for (let i = 1; i <= n; i++) {
-        result.push({
-          year: year,
-          month: month,
-          day: i,
-          selected: false,
-          selectable: true,
-          inMonth: inCurrentMonth
-        })
-      }
+      stringifyYearHeader (date) {
+        return date.getFullYear() + this.$t('components.year') + ' '
+      },
 
-      return result
-    },
+      stringifyDecadeHeader (date) {
+        var yearStr = date.getFullYear().toString()
+        var firstYearOfDecade = yearStr.substring(0, yearStr.length - 1) + 0
+        var lastYearOfDecade = parseInt(firstYearOfDecade, 10) + 10
+        return firstYearOfDecade + '-' + lastYearOfDecade
+      },
 
-    /**
-     * 获取某月份天数
-     * @param  {Number} month 月份
-     * @return {Number}
-     */
-    _getMonthLength (month) {
-      let result = 28
-      switch (month) {
-        case 1:
-          if (this.isLeapYear) {
-            result = 29
+      parseMonth (date) {
+        return this.monthNames[date.getMonth()]
+      },
+
+      stringify (date) {
+        var year = date.getFullYear()
+        var month = date.getMonth() + 1
+        var day = date.getDate()
+        var monthName = this.parseMonth(date)
+        var format = this.format
+
+        return format
+          .replace(/yyyy/g, year)
+          .replace(/MMMM/g, monthName)
+          .replace(/MM/g, ('0' + month).slice(-2))
+          .replace(/dd/g, ('0' + day).slice(-2))
+          .replace(/yy/g, year)
+          .replace(/M(?!a)/g, month)
+          .replace(/d/g, day)
+      },
+
+      parse (str) {
+        // var date = new Date(str)
+        // return isNaN(date.getFullYear()) ? null : date
+        // return new Date(str)
+        return this.value && !isNaN(new Date(this.value).getFullYear()) ? new Date(this.value) : new Date()
+      },
+
+      getDayCount (year, month) {
+        var dict = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        if (month === 1) {
+          if ((year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0)) {
+            return 29
           }
-          break
-        case 3:
-        case 5:
-        case 8:
-        case 10:
-          result = 30
-          break
-        default:
-          result = 31
+          return 28
+        }
+        return dict[month]
+      },
+
+      getDateRange () {
+        this.dateRange = []
+        this.decadeRange = []
+
+        var time = {
+          year: this.currDate.getFullYear(),
+          month: this.currDate.getMonth(),
+          day: this.currDate.getDate()
+        }
+        var i
+
+        var yearStr = time.year.toString()
+        var firstYearOfDecade = (yearStr.substring(0, yearStr.length - 1) + 0) - 1
+        for (i = 0; i < 12; i++) {
+          this.decadeRange.push({
+            text: firstYearOfDecade + i
+          })
+        }
+
+        var currMonthFirstDay = new Date(time.year, time.month, 1)
+        var firstDayWeek = currMonthFirstDay.getDay() + 1
+        if (firstDayWeek === 0) {
+          firstDayWeek = 7
+        }
+        var dayCount = this.getDayCount(time.year, time.month)
+        if (firstDayWeek > 1) {
+          var preMonth = this.getYearMonth(time.year, time.month - 1)
+          var prevMonthDayCount = this.getDayCount(preMonth.year, preMonth.month)
+          for (i = 1; i < firstDayWeek; i++) {
+            var dayText = prevMonthDayCount - firstDayWeek + i + 1
+            this.dateRange.push({
+              text: dayText,
+              date: new Date(preMonth.year, preMonth.month, dayText),
+              sclass: 'date-picker-item-gray'
+            })
+          }
+        }
+        for (i = 1; i <= dayCount; i++) {
+          var date = new Date(time.year, time.month, i)
+          // var week = date.getDay()
+          var sclass = ''
+          if (i === time.day) {
+            if (this.value) {
+              var valueDate = this.parse(this.value)
+              if (valueDate) {
+                if (valueDate.getFullYear() === time.year && valueDate.getMonth() === time.month) {
+                  sclass = 'date-picker-date-range-item-active'
+                }
+              }
+            }
+          }
+          this.dateRange.push({
+            text: i,
+            date: date,
+            sclass: sclass
+          })
+        }
+        if (this.dateRange.length < 42) {
+          var nextMonthNeed = 42 - this.dateRange.length
+          var nextMonth = this.getYearMonth(time.year, time.month + 1)
+          for (i = 1; i <= nextMonthNeed; i++) {
+            this.dateRange.push({
+              text: i,
+              date: new Date(nextMonth.year, nextMonth.month, i),
+              sclass: 'date-picker-item-gray'
+            })
+          }
+        }
       }
-      return result
     },
 
-    /**
-     * 判断是否当天
-     * @param {Object} date 日期
-     */
-    isToday (date) {
-      let now = new Date()
-      return date.year === now.getFullYear() && date.month === now.getMonth() && date.day === now.getDate()
+    ready () {
+      this.weekRange = this.locales.data.WEEK_RANGE
+      this.monthNames = this.locales.data.MONTH_NAMES
+      this.$emit('date-picker-created', this)
+      this.currDate = this.parse(this.value) || this.parse(new Date())
+      this._closeEvent = EventListener.listen(window, 'click', (e) => {
+        if (!this.$el.contains(e.target)) {
+          this.close()
+        }
+      })
     },
 
-    /**
-     * 判断是否选中
-     * @param {Object} date 日期
-     */
-    isSelected (date) {
-      return this.selectedDate && date.year === this.selectedDate.year && date.month === this.selectedDate.month && date.day === this.selectedDate.day
-    },
-
-    /**
-     * 处理上一年按钮点击
-     */
-    onPrevYearClick () {
-      this.year -= 1
-    },
-
-    /**
-     * 处理下一年按钮点击
-     */
-    onNextYearClick () {
-      this.year += 1
-    },
-
-    /**
-     * 处理上一月按钮点击
-     */
-    onPrevMonthClick () {
-      let month = this.month - 1
-      if (month < 0) {
-        month = 11
-        this.year -= 1
+    beforeDestroy () {
+      if (this._closeEvent) {
+        this._closeEvent.remove()
       }
-      this.month = month
-    },
-
-    /**
-     * 处理下一月按钮点击
-     */
-    onNextMonthClick () {
-      let month = this.month + 1
-      if (month > 11) {
-        month = 0
-        this.year += 1
-      }
-      this.month = month
-    },
-
-    /**
-     * 处理日期点击
-     * @param {Object} date 日期
-     */
-    onDateClick (date) {
-      if (!date.selectable) return
-
-      this.selecting = true
-      this.year = date.year
-      this.month = date.month
-      this.day = date.day
-      let dateObj = new Date(date.year, date.month, date.day)
-      this.dateStr = formaDate(dateObj, 'yyyy-MM-dd', true)
-      date.selected = true
-      this.selectedDate = date
-      this.$emit('date-select', date)
-      setTimeout(() => {
-        this.selecting = false
-      }, 0)
-    },
-
-    /**
-     * 处理今日按钮点击
-     */
-    onNowBtnClick () {
-      let now = new Date()
-      this.year = now.getFullYear()
-      this.month = now.getMonth()
-      this.day = now.getDate()
-      this.hour = now.getHours()()
-      this.minute = now.getMinutes()()
-      this.second = now.getSeconds()()
-      setTimeout(() => {
-        let date = _.find(this.dateList, this.isToday)
-        this.onDateClick(date)
-      }, 0)
-    },
-
-    onShowboxClick () {
-      this.$emit('showbox-click')
-      this.open = true
     }
   }
-}
 </script>
 
 <style lang="stylus">
-@import '../../../assets/stylus/common'
+  @import '../../../assets/stylus/common'
 
-.x-datepicker {
-  position: relative;
-  display: inline-block;
-  min-width: 120px;
-  font-size: 12px;
-  clearfix()
+  .date-picker
+    display inline-block
+    position relative
+    vertical-align middle
 
-  .x-datepicker-value {
-    position: relative;
-    size: 196px 28px;
-    line-height: 1.5;
-    border: 1px solid default-border-color;
-    box-sizing: border-box;
-    padding: 4px 26px 4px 7px;
+  .date-picker-popup
+    position absolute
+    border 1px solid #CCC
+    background #FFF
+    margin-top 2px
+    z-index 1000
+    box-shadow 0 6px 12px rgba(0, 0, 0, .2)
 
-    .fa {
-      absolute: right 7px top 7px;
-      size: 12px;
-      color: gray-light;
-    }
+  .date-picker-inner
+    width 218px
 
-    // 清除图标
-    .x-datepicker-clear {
+  .date-picker-body
+    padding 10px
 
-    }
-  }
+  .date-picker-ctrl p,
+  .date-picker-ctrl span,
+  .date-picker-body span
+    display inline-block
+    width 28px
+    line-height 28px
+    height 28px
 
-  .x-datepicker-showbox {
-    font-size: 12px;
-    height: 100%;
-  }
-}
+  .date-picker-ctrl
+    p
+      width 65%
+      margin 0
 
-.x-datepicker-panel {
-  absolute: left top -4px;
-  width: 218px;
-  border: 1px solid default-border-color;
-  font-size: 12px;
-  background-color: #FFF;
-  z-index: 1000;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, .15);
+    span
+      position absolute
 
-  .x-datepicker-input-wrap {
-    padding: 4px 7px;
-    border-bottom: 1px solid light-border-color;
-  }
+  .date-picker-body span
+    text-align center
+    font-size 12px
 
-  .x-datepicker-input {
-    border: 0;
-    display: block;
-    padding: 0;
-    size: 100% 26px;
-    box-sizing: border-box;
-  }
+  .date-picker-month-range span
+    width 48px
+    height 50px
+    line-height 50px
 
-  .x-datepicker-header {
-    position: relative;
-    height: 32px;
-    line-height: 32px;
-    border-bottom: 1px solid light-border-color;
-    text-align: center;
-    -webkit-user-select: none;
-    user-select: none;
+  .decade-range span:first-child,
+  .decade-range span:last-child,
+  .date-picker-item-gray
+    color #999
 
-    .x-datepicker-prev-year-btn,
-    .x-datepicker-prev-month-btn,
-    .x-datepicker-next-month-btn,
-    .x-datepicker-next-year-btn {
-      absolute: top;
-      padding: 0 5px;
-      font-size: 14px;
-      display: inline-block;
-      line-height: 32px;
-    }
+  .date-picker-date-range-item-active:hover,
+  .date-picker-date-range-item-active
+    background red !important
+    color white !important
 
-    .x-datepicker-prev-year-btn {
-      left: 7px;
-    }
+  .date-picker-month-range
+    margin-top 10px
 
-    .x-datepicker-next-year-btn {
-      right: 7px;
-    }
+  .date-picker-month-range span,
+  .date-picker-ctrl span,
+  .date-picker-ctrl p,
+  .date-picker-date-range span
+    cursor pointer
 
-    .x-datepicker-prev-month-btn {
-      left: 29px;
-    }
+  .date-picker-month-range span:hover,
+  .date-picker-ctrl p:hover,
+  .date-picker-ctrl span:hover,
+  .date-picker-date-range span:hover,
+  .date-picker-date-range-item-hover
+    background-color #eee
 
-    .x-datepicker-next-month-btn {
-      right: 29px;
-    }
+  .date-picker-week-range span
+    font-weight bold
 
-    .x-datepicker-my-select {
-      font-weight: bold;
-    }
-  }
+  .date-picker-label
+    background-color #f8f8f8
+    font-weight 700
+    padding 7px 0
+    text-align center
 
-  .x-datepicker-footer {
-    height: 36px;
-    line-height: 36px;
-    border-top: 1px solid light-border-color;
-  }
+  .date-picker-ctrl
+    position relative
+    height 30px
+    line-height 30px
+    font-weight bold
+    text-align center
 
-  .x-datepicker-body {
-    height: 218px;
-  }
-}
+  .month-btn
+    font-weight bold
+    user-select none
 
-.x-datepicker-weekdays {
-  padding: 8px 0 0 8px;
-  clearfix()
+  .date-picker-prev-btn
+    left 2px
 
-  .x-datepicker-weekday-item {
-    float: left;
-    size: 22px;
-    line-height: 22px;
-    padding-right: 8px;
-    text-align: center;
+  .date-picker-next-btn
+    right 2px
 
-    &:last-child {
-      padding-right: 0;
-    }
-  }
-}
-
-.x-datepicker-days-list {
-  padding: 0 0 8px 8px;
-  clearfix()
-
-  .day {
-    display: inline-block;
-    size: 100%;
-    text-align: center;
-    cursor: pointer;
-    box-sizing: border-box;
-
-    &:hover {
-      background: lighten(red, 95%)
-      color: red;
-    }
-  }
-
-  .day-item {
-    float: left;
-    size: 22px;
-    line-height: 22px;
-    padding-right: 8px;
-    margin-top: 8px;
-    color: #CCC;
-
-    &:nth-child(7n),
-    &:last-child {
-      padding-right: 0;
-    }
-
-    &.day-item--in-month {
-      color: gray-darker;
-    }
-
-    &.day-item--today {
-      .day {
-        border: 1px solid red;
-        color: red;
-      }
-    }
-
-    &.day-item--selected {
-      .day {
-        background: red;
-        color: #FFF;
-      }
-    }
-  }
-}
+  .date-picker-sm
+    .input-text-wrap
+      .input-text
+        height 26px
+        line-height 24px
+        font-size 12px
 </style>

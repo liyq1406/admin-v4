@@ -41,8 +41,6 @@ import Statistic from 'components/Statistic2'
 import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
 import formatDate from 'filters/format-date'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-
 export default {
   name: 'ProductTrend',
 
@@ -51,8 +49,7 @@ export default {
   components: {
     // RadioButtonGroup,
     Chart,
-    Statistic,
-    DateTimeMultiplePicker
+    Statistic
   },
 
   vuex: {

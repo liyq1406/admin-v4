@@ -57,7 +57,6 @@
 <script>
 import * as config from 'consts/config'
 import api from 'api'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Statistic from 'components/Statistic'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
@@ -72,7 +71,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    DateTimeMultiplePicker,
     'x-table': Table,
     Statistic,
     SearchBox

@@ -91,7 +91,6 @@
   import { globalMixins } from 'src/mixins'
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import SearchBox from 'components/SearchBox'
-  import DateTimeRangePicker from 'components/DateTimeRangePicker'
   import InfoCard from 'components/InfoCard'
   import Alert from 'components/Alert'
   import Chart from 'components/Chart/index'
@@ -144,7 +143,6 @@
       'x-table': Table,
       'x-alert': Alert,
       RadioButtonGroup,
-      DateTimeRangePicker,
       Chart,
       SearchBox,
       InfoCard,

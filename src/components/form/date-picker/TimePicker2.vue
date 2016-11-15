@@ -21,6 +21,8 @@
 
 <script>
   export default {
+    name: 'TimePicker2',
+
     props: {
       // 值
       value: {

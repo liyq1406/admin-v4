@@ -77,7 +77,6 @@
   import api from 'api'
   import { globalMixins } from 'src/mixins'
   import AreaSelect from 'components/AreaSelect'
-  import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
 
   export default {
     name: 'TableDetails',
@@ -85,7 +84,6 @@
     mixins: [globalMixins],
 
     components: {
-      DateTimeSinglePicker,
       'area-select': AreaSelect
     },
 

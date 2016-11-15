@@ -85,7 +85,6 @@
 import api from 'api'
 import Statistic from 'components/Statistic'
 import Chart from 'components/Chart/index'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
@@ -97,7 +96,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    DateTimeMultiplePicker,
     Statistic,
     Chart
   },

@@ -37,7 +37,6 @@ import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
 import Table from 'components/Table'
 // import Select from 'components/Select'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import AreaSelect from 'components/AreaSelect'
 import Chart from 'components/Chart/index'
 import 'echarts/extension/bmap/bmap'
@@ -53,7 +52,6 @@ export default {
   components: {
     // 'x-select': Select,
     'x-table': Table,
-    DateTimeRangePicker,
     Chart,
     AreaSelect
   },

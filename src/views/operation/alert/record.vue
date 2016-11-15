@@ -89,12 +89,9 @@ import Pager from 'components/Pager'
 import Statistic from 'components/Statistic'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import SearchBox from 'components/SearchBox'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
-
 // TODO 消除代码冗余 #weijie
 
 export default {
@@ -106,10 +103,8 @@ export default {
     Pager,
     RadioButtonGroup,
     Statistic,
-    DateTimeMultiplePicker,
     'x-table': Table,
-    SearchBox,
-    DateTimeRangePicker
+    SearchBox
   },
 
   vuex: {

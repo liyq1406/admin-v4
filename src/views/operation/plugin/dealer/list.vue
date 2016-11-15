@@ -87,7 +87,6 @@
   import api from 'api'
   import SearchBox from 'components/SearchBox'
   import Pager from 'components/Pager'
-  import DatePicker from 'components/DatePicker'
   export default {
     name: 'DealerList',
 
@@ -95,8 +94,7 @@
 
     components: {
       SearchBox,
-      Pager,
-      DatePicker
+      Pager
     },
 
     data () {

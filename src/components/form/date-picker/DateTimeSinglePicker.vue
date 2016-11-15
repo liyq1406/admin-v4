@@ -10,16 +10,16 @@
 </template>
 
 <script>
-import DateTimePicker from 'components/DateTimePicker'
 import Dropdown from 'components/Dropdown'
 import formatDate from 'filters/format-date'
 
 export default {
-  name: 'timesinglerangepicker',
+  name: 'DateTimeSinglePicker',
+
   components: {
-    DateTimePicker,
     Dropdown
   },
+
   props: {
     time: {
       type: Date,
@@ -36,6 +36,7 @@ export default {
       default: true
     }
   },
+
   data () {
     return {
       showTimePicker: false,
@@ -43,26 +44,31 @@ export default {
       defaultTime: new Date()
     }
   },
+
   computed: {
     timeShowPanel () {
       let format = this.showTime ? 'yyyy-MM-dd hh:mm' : 'yyyy-MM-dd'
       return formatDate(this.startTime, format, true)
     }
   },
+
   ready () {
     this.startTime = this.time
   },
+
   watch: {
     time () {
       this.startTime = this.time
     }
   },
+
   methods: {
     timeChange (microtime) {
       var date = new Date(microtime)
       this.startTime = date
       this.dispatchTime()
     },
+
     dispatchTime () {
       this.$emit('timechange', this.startTime)
     }

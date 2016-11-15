@@ -21,23 +21,18 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-// import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
 import truncate from 'filters/truncate'
 import formatDate from 'filters/format-date'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-
 export default {
   name: 'ProductActive',
 
   mixins: [globalMixins],
 
   components: {
-    // RadioButtonGroup,
-    Chart,
-    DateTimeMultiplePicker
+    Chart
   },
 
   vuex: {

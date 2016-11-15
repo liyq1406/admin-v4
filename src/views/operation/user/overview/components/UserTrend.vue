@@ -35,7 +35,6 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 import {getTrend} from '../api-user'
 import { globalMixins } from 'src/mixins'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import formatDate from 'filters/format-date'
 import {getLastYearDate} from 'utils'
 
@@ -49,7 +48,6 @@ export default {
   components: {
     Panel,
     RadioButtonGroup,
-    DateTimeMultiplePicker,
     Chart
   },
 

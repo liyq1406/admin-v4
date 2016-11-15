@@ -44,8 +44,6 @@ import api from 'api'
 import truncate from 'filters/truncate'
 import formatDate from 'filters/format-date'
 import { CHART_COLORS } from 'consts/config'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-
 export default {
   name: 'ProductTrend',
 
@@ -54,8 +52,7 @@ export default {
   components: {
     // RadioButtonGroup,
     Chart,
-    Statistic,
-    DateTimeMultiplePicker
+    Statistic
   },
 
   vuex: {

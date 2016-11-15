@@ -28,19 +28,17 @@
 </template>
 
 <script>
-import DateTimePicker from './DateTimePicker'
 import formatDate from 'filters/format-date'
 import EventListener from 'utils/event-listener'
 import { globalMixins } from 'src/mixins'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 
 export default {
-  name: 'timemutiplepicker',
+  name: 'DateTimeMultiplePicker',
 
   mixins: [globalMixins],
 
   components: {
-    DateTimePicker,
     RadioButtonGroup
   },
   props: {
@@ -180,7 +178,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../assets/stylus/common'
+@import '../../../assets/stylus/common'
+
 .date-time-mutiple-picker
   display inline-block
   font-size 0

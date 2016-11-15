@@ -16,7 +16,6 @@
 import api from 'api'
 import Chart from 'components/Chart/index'
 import { patchLostDates } from 'utils'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 
@@ -26,8 +25,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Chart,
-    DateTimeMultiplePicker
+    Chart
   },
 
   props: {

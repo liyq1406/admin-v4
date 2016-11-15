@@ -40,7 +40,6 @@
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic'
   import RadioButtonGroup from 'components/RadioButtonGroup'
-  import DateTimeRangePicker from 'components/DateTimeRangePicker'
   import api from 'api'
   import formatDate from 'filters/format-date'
 
@@ -53,8 +52,7 @@
       'x-table': Table,
       'search-box': SearchBox,
       Statistic,
-      RadioButtonGroup,
-      DateTimeRangePicker
+      RadioButtonGroup
     },
 
     data () {

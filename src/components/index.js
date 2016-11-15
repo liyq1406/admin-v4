@@ -6,7 +6,14 @@ import Modal from './view/modal/Modal'
 
 // 表单类
 import Editor from './form/editor/Editor'
-import DatePicker2 from './form/date-picker/DatePicker'
+import DatePicker from './form/date-picker/DatePicker'
+import DatePicker2 from './form/date-picker/DatePicker2'
+import DateTimePicker from './form/date-picker/DateTimePicker'
+import DateTimeMultiplePicker from './form/date-picker/DateTimeMultiplePicker'
+import DateTimeRangePicker from './form/date-picker/DateTimeRangePicker'
+import DateTimeSinglePicker from './form/date-picker/DateTimeSinglePicker'
+import TimePicker from './form/date-picker/TimePicker'
+import TimePicker2 from './form/date-picker/TimePicker2'
 import FileUploader from './form/uploader/FileUploader'
 import XSelect from './form/select/Select'
 import Switch from './form/switch/Switch'
@@ -20,7 +27,14 @@ const components = {
   ButtonGroup,
   Modal,
   Editor,
+  DatePicker,
   DatePicker2,
+  DateTimePicker,
+  DateTimeMultiplePicker,
+  DateTimeRangePicker,
+  DateTimeSinglePicker,
+  TimePicker,
+  TimePicker2,
   FileUploader,
   XSelect,
   Switch,

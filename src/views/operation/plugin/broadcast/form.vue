@@ -212,7 +212,7 @@
                           <input type="radio" v-model="timeType" :value="2" number/>自定义
                         </label>
                         <div class="row col-14">
-                          <date-picker :time="time" @timechange="onTimeChange"></date-picker>
+                          <date-time-single-picker :time="time" @timechange="onTimeChange"></date-time-single-picker>
                         </div>
                       </div>
                     </div>
@@ -221,7 +221,7 @@
                     <label class="form-control col-5">过期时间:</label>
                     <div class="controls col-19 row">
                       <div class="broadcast-time row">
-                        <date-picker :time="expire" @timechange="onExpireTimeChange"></date-picker>
+                        <date-time-single-picker :time="expire" @timechange="onExpireTimeChange"></date-time-single-picker>
                       </div>
                     </div>
                   </div>
@@ -313,7 +313,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import DatePicker from 'components/DateTimeSinglePicker'
   import AreaSelect from 'components/AreaSelect'
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import TagInput from 'components/TagInput'
@@ -333,7 +332,6 @@
     },
 
     components: {
-      DatePicker,
       AreaSelect,
       TagInput,
       RadioButtonGroup

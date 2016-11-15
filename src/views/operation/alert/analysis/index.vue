@@ -92,7 +92,6 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Statistic from 'components/Statistic2'
 import Chart from 'components/Chart'
 import formatDate from 'filters/format-date'
@@ -104,7 +103,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    DateTimeMultiplePicker,
     Statistic,
     Chart
   },

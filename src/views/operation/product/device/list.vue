@@ -78,7 +78,6 @@ import * as config from 'consts/config'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import locales from 'consts/locales/index'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
@@ -95,7 +94,6 @@ export default {
     'x-table': Table,
     'search-box': SearchBox,
     'pager': Pager,
-    DateTimeRangePicker,
     Statistic
   },
 

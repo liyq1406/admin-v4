@@ -74,10 +74,8 @@ import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic2'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import formatDate from 'filters/format-date'
 import AreaSelect from 'components/AreaSelect'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import locales from 'consts/locales/index'
 
 export default {
@@ -90,9 +88,7 @@ export default {
     AreaSelect,
     SearchBox,
     Statistic,
-    RadioButtonGroup,
-    DateTimeMultiplePicker,
-    DateTimeRangePicker
+    RadioButtonGroup
   },
 
   data () {

@@ -68,7 +68,6 @@
   import { warrantyMixins } from '../../mixins'
   import SearchBox from 'components/SearchBox'
   import Table from 'components/Table'
-  import DateTimeRangePicker from 'components/DateTimeRangePicker'
   import api from 'api'
   import Statistic from 'components/Statistic'
 
@@ -86,7 +85,6 @@
     components: {
       'search-box': SearchBox,
       'x-table': Table,
-      DateTimeRangePicker,
       Statistic
     },
 
