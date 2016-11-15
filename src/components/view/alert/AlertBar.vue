@@ -4,6 +4,8 @@
 
 <script>
 export default {
+  name: 'AlertBar',
+
   props: {
     msg: {
       type: String,

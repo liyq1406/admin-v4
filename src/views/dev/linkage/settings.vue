@@ -6,9 +6,9 @@
     <div class="panel mt20">
       <div class="panel-bd">
         <!-- 无产品时显示添加提示 -->
-        <x-alert v-if="!products.length && !loadingProducts && !loadingDatapoints" :cols="7">
+        <alert v-if="!products.length && !loadingProducts && !loadingDatapoints" :cols="7">
           <p>还没有产品哦，请<a v-link="{ path: '/dev/products/create/guide' }" class="hl-red">点击此处</a>添加</p>
-        </x-alert>
+        </alert>
 
         <!-- Start: 数据端点列表 -->
         <template v-if="products.length && !loadingProducts">
@@ -85,17 +85,12 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import Alert from 'components/Alert'
   import api from 'api'
 
   export default {
     name: 'Settings',
 
     mixins: [globalMixins],
-
-    components: {
-      'x-alert': Alert
-    },
 
     data () {
       return {

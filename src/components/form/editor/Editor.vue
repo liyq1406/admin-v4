@@ -11,6 +11,8 @@ import { API_SERVER } from 'consts/config'
 import browser from 'utils/browser'
 
 export default {
+  name: 'Editor',
+
   props: {
     // 输入内容
     inputContent: {

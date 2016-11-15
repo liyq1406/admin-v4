@@ -46,7 +46,6 @@
 
 <script>
   import api from 'api'
-  // import Select from 'components/Select'
   import { globalMixins } from 'src/mixins'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   export default {
@@ -63,9 +62,6 @@
         updatePlugin,
         removePlugin
       }
-    },
-
-    components: {
     },
 
     props: {

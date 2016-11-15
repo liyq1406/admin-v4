@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'InfoCard',
+  name: 'InfoList',
 
   props: {
     // 信息

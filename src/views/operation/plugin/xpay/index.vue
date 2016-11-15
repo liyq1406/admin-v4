@@ -16,16 +16,11 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import Alert from 'components/Alert'
 
   export default {
     name: 'Link',
 
     mixins: [globalMixins],
-
-    components: {
-      'x-alert': Alert
-    },
 
     data () {
       return {

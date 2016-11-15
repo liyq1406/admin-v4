@@ -33,14 +33,9 @@
 </template>
 
 <script>
-  // import AreaSelect from 'components/AreaSelect'
   import formatDate from 'filters/format-date'
 
   export default {
-    components: {
-      // 'area-select': AreaSelect
-    },
-
     data () {
       return {
         key: '',

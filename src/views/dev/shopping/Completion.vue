@@ -7,17 +7,12 @@
 </template>
 
 <script>
-import Alert from 'components/Alert'
 import { globalMixins } from 'src/mixins'
 
 export default {
   name: 'Completion',
 
   mixins: [globalMixins],
-
-  components: {
-    Alert
-  },
 
   data () {
     return {

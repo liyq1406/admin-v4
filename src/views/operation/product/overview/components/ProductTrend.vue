@@ -35,7 +35,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-// import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
 import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
@@ -46,7 +45,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    // RadioButtonGroup,
     Chart
   },
 

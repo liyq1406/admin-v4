@@ -33,10 +33,10 @@
       </div>
     </div>
     <div class="auth-msg-box" v-else>
-      <x-alert :cols="16" type="success" :title="$t('auth.reset_success')">
+      <alert :cols="16" type="success" :title="$t('auth.reset_success')">
         <p>{{ $t("auth.reset_success_msg") }}</p>
         <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
-      </x-alert>
+      </alert>
     </div>
   </div>
   <!-- <div class="form form-auth form-fetch-password">
@@ -82,7 +82,6 @@
   import api from 'api'
   import base64 from 'utils/base64'
   import { globalMixins } from 'src/mixins'
-  import Alert from 'components/Alert'
 
   export default {
     name: 'PwdResetForm',
@@ -90,10 +89,6 @@
     layouts: ['auth'],
 
     mixins: [globalMixins],
-
-    components: {
-      'x-alert': Alert
-    },
 
     data () {
       return {

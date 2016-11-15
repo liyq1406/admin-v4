@@ -1,5 +1,5 @@
 <template>
-  <div class="v-pic-text">
+  <div class="x-pic-txt">
     <div class="pic" :style="picStyle">
       <slot name="pic"></slot>
     </div>
@@ -11,7 +11,7 @@
 
 <script>
   export default {
-    name: 'Alert',
+    name: 'PicTxt',
 
     props: {
       // 图片宽度
@@ -45,9 +45,9 @@
 </script>
 
 <style lang="stylus">
-  @import '../assets/stylus/common'
+  @import '../../../assets/stylus/common'
 
-  .v-pic-text
+  .x-pic-txt
     clearfix()
 
     .pic

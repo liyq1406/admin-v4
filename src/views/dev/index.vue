@@ -13,7 +13,6 @@
 
 <script>
 import Sidebar from 'components/other/layout/Sidebar'
-import AlertBar from 'components/AlertBar'
 import { globalMixins } from 'src/mixins'
 import { MAIN_NAV } from 'consts/config'
 // import api from 'api'
@@ -26,8 +25,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Sidebar,
-    AlertBar
+    Sidebar
   },
 
   vuex: {

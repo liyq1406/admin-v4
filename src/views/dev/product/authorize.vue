@@ -168,7 +168,6 @@ import * as config from 'consts/config'
 // import locales from 'consts/locales/index'
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from './mixins'
-import Alert from 'components/Alert'
 import formatDate from 'filters/format-date'
 
 export default {
@@ -180,10 +179,6 @@ export default {
     getters: {
       products: ({ products }) => products.all
     }
-  },
-
-  components: {
-    Alert
   },
 
   data () {

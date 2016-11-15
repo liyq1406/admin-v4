@@ -63,18 +63,16 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import PicTxt from 'components/PicTxt'
   import LinkageItem from './components/LinkageItem'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   // import { pluginFactoryMixin } from '../../opration/plugin/mixins'
   import api from 'api'
 
   export default {
-    name: 'Nest',
+    name: 'Philips',
 
     components: {
-      'pic-txt': PicTxt,
-      'linkage-item': LinkageItem
+      LinkageItem
     },
 
     // mixins: [globalMixins, pluginFactoryMixin],

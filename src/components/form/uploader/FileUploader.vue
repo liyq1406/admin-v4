@@ -27,7 +27,7 @@ import { globalMixins } from 'src/mixins'
 import { MAX_UPLOAD_FILE_SIZE } from 'consts/config'
 
 export default {
-  name: 'FileUpload',
+  name: 'FileUploader',
 
   mixins: [globalMixins],
 

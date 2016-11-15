@@ -15,6 +15,8 @@
 
 <script>
 export default {
+  name: 'Flow',
+
   props: {
     // 当前步骤
     curr: {

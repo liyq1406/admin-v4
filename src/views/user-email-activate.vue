@@ -1,14 +1,14 @@
 <template>
   <div class="auth-form">
     <div class="auth-msg-box" v-show="activateSuccess">
-      <x-alert :cols="16" type="success" :title="$t('auth.activate_success')">
+      <alert :cols="16" type="success" :title="$t('auth.activate_success')">
         <p>{{ $t("auth.activate_success_msg") }}</p>
-      </x-alert>
+      </alert>
     </div>
     <div class="auth-msg-box" v-show="activateFail">
-      <x-alert :cols="16" type="error" :title="$t('auth.activate_fail')">
+      <alert :cols="16" type="error" :title="$t('auth.activate_fail')">
         <p>{{ $t("auth.activate_fail_msg") }}</p>
-      </x-alert>
+      </alert>
     </div>
   </div>
 </template>
@@ -21,7 +21,6 @@
   import api from 'api'
   import base64 from 'utils/base64'
   import { globalMixins } from 'src/mixins'
-  import Alert from 'components/Alert'
 
   export default {
     name: 'EmailActivateForm',
@@ -29,10 +28,6 @@
     layouts: ['auth'],
 
     mixins: [globalMixins],
-
-    components: {
-      'x-alert': Alert
-    },
 
     data () {
       return {

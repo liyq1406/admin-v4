@@ -41,7 +41,7 @@
 </template>
 <script>
   export default {
-    name: 'percentTable',
+    name: 'PercentTable',
 
     props: {
       // 颜色主题

@@ -28,14 +28,13 @@
     <!-- End: 错误模态窗口 -->
 
     <!-- Start: 通知信息 -->
-    <toast :messages="notices"></toast>
+    <notification :messages="notices"></notification>
     <!-- End: 通知信息 -->
   </div>
 </template>
 
 <script>
 import Topbar from 'components/other/layout/Topbar'
-import Toast from './components/Toast'
 import api from 'api'
 import store from 'store/index'
 import { globalMixins } from './mixins'
@@ -48,7 +47,6 @@ export default {
   name: 'App',
 
   components: {
-    Toast,
     Topbar
   },
 

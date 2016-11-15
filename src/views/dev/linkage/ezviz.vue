@@ -63,16 +63,11 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import PicTxt from 'components/PicTxt'
 import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
 import api from 'api'
 
 export default {
   name: 'Ezviz',
-
-  components: {
-    PicTxt
-  },
 
   mixins: [globalMixins],
 

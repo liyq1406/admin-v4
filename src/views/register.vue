@@ -117,10 +117,10 @@
       </div>
     </div>
     <div class="auth-msg-box" v-else>
-      <x-alert :cols="16" type="success" :title="$t('auth.register_success')">
+      <alert :cols="16" type="success" :title="$t('auth.register_success')">
         <p>{{ $t("auth.register_success_msg") }}</p>
         <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
-      </x-alert>
+      </alert>
     </div>
   </div>
 </template>
@@ -129,7 +129,6 @@
 import api from 'api'
 // import Vue from 'vue'
 // import locales from 'consts/locales/index'
-import Alert from 'components/Alert'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -138,10 +137,6 @@ export default {
   layouts: ['auth'],
 
   mixins: [globalMixins],
-
-  components: {
-    'x-alert': Alert
-  },
 
   data () {
     return {

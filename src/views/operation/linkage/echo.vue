@@ -26,15 +26,13 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import PicTxt from 'components/PicTxt'
   import LinkageItem from './components/LinkageItem'
 
   export default {
     name: 'Echo',
 
     components: {
-      'pic-txt': PicTxt,
-      'linkage-item': LinkageItem
+      LinkageItem
     },
 
     mixins: [globalMixins]

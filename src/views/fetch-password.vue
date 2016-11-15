@@ -75,10 +75,10 @@
       </div>
     </div>
     <div class="auth-msg-box" v-else>
-      <x-alert :cols="16" type="success" :title="$t('auth.by_phone_success')">
+      <alert :cols="16" type="success" :title="$t('auth.by_phone_success')">
         <p>{{ $t("auth.by_phone_success_msg") }}</p>
         <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
-      </x-alert>
+      </alert>
     </div>
   </div>
   <!-- <div class="form form-auth form-fetch-password">
@@ -163,7 +163,6 @@
 <script>
   import api from 'api'
   import * as config from 'consts/config'
-  import Alert from 'components/Alert'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -172,10 +171,6 @@
     layouts: ['auth'],
 
     mixins: [globalMixins],
-
-    components: {
-      'x-alert': Alert
-    },
 
     data () {
       return {

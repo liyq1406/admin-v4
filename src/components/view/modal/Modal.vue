@@ -18,6 +18,8 @@
 
 <script>
 export default {
+  name: 'Modal',
+
   props: {
     width: {
       type: String,

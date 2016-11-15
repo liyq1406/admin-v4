@@ -10,6 +10,7 @@ import PercentTable from './view/table/PercentTable'
 import IntelligentTable from './view/table/IntelligentTable'
 import InfoCard from './view/info/InfoCard'
 import InfoList from './view/info/InfoList'
+import PicTxt from './view/info/PicTxt'
 import Tooltip from './view/info/Tooltip'
 import Statistic from './view/info/Statistic'
 import Statistic2 from './view/info/Statistic2'
@@ -17,6 +18,9 @@ import SearchBox from './view/search/SearchBox'
 import PercentageBar from './view/progress/PercentageBar'
 import Tree1 from './view/tree/Tree1'
 import XMap from './view/map/XMap'
+import Alert from './view/alert/Alert'
+import AlertBar from './view/alert/AlertBar'
+import Notification from './view/notification/Notification'
 
 // 表单类
 import Editor from './form/editor/Editor'
@@ -55,12 +59,16 @@ const components = {
   IntelligentTable,
   InfoCard,
   InfoList,
+  PicTxt,
   Tooltip,
   Statistic,
   Statistic2,
   SearchBox,
   PercentageBar,
   XMap,
+  Alert,
+  AlertBar,
+  Notification,
   Editor,
   DatePicker,
   DatePicker2,

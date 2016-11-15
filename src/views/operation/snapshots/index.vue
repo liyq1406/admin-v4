@@ -89,7 +89,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import Alert from 'components/Alert'
   import Chart from 'components/Chart/index'
   import formatDate from 'filters/format-date'
   import api from 'api'
@@ -135,7 +134,6 @@
     },
 
     components: {
-      'x-alert': Alert,
       Chart
     },
 

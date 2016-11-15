@@ -1,7 +1,7 @@
 <template>
-  <div class="toast">
-    <div class="toast-box" v-for="message in messages" transition="toast-box" transition-mode="out-in">
-      <div class="toast-msg toast-msg-{{message.type}}">
+  <div class="x-notification">
+    <div class="x-notification-box" v-for="message in messages" transition="x-notification-box" transition-mode="out-in">
+      <div class="x-notification-msg x-notification-msg-{{message.type}}">
         <i class="fa" :class="{'fa-check':message.type==='success', 'fa-times':message.type==='error', 'fa-info':message.type==='info'}"></i>
         <span>{{ message.content }}</span>
       </div>
@@ -11,7 +11,7 @@
 
 <script>
   export default {
-    name: 'Toast',
+    name: 'Notification',
 
     props: {
       messages: {
@@ -25,18 +25,18 @@
 </script>
 
 <style lang="stylus">
-  @import '../assets/stylus/common'
+  @import '../../../assets/stylus/common'
 
-  .toast
+  .x-notification
     position absolute
     top 91px
     right 31px
     z-index 10200
 
-  .toast-box
+  .x-notification-box
     text-align right
 
-  .toast-msg
+  .x-notification-msg
     display inline-block
     margin-bottom 10px
     background #FFF
@@ -52,31 +52,31 @@
       font-size 18px
       vertical-align middle
 
-  .toast-msg-success
-  .toast-msg-error
-  .toast-msg-info
+  .x-notification-msg-success
+  .x-notification-msg-error
+  .x-notification-msg-info
     color #FFF
 
-  .toast-msg-success
+  .x-notification-msg-success
     background green
 
-  .toast-msg-error
+  .x-notification-msg-error
     background red
 
-  .toast-msg-info
+  .x-notification-msg-info
     background blue
 
   // 淡入淡出 动画
-  .toast-box
+  .x-notification-box
     transition transform .3s ease, opacity .3s ease
 
-  .toast-box-enter
-  .toast-box-leave
+  .x-notification-box-enter
+  .x-notification-box-leave
     opacity 0
 
-  .toast-box-enter
+  .x-notification-box-enter
     transform translate3d(0, 8px, 0)
 
-  .toast-box-leave
+  .x-notification-box-leave
     transform translate3d(0, -8px, 0)
 </style>

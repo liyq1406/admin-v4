@@ -24,9 +24,9 @@
       <div class="icon-loading" v-show="loadingDevices">
         <i class="fa fa-refresh fa-spin"></i>
       </div>
-      <x-alert v-show="!devices.length && !loadingDevices" :cols="18">
+      <alert v-show="!devices.length && !loadingDevices" :cols="18">
         <p>{{ infoMsg }}</p>
-      </x-alert>
+      </alert>
       <div v-show="deviceList.length" class="device-list mb20">
         <div class="device-list-item" v-for="device in deviceList" :class="{'active':currIndex===$index || currHover===$index}" @click="handleDeviceItemClick($index)" @mouseover="pullUp($index)" @mouseout="pushDown($index)">
           <div class="list-item-cont">
@@ -57,17 +57,12 @@ import { setCurrProductMixin } from './mixins'
 import api from 'api'
 import * as config from 'consts/config'
 // import AMap from 'AMap'
-import Alert from 'components/Alert'
 import formatDate from 'filters/format-date'
 
 export default {
   name: 'DeviceMap',
 
   mixins: [globalMixins, setCurrProductMixin],
-
-  components: {
-    'x-alert': Alert
-  },
 
   data () {
     return {

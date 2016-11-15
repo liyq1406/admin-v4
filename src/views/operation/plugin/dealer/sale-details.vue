@@ -159,17 +159,12 @@
 
 <script>
 import api from 'api'
-// import AreaSelect from 'components/AreaSelect'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
 export default {
   name: 'TableDetails',
 
   mixins: [globalMixins, pluginMixins],
-
-  components: {
-    // AreaSelect
-  },
 
   data () {
     return {

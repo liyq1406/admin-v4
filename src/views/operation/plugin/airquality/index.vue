@@ -35,7 +35,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
-// import Select from 'components/Select'
 import Chart from 'components/Chart/index'
 import 'echarts/extension/bmap/bmap'
 import formatDate from 'filters/format-date'
@@ -48,7 +47,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    // 'x-select': Select,
     Chart
   },
 

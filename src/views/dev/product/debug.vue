@@ -265,7 +265,6 @@
 import io from 'socket.io-client'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
-import Alert from 'components/Alert'
 import api from 'api'
 
 var socket = null
@@ -275,9 +274,6 @@ export default {
 
   mixins: [globalMixins],
 
-  components: {
-    Alert
-  },
   data () {
     return {
       total: 0,

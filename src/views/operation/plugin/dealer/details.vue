@@ -109,15 +109,10 @@
   import api from 'api'
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
-  import Alert from 'components/Alert'
   export default {
     name: 'TableDetails',
 
     mixins: [globalMixins, pluginMixins],
-
-    components: {
-      'x-alert': Alert
-    },
 
     data () {
       return {

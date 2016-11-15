@@ -16,7 +16,6 @@
 </template>
 
 <script>
-  import Alert from 'components/Alert'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -24,10 +23,6 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins],
-
-    components: {
-      'v-alert': Alert
-    }
+    mixins: [globalMixins]
   }
 </script>

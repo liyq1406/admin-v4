@@ -9,6 +9,81 @@
   </div>
 </template>
 
+<script>
+  import { globalMixins } from 'src/mixins'
+
+  export default {
+    name: 'SearchBox',
+
+    mixins: [globalMixins],
+
+    props: {
+      max: false,
+      key: {
+        type: String,
+        twoWay: true,
+        default: ''
+      },
+      auto: {
+        type: Boolean,
+        default: false
+      },
+      placeholder: {
+        type: String,
+        default: ''
+      },
+      active: {
+        type: Boolean,
+        default: false
+      }
+    },
+
+    watch: {
+      key () {
+        if (this.max > 0) {
+          if (this.key - 0 > this.max - 0) {
+            this.showNotice({
+              type: 'error',
+              content: `输入的值不能大于${this.max}`
+            })
+            return
+          }
+        }
+        this.$emit('search')
+      }
+    },
+
+    methods: {
+      enterPress () {
+        this.$emit('press-enter')
+      },
+      handleCancelClick () {
+        this.key = ''
+        let inputDoms = this.$el.getElementsByTagName('input')
+        if (inputDoms.length > 0) {
+          let inputDom = inputDoms[0]
+          inputDom.value = ''
+        }
+        this.$emit('cancel')
+      },
+
+      // handleInput () {
+      //   console.log(this.key)
+      //   if (this.key) {
+      //   }
+      // },
+
+      handleFocus (key) {
+        this.$emit('search-activate', key)
+      },
+
+      handleBlur (key) {
+        this.$emit('search-deactivate', key)
+      }
+    }
+  }
+</script>
+
 <style lang="stylus">
 @import '../../../assets/stylus/common'
 
@@ -94,76 +169,3 @@
       display inline
 
 </style>
-
-<script>
-  import { globalMixins } from 'src/mixins'
-
-  export default {
-    mixins: [globalMixins],
-
-    props: {
-      max: false,
-      key: {
-        type: String,
-        twoWay: true,
-        default: ''
-      },
-      auto: {
-        type: Boolean,
-        default: false
-      },
-      placeholder: {
-        type: String,
-        default: ''
-      },
-      active: {
-        type: Boolean,
-        default: false
-      }
-    },
-
-    watch: {
-      key () {
-        if (this.max > 0) {
-          if (this.key - 0 > this.max - 0) {
-            this.showNotice({
-              type: 'error',
-              content: `输入的值不能大于${this.max}`
-            })
-            return
-          }
-        }
-        this.$emit('search')
-      }
-    },
-
-    methods: {
-      enterPress () {
-        this.$emit('press-enter')
-      },
-      handleCancelClick () {
-        this.key = ''
-        let inputDoms = this.$el.getElementsByTagName('input')
-        if (inputDoms.length > 0) {
-          let inputDom = inputDoms[0]
-          inputDom.value = ''
-        }
-        this.$emit('cancel')
-      },
-
-      // handleInput () {
-      //   console.log(this.key)
-      //   if (this.key) {
-      //   }
-      // },
-
-      handleFocus (key) {
-        this.$emit('search-activate', key)
-      },
-
-      handleBlur (key) {
-        this.$emit('search-deactivate', key)
-      }
-    }
-  }
-</script>

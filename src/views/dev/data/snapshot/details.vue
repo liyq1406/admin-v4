@@ -153,7 +153,6 @@
 import api from 'api'
 import Chart from 'components/Chart/index'
 import { globalMixins } from 'src/mixins'
-import Alert from 'components/Alert'
 import formatDate from 'filters/format-date'
 
 export default {
@@ -162,8 +161,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Chart,
-    'x-alert': Alert
+    Chart
   },
 
   data () {

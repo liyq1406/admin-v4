@@ -27,7 +27,8 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  module.exports = {
+
+  export default {
     name: 'Range',
 
     mixins: [globalMixins],
