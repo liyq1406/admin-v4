@@ -5,11 +5,11 @@
         <label class="form-control col-6">参数名称:</label>
         <div class="controls col-18">
           <div class="input-text-wrap">
-            <input v-model="cloneMenu.name" name="cloneMenu.type" type="text" class="input-text" v-validate:name="{required: true, maxlength: 20, format: 'trim'}">
+            <input v-model="cloneMenu.name" name="cloneMenu.type" type="text" class="input-text" v-validate:name="{required: true, maxlength: 10, format: 'trim'}">
           </div>
           <div class="form-tips form-tips-error">
             <span v-if="$validation.name.touched && $validation.name.required">请输入参数名称</span>
-            <span v-if="$validation.name.modified && $validation.name.maxlength">参数名称不能超过20位</span>
+            <span v-if="$validation.name.modified && $validation.name.maxlength">参数名称不能超过10位</span>
             <span v-if="$validation.name.touched && $validation.name.format">参数名称不允许前后带空格</span>
           </div>
         </div>
