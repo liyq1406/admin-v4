@@ -107,7 +107,6 @@
   // import Vue from 'vue'
   // import locales from 'consts/locales/index'
   import api from 'api'
-  import RadioGroup from 'components/RadioGroup'
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
   import Alert from 'components/Alert'
@@ -117,8 +116,7 @@
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      'x-alert': Alert,
-      RadioGroup
+      'x-alert': Alert
     },
 
     data () {

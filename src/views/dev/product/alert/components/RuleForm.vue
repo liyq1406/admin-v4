@@ -326,17 +326,12 @@
 
 <script>
 import api from 'src/api'
-import RadioGroup from 'components/RadioGroup'
 import { globalMixins } from 'src/mixins'
 
 export default {
   name: 'RuleForm',
 
   mixins: [globalMixins],
-
-  components: {
-    RadioGroup
-  },
 
   vuex: {
     getters: {

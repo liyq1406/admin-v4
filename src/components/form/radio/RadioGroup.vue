@@ -9,6 +9,8 @@
 
 <script>
   export default {
+    name: 'RadioGroup',
+
     props: {
       value: {
         twoWay: true
