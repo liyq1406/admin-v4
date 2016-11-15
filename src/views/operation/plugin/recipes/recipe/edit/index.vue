@@ -16,8 +16,6 @@
 import api from 'api'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-import Tab from 'components/Tab'
-
 export default {
   name: 'EditRecipe',
 
@@ -26,7 +24,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    Tab
   },
 
   data () {

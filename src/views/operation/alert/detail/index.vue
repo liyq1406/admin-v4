@@ -36,7 +36,7 @@
             <i class="fa fa-refresh fa-spin"></i>
           </div>
           <div class="mt10 ml30">
-            <map v-if="this.deviceLocation.length > 0" :location="deviceLocation" height="220px"></map>
+            <x-map v-if="this.deviceLocation.length > 0" :location="deviceLocation" height="220px"></x-map>
             <div class="center" v-else>{{ $t('operation.alert.record.no_map') }}</div>
           </div>
         </div>
@@ -50,19 +50,14 @@
 <script>
 import api from 'api'
 // import * as config from 'consts/config'
-import Tab from 'components/Tab'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
-import Map from 'components/Map'
-
 export default {
   name: 'Device',
 
   mixins: [globalMixins],
 
   components: {
-    Tab,
-    Map
   },
 
   data () {

@@ -15,17 +15,12 @@
 </template>
 
 <script>
-import Flow from 'components/Flow'
 import { globalMixins } from 'src/mixins'
 
 export default {
   name: 'Creation',
 
   mixins: [globalMixins],
-
-  components: {
-    Flow
-  },
 
   data () {
     return {

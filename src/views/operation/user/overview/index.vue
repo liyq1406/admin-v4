@@ -24,7 +24,6 @@
 
 <script>
 // import api from 'api'
-import Statistic from 'components/Statistic'
 import { globalMixins } from 'src/mixins'
 import UserTrend from './components/UserTrend'
 import UserDistribution from './components/UserDistribution'
@@ -36,7 +35,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Statistic,
     UserTrend,
     UserDistribution
   },

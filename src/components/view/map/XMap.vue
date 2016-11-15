@@ -9,6 +9,7 @@ import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 
 export default {
+  name: 'XMap',
 
   mixins: [globalMixins],
 

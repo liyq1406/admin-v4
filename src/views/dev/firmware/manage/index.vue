@@ -27,8 +27,6 @@
   import { globalMixins } from 'src/mixins'
   import Message from './message'
   import Update from './update'
-  import Tab from 'components/Tab'
-
   export default {
     name: 'Alert',
 
@@ -36,8 +34,7 @@
 
     components: {
       Message,
-      Update,
-      'tab': Tab
+      Update
     },
 
     data () {

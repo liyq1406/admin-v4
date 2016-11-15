@@ -67,8 +67,6 @@
   import { globalMixins } from 'src/mixins'
   import { warrantyMixins } from '../../mixins'
   import api from 'api'
-  import Statistic from 'components/Statistic'
-
   export default {
     name: 'OrderList',
 
@@ -81,7 +79,6 @@
     },
 
     components: {
-      Statistic
     },
 
     data () {

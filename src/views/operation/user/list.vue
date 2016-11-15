@@ -70,7 +70,6 @@
   import * as config from 'consts/config'
   import formatDate from 'filters/format-date'
   import { globalMixins } from 'src/mixins'
-  import Statistic from 'components/Statistic2'
   import {createDayRange} from 'utils'
   import locales from 'consts/locales/index'
   export default {
@@ -79,8 +78,7 @@
     mixins: [globalMixins],
 
     components: {
-      'api': api,
-      Statistic
+      'api': api
     },
 
     data () {

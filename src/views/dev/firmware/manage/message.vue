@@ -108,7 +108,6 @@ import api from 'api'
 import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'
-import Statistic from 'components/Statistic2'
 import Chart from 'components/Chart/index'
 
 export default {
@@ -117,7 +116,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Statistic,
     Chart
   },
 

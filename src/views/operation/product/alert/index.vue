@@ -27,7 +27,6 @@
 import api from 'api'
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from '../mixins'
-import Statistic from 'components/Statistic'
 import formatDate from 'filters/format-date'
 import AlertTable from './alert-table'
 import AlertTrends from './alert-trends'
@@ -39,7 +38,6 @@ export default {
   mixins: [globalMixins, setCurrProductMixin],
 
   components: {
-    Statistic,
     AlertTable,
     AlertTrends
   },

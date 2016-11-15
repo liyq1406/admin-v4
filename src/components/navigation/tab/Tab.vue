@@ -15,9 +15,11 @@
 </template>
 
 <script>
-import { globalMixins } from '../mixins'
+import { globalMixins } from '../../../mixins'
 
 export default {
+  name: 'Tab',
+
   mixins: [globalMixins],
 
   props: {
@@ -55,7 +57,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../assets/stylus/common'
+@import '../../../assets/stylus/common'
 
 // 选项卡
 .tab

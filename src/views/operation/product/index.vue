@@ -15,7 +15,6 @@
 </template>
 
 <script>
-  import Tab from 'components/Tab'
   import api from 'api'
   import { setCurrProduct } from 'store/actions/products'
   import { globalMixins } from 'src/mixins'
@@ -35,7 +34,6 @@
     },
 
     components: {
-      'tab': Tab
     },
 
     data () {

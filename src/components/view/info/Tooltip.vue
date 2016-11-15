@@ -33,7 +33,7 @@
       // 类前缀
       classPrefix: {
         type: String,
-        default: 'v-tooltip'
+        default: 'x-tooltip'
       }
     },
 
@@ -111,9 +111,9 @@
 </script>
 
 <style lang="stylus">
-  @import '../assets/stylus/common'
+  @import '../../../assets/stylus/common'
 
-  .v-tooltip
+  .x-tooltip
     display inline-block
     position relative
 
@@ -135,7 +135,7 @@
         margin 0
         line-height 20px
 
-  .v-tooltip-top
+  .x-tooltip-top
     .popup
       left 50%
       bottom 100%
@@ -147,7 +147,7 @@
         margin-left -5px
         triangle rgba(0, 0, 0, .8) 10px down
 
-  .v-tooltip-bottom
+  .x-tooltip-bottom
     .popup
       left 50%
       top 100%
@@ -159,7 +159,7 @@
         margin-left -5px
         triangle rgba(0, 0, 0, .8) 10px up
 
-  .v-tooltip-right
+  .x-tooltip-right
     .popup
       left 100%
       top 50%
@@ -171,7 +171,7 @@
         margin-top -5px
         triangle rgba(0, 0, 0, .8) 10px left
 
-  .v-tooltip-left
+  .x-tooltip-left
     .popup
       right 100%
       top 50%

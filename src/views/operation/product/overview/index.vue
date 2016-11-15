@@ -44,8 +44,6 @@
 
 <script>
 import { removeProduct, updateProduct } from 'store/actions/products'
-import Statistic from 'components/Statistic2'
-import Tooltip from 'components/Tooltip'
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from '../mixins'
 import ProductTrend from './components/ProductTrend'
@@ -71,8 +69,6 @@ export default {
   },
 
   components: {
-    Statistic,
-    Tooltip,
     // IntervalIcon,
     ProductTrend,
     ProductActive,

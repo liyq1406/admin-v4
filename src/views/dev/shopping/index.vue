@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import Flow from 'components/Flow'
 import Info from './Info'
 import Order from './Order'
 import Completion from './Completion'
@@ -42,7 +41,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Flow,
     Info,
     Order,
     Completion

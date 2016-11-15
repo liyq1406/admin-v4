@@ -213,7 +213,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../assets/stylus/common'
+@import '../../../assets/stylus/common'
 
 // 头部
 .the-header
@@ -226,7 +226,7 @@ export default {
 .logo
   float left
   size 200px 55px
-  background url("../assets/images/logo.png") no-repeat center
+  background url("../../../assets/images/logo.png") no-repeat center
 
 // 头部导航
 .nav-header
@@ -317,7 +317,7 @@ export default {
       width 280px
       line-height 24px
       font-size 14px
-      background url('../assets/images/indicator.png') no-repeat 100px top
+      background url('../../../assets/images/indicator.png') no-repeat 100px top
 
       .demo-text
         absolute right 46px top -66px

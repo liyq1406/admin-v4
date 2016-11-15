@@ -34,17 +34,12 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import Dropdown from 'components/Dropdown'
 import formatDate from 'filters/format-date'
 
 export default {
   name: 'device-list',
 
   mixins: [globalMixins],
-
-  components: {
-    Dropdown
-  },
 
   data () {
     return {

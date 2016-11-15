@@ -38,7 +38,6 @@
 import { globalMixins } from 'src/mixins'
 // import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
-import Statistic from 'components/Statistic2'
 import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
 import truncate from 'filters/truncate'
@@ -51,8 +50,7 @@ export default {
 
   components: {
     // RadioButtonGroup,
-    Chart,
-    Statistic
+    Chart
   },
 
   vuex: {

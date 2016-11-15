@@ -79,8 +79,6 @@ import locales from 'consts/locales/index'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import { productSummaryMixin, setCurrProductMixin } from '../mixins'
-import Statistic from 'components/Statistic2'
-
 export default {
   name: 'DeviceList',
 
@@ -88,7 +86,6 @@ export default {
   mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
 
   components: {
-    Statistic
   },
 
   data () {

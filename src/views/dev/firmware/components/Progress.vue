@@ -112,7 +112,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../assets/stylus/common'
+@import '../../../../assets/stylus/common'
 
 .x-progress
   position relative

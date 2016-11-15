@@ -80,13 +80,11 @@
 import Vue from 'vue'
 import api from 'api'
 import * as config from 'consts/config'
-import Progress from 'components/Progress'
+import Progress from './components/Progress'
 import locales from 'consts/locales/index'
 // import formatDate from 'filters/format-date'
 // import { globalMixins } from 'src/mixins'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'
-import Statistic from 'components/Statistic2'
-
 export default {
   name: 'DeviceList',
 
@@ -94,7 +92,6 @@ export default {
   // mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
 
   components: {
-    Statistic,
     Progress
   },
 

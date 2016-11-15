@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Sidebar from 'components/Sidebar'
+import Sidebar from 'components/other/layout/Sidebar'
 import AlertBar from 'components/AlertBar'
 import { globalMixins } from 'src/mixins'
 import { MAIN_NAV, IS_DEMO } from 'consts/config'

@@ -39,7 +39,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import Chart from 'components/Chart/index'
-import Statistic from 'components/Statistic2'
 import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
 // import truncate from 'filters/truncate'
@@ -50,8 +49,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Chart,
-    Statistic
+    Chart
   },
 
   data () {
@@ -88,21 +86,6 @@ export default {
   },
 
   computed: {
-    // avgTitle () {
-    //   return this.period + '天平均增长'
-    // },
-    //
-    // avgTooltip () {
-    //   return this.period + '天平均增长'
-    // },
-
-    // avg () {
-    //   return {
-    //     count: parseInt((this.latest * 2 - this.doubled) / this.period), // (后段 - 前段) / 时间段
-    //     change: 0
-    //   }
-    // },
-
     // 新增用户图表配置
     addOptions () {
       return {

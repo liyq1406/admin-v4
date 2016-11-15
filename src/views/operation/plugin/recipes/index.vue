@@ -15,7 +15,6 @@
 </template>
 
 <script>
-  import Tab from 'components/Tab'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -26,7 +25,6 @@
     mixins: [globalMixins],
 
     components: {
-      'tab': Tab
     },
 
     data () {

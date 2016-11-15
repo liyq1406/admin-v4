@@ -34,9 +34,9 @@
 </template>
 
 <script>
-import Topbar from 'components/Topbar'
+import Topbar from 'components/other/layout/Topbar'
 import Toast from './components/Toast'
-import api from './api'
+import api from 'api'
 import store from 'store/index'
 import { globalMixins } from './mixins'
 import { removeError, hideError, setCurrentMember, setCorp, setLoadingStatus } from './store/actions/system'

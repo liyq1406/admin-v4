@@ -34,8 +34,6 @@
 
 <script>
 import api from 'api'
-import Tab from 'components/Tab'
-import Map from 'components/Map'
 import { globalMixins } from 'src/mixins'
 import { getCurrProduct, setCurrDevice, setCurrVirtualDevice } from 'store/actions/products'
 import formatDate from 'filters/format-date'
@@ -46,8 +44,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Tab,
-    'x-map': Map
   },
 
   vuex: {

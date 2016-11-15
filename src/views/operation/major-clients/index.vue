@@ -70,7 +70,6 @@
 import Vue from 'vue'
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import Statistic from 'components/Statistic2'
 import formatDate from 'filters/format-date'
 import locales from 'consts/locales/index'
 
@@ -80,7 +79,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Statistic
   },
 
   data () {

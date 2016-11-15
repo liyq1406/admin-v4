@@ -33,7 +33,6 @@
 </template>
 
 <script>
-  import Tab from 'components/Tab'
   import { globalMixins } from 'src/mixins'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { pluginFactoryMixin } from './mixins'
@@ -52,7 +51,6 @@
     },
 
     components: {
-      'tab': Tab
     },
 
     data () {

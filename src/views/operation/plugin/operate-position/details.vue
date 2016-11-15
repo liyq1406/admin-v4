@@ -72,7 +72,6 @@
 </template>
 
 <script>
-import Dropdown from 'components/Dropdown'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
 
@@ -82,10 +81,6 @@ export default {
   layout: 'admin',
 
   mixins: [globalMixins],
-
-  components: {
-    Dropdown
-  },
 
   data () {
     return {

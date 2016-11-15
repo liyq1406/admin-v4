@@ -36,7 +36,6 @@
 <script>
   import * as config from 'consts/config'
   import { globalMixins } from 'src/mixins'
-  import Statistic from 'components/Statistic'
   import api from 'api'
   import formatDate from 'filters/format-date'
 
@@ -46,7 +45,6 @@
     mixins: [globalMixins],
 
     components: {
-      Statistic
     },
 
     data () {

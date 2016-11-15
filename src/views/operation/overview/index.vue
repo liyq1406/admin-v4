@@ -32,7 +32,6 @@
 
 <script>
 import api from 'api'
-import Statistic from 'components/Statistic2'
 import { globalMixins } from 'src/mixins'
 import ProductTrend from './components/ProductTrend'
 import ProductActive from './components/ProductActive'
@@ -48,7 +47,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Statistic,
     // IntervalIcon,
     ProductTrend,
     ProductActive,

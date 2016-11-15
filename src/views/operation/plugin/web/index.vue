@@ -15,7 +15,6 @@
   </section>
 </template>
 <script>
-  import Tab from 'components/Tab'
   import { globalMixins } from 'src/mixins'
   import { setCurrPlugin } from 'store/actions/plugins'
   import api from 'api'
@@ -26,7 +25,6 @@
     mixins: [globalMixins],
 
     components: {
-      'tab': Tab
     },
 
     vuex: {

@@ -10,9 +10,13 @@ import PercentTable from './view/table/PercentTable'
 import IntelligentTable from './view/table/IntelligentTable'
 import InfoCard from './view/info/InfoCard'
 import InfoList from './view/info/InfoList'
+import Tooltip from './view/info/Tooltip'
+import Statistic from './view/info/Statistic'
+import Statistic2 from './view/info/Statistic2'
 import SearchBox from './view/search/SearchBox'
 import PercentageBar from './view/progress/PercentageBar'
 import Tree1 from './view/tree/Tree1'
+import XMap from './view/map/XMap'
 
 // 表单类
 import Editor from './form/editor/Editor'
@@ -38,6 +42,8 @@ import TagInput from './form/input/TagInput'
 // 导航类
 import Pagination from './navigation/pagination/Pagination'
 import Breadcrumb from './navigation/breadcrumb/Breadcrumb'
+import Tab from './navigation/tab/Tab'
+import Flow from './navigation/flow/Flow'
 
 const components = {
   ButtonGroup,
@@ -49,8 +55,12 @@ const components = {
   IntelligentTable,
   InfoCard,
   InfoList,
+  Tooltip,
+  Statistic,
+  Statistic2,
   SearchBox,
   PercentageBar,
+  XMap,
   Editor,
   DatePicker,
   DatePicker2,
@@ -72,7 +82,9 @@ const components = {
   TagInput,
   Pagination,
   Breadcrumb,
-  Tree1
+  Tree1,
+  Tab,
+  Flow
 }
 
 const install = function (Vue, opts = {}) {

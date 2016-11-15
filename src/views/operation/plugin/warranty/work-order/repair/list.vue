@@ -74,7 +74,6 @@ import { globalMixins } from 'src/mixins'
 import { warrantyMixins } from '../../mixins'
 import api from 'api'
 import * as config from 'consts/config'
-import Statistic from 'components/Statistic'
 import formatDate from 'filters/format-date'
 
 export default {
@@ -89,7 +88,6 @@ export default {
   },
 
   components: {
-    Statistic
   },
 
   data () {

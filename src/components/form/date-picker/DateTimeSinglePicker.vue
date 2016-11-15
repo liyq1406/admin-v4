@@ -10,15 +10,10 @@
 </template>
 
 <script>
-import Dropdown from 'components/Dropdown'
 import formatDate from 'filters/format-date'
 
 export default {
   name: 'DateTimeSinglePicker',
-
-  components: {
-    Dropdown
-  },
 
   props: {
     time: {

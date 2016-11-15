@@ -149,7 +149,7 @@ export default {
 
 <style lang="stylus">
 // 配置
-@import '../assets/stylus/base'
+@import '../../../assets/stylus/base'
 
 // 侧栏
 .sidebar

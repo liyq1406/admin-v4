@@ -15,7 +15,6 @@
 </template>
 
 <script>
-  import Tab from 'components/Tab'
   import { globalMixins } from 'src/mixins'
   import Alert from 'components/Alert'
 
@@ -25,8 +24,7 @@
     mixins: [globalMixins],
 
     components: {
-      'x-alert': Alert,
-      'tab': Tab
+      'x-alert': Alert
     },
 
     data () {

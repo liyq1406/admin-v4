@@ -43,18 +43,13 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import Tab from 'components/Tab'
 import formatDate from 'filters/format-date'
-import Map from 'components/Map'
-
 export default {
   name: 'MajorClients',
 
   mixins: [globalMixins],
 
   components: {
-    Tab,
-    'x-map': Map
   },
 
   data () {

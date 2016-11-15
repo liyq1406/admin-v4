@@ -43,17 +43,12 @@
   import api from 'api'
   import { globalMixins } from 'src/mixins'
   import formatDate from 'filters/format-date'
-  import Tab from 'components/Tab'
-  import Map from 'components/Map'
-
   export default {
     name: 'UserDetails',
 
     mixins: [globalMixins],
 
     components: {
-      Tab,
-      'x-map': Map
     },
 
     data () {

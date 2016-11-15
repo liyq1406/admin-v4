@@ -83,7 +83,6 @@
 // import Vue from 'vue'
 // import locales from 'consts/locales/index'
 import api from 'api'
-import Statistic from 'components/Statistic'
 import Chart from 'components/Chart/index'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
@@ -96,7 +95,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    Statistic,
     Chart
   },
 
