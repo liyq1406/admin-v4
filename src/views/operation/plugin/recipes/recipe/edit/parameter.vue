@@ -100,7 +100,6 @@ import api from 'api'
 import TreeItem from '../components/TreeItem'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-import TagInput from 'components/TagInput'
 import CodeForm from '../components/CodeForm'
 import MenuForm from '../components/MenuForm'
 
@@ -113,7 +112,6 @@ export default {
 
   components: {
     'tree-item': TreeItem,
-    'tag-input': TagInput,
     CodeForm,
     MenuForm
   },

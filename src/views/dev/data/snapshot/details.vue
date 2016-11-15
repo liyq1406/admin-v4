@@ -151,7 +151,6 @@
 
 <script>
 import api from 'api'
-import IntelligentTable from 'components/IntelligentTable'
 import Chart from 'components/Chart/index'
 import { globalMixins } from 'src/mixins'
 import Alert from 'components/Alert'
@@ -163,7 +162,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    IntelligentTable,
     Chart,
     'x-alert': Alert
   },

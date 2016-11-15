@@ -434,7 +434,6 @@
   import api from 'api'
   import * as config from 'consts/config'
   import locales from 'consts/locales/index'
-  import TagInput from 'components/TagInput'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -443,7 +442,6 @@
     mixins: [globalMixins],
 
     components: {
-      'tag-input': TagInput
     },
 
     data () {

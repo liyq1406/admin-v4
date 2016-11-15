@@ -71,6 +71,8 @@
       // @selected-change
       // 参数是当前的已经选择的table数组
     /** **************************************/
+    name: 'IntelligentTable',
+
     props: {
       // 是否开启选择模式
       selecting: {
@@ -181,7 +183,7 @@
 </script>
 
 <style lang="stylus">
-@import '../assets/stylus/common'
+@import '../../../assets/stylus/common'
 
   .intelligent-table-box
     width 100%

@@ -69,7 +69,6 @@
 
 <script>
 import api from 'api'
-import TagInput from 'components/TagInput'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 
@@ -86,7 +85,6 @@ export default {
   },
 
   components: {
-    TagInput
   },
 
   vuex: {

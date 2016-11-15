@@ -108,7 +108,6 @@
   // import locales from 'consts/locales/index'
   import api from 'api'
   import RadioGroup from 'components/RadioGroup'
-  import IntelligentTable from 'components/IntelligentTable'
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
   import Alert from 'components/Alert'
@@ -119,8 +118,7 @@
 
     components: {
       'x-alert': Alert,
-      RadioGroup,
-      IntelligentTable
+      RadioGroup
     },
 
     data () {

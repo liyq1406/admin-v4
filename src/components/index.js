@@ -6,6 +6,7 @@ import RadioButtonGroup from './base/button/RadioButtonGroup'
 import Modal from './view/modal/Modal'
 import Gallery from './view/gallery/Gallery'
 import XTable from './view/table/XTable'
+import IntelligentTable from './view/table/IntelligentTable'
 import InfoCard from './view/info/InfoCard'
 import InfoList from './view/info/InfoList'
 import SearchBox from './view/search/SearchBox'
@@ -28,6 +29,7 @@ import Switch from './form/switch/Switch'
 import Captcha from './form/captcha/Captcha'
 import AreaSelect from './form/cascader/AreaSelect'
 import Range from './form/range/Range'
+import TagInput from './form/input/TagInput'
 
 // 导航类
 import Pagination from './navigation/pagination/Pagination'
@@ -39,6 +41,7 @@ const components = {
   Modal,
   Gallery,
   XTable,
+  IntelligentTable,
   InfoCard,
   InfoList,
   SearchBox,
@@ -59,6 +62,7 @@ const components = {
   Captcha,
   AreaSelect,
   Range,
+  TagInput,
   Pagination,
   Breadcrumb
 }

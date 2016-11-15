@@ -6,7 +6,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import IntelligentTable from 'components/IntelligentTable'
 import api from 'src/api'
 import Chart from 'components/Chart/index'
 import formatDate from 'filters/format-date'
@@ -18,7 +17,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'intelligent-table': IntelligentTable,
     Chart
   },
 

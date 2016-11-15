@@ -324,8 +324,6 @@
 import api from 'api'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-import TagInput from 'components/TagInput'
-
 export default {
   name: 'EditRecipe',
 
@@ -334,7 +332,6 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    'tag-input': TagInput
   },
 
   vuex: {

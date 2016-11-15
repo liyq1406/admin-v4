@@ -64,7 +64,7 @@
           <div class="col-20 data-table-border details-box">
             <div class="selected-first-class" v-show="selectedFirstClass.selected">
               <div class="details-table">
-                <x-table :headers.sync="vHeaders" :tables.sync="vTables" :page="page" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></x-table>
+                <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables" :page="page" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></intelligent-table>
                 <pagination :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate"></pagination>
               </div>
             </div>
@@ -439,17 +439,12 @@
 <script>
 import api from 'api'
 import * as config from 'consts/config'
-import IntelligentTable from 'components/IntelligentTable'
 import { globalMixins } from 'src/mixins'
 
 export default {
   name: 'DataTables',
 
   mixins: [globalMixins],
-
-  components: {
-    'x-table': IntelligentTable
-  },
 
   data () {
     return {
