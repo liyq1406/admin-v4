@@ -6,13 +6,12 @@
           <label class="form-control col-3">{{ $t('operation.user.major.columns.name') }}:</label>
           <div class="controls col-18">
             <div v-placeholder="$t('operation.user.major.placeholders.name')" class="input-text-wrap">
-              <input v-model="model.username" type="text" name="model.username" v-validate:username="{required: true, minlength: 6, maxlength: 32, format: 'account'}" lazy class="input-text"/>
+              <input v-model="model.username" type="text" name="model.username" v-validate:username="{required: true, minlength: 2, maxlength: 32}" lazy class="input-text"/>
             </div>
             <div class="form-tips form-tips-error">
               <span v-if="$validation.username.touched && $validation.username.required">{{ $t('common.validation.required', {field: $t('operation.user.major.columns.name')}) }}</span>
-              <span v-if="$validation.username.touched && $validation.username.modified && $validation.username.minlength">{{ $t('common.validation.minlength', [$t('operation.user.major.columns.name'), 6]) }}</span>
-              <span v-if="$validation.username.touched && $validation.username.modified && $validation.username.maxlength">{{ $t('common.validation.maxlength', [$t('operation.user.major.columns.name'), 40]) }}</span>
-              <span v-if="$validation.username.touched && $validation.username.modified && $validation.username.format">{{ $t('common.validation.account', {field: $t('operation.user.major.columns.name')}) }}</span>
+              <span v-if="$validation.username.touched && $validation.username.modified && $validation.username.minlength">{{ $t('common.validation.minlength', [$t('operation.user.major.columns.name'), 2]) }}</span>
+              <span v-if="$validation.username.touched && $validation.username.modified && $validation.username.maxlength">{{ $t('common.validation.maxlength', [$t('operation.user.major.columns.name'), 32]) }}</span>
             </div>
           </div>
         </div>
@@ -25,7 +24,7 @@
             <div class="form-tips form-tips-error">
               <span v-if="$validation.contacter.touched && $validation.contacter.required">{{ $t('common.validation.required', {field: $t('operation.user.major.columns.contacter')}) }}</span>
               <span v-if="$validation.contacter.touched && $validation.contacter.modified && $validation.contacter.minlength">{{ $t('common.validation.minlength', [$t('operation.user.major.columns.contacter'), 2]) }}</span>
-              <span v-if="$validation.contacter.touched && $validation.contacter.modified && $validation.contacter.maxlength">{{ $t('common.validation.maxlength', [$t('operation.user.major.columns.contacter'), 40]) }}</span>
+              <span v-if="$validation.contacter.touched && $validation.contacter.modified && $validation.contacter.maxlength">{{ $t('common.validation.maxlength', [$t('operation.user.major.columns.contacter'), 32]) }}</span>
             </div>
           </div>
         </div>
@@ -56,7 +55,7 @@
         <div class="form-row row">
           <label class="form-control col-3">{{ $t('operation.user.major.columns.industry') }}:</label>
           <div class="controls filter-group-item col-18">
-            <x-select :label="selectedFilterIndustry || $t('common.all')" width='110px' size="small">
+            <x-select :label="model.industry" size="small" width="110px">
               <select v-model="model.industry">
                 <option v-for="industry in industrys" :value="industry">{{industry}}</option>
               </select>
@@ -68,7 +67,7 @@
           <div class="controls col-18">
             <div class="clearfix">
               <div class="filter-group-item">
-                <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" select-size="small"></area-select>
+                <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" select-size="small" :default-value="areas"></area-select>
               </div>
             </div>
           </div>
@@ -90,13 +89,13 @@
         <div class="form-row row" v-if="type==='edit'">
           <div class="col-21 col-offset-3">
             <label class="del-check">
-              <input type="checkbox" name="del" v-model="delChecked"/> 删除统计规则
+              <input type="checkbox" name="del" v-model="delChecked"/> {{ $t(common.del) }}
             </label>
           </div>
         </div>
         <div class="form-actions row">
           <div class="col-21 col-offset-3">
-            <button :disabled="submitting || $validation.invalid" :class="{'disabled':submitting || $validation.invalid }" class="btn btn-primary" @click.prevent="onSubmit">{{ $t('common.ok') }}</button>
+            <button :disabled="submitting || $validation.invalid" :class="{'disabled':submitting || $validation.invalid}" class="btn btn-primary" @click.prevent="onSubmit">{{ $t('common.ok') }}</button>
           </div>
         </div>
       </form>
@@ -110,7 +109,7 @@ import AreaSelect from 'components/AreaSelect'
 import api from 'api'
 
 export default {
-  name: 'StatisticRuleForm',
+  name: 'vip-form',
 
   mixins: [globalMixins],
 
@@ -127,7 +126,15 @@ export default {
 
   data () {
     return {
-      model: {},
+      model: {
+        username: '',
+        email: '',
+        contacter: '',
+        phone: '',
+        location: '',
+        industry: this.$t('operation.user.major.industrys.web')
+      },
+      areas: '',
       delChecked: false,
       submitting: false,
       curProvince: {},
@@ -140,15 +147,11 @@ export default {
         this.$t('operation.user.major.industrys.game'),
         this.$t('operation.user.major.industrys.consumable'),
         this.$t('operation.user.major.industrys.communication')
-      ],
-      selectedFilterIndustry: ''
+      ]
     }
   },
 
   computed: {
-  },
-
-  watch: {
   },
 
   ready () {},
@@ -158,40 +161,43 @@ export default {
       if (this.submitting) return
 
       if (this.$validation.invalid) {
+        console.log(this.$validation)
         this.$validate(true)
         return
       }
 
-      if (this.delChecked && !window.confirm('您确定要删除该规则?')) {
+      if (this.delChecked && !window.confirm(this.$t('operation/user/major/comfirm_del'))) {
         return
       }
 
-      let model = {
-        dp_mode: this.getDpMode(),
-        fineness: this.getFineness(),
-        name: this.name,
-        describe: this.description,
-        type: 2,
-        status: this.status
+      let params = {
+        username: this.model.username,
+        contacter: this.model.contacter,
+        contact_way: this.model.phone,
+        email: this.model.email,
+        industry: this.model.industry,
+        provice: this.curProvince.name || '',
+        city: this.curCity.name || '',
+        district: this.curDistrict.name || '',
+        location: this.model.address
       }
 
       let process
 
       this.submitting = true
       if (this.type === 'add') { // 添加
-        process = api.snapshot.ceateStatisticRules(this.selectedSnapshot.productId, this.selectedSnapshot.id, model)
+        process = api.heavyBuyer.addHeavyBuyer(params)
       } else {
         if (this.delChecked) { // 删除
-          process = api.snapshot.delStatisticRules(this.selectedSnapshot.productId, this.selectedSnapshot.id, this.$route.params.rule_id)
+          process = api.heavyBuyer.delHeavyBuyer(this.$route.params.id)
         } else {
-          model._id = this.$route.params.rule_id
-          process = api.snapshot.editStatisticRule(this.selectedSnapshot.productId, this.selectedSnapshot.id, this.$route.params.rule_id, model)
+          process = api.heavyBuyer.editHeavyBuyer(this.$route.params.id, params)
         }
       }
       process.then((res) => {
         this.submitting = false
         if (res.status === 200) {
-          this.$route.router.replace('/dev/data/statistics-rule/product')
+          this.$route.router.replace('/operation/major-clients')
         }
       }).catch((res) => {
         this.submitting = false

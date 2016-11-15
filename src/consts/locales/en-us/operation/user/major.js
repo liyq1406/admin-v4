@@ -11,6 +11,7 @@ export default {
   search_placeholder: 'Enter Customer Name',
   password: 'password',
   comfirm_password: 'Confirm',
+  comfirm_del: '您确定要删除该大客户',
   columns: {
     name: 'Customer Name',
     contacter: 'Contact',

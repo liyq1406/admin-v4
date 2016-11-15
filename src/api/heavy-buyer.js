@@ -23,6 +23,18 @@ export default {
     )
   },
 
+  editHeavyBuyer (id, params) {
+    return http.put(
+      `${API_SERVER.default}/v2/heavy_buyer/${id}`, params
+    )
+  },
+
+  delHeavyBuyer (id) {
+    return http.del(
+      `${API_SERVER.default}/v2/heavy_buyer/${id}`
+    )
+  },
+
   getHeavyBuyer (params) {
     return http.post(
       `${API_SERVER.default}/v2/heavy_buyer_list`, params

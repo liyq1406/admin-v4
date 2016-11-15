@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   name: 'AreaSelect',
 
@@ -81,6 +83,11 @@ export default {
     showDistrict: {
       type: Boolean,
       default: true
+    },
+
+    defaultValue: { // '广东省, 广州市, 海珠区'
+      type: String,
+      default: ''
     }
   },
 
@@ -108,7 +115,58 @@ export default {
     }
   },
 
+  watch: {
+    defaultValue () {
+      this.setDefault()
+    },
+    provinces () {
+      this.setDefault()
+    },
+    citys () {
+      this.setDefault()
+    },
+    districts () {
+      this.setDefault()
+    }
+  },
+
   methods: {
+    setDefault () {
+      if (!this.defaultValue || !this.provinces.length) {
+        return
+      }
+      let areas = this.defaultValue.split(',')
+      if (areas[0]) { // 省
+        let province = areas[0].trim()
+        let findProvince = _.find(this.provinces, (provinceItem) => {
+          return provinceItem.name === province
+        })
+        if (findProvince) {
+          this.province = findProvince
+          this.handleProvinceChange()
+          if (areas[1]) { // 市
+            let city = areas[1].trim()
+            let findCity = _.find(this.cityOptions, (cityItem) => {
+              return cityItem.name === city
+            })
+            if (findCity) {
+              this.city = findCity
+              this.handleCityChange()
+              if (areas[2]) {
+                let district = areas[2].trim()
+                let findDistrict = _.find(this.districtOptions, (districtItem) => {
+                  return districtItem.name === district
+                })
+                if (findDistrict) {
+                  this.district = findDistrict
+                  this.handleDistrictChange()
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     /**
      * 处理切换省
      */

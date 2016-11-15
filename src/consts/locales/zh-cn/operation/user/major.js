@@ -11,6 +11,7 @@ export default {
   search_placeholder: '搜索客户名称',
   password: '密码',
   comfirm_password: '确认密码',
+  comfirm_del: '您确定要删除该大客户',
   columns: {
     name: '客户名称',
     contacter: '联系人',
