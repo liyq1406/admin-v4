@@ -70,9 +70,13 @@
 <script>
 import { IS_DEMO } from 'consts/config'
 import { showAlertMask, removeAlertMask } from 'store/actions/system'
+import { globalMixins } from 'src/mixins'
 
 export default {
   name: 'Topbar',
+
+  mixins: [globalMixins],
+
   vuex: {
     getters: {
       loading: ({ system }) => system.loading,

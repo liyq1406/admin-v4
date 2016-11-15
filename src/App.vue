@@ -35,6 +35,8 @@
 
 <script>
 import Topbar from 'components/other/layout/Topbar'
+import Modal from 'components/view/modal/Modal'
+import Notification from 'components/view/notification/Notification'
 import api from 'api'
 import store from 'store/index'
 import { removeError, hideError, setCurrentMember, setCorp, setLoadingStatus } from './store/actions/system'
@@ -46,7 +48,9 @@ export default {
   name: 'App',
 
   components: {
-    Topbar
+    Topbar,
+    Notification,
+    Modal
   },
 
   // 状态管理

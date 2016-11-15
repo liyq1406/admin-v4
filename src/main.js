@@ -34,9 +34,6 @@ var router
 // 调试模式
 Vue.config.debug = process.env.NODE_ENV === 'production'
 
-// 注册全局组件
-Vue.use(components)
-
 // 加载路由插件
 Vue.use(VueRouter)
 
@@ -57,9 +54,6 @@ Vue.use(i18n, {
   // lang: 'zh-cn',
   locales: locales
 })
-
-// 注册全局 Mixins
-Vue.mixin(globalMixins)
 
 // 注册全局指令
 // ------------------------------
@@ -133,6 +127,12 @@ router = new VueRouter({
   // saveScrollPosition: true
 })
 configRouter(router)
+
+// 注册全局 Mixins
+Vue.mixin(globalMixins)
+
+// 注册全局组件
+Vue.use(components)
 
 // 启动 App
 router.start(App, '#app')

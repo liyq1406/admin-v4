@@ -1,3 +1,6 @@
+// 全局 Mixins
+// import { globalMixins } from 'src/mixins'
+
 // 基础类
 import ButtonGroup from './base/button/ButtonGroup'
 import RadioButtonGroup from './base/button/RadioButtonGroup'
@@ -99,6 +102,7 @@ const install = function (Vue, opts = {}) {
   if (install.installed) return
 
   // 注册全局方法和变量
+  // Vue.mixin(globalMixins)
 
   // 注册全局指令
 
