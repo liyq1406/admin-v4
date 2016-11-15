@@ -793,6 +793,16 @@ let configRouter = (router) => {
             require.ensure([], (require) => {
               resolve(require('./views/dev/settings/tag'))
             }, 'admin')
+          },
+          subRoutes: {
+            // 告警标签设置
+            '/alert': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/tag/alert'))
+                }, 'admin')
+              }
+            }
           }
         },
 
@@ -1894,6 +1904,7 @@ let configRouter = (router) => {
     '/operation/alerts': '/operation/alerts/record',
     '/operation/alerts/detail/:id': '/operation/alerts/detail/:id/history',
     '/dev/firmware/manage': '/dev/firmware/manage/message',
+    '/dev/settings/tag': '/dev/settings/tag/alert',
     '/operation/major-clients/:id': '/operation/major-clients/:id/device'
   })
 
