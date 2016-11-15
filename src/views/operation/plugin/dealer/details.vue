@@ -108,7 +108,6 @@
   // import locales from 'consts/locales/index'
   import api from 'api'
   import RadioGroup from 'components/RadioGroup'
-  import SearchBox from 'components/SearchBox'
   import IntelligentTable from 'components/IntelligentTable'
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
@@ -121,7 +120,6 @@
     components: {
       'x-alert': Alert,
       RadioGroup,
-      SearchBox,
       IntelligentTable
     },
 

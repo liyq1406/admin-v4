@@ -109,15 +109,12 @@ import api from 'api'
 // import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-import SearchBox from 'components/SearchBox'
-
 export default {
   name: 'MenuForm',
 
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    SearchBox
   },
 
   props: {

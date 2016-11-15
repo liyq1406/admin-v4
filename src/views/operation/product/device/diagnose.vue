@@ -97,8 +97,6 @@ import io from 'socket.io-client'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import locales from 'consts/locales/index'
-import SearchBox from 'components/SearchBox'
-
 var socket = null
 
 export default {
@@ -107,7 +105,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    SearchBox
   },
 
   data () {

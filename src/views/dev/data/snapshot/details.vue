@@ -151,7 +151,6 @@
 
 <script>
 import api from 'api'
-import SearchBox from 'components/SearchBox'
 import IntelligentTable from 'components/IntelligentTable'
 import Chart from 'components/Chart/index'
 import { globalMixins } from 'src/mixins'
@@ -164,7 +163,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    SearchBox,
     IntelligentTable,
     Chart,
     'x-alert': Alert

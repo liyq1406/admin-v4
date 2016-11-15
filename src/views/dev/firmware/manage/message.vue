@@ -106,7 +106,6 @@
 <script>
 import api from 'api'
 import * as config from 'consts/config'
-import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'
 import Statistic from 'components/Statistic2'
@@ -118,7 +117,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'search-box': SearchBox,
     Statistic,
     Chart
   },

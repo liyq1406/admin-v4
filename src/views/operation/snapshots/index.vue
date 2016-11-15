@@ -89,7 +89,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import SearchBox from 'components/SearchBox'
   import Alert from 'components/Alert'
   import Chart from 'components/Chart/index'
   import formatDate from 'filters/format-date'
@@ -137,8 +136,7 @@
 
     components: {
       'x-alert': Alert,
-      Chart,
-      SearchBox
+      Chart
     },
 
     data () {

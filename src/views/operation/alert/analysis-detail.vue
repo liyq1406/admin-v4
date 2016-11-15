@@ -58,7 +58,6 @@
 import * as config from 'consts/config'
 import api from 'api'
 import Statistic from 'components/Statistic'
-import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import locales from 'consts/locales/index'
@@ -70,8 +69,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Statistic,
-    SearchBox
+    Statistic
   },
 
   data () {

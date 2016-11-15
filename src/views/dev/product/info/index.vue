@@ -127,7 +127,6 @@ import { setCurrProductMixin } from '../mixins'
 import { removeProduct, updateProduct } from 'store/actions/products'
 import * as config from 'consts/config'
 import Chart from 'components/Chart/index'
-import SearchBox from 'components/SearchBox'
 import formatDate from 'filters/format-date'
 // import BatchExportQr from './batch-export-qr'
 
@@ -144,7 +143,6 @@ export default {
   },
 
   components: {
-    SearchBox,
     Chart
   },
 

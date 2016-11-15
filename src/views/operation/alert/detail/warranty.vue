@@ -68,10 +68,8 @@
 </template>
 
 <script>
-  import SearchBox from 'components/SearchBox'
   export default {
     components: {
-      'search-box': SearchBox
     },
 
     data () {

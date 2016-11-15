@@ -265,7 +265,6 @@
 import io from 'socket.io-client'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
-import SearchBox from 'components/SearchBox'
 import Alert from 'components/Alert'
 import api from 'api'
 
@@ -277,7 +276,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'search-box': SearchBox,
     Alert
   },
   data () {

@@ -8,6 +8,7 @@ import Gallery from './view/gallery/Gallery'
 import XTable from './view/table/XTable'
 import InfoCard from './view/info/InfoCard'
 import InfoList from './view/info/InfoList'
+import SearchBox from './view/search/SearchBox'
 
 // 表单类
 import Editor from './form/editor/Editor'
@@ -37,9 +38,10 @@ const components = {
   RadioButtonGroup,
   Modal,
   Gallery,
+  XTable,
   InfoCard,
   InfoList,
-  XTable,
+  SearchBox,
   Editor,
   DatePicker,
   DatePicker2,

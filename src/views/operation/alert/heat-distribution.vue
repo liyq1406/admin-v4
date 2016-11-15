@@ -118,7 +118,6 @@ import api from 'api'
 import * as config from 'consts/config'
 import Chart from 'components/Chart/index'
 import convertData from 'components/chart/convert-data'
-import SearchBox from 'components/SearchBox'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import {numToPercent} from 'utils'
@@ -129,7 +128,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    SearchBox,
     Chart
   },
 

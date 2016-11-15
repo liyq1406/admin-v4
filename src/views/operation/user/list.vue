@@ -66,7 +66,6 @@
 
 <script>
   import Vue from 'vue'
-  import SearchBox from 'components/SearchBox'
   import api from 'api'
   import * as config from 'consts/config'
   import formatDate from 'filters/format-date'
@@ -80,7 +79,6 @@
     mixins: [globalMixins],
 
     components: {
-      'search-box': SearchBox,
       'api': api,
       Statistic
     },

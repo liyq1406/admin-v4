@@ -33,14 +33,12 @@
 </template>
 
 <script>
-  import SearchBox from 'components/SearchBox'
   // import AreaSelect from 'components/AreaSelect'
   import formatDate from 'filters/format-date'
 
   export default {
     components: {
-      // 'area-select': AreaSelect,
-      'search-box': SearchBox
+      // 'area-select': AreaSelect
     },
 
     data () {

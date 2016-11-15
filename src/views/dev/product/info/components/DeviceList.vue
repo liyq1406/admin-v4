@@ -52,7 +52,6 @@
 import api from 'api'
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
-import SearchBox from 'components/SearchBox'
 import formatDate from 'filters/format-date'
 // import BatchExportQr from './batch-export-qr'
 
@@ -67,7 +66,6 @@ export default {
   },
 
   components: {
-    SearchBox
   },
 
   data () {

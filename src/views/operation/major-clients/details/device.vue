@@ -7,7 +7,6 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import SearchBox from 'components/SearchBox'
 import { setCurrVirtualDevice } from 'store/actions/products'
 
 export default {
@@ -16,7 +15,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    SearchBox
   },
 
   vuex: {

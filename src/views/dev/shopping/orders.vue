@@ -66,7 +66,6 @@
 </template>
 
 <script>
-import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -75,7 +74,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    SearchBox
   },
 
   data () {

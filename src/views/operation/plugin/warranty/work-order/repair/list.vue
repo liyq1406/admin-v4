@@ -72,7 +72,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { warrantyMixins } from '../../mixins'
-import SearchBox from 'components/SearchBox'
 import api from 'api'
 import * as config from 'consts/config'
 import Statistic from 'components/Statistic'
@@ -90,7 +89,6 @@ export default {
   },
 
   components: {
-    'search-box': SearchBox,
     Statistic
   },
 

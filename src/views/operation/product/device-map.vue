@@ -57,7 +57,6 @@ import { setCurrProductMixin } from './mixins'
 import api from 'api'
 import * as config from 'consts/config'
 // import AMap from 'AMap'
-import SearchBox from 'components/SearchBox'
 import Alert from 'components/Alert'
 import formatDate from 'filters/format-date'
 
@@ -67,8 +66,7 @@ export default {
   mixins: [globalMixins, setCurrProductMixin],
 
   components: {
-    'x-alert': Alert,
-    SearchBox
+    'x-alert': Alert
   },
 
   data () {

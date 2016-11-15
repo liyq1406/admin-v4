@@ -148,7 +148,6 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from './mixins'
-import SearchBox from 'components/SearchBox'
 import api from 'api'
 
 export default {
@@ -157,7 +156,6 @@ export default {
   mixins: [globalMixins, setCurrProductMixin],
 
   components: {
-    'search-box': SearchBox
   },
 
   data () {

@@ -90,7 +90,6 @@
 </template>
 
 <script>
-import SearchBox from 'components/SearchBox'
 import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
@@ -101,7 +100,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    SearchBox
   },
 
   vuex: {

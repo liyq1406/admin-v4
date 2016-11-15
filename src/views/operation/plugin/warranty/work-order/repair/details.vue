@@ -161,7 +161,6 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import { warrantyMixins } from '../../mixins'
 import api from 'api'
-import SearchBox from 'components/SearchBox'
 import formatDate from 'filters/format-date'
 import * as config from 'consts/config'
 
@@ -171,7 +170,6 @@ export default {
   mixins: [globalMixins, pluginMixins, warrantyMixins],
 
   components: {
-    SearchBox
   },
 
   data () {

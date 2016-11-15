@@ -258,7 +258,6 @@
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 import { warrantyMixins } from '../mixins'
-import SearchBox from 'components/SearchBox'
 import api from 'api'
 import * as config from 'consts/config'
 
@@ -348,7 +347,6 @@ export default {
   },
 
   components: {
-    SearchBox
   },
 
   ready () {

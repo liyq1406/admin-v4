@@ -34,7 +34,6 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import SearchBox from 'components/SearchBox'
 import Dropdown from 'components/Dropdown'
 import formatDate from 'filters/format-date'
 
@@ -44,7 +43,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    SearchBox,
     Dropdown
   },
 

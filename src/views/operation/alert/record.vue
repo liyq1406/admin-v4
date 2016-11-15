@@ -86,7 +86,6 @@ import api from 'api'
 import * as config from 'consts/config'
 import locales from 'consts/locales/index'
 import Statistic from 'components/Statistic'
-import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 // TODO 消除代码冗余 #weijie
@@ -97,8 +96,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Statistic,
-    SearchBox
+    Statistic
   },
 
   vuex: {

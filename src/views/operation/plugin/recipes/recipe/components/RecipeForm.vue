@@ -614,7 +614,6 @@
 
 <script>
 import api from 'api'
-import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import TagInput from 'components/TagInput'
@@ -636,7 +635,6 @@ export default {
     CodeForm,
     MenuForm,
     'tree-item': TreeItem,
-    'search-box': SearchBox,
     'tag-input': TagInput,
     DeviceForm,
     InstructionsForm,

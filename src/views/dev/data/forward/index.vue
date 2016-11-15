@@ -71,7 +71,6 @@
 <script>
 // import Vue from 'vue'
 // import * as config from 'consts/config'
-import SearchBox from 'components/SearchBox'
 // import locales from 'consts/locales/index'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
@@ -88,7 +87,6 @@ export default {
   },
 
   components: {
-    SearchBox
   },
 
   data () {

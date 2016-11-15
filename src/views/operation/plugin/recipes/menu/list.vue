@@ -30,7 +30,6 @@
 <script>
 import api from 'api'
 // import * as config from 'consts/config'
-import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 import formatDate from 'filters/format-date'
@@ -47,7 +46,6 @@ export default {
   },
 
   components: {
-    SearchBox
   },
 
   data () {

@@ -57,7 +57,6 @@
 import Vue from 'vue'
 import locales from 'consts/locales/index'
 import api from 'api'
-import SearchBox from 'components/SearchBox'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
@@ -73,7 +72,6 @@ export default {
   },
 
   components: {
-    SearchBox
   },
 
   data () {

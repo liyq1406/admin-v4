@@ -35,7 +35,6 @@
 
 <script>
   import * as config from 'consts/config'
-  import SearchBox from 'components/SearchBox'
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic'
   import api from 'api'
@@ -47,7 +46,6 @@
     mixins: [globalMixins],
 
     components: {
-      'search-box': SearchBox,
       Statistic
     },
 

@@ -80,7 +80,6 @@
 import Vue from 'vue'
 import api from 'api'
 import * as config from 'consts/config'
-import SearchBox from 'components/SearchBox'
 import Progress from 'components/Progress'
 import locales from 'consts/locales/index'
 // import formatDate from 'filters/format-date'
@@ -95,7 +94,6 @@ export default {
   // mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
 
   components: {
-    SearchBox,
     Statistic,
     Progress
   },

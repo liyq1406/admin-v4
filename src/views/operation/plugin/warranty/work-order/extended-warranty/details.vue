@@ -124,14 +124,12 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import { warrantyMixins } from '../../mixins'
 import api from 'api'
-import SearchBox from 'components/SearchBox'
 export default {
   name: 'OrderDetails',
 
   mixins: [globalMixins, pluginMixins, warrantyMixins],
 
   components: {
-    SearchBox
   },
 
   data () {
