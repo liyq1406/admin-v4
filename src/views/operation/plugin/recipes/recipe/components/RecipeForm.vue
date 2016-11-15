@@ -1272,11 +1272,12 @@ export default {
       var no = this.recipe.devices.indexOf(obj.device)
       var lesno = this.recipe.devices[no].prompts.indexOf(obj.tip)
       if (this.tipsType === 'add') {
-        this.recipe.devices[no].prompts.push({prompt_text: obj.prompt_text})
+        this.recipe.devices[no].prompts.push({prompt_text: obj.prompt_text, index: this.recipe.devices[no].prompts.length + 1})
         this.onTipsCancel()
         // this.editOthers('edit')
       } else if (this.tipsType === 'edit') {
         this.recipe.devices[no].prompts[lesno].prompt_text = obj.prompt_text
+        this.recipe.devices[no].prompts[lesno].index = lesno + 1
         this.onTipsCancel()
         // this.editOthers('edit')
       }

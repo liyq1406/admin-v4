@@ -338,14 +338,14 @@ export default {
       var lesno = this.recipe.devices[no].prompts.indexOf(obj.tip)
       if (this.tipsType === 'add') {
         var device = _.clone(this.recipe.devices[no])
-        device.prompts.push({prompt_text: obj.prompt_text})
+        device.prompts.push({prompt_text: obj.prompt_text, index: device.prompts.length + 1})
         this.recipe.devices.$set(no, device)
         this.onTipsCancel()
         // this.editOthers('edit')
       } else if (this.tipsType === 'edit') {
         // this.recipe.devices[no].prompts[lesno] = {prompt_text: obj.prompt_text}
         // this.recipe.devices[no].prompts[lesno] = _.extend({}, this.recipe.devices[no].prompts[lesno], {prompt_text: obj.prompt_text})
-        this.$set(`recipe.devices[${no}].prompts[${lesno}]`, {prompt_text: obj.prompt_text})
+        this.$set(`recipe.devices[${no}].prompts[${lesno}]`, {prompt_text: obj.prompt_text, index: lesno + 1})
         this.onTipsCancel()
         // this.editOthers('edit')
       }
