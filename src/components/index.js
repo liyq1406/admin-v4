@@ -22,6 +22,7 @@ import Tree1 from './view/tree/Tree1'
 import XMap from './view/map/XMap'
 import Alert from './view/alert/Alert'
 import AlertBar from './view/alert/AlertBar'
+import Dropdown from './view/dropdown/Dropdown'
 import Notification from './view/notification/Notification'
 
 // 表单类
@@ -69,6 +70,7 @@ const components = {
   XMap,
   Alert,
   AlertBar,
+  Dropdown,
   Notification,
   Editor,
   DatePicker,

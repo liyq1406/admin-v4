@@ -82,7 +82,7 @@ export default {
     this.$emit('dropdown-created', this)
     this._closeEvent = EventListener.listen(window, 'click', (e) => {
       if (!this.$el.contains(e.target)) {
-        this.show = false
+        this.$emit('dismiss')
       }
     })
     window.setTimeout(() => {
@@ -115,7 +115,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../assets/stylus/common'
+@import '../../../assets/stylus/common'
 
 .x-dropdown-wrap
   display inline-block

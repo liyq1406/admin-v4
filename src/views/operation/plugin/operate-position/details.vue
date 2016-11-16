@@ -7,7 +7,7 @@
     <div class="panel mt20">
       <div class="panel-hd">
         <div class="actions">
-          <dropdown :trigger-width="90" :dropdown-width="130" :show="isShowDropdown" @toggle="onDropdownToggle">
+          <dropdown :trigger-width="90" :dropdown-width="130" :show="isShowDropdown" @toggle="onDropdownToggle" @dismiss="onDropdownDismiss">
             <button class="btn btn-primary" slot="trigger" :class="{'disabled': loadingData || contentList.length>=maxCount}" :disabled="loadingData || contentList.length>=maxCount">添加内容 <i class="fa fa-caret-down"></i></button>
             <div class="dropdown-menu">
               <div class="dropdown-menu-item" v-for="(type, label) in types" @click="addContent(type)">{{ label }}</div>
@@ -303,6 +303,13 @@ export default {
       if (!this.loadingData && this.contentList.length < this.maxCount) {
         this.isShowDropdown = !show
       }
+    },
+
+    /**
+     * 处理下拉收起
+     */
+    onDropdownDismiss () {
+      this.isShowDropdown = false
     }
   }
 }
