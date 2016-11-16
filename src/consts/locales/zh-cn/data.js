@@ -137,7 +137,7 @@ export const DATAPOINT_TYPES = [
 ]
 
 // 数据端点规则
-export const RULE_TYPES = ['数据端点', '设备状态']
+export const RULE_TYPES = ['数据端点', '设备状态', '数据端点']
 
 // 比对类型
 export const RULE_COMPARE_TYPES = ['等于', '大于', '小于', '大于或等于', '小于或等于', '不等于']

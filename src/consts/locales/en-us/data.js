@@ -139,7 +139,7 @@ export const DATAPOINT_TYPES = [
 ]
 
 // 数据端点规则
-export const RULE_TYPES = ['Data Endpoint', 'Device Status']
+export const RULE_TYPES = ['Data Endpoint', 'Device Status', 'Data Endpoint']
 
 // 比对类型
 export const RULE_COMPARE_TYPES = ['Equal', 'Large than', 'Less than', 'Large than or equal', 'Less than or equal', 'Not equal']

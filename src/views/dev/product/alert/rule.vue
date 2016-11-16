@@ -35,8 +35,8 @@
             <tr>
               <th>{{ $t("ui.rule.fields.name") }}</th>
               <th>{{ $t("ui.rule.fields.content") }}</th>
-              <th>{{ $t("ui.rule.fields.type") }}</th>
-              <th>告警等级</th>
+              <th>触发条件</th>
+              <th>告警类型</th>
               <th class="tac">状态</th>
             </tr>
           </thead>
