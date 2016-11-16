@@ -17,7 +17,7 @@
     </template>
 
     <!-- Start: 错误模态窗口 -->
-    <modal :show="isShowError" width="360px" @disapear="removeError" @dismiss="hideError">
+    <modal :show="isShowError" width="360px" @close="hideError">
       <template slot="body">
         <div class="error-msg">{{error.msg}}</div>
         <div class="modal-actions">
