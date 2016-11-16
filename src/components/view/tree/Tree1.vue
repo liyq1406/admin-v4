@@ -1,13 +1,14 @@
 <template>
   <div class="x-tree-1">
     <label>
-      <input type="radio" class="hide-input" @blur="onBlur">
+      <!-- <input type="radio" class="hide-input" @blur="onBlur"> -->
       <div class="list"
       v-for="list in lists"
       :class="{'selected': list.treeIndex === selectedTreeIndex}" :style="computedListStyle(list)" v-show="list.show">
-        <div class="content">
+        <div class="tree-content">
           <i :class="computedIconClass(list)" @click.stop="onChangeShowHide(list)"></i>
           <span @click.stop="selectedTreeIndex = list.treeIndex">{{list.label}}</span>
+          <!-- <input type="text" class="edit-input" v-show="editing && list.treeIndex === selectedTreeIndex"> -->
           <div
           class="line"
           :style="'width:' + (unitPadding - 15) + 'px;left: -' + (unitPadding - 5) + 'px'"
@@ -15,6 +16,7 @@
           >
           </div>
           <div class="vertical-line" :style="'height: ' + verticalLineHeight(list, $index) + 'px; left: -' + (unitPadding - 5) + 'px'"></div>
+          <div class="selected-line"></div>
         </div>
       </div>
     </label>
@@ -46,8 +48,6 @@
         unitLineHeight: 32,
         // 已选择索引
         selectedTreeIndex: '',
-        // 正在编辑
-        editing: false,
         // 对外暴露数据
         emitData: []
       }
@@ -85,16 +85,27 @@
 
     watch: {
       selectedTreeIndex (val) {
+        var hasData = val && this.data.some((item) => {
+          return item.treeIndex === val
+        })
+        if (!hasData) {
+          val = ''
+        }
         this.$emit('changed', val, this.data)
       }
     },
 
     ready () {
+      this.init()
     },
 
     methods: {
+      init () {
+        window.addEventListener('click', () => {
+          this.selectedTreeIndex = ''
+        })
+      },
       onBlur () {
-        console.log('光标离开')
         this.selectedTreeIndex = ''
       },
       /**
@@ -270,7 +281,7 @@
   }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
   @import '../../../assets/stylus/common'
 
   .x-tree-1
@@ -280,12 +291,16 @@
     .list
       height 32px
       line-height 32px
-      .content
+      .tree-content
         position relative
         padding-left 20px
         box-sizing border-box
         span,i
           cursor pointer
+        .edit-input
+          position absolute
+          left 20px
+          width 100px
         .line
           position absolute
           height 0
@@ -298,10 +313,10 @@
           border-left 1px solid default-border-color
           height 10px
           bottom 50%
-      &.selected .content span
-        background blue
-        padding 2px
-        color #fff
+      &.selected
+        background #f3f3f3
+        .fa
+          background #f3f3f3
     .fa
       width 10px
       height 15px

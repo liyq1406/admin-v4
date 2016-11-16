@@ -3,27 +3,45 @@
     <div class="organization-box">
       <div class="tree-box">
         <div class="btn-group-box">
-          <button class="btn btn-ghost btn-sm" :class="{'disabled': !btnCanUse.add}">
+          <!-- 添加兄弟接点 -->
+          <button class="btn btn-ghost btn-sm"
+          :class="{'disabled': !btnCanUse.add}">
             <!-- <i class="fa fa-share"></i> -->1
           </button>
-          <button class="btn btn-ghost btn-sm" :class="{'disabled': !btnCanUse.addChild}">
+
+          <!-- 添加子节点 -->
+          <button class="btn btn-ghost btn-sm"
+          :class="{'disabled': !btnCanUse.addChild}">
             <!-- <i class="fa fa-share"></i> -->2
           </button>
-          <button class="btn btn-ghost btn-sm" :class="{'disabled': !btnCanUse.delete}">
+
+          <!-- 删除 -->
+          <button class="btn btn-ghost btn-sm"
+          :class="{'disabled': !btnCanUse.delete}">
             <i class="fa fa-trash-o"></i>
           </button>
-          <button class="btn btn-ghost btn-sm" :class="{'disabled': !btnCanUse.up}">
+
+          <!-- 上移 -->
+          <button class="btn btn-ghost btn-sm"
+          :class="{'disabled': !btnCanUse.up}">
             <i class="fa fa-long-arrow-up"></i>
           </button>
-          <button class="btn btn-ghost btn-sm" :class="{'disabled': !btnCanUse.down}">
+
+          <!-- 下移 -->
+          <button class="btn btn-ghost btn-sm"
+          :class="{'disabled': !btnCanUse.down}">
             <i class="fa fa-long-arrow-down"></i>
           </button>
-          <button class="btn btn-ghost btn-sm" :class="{'disabled': !btnCanUse.edit}">
+
+          <!-- 编辑 -->
+          <button class="btn btn-ghost btn-sm"
+          :class="{'disabled': !btnCanUse.edit}"
+          @click.stop="onEditName">
             <i class="fa fa-edit"></i>
           </button>
         </div>
         <div class="tree-container">
-          <tree1 :data="organizationTree" :editing="editing" @changed="changed"></tree1>
+          <tree1 :data="organizationTree" @changed="changed"></tree1>
         </div>
       </div>
       <div class="detail-box">222</div>
@@ -53,6 +71,27 @@ export default {
      * 计算属性 组织信息列表 传入组件的数据
      */
     organizationTree () {
+      var result = []
+      this.organizationData.forEach((item) => {
+        var list = _.clone(item)
+        list.label = item.name
+        list.open = true
+        list.treeIndex = (item.id === this.majorClientId) ? '0' : ''
+        result.push(list)
+      })
+      result = this.resetTreeIndex(result)
+      console.log(result)
+      return result
+    },
+
+    majorClientId () {
+      return this.$route.params.id
+    },
+
+    /**
+     * 计算属性 组织信息列表 传入组件的数据
+     */
+    organizationTree1 () {
       var result = [
         {
           label: '0',
@@ -130,6 +169,7 @@ export default {
 
   route: {
     data () {
+      this.getData()
     }
   },
 
@@ -137,10 +177,58 @@ export default {
   },
 
   methods: {
+    getData () {
+      this.organizationData = [
+        {
+          'id': '11',
+          'parent': '',
+          'name': '0',
+          'sort': '0',
+          'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
+        },
+        {
+          'id': '22',
+          'parent': '11',
+          'name': '0-0',
+          'sort': '0',
+          'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
+        },
+        {
+          'id': '33',
+          'parent': '22',
+          'name': '0-0-0',
+          'sort': '0',
+          'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
+        },
+        {
+          'id': '44',
+          'parent': '11',
+          'name': '0-1',
+          'sort': '1',
+          'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
+        }
+      ]
+    },
     changed (selectedTreeIndex, data) {
       console.log(selectedTreeIndex)
       console.log(data)
       this.selectedTreeIndex = selectedTreeIndex
+    },
+
+    onEditName () {
+      this.editing = true
+    },
+
+    resetTreeIndex (lists) {
+      var result = []
+      // TODO
+      return result
+    },
+
+    computedTreeIndex (list) {
+      var result = ''
+      // TODO
+      return result
     }
   }
 }
