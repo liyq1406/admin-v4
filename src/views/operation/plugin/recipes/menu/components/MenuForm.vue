@@ -20,26 +20,32 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-4">摘要:</label>
+            <label class="form-control col-4"><i class="hl-red">*</i> 摘要:</label>
             <div class="controls col-20">
               <div v-placeholder="'请输入摘要介绍'" class="input-text-wrap">
-                <textarea v-model="model.instructions" type="text" name="model.instructions" v-validate:instructions="{maxlength: 200, format: 'trim'}" v-length-tip="{max: 200, model: model.instructions}" lazy class="input-text"></textarea>
+                <textarea v-model="model.instructions" type="text" name="model.instructions" v-validate:instructions="{required: true, maxlength: 200, format: 'trim'}" v-length-tip="{max: 200, model: model.instructions}" lazy class="input-text"></textarea>
               </div>
               <div class="form-tips form-tips-error">
+                <span v-if="$validation.instructions.touched && $validation.instructions.required">{{ $t('common.validation.required', {field: '摘要介绍'}) }}</span>
                 <span v-if="$validation.instructions.modified && $validation.instructions.maxlength">{{ $t('common.validation.maxlength', ['摘要介绍', 200]) }}</span>
                 <span v-if="$validation.instructions.modified && $validation.instructions.format">摘要前后不允许带空格</span>
               </div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-4">菜谱:</label>
+            <label class="form-control col-4"><i class="hl-red">*</i> 菜谱:</label>
             <div class="controls col-20">
-              <a class="control-text hl-red" @click.prevent.stop="editRecipes">+ 编辑菜谱</a>
-              <div class="recipe-list">
+              <!-- <a class="control-text hl-red" @click.prevent.stop="editRecipes">+ 编辑菜谱</a> -->
+              <button class="btn btn-ghost btn-sm" @click.prevent.stop="editRecipes"><i class="fa" :class="{'fa-pencil-square-o': model.menu && model.menu.length, 'fa-plus': !(model.menu && model.menu.length)}"></i> {{ model.menu && model.menu.length ? '编辑' : '添加' }}菜谱</button>
+              <div class="recipe-list" v-if="model.menu && model.menu.length">
                 <div class="recipe-list-item" v-for="recipe in model.menu">
                   <span>{{ recipe.name }}</span>
                   <i class="fa fa-times" @click="removeRecipe(recipe, model.menu)"></i>
                 </div>
+              </div>
+              <input v-model="model.menu" type="text" v-validate:menu="{required: true}" class="hidden">
+              <div class="form-tips form-tips-error">
+                <span v-if="$validation.menu.touched && $validation.menu.required">请添加菜谱</span>
               </div>
             </div>
           </div>

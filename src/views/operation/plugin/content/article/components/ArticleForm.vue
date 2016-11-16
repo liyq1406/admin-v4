@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="form-row row">
-          <label class="form-control col-4">封面图片:</label>
+          <label class="form-control col-4"><i class="hl-red">*</i> 封面图片:</label>
           <div class="controls col-20">
             <div class="img-box">
               <image-uploader :images="images" @modified="onModifiedImages(images)"></image-uploader>
@@ -147,7 +147,8 @@ export default {
         if (res.status === 200) {
           var data = res.data.list[0] ? res.data.list[0] : {}
           this.model = data
-          this.images = data.cover || ['']
+          this.outputContent = data.text
+          this.images = data.cover.length ? data.cover : ['']
           this.tag = data.label ? data.label.join(',') : ''
           this.loadingData = false
         }
