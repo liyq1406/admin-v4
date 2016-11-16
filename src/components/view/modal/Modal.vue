@@ -10,7 +10,7 @@
         <div class="modal-body">
           <slot name="body"></slot>
         </div>
-        <slot name="footer"></slot><span @click="dismiss" class="fa fa-times-circle"></span>
+        <slot name="footer"></slot><span @click.stop="dismiss" class="fa fa-times-circle"></span>
       </div>
     </div>
   </div>

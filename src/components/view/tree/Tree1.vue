@@ -103,7 +103,7 @@
       init () {
         window.addEventListener('click', () => {
           this.selectedTreeIndex = ''
-        })
+        }, false)
       },
       onBlur () {
         this.selectedTreeIndex = ''
