@@ -229,7 +229,7 @@ export default {
 
       // 分类
       if (this.category.value !== 'all') {
-        condition.query['classification.main'] = this.category.value
+        condition.query['classification.main.name'] = this.category.value
       }
 
       // 来源
