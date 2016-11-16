@@ -39,6 +39,11 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/heavy_buyer_list`, params
     )
-  }
+  },
 
+  getOrganizationList (heavyBuyerId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/organization_list`, params
+    )
+  }
 }
