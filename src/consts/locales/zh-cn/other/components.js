@@ -1,6 +1,7 @@
 export default {
   tips: '温馨提示',
   area: {
+    select_country: '请选择国家',
     select_province: '请选择省',
     select_city: '请选择市',
     select_district: '请选择区'

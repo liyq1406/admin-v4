@@ -88,6 +88,12 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
+                  <label class="form-control col-5 dealer-label">所在区域:</label>
+                  <div class="controls col-19">
+                    <loc-select></loc-select>
+                  </div>
+                </div>
+                <div class="form-row row mt20">
                   <label class="form-control col-5 dealer-label">联系地址:</label>
                   <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.address')" class="input-text-wrap">

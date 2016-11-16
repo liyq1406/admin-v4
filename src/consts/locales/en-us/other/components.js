@@ -1,6 +1,7 @@
 export default {
   tips: 'Tips',
   area: {
+    select_country: 'Country',
     select_province: 'Province',
     select_city: 'City',
     select_district: 'District'

@@ -43,6 +43,7 @@ import Switch from './form/switch/Switch'
 import RadioGroup from './form/radio/RadioGroup'
 import Captcha from './form/captcha/Captcha'
 import AreaSelect from './form/cascader/AreaSelect'
+import LocSelect from './form/cascader/LocSelect'
 import Range from './form/range/Range'
 import TagInput from './form/input/TagInput'
 
@@ -89,6 +90,7 @@ const components = {
   RadioGroup,
   Captcha,
   AreaSelect,
+  LocSelect,
   Range,
   TagInput,
   Pagination,
