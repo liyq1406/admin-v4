@@ -1,5 +1,5 @@
 <template>
-  <div class="form with-loading">
+  <div class="form article-form with-loading">
     <div class="icon-loading" v-show="loadingData">
       <i class="fa fa-refresh fa-spin"></i>
     </div>
@@ -64,11 +64,20 @@
         </div>
       </form>
     </validator>
+    <!-- 预览浮层 Start -->
+    <modal :show="showPreview" width="320px" @close="onPreviewModalClose">
+      <h3 slot="header">预览</h3>
+      <preview-panel slot="body">
+        <div class="article-content">{{{ outputContent }}}</div>
+      </preview-panel>
+    </modal>
+    <!-- 预览浮层 End -->
   </div>
 </template>
 
 <script>
 import api from 'api'
+import PreviewPanel from 'components/other/preview/PreviewPanel'
 import { pluginMixins } from '../../../mixins'
 
 export default {
@@ -84,6 +93,7 @@ export default {
   },
 
   components: {
+    PreviewPanel
   },
 
   vuex: {
@@ -94,6 +104,7 @@ export default {
 
   data () {
     return {
+      showPreview: false,
       outputContent: '',
       model: {
         name: '',
@@ -160,6 +171,14 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理预览浮层关闭
+     * @author shengzhi
+     */
+    onPreviewModalClose () {
+      this.showPreview = false
+    },
+
     /**
      * 处理内容改变
      * @author shengzhi
@@ -249,7 +268,9 @@ export default {
      * 预览文章
      * @author shengzhi
      */
-    previewArticle () {},
+    previewArticle () {
+      this.showPreview = true
+    },
 
     /**
      * 获取标签
@@ -281,6 +302,26 @@ export default {
 </script>
 
 <style lang="stylus">
-.form
+.article-form
   max-width 800px
+
+  .modal
+    .modal-body
+      padding 0
+      max-height none
+
+  .article-content
+    padding 0 10px
+
+    & > p
+      width 100%
+      color #747474
+      margin-bottom 15px
+      line-height 30px
+
+      & > img
+        width 100%
+        height auto
+        display block
+        margin-top 10px
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="panel mt20 pdb30">
+  <div class="panel recipe-form mt20 pdb30">
     <div class="panel-bd">
       <!-- 第一步骤 -->
       <validator name="validation">
@@ -226,7 +226,7 @@
                 <div class="form-actions mb40 row">
                   <div class="col-offset-4">
                     <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
-                    <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-lg">预览</button>
+                    <button @click.prevent.stop="showPreview=true" class="btn btn-ghost btn-lg">预览</button>
                     <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button>
                   </div>
                 </div>
@@ -235,7 +235,7 @@
           </div>
         </div>
         <!-- 第一步骤END -->
-      <div v-show="isShowPreview" transition="modal" class="mask">
+      <!-- <div v-show="isShowPreview" transition="modal" class="mask">
         <div class="preview-wrapper">
           <div :style="dialogStyle" class="preview-dialog">
             <div class="preview-header">
@@ -295,20 +295,146 @@
           </div>
         </div>
       </div>
-    </div>
-    <!-- <div class="row border-top action">
-      <div class="col-21 col-offset-3">
-        <button v-if="mixPage" class="btn btn-primary btn-lg mlr10" @click.prevent="lastStep">上一步</button>
-        <button v-if="!maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent.stop="onRecipeSubmit">提交</button>
-        <button v-if="maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent="nextStep">下一步</button>
-        <button v-if="!maxPage" class="btn btn-ghost btn-lg mlr10" @click.prevent.stop="isShowPreview=true">预览</button>
-      </div>
     </div> -->
+
+    <!-- 预览浮层 Start -->
+    <modal :show="showPreview" width="320px" @close="onPreviewModalClose">
+      <h3 slot="header">预览</h3>
+      <preview-panel slot="body">
+        <div class="recipe-content">
+          <!-- 菜谱图片 -->
+          <div class="img-box" v-if="images.length">
+            <img :src="images[0]" alt="" width="100%">
+          </div>
+
+          <!-- 菜谱标题 -->
+          <div class="block mian-title-box">
+            <span class="title">{{name}}</span>
+          </div>
+
+          <!-- 菜谱介绍 -->
+          <template v-if="instructions">
+            <div class="block description-box">
+              <div class="content">
+                <div class="icon icon-before">“</div>
+                <span>
+                  {{instructions}}
+                </span>
+                <div class="icon icon-after">”</div>
+              </div>
+            </div>
+          </template>
+
+          <!-- 标签 -->
+          <template v-if="tag">
+            <div class="block line-box">
+              <div class="line"></div>
+            </div>
+            <div class="block modal-title-box">
+              <span>菜谱标签</span>
+            </div>
+            <div class="block recipe-tag-list">
+              <span v-for="tag in tagList" class="recipe-tag-list-item">{{ tag }}</span>
+            </div>
+          </template>
+
+          <!-- 菜谱属性 -->
+          <div class="block line-box">
+            <div class="line"></div>
+          </div>
+          <div class="block">
+            <div class="attribute-box">
+              <div class="attribute">
+                <i class="icon difficulty"></i>
+                <span class="text">难度{{properties.difficulty}}</span>
+              </div>
+              <div class="attribute">
+                <i class="icon time"></i>
+                <span class="text">{{properties.cooking_time}}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 菜谱用料 -->
+          <template v-if="major_ingredients.length || minor_ingredients.length">
+            <div class="block line-box">
+              <div class="line" type="2"></div>
+            </div>
+
+            <div class="block modal-title-box">
+              <span>用料</span>
+            </div>
+
+            <div class="block line-box">
+              <div class="line"></div>
+            </div>
+
+            <div class="block material-box">
+              <div class="material" v-for="major_ingredient in major_ingredients">
+                <div class="name">
+                  <span>{{major_ingredient.name}}</span>
+                </div>
+                <div class="amount">
+                  <span>{{major_ingredient.unit}}</span>
+                </div>
+              </div>
+              <div class="material" v-for="minor_ingredients in minor_ingredients">
+                <div class="name">
+                  <span>{{minor_ingredients.name}}</span>
+                </div>
+                <div class="amount">
+                  <span>{{minor_ingredients.unit}}</span>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <!-- 菜谱步骤 -->
+          <template v-if="filteredSteps.length">
+            <div class="block line-box">
+              <div class="line" type="2"></div>
+            </div>
+
+            <template v-for="(index, step) in filteredSteps">
+
+              <div class="block modal-title-box">
+                <span>步骤 {{index + 1}}/{{filteredSteps.length}}</span>
+              </div>
+
+              <div class="block step-box">
+                <div class="img">
+                  <img :src="step.images[0]" alt="" width="100%">
+                </div>
+                <div class="text">
+                  <span>{{step.description}}</span>
+                </div>
+              </div>
+
+              <div class="block line-box" v-if="index !== filteredSteps.length - 1">
+                <div class="line"></div>
+              </div>
+
+            </template>
+          </template>
+
+
+          <!-- 结尾 -->
+          <div class="block line-box">
+            <div class="line" type="2"></div>
+          </div>
+
+          <div class="block footer-box">
+          </div>
+        </div>
+      </preview-panel>
+    </modal>
+    <!-- 预览浮层 End -->
   </div>
 </template>
 
 <script>
 import api from 'api'
+import PreviewPanel from 'components/other/preview/PreviewPanel'
 import { pluginMixins } from '../../../mixins'
 export default {
   name: 'EditRecipe',
@@ -318,6 +444,7 @@ export default {
   mixins: [pluginMixins],
 
   components: {
+    PreviewPanel
   },
 
   vuex: {
@@ -367,7 +494,7 @@ export default {
       candidateTags: [],
       adding: false,
       status: 1,
-      isShowPreview: false,
+      showPreview: false,
       maxStepCount: 15,
       recipe: {
         name: '',
@@ -412,6 +539,24 @@ export default {
     }
   },
   computed: {
+    // 用于预览展示的标签列表
+    tagList () {
+      let result = []
+
+      if (this.tag) {
+        result = this.tag.split(',')
+      }
+
+      return result
+    },
+
+    // 过滤空的步骤
+    filteredSteps () {
+      return _.filter(this.cooking_steps, (item) => {
+        return item.discription || _.compact(item.images).length
+      })
+    },
+
     productOptions () {
       return _.differenceBy(this.products, this.recipe.devices, 'id')
     },
@@ -488,6 +633,13 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理预览浮层关闭
+     * @author shengzhi
+     */
+    onPreviewModalClose () {
+      this.showPreview = false
+    },
 
     /**
      * 处理图片上传
@@ -768,434 +920,459 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
   @import '../../../../../../assets/stylus/common'
-  .previewstep
-    display block
-    font-size 16px
-  .previewpic
-    width 280px
-    height 210px
-    display block
-    margin-left auto
-    margin-right auto
-  .line32
-    line-height 32px
-    height 32px
-  .mrb10
-    margin-bottom 10px
-  .cooktipp
-    width 100%
-    border 1px solid #ddd
-    box-sizing border-box
-    margin 0
-    height 32px
-    line-height 32px
-  .addCookTip
-    margin-top 10px
-  .bortop
-    border-top 1px solid #ddd
-    /*padding-top 20px*/
-  .action
-    border-top 1px solid #ddd
-    padding-top 20px
-  .mlr10
-    margin 0 10px 0 10px
-  .pdb30
-    padding-bottom 30px!important
-  .panel-bd.form
-    padding 0!important
-  .pad0
-    padding 0!important
+  .recipe-form
+    .modal
+      .modal-body
+        padding 0
+        max-height none
 
-  // 图文
-  .thumb-info
-    width 100%
-    position relative
-    clearfix()
-    label.form-control
-      float left
-      text-align right
-      /*width 70px*/
-      line-height 120px
-      /*padding-right 20px*/
+    .recipe-content {
+      .block {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 20px;
+        /*margin-top: 0.5rem;*/
+      }
+
+      /*图片模块*/
+      .img-box {
+        width: 100%;
+        height: auto;
+      }
+
+      /*标题模块*/
+      .mian-title-box {
+        width: 100%;
+        height: 48px;
+        line-height: 48px;
+        font-size: 20px;
+        text-align: center;
+      }
+
+      /*简介模块*/
+      .description-box .content{
+        position: relative;
+        padding: 20px 30px;
+        font-size: 14px;
+        line-height: 20px;
+        color: #666;
+      }
+
+      .description-box .content .icon {
+        position: absolute;
+        top: 0;
+        width: 40px;
+        height: 20px;
+        line-height: 20px;
+        /*text-align: center;*/
+        font-size: 20px;
+        display: block;
+
+      }
+      .description-box .content .icon-before {
+        left: 0;
+        top: 20px;
+      }
+      .description-box .content .icon-after {
+        right: -10px;
+        top: auto;
+        bottom: 0
+      }
+
+      /*分隔线*/
+      .line-box {
+        position: relative;
+      }
+      .line-box .line{
+        width: 100%;
+        height: 0;
+        border-bottom: 1px solid #e5e5e5;
+        margin: 10px 0;
+      }
+      .line-box .line[type="2"]{
+        width: 100%;
+        height: 0;
+        border-bottom: 1px dashed #c6c6c6;
+        /*border-bottom: 1px dashed #f00;*/
+        margin: 10px 0 30px;
+      }
+      .line-box .line[type="2"]:before, .line-box .line[type="2"]:after {
+        content: '';
+        display: block;
+        width: 10px;
+        height: 10px;
+        background: #c6c6c6;
+        border-radius: 50%;
+        position: absolute;
+        top: -5px;
+      }
+      .line-box .line[type="2"]:before {
+        left: -5px;
+      }
+      .line-box .line[type="2"]:after {
+        right: -5px;
+      }
+
+      /*标签模块*/
+      .recipe-tag-list {
+        clearfix()
+        .recipe-tag-list-item {
+          float: left;
+          border: 1px solid light-border-color;
+          padding: 0 10px;
+          border-radius: 20px;
+          margin: 5px 0 0 5px;
+        }
+      }
+
+      /*属性模块*/
+      .attribute-box {
+        box-sizing: border-box;
+        padding: 0 24px;
+        font-size: 0;
+      }
+      .attribute-box .attribute {
+        font-size: 12px;
+        width: 50%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        display: inline-block;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        color: #666;
+      }
+      .attribute-box .attribute .icon {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        vertical-align: middle;
+        background-size: 100% auto;
+        background-position: center top;
+        position: relative;
+        top: -2px;
+      }
+      .attribute-box .attribute .icon.difficulty {
+        background-image: url(../assets/images/icon_level@2x.png);
+      }
+      .attribute-box .attribute .icon.time {
+        background-image: url(../assets/images/icon_time@2x.png);
+      }
+
+      /*模块标题*/
+      .modal-title-box {
+        margin-top: 12px;
+        font-size: 16px;
+      }
+      .modal-title-box span {
+        display: inline-block;
+        line-height: 20px;
+        padding-left: 5px;
+        border-left: 2px solid #ff7900;
+      }
+
+      /*用料*/
+      .material-box {
+        margin: 8px 0 14px;
+      }
+      .material-box .material {
+        height: 24px;
+        line-height: 24px;
+        overflow: hidden;
+        font-size: 12px;
+        color: #999;
+        position: relative;
+      }
+
+      .material-box .material .name {
+        position: absolute;
+        left: 4px;
+      }
+      .material-box .material .amount {
+        position: absolute;
+        right: 4px;
+      }
+
+      /*步骤*/
+      .step-box {
+
+      }
+      .step-box .img {
+        margin: 10px 0;
+      }
+
+      .step-box .text {
+        font-size: 12px;
+        color: #999;
+        line-height: 14px;
+      }
+
+      /*页尾*/
+      .footer-box {
+        margin-bottom: 20px;
+      }
+      .footer-box .text {
+        text-align: center;
+        line-height: 20px;
+        font-size: 12px;
+      }
+      .footer-box .qr-code {
+        width: 80%;
+        margin: 20px auto;
+      }
+      .footer-box .text2 {
+        color: #876247;
+      }
+    }
+    .previewstep
+      display block
+      font-size 16px
+    .previewpic
+      width 280px
+      height 210px
+      display block
+      margin-left auto
+      margin-right auto
+    .line32
+      line-height 32px
+      height 32px
+    .mrb10
+      margin-bottom 10px
+    .cooktipp
+      width 100%
+      border 1px solid #ddd
       box-sizing border-box
-    .controls-image
-      float left
-      width 182px
-      min-width 182px
-      overflow hidden
+      margin 0
+      height 32px
+      line-height 32px
+    .addCookTip
+      margin-top 10px
+    .bortop
+      border-top 1px solid #ddd
+      /*padding-top 20px*/
+    .action
+      border-top 1px solid #ddd
+      padding-top 20px
+    .mlr10
+      margin 0 10px 0 10px
+    .pdb30
+      padding-bottom 30px!important
+    .panel-bd.form
+      padding 0!important
+    .pad0
+      padding 0!important
 
-      .image-uploader-item
-        margin-bottom 0
-    .thumb
-      float left
-      width 170px
-
-      .image-uploader-item
-        margin-bottom 0
-    .info-text
-      margin-left 170px
-      box-sizing border-box
-      height 120px
+    // 图文
+    .thumb-info
+      width 100%
       position relative
-      .input-text-wrap
-      .input-text
-        height 100%
-    .button-list
-      absolute right -30px top
-      height 120px
-      opacity 0
-      /*transition opacity ease 0.3s*/
-      .control-button
-        height 25px
-        width 25px
-        line-height 25px
-        margin-bottom 6px
-        background #999
-        text-align center
-        cursor pointer
-        &:hover
-          background red
-        i.icon
-          color #fff
-    &:hover
+      clearfix()
+      label.form-control
+        float left
+        text-align right
+        /*width 70px*/
+        line-height 120px
+        /*padding-right 20px*/
+        box-sizing border-box
+      .controls-image
+        float left
+        width 182px
+        min-width 182px
+        overflow hidden
+
+        .image-uploader-item
+          margin-bottom 0
+      .thumb
+        float left
+        width 170px
+
+        .image-uploader-item
+          margin-bottom 0
+      .info-text
+        margin-left 170px
+        box-sizing border-box
+        height 120px
+        position relative
+        .input-text-wrap
+        .input-text
+          height 100%
       .button-list
-        opacity 1
+        absolute right -30px top
+        height 120px
+        opacity 0
+        /*transition opacity ease 0.3s*/
+        .control-button
+          height 25px
+          width 25px
+          line-height 25px
+          margin-bottom 6px
+          background #999
+          text-align center
+          cursor pointer
+          &:hover
+            background red
+          i.icon
+            color #fff
+      &:hover
+        .button-list
+          opacity 1
 
-  /*预览*/
-  .mask
-    fixed left top
-    size 100%
-    background rgba(0, 0, 0, .6)
-    z-index 1000
-    display table
-    transition opacity .2s ease
-
-    .preview-wrapper
+    .panel
+      padding-bottom 5px
+    .previewForm
       display table-cell
       vertical-align middle
+    .dis
+      display inline-block
+    .m10
+      margin 10px
+    .childinblock div
+      display inline-block
+      margin-top 5px
+      margin-left 5px
+    .recipe-form
+      .form
+        max-width 800px
+        .form-row
+          max-height 5000px
+          .fa-times
+            cursor pointer
+          .controls
+            .select-group1
+              position relative
+              width 400px
+              margin 0 10px 10px 0
+              padding-right 30px
+            .input-text-wrap
+              input.input-text-time
+                border 1px solid default-border-color
+                display inline-block
+                width 120px
+                box-sizing border-box
+                font-size 14px
+                height 32px
+                line-height 32px
+                padding 6px 20px
+                margin-right 10px
+              span.text-time
+                margin-right 10px
 
-    .preview-dialog
-      position relative
-      background rgba(255, 255, 255, .95)
-      margin 0 auto
-      width 320px
-      box-shadow 0 2px 8px rgba(0, 0, 0, .3)
-      transition all .3s ease
+        // 设备列表
+        .device-list
+          .device-list-item
+            position relative
+            font-size 12px
 
-      .fa-times-circle
-        absolute right top 3px
-        size 40px
-        line-height 40px
-        text-align center
-        cursor pointer
-        font-size 16px
-        color #666
-        transition color .3s
+            .device-name
+              font-size 14px
+              font-weight bold
+              line-height 26px
 
-        &:hover
-          color red
+            .cooking-time
+              line-height 26px
 
-    .preview-header
-      padding 10px 20px
-      border-bottom 1px solid #DDD
+              .input-text-wrap
+                display inline-block
 
-      h3
-        font-weight normal
-        color gray-darker
-        margin 0
+                .input-text
+                  font-size 12px
+                  size 90px 26px
+                  line-height 24px
+                  padding 0 5px
 
-    .preview-body
-      max-height 540px
-      overflow-y auto
-      box-sizing border-box
-      background-color #F2F2F2
+            .fa-times
+              font-size 14px
+              size 24px
+              line-height 24px
+              background rgba(255, 0, 0, .5)
+              color #FFF
+              text-align center
+              z-index 100
 
-      .app-header
-        font-size 18px
-        text-align center
-        padding 10px 0
-        border-bottom 1px solid default-border-color
-        background-color #fff
-      .preview-thumb
-        /*width 380px*/
-        height 200px
-        margin-bottom 10px
-        img
-          width 100%
-          height 100%
-      .preview-panel
-        background #FFF
-        padding 0 10px
-        margin-bottom 10px
-      .preview-panel-hd
-        font-size 12px
-        margin-bottom 10px
-        padding 10px 0
-        border-bottom 1px solid light-border-color
+          .step-list-item
+            margin 20px 0
+            border 1px solid default-border-color
+            padding 0 0 10px 10px
 
-        .preview-panel-hd-actions
-          float right
+            .step-num
+              text-align center
 
-          span
+              span
+                position relative
+                display inline-block
+                line-height 24px
+                padding 0 20px
+                border 1px solid default-border-color
+                border-radius 20px
+                font-weight bold
+                background #FFF
+                top -13px
+    // 浮窗
+    .modal
+      .modal-body
+        clearfix()
+        .status-bar
+          padding 0
+          border 0
+          .x-select
+            float left
             display inline-block
-            background #999
-            color #FFF
-            line-height 20px
-            padding 0 10px
-            border-radius 20px
+            padding-left 10px
+          .search-box
+            float right
+
+      .to-select-list
+        width 65%
+        float left
+
+      .pager
+        margin-top 10px
+
+      .selected-list
+        width 33%
+        float right
+        border 1px solid light-border-color
+        box-sizing border-box
+        background #FFF
 
         h3
           font-size 14px
+          padding 0 20px
+          line-height 35px
           margin 0
-      .preview-panel-bd
-        font-size 12px
-        padding-bottom 10px
+          border-bottom 1px solid #e4e4e4
 
-        table
-          width 100%
-          td
-            padding 5px 0
+        ul
+          margin 0
+          max-height 310px
+          list-style none
+          overflow auto
 
-      .device-panel
-        padding 1px 0 15px
-
-      .introduce
-        margin 0
-        border-bottom 1px solid light-border-color
-        padding-bottom 10px
-
-      .metas
-        padding-top 10px
-        clearfix()
-
-        .meta
-          float left
-          width 50%
-          text-align center
-      .introlist
-        clearfix()
-        margin-top 5px
         li
-          float left
-          width 50%
-          text-align center
-          padding 10px 0
-          line-height 25px
-          height 25px
-      .posdiv
-        position relative
-        padding-bottom 10px
-        border-bottom 1px solid #999
-        margin-bottom 10px
-        span
-          display inline-block
-          position absolute
-          right 5px
-          background-color #999
+          border-bottom 1px solid #e4e4e4
           font-size 12px
-          padding 3px 10px
-          border-radius 10px
-          color #fff
-      h4
-        text-align center
-      .foolist
-        clearfix()
-        li
-          float left
-          width 50%
-          text-align left
-      .table
-        margin 0
-
-      // 错误信息
-      .error-msg
-        text-align center
-        margin-bottom 30px
-
-    .cooking-devices
-      text-align center
-
-      .cooking-device-item
-        display inline-block
-        size 64px
-        background-color #F3F3F3
-        background-repeat no-repeat
-        background-position center center
-        border-radius 40px
-        margin 0 15px
-
-      .device1
-        background-image url('../assets/images/device_1.png')
-
-      .device2
-        background-image url('../assets/images/device_2.png')
-
-    .preview-actions
-        text-align center
-
-        .btn
-          width 120px
-
-    .preview-footer
-      padding 0 30px 20px
-      text-align right
-      clearfix()
-      /*end*/
-  .panel
-    padding-bottom 5px
-  .previewForm
-    display table-cell
-    vertical-align middle
-  .dis
-    display inline-block
-  .m10
-    margin 10px
-  .childinblock div
-    display inline-block
-    margin-top 5px
-    margin-left 5px
-  .recipe-form
-    .form
-      max-width 800px
-      .form-row
-        max-height 5000px
-        .fa-times
-          cursor pointer
-        .controls
-          .select-group1
-            position relative
-            width 400px
-            margin 0 10px 10px 0
-            padding-right 30px
-          .input-text-wrap
-            input.input-text-time
-              border 1px solid default-border-color
-              display inline-block
-              width 120px
-              box-sizing border-box
-              font-size 14px
-              height 32px
-              line-height 32px
-              padding 6px 20px
-              margin-right 10px
-            span.text-time
-              margin-right 10px
-
-      // 设备列表
-      .device-list
-        .device-list-item
           position relative
-          font-size 12px
-
-          .device-name
-            font-size 14px
-            font-weight bold
-            line-height 26px
-
-          .cooking-time
-            line-height 26px
-
-            .input-text-wrap
-              display inline-block
-
-              .input-text
-                font-size 12px
-                size 90px 26px
-                line-height 24px
-                padding 0 5px
-
-          .fa-times
-            font-size 14px
-            size 24px
-            line-height 24px
-            background rgba(255, 0, 0, .5)
-            color #FFF
-            text-align center
-            z-index 100
-
-        .step-list-item
-          margin 20px 0
-          border 1px solid default-border-color
-          padding 0 0 10px 10px
-
-          .step-num
-            text-align center
-
-            span
-              position relative
-              display inline-block
-              line-height 24px
-              padding 0 20px
-              border 1px solid default-border-color
-              border-radius 20px
-              font-weight bold
-              background #FFF
-              top -13px
-  // 浮窗
-  .modal
-    .modal-body
-      clearfix()
-      .status-bar
-        padding 0
-        border 0
-        .x-select
-          float left
-          display inline-block
-          padding-left 10px
-        .search-box
-          float right
-
-    .to-select-list
-      width 65%
-      float left
-
-    .pager
-      margin-top 10px
-
-    .selected-list
-      width 33%
-      float right
-      border 1px solid light-border-color
-      box-sizing border-box
-      background #FFF
-
-      h3
-        font-size 14px
-        padding 0 20px
-        line-height 35px
-        margin 0
-        border-bottom 1px solid #e4e4e4
-
-      ul
-        margin 0
-        max-height 310px
-        list-style none
-        overflow auto
-
-      li
-        border-bottom 1px solid #e4e4e4
-        font-size 12px
-        position relative
-        line-height 30px
-        padding 0 20px
-
-        .fa
-          height 100%
-          top 0
           line-height 30px
+          padding 0 20px
 
-        &:nth-child(2n-1)
-          background #F9F9F9
+          .fa
+            height 100%
+            top 0
+            line-height 30px
 
-        &:last-child
-          border-bottom none
+          &:nth-child(2n-1)
+            background #F9F9F9
 
-    .button-box
-      width 100%
-      box-sizing border-box
-      text-align right
-      .btn
-        margin-left 10px
+          &:last-child
+            border-bottom none
+
+      .button-box
+        width 100%
+        box-sizing border-box
+        text-align right
+        .btn
+          margin-left 10px
 </style>
