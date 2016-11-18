@@ -77,7 +77,6 @@
             <span class="value">{{accountCount}}个</span>
           </div>
         </div>
-        {{organizationUsers | json}}
       </div>
     </div>
     <modal :show.sync="showModal" @close="onCloseEditModal">
