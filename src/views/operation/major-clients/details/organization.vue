@@ -60,23 +60,24 @@
       </div>
       <div class="detail-box">
         <div class="title-box">
-          <span class="title">{{ showedList.name }}</span>
-          <span class="level" v-if="organizationLevel(showedList)<9">{{ computedLevelText(organizationLevel(showedList)) }}</span>
+          <span class="title">{{ currentOrganization.name }}</span>
+          <span class="level" v-if="organizationLevel(currentOrganization)<9">{{ computedLevelText(organizationLevel(currentOrganization)) }}</span>
         </div>
         <div class="content-box">
           <div class="row">
             <span class="label">上级组织: </span>
-            <span class="value">{{ computedName(showedList.parent) }}</span>
+            <span class="value">{{ computedName(currentOrganization.parent) }}</span>
           </div>
           <div class="row">
             <span class="label">旗下组织: </span>
-            <span class="value">5个</span>
+            <span class="value">{{ childCount(currentOrganization) }}个</span>
           </div>
           <div class="row">
             <span class="label">账户数: </span>
-            <span class="value">1个</span>
+            <span class="value">{{accountCount}}个</span>
           </div>
         </div>
+        {{organizationUsers | json}}
       </div>
     </div>
     <modal :show.sync="showModal" @close="onCloseEditModal">
@@ -138,11 +139,26 @@
         // 编辑浮层
         modal: {
           name: ''
-        }
+        },
+        // 组织账户数
+        organizationUsers: [],
+
+        // 账户数
+        accountCount: 0
       }
     },
 
     computed: {
+      accountCount () {
+        var result = 0
+        this.organizationUsers.forEach((item) => {
+          if (item.organizationId === this.currentOrganization.id) {
+            result = item.count
+          }
+        })
+
+        return result
+      },
       // 计算属性 组织信息列表 传入组件的数据
       organizationTree () {
         if (!this.resetSortLists.length) return []
@@ -261,23 +277,16 @@
         return result
       },
 
-      showedList () {
+      /**
+       * 当前组织
+       */
+      currentOrganization () {
         var result = {}
         if (this.selectedTreeIndex) {
           result = this.selectedList
         } else {
           result = this.majorClient
         }
-        return result
-      },
-
-      currentMajorClient () {
-        var result = {}
-        this.organizationTree.forEach((item) => {
-          if (item.id === '0') {
-            result = item
-          }
-        })
         return result
       },
 
@@ -291,6 +300,17 @@
       }
     },
 
+    watch: {
+      currentOrganization (val) {
+        // if (this.organizationUsers[val.id]) return
+        var hasData = this.organizationUsers.some((item) => {
+          return item.organizationId === val.id
+        })
+        if (!hasData) {
+          this.getUserList(val.id)
+        }
+      }
+    },
     route: {
       data () {
         this.init()
@@ -310,6 +330,24 @@
           majorClientDetail.id = '0'
           this.majorClient = majorClientDetail
           this.getData()
+        })
+      },
+
+      getUserList (organizationId) {
+        organizationId = organizationId + ''
+        var params = {
+          query: {
+            organization: { '$in': [organizationId] }
+          }
+        }
+        api.heavyBuyer.getOrganizationUsers(this.majorClientId, params).then((res) => {
+          var obj = {
+            organizationId: organizationId,
+            count: res.data.list.length
+          }
+          this.organizationUsers.push(obj)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
       /**
@@ -640,6 +678,20 @@
           '8': '八'
         }
         return `${results[level]}级组织` || ''
+      },
+
+      /**
+       * 下级组织数量
+       */
+      childCount (list) {
+        var result = 0
+        var treeIndex = list.treeIndex || '0'
+        this.organizationTree.forEach((item) => {
+          if (item.treeIndex.indexOf(treeIndex + '-') === 0) {
+            result++
+          }
+        })
+        return result
       },
 
       /**

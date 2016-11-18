@@ -75,5 +75,14 @@ export default {
     return http.del(
       `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/organization/${organizationId}`
     )
+  },
+
+  /**
+   * 批量修改组织
+   */
+  getOrganizationUsers (heavyBuyerId, params) {
+    return http.post(
+      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/user_list`, params
+    )
   }
 }
