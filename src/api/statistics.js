@@ -354,5 +354,25 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/statistics/product_snapshot/${snapshotId}/snapshot_datapoint/${statisticsId}`, params
     )
+  },
+  /**
+   * 经销商销售信息日趋势统计
+   * @param  {String} startDay 查询开始时间 yyyy-mm-dd
+   * @param  {String} endDay  查询结束时间 yyyy-mm-dd
+   * @return {Promise}
+   */
+  getDealerSaleTrend (startDay, endDay) {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/dealer/sale_trend?start_day=${startDay}&end_day=${endDay}`
+    )
+  },
+  /**
+   * 经销商区域分布
+   * @return {Promise}
+   */
+  getDealeSaleRegion () {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/dealer/sale_region`
+    )
   }
 }

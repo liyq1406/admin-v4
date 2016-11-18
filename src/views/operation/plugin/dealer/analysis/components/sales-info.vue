@@ -3,7 +3,7 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fr">
         <div class="filter-group-item mr20">
-          <radio-button-group :items="dimensions" :value.sync="dimension"></radio-button-group>
+          <date-time-multiple-picker :periods="periods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
         </div>
       </div>
     </div>
@@ -16,7 +16,9 @@
 </template>
 <script>
 import Chart from 'components/Chart/index'
-// import api from 'api'
+import api from 'api'
+import formatDate from 'filters/format-date'
+import { patchLostDates } from 'utils'
 
 export default {
   name: 'Age',
@@ -26,18 +28,10 @@ export default {
   },
   data () {
     return {
-      dimensions: [{
-        label: this.$t('common.unit.time.day'),
-        value: 'day'
-      }, {
-        label: this.$t('common.unit.time.month'),
-        value: 'month'
-      }, {
-        label: this.$t('common.unit.time.year'),
-        value: 'year'
-      }],
       durationData: [],
-      dimension: 'day'
+      periods: [7, 30, 90],
+      defaultPeriod: 7,
+      period: 7
     }
   },
 
@@ -58,7 +52,7 @@ export default {
           y2: 20
         },
         xAxis: {
-          data: _.map(this.durationData, 'name')
+          data: _.map(this.durationData, 'day')
         },
         yAxis: {
           minInterval: 1
@@ -67,7 +61,7 @@ export default {
           name: this.$t('operation.product.analysis.count'),
           type: 'bar',
           barMaxWidth: 30,
-          data: _.map(this.durationData, 'value')
+          data: _.map(this.durationData, 'sale_total')
         }]
       }
     }
@@ -75,6 +69,20 @@ export default {
   ready () {
   },
 
-  methods: {}
+  methods: {
+    onTimeChange (start, end) {
+      this.period = parseInt((end - start) / 1000 / 60 / 60 / 24) + 1
+      let startDay = formatDate(start, 'yyyy-MM-dd')
+      let endDay = formatDate(end, 'yyyy-MM-dd')
+      this.getDealerSaleTrend(startDay, endDay)
+    },
+    getDealerSaleTrend (startDay, endDay) {
+      api.statistics.getDealerSaleTrend(startDay, endDay).then((res) => {
+        if (res.status === 200) {
+          this.durationData = patchLostDates(res.data, startDay, this.period, ['sale_total'])
+        }
+      })
+    }
+  }
 }
 </script>

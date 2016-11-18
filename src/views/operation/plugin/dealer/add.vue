@@ -17,7 +17,7 @@
                   <label class="form-control col-5 dealer-label">帐号:</label>
                   <div class="controls col-19">
                     <div v-placeholder="$t('operation.dealer.placeholders.account')" class="input-text-wrap">
-                      <input v-model="dealer.username" name="dealer.username" v-validate:username="{required: true, format: 'account'}" lazy class="input-text"/>
+                      <input :disabled="type === 'edit'" v-model="dealer.username" name="dealer.username" v-validate:username="{required: true, format: 'account'}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$autoValidation.username.touched && $autoValidation.username.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
