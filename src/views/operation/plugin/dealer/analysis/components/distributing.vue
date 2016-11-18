@@ -31,7 +31,6 @@ export default {
   data () {
     return {
       states: [],
-      dataPer: [],
       regionDataRaw: {},
       loadingData: false,
       headers: [
