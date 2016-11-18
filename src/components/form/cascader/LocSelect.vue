@@ -3,32 +3,32 @@
     <div class="select-box">
       <x-select width="120px" :label="country.name" :placeholder="$t('components.area.select_country')" :size="selectSize">
         <span slot="label" v-if="label.length">{{ label }}</span>
-        <select v-model="country" @change="handleCountryChange(country)">
+        <select v-model="country" @change="handleCountryChange(country.code)">
           <option :value="defaultOption">{{ defaultOption.name }}</option>
           <option v-for="option in countryOptions" :value="option">{{ option.name }}</option>
         </select>
       </x-select>
     </div>
     <div class="select-box">
-      <x-select v-show="countryOptions.length && country.name && !noState" width="120px" :label="state.name" :placeholder="$t('components.area.select_province')" :size="selectSize">
+      <x-select v-show="countryOptions.length && country.code && !noState" width="120px" :label="state.name" :placeholder="$t('components.area.select_province')" :size="selectSize">
         <span slot="label" v-if="label.length">{{ label }}</span>
-        <select v-model="state" @change="handlestateChange(state)">
+        <select v-model="state" @change="handlestateChange(state.code)">
           <option :value="defaultOption">{{ defaultOption.name }}</option>
           <option v-for="option in stateOptions" :value="option">{{ option.name }}</option>
         </select>
       </x-select>
     </div>
     <div class="select-box">
-      <x-select v-show="cityOptions.length && (state.name || noState)" width="120px" :label="city.name" :placeholder="$t('components.area.select_city')" :size="selectSize">
-        <select v-model="city" @change="handleCityChange(city)">
+      <x-select v-show="cityOptions.length && (state.code || noState)" width="120px" :label="city.name" :placeholder="$t('components.area.select_city')" :size="selectSize">
+        <select v-model="city" @change="handleCityChange(city.code)">
           <option :value="defaultOption">{{ defaultOption.name }}</option>
           <option v-for="option in cityOptions" :value="option">{{ option.name }}</option>
         </select>
       </x-select>
     </div>
     <div class="select-box" v-show="showregion">
-      <x-select v-show="regionOptions.length && city.name" width="120px" :label="region.name" :placeholder="$t('components.area.select_region')" :size="selectSize">
-        <select v-model="region" @change="handleregionChange(region)">
+      <x-select v-show="regionOptions.length && city.code" width="120px" :label="region.name" :placeholder="$t('components.area.select_district')" :size="selectSize">
+        <select v-model="region" @change="handleregionChange(region.code)">
           <option :value="defaultOption">{{ defaultOption.name }}</option>
           <option v-for="option in regionOptions" :value="option">{{ option.name }}</option>
         </select>
@@ -59,7 +59,27 @@ export default {
       default: ''
     },
 
-    defaultValue: { // 'code, code, code'
+    showregion: {
+      type: Boolean,
+      default: true
+    },
+
+    defaultCountryCode: {
+      type: String,
+      default: ''
+    },
+
+    defaultStateCode: {
+      type: String,
+      default: ''
+    },
+
+    defaultCityCode: {
+      type: String,
+      default: ''
+    },
+
+    defaultRegionCode: {
       type: String,
       default: ''
     }
@@ -92,9 +112,75 @@ export default {
     })
   },
 
+  watch: {
+    defaultCountryCode () {
+      this.setDefaultCountry()
+    },
+    countryOptions () {
+      this.setDefaultCountry()
+    },
+    stateOptions () {
+      this.setDefaultState()
+    },
+    cityOptions () {
+      this.setDefaultCity()
+    },
+    regionOptions () {
+      this.setDefaultRegion()
+    }
+  },
+
   methods: {
-    handleCountryChange (country) {
-      console.log(country)
+    setDefaultCity () {
+      if (!this.defaultCityCode || !this.cityOptions.length) {
+        return
+      }
+      let findCity = _.find(this.cityOptions, (city) => {
+        return this.defaultCityCode === city.code
+      })
+      if (findCity) {
+        this.city = findCity
+        this.handleCityChange(findCity.code)
+      }
+    },
+    setDefaultRegion () {
+      if (!this.defaultRegionCode || !this.regionOptions.length) {
+        return
+      }
+      let findRegion = _.find(this.regionOptions, (region) => {
+        return this.defaultRegionCode === region.code
+      })
+      if (findRegion) {
+        this.region = findRegion
+        this.handleCityChange(findRegion.code)
+      }
+    },
+    setDefaultState () {
+      if (!this.defaultStateCode || !this.stateOptions.length) {
+        return
+      }
+      let findState = _.find(this.stateOptions, (state) => {
+        return this.defaultStateCode === state.code
+      })
+      if (findState) {
+        this.state = findState
+        this.handlestateChange(findState.code)
+      }
+    },
+    setDefaultCountry () {
+      if (!this.defaultCountryCode || !this.countryOptions.length) {
+        return
+      }
+      let findCountry = _.find(this.countryOptions, (country) => {
+        return this.defaultCountryCode === country.code
+      })
+      if (findCountry) {
+        this.country = findCountry
+        this.handleCountryChange(findCountry.code)
+      }
+    },
+    handleCountryChange (countryCode) {
+      this.stateOptions = []
       this.regionOptions = []
       this.cityOptions = []
       this.state = {}
@@ -103,10 +189,14 @@ export default {
       this.noState = false
 
       // 向父组件传递省份改变事件
-      this.$emit('country-change', country)
+      this.$emit('country-change', countryCode || '')
+
+      if (!countryCode) {
+        return
+      }
 
       // 获取对应省份
-      this.$http.get(`/static/data/areas/${this.lang}/${country.code}.json`).then((res) => {
+      this.$http.get(`/static/data/areas/${this.lang}/${countryCode}.json`).then((res) => {
         this.originState = res.data.states || []
         if (!this.originState.length) {
           this.noState = true
@@ -114,10 +204,9 @@ export default {
           return
         }
         let stateOptions = []
-        if (this.originState.length === 1) { // 某些国家没有省
-          console.log(this.originState[0].code)
+        if (this.originState.length === 1) { // 某些国家没有省, 直接显示市
           if (!this.originState[0].code) {
-            this.handlestateChange({})
+            this.handlestateChange(-1)
             this.noState = true
             return
           } else {
@@ -125,6 +214,7 @@ export default {
               name: this.originState[0].name,
               code: this.originState[0].code
             })
+            return
           }
         }
         this.originState.forEach((item) => {
@@ -139,20 +229,29 @@ export default {
     /**
      * 处理切换省
      */
-    handlestateChange (state) {
+    handlestateChange (stateCode) {
+      this.cityOptions = []
       this.regionOptions = []
       this.city = {}
       this.region = {}
 
       // 向父组件传递省份改变事件
-      this.$emit('state-change', state)
+      if (stateCode !== -1) {
+        this.$emit('state-change', stateCode || '')
+      }
 
-      // 获取对应城市
+      if (!stateCode) {
+        return
+      }
+
+      if (stateCode === -1) { // 表示那些没有省只有市的情况
+        stateCode = ''
+      }
+
+      // 获取对应省份
       this.curOriginState = _.find(this.originState, (item) => {
-        return (item.code || '') === (state.code || '')
+        return (item.code || '') === stateCode
       })
-
-      console.log(this.curOriginState)
 
       let citys = this.curOriginState.citys || []
       if (!citys.length) {
@@ -162,8 +261,8 @@ export default {
       let cityOptions = []
       citys.forEach((item) => {
         cityOptions.push({
-          name: item.name || '',
-          code: item.code || ''
+          name: item.name,
+          code: item.code
         })
       })
       this.cityOptions = cityOptions
@@ -172,15 +271,19 @@ export default {
     /**
      * 处理切换市
      */
-    handleCityChange (city) {
+    handleCityChange (cityCode) {
       this.region = {}
+      this.regionOptions = []
 
       // 向父组件传递市改变事件
-      this.$emit('city-change')
+      this.$emit('city-change', cityCode || '')
+
+      if (!cityCode) {
+        return
+      }
 
       this.curOriginCity = _.find(this.curOriginState.citys, (item) => {
-        let itemCode = item.code || ''
-        return city.code === itemCode
+        return cityCode === item.code
       })
 
       let regions = this.curOriginCity.regions || []
@@ -191,8 +294,8 @@ export default {
       let regionOptions = []
       regions.forEach((item) => {
         regionOptions.push({
-          name: item.name || '',
-          code: item.code || ''
+          name: item.name,
+          code: item.code
         })
       })
       this.regionOptions = regionOptions
@@ -201,9 +304,9 @@ export default {
     /**
      * 处理切换区
      */
-    handleregionChange (region) {
+    handleregionChange (regionCode) {
       // 向父组件传递区改变事件
-      this.$emit('region-change', region)
+      this.$emit('region-change', regionCode || '')
     }
   }
 }

@@ -4,5 +4,9 @@
  */
 
 export default {
-  title: '经销商分析' // 概览
+  title: '经销商分析', // 概览
+  dealer_name: '经销商名称',
+  placeholders: {
+    account: '帐号必须以字母开头，包含数字字母和下划线'
+  }
 }
