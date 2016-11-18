@@ -13,15 +13,13 @@
                 </select>
               </x-select>
 
-              <template v-if="debug">
-                <span class="ml10">{{ $t('operation.product.device.alert.time') }}: </span>
-                <x-select width="98px" size="small" :label="rangeOption.label">
-                  <select v-model="rangeOption" @change="onRangeOptionChange">
-                    <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
-                  </select>
-                </x-select>
-                <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
-              </template>
+              <span class="ml10">{{ $t('operation.product.device.alert.time') }}: </span>
+              <x-select width="98px" size="small" :label="rangeOption.label">
+                <select v-model="rangeOption" @change="onRangeOptionChange">
+                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </x-select>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
 
             </div>
           </div>
