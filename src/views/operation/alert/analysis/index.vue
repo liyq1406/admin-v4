@@ -109,6 +109,7 @@ export default {
 
   data () {
     return {
+      tags: [],
       defaultPeriod: 7, // 默认日期间隔
       periods: [1, 7, 30], // 可选时间间隔
       scale: 'day', // 时间衡量
@@ -231,7 +232,6 @@ export default {
     // 告警图表配置
     tagOptions () {
       return {
-        tags: [],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c} ({d}%)'
