@@ -61,12 +61,12 @@
       <div class="detail-box">
         <div class="title-box">
           <span class="title">{{ showedList.name }}</span>
-          <span class="level" v-show="showedList.id === '0'">一级组织</span>
+          <span class="level" v-if="organizationLevel(showedList)<9">{{ computedLevelText(organizationLevel(showedList)) }}</span>
         </div>
         <div class="content-box">
           <div class="row">
             <span class="label">上级组织: </span>
-            <span class="value">{{ showedList.parent }}</span>
+            <span class="value">{{ computedName(showedList.parent) }}</span>
           </div>
           <div class="row">
             <span class="label">旗下组织: </span>
@@ -247,6 +247,9 @@
         return result
       },
 
+      /**
+       * 当前选中的组织
+       */
       selectedList () {
         var result = {}
         if (!this.selectedTreeIndex) return result
@@ -263,7 +266,7 @@
         if (this.selectedTreeIndex) {
           result = this.selectedList
         } else {
-          result = this.currentMajorClient
+          result = this.majorClient
         }
         return result
       },
@@ -290,12 +293,7 @@
 
     route: {
       data () {
-        this.loading = true
-        this.getDetail(this.majorClientId).then((majorClientDetail) => {
-          majorClientDetail.id = '0'
-          this.majorClient = majorClientDetail
-          this.getData()
-        })
+        this.init()
       }
     },
 
@@ -303,6 +301,20 @@
     },
 
     methods: {
+      /**
+       * 初始化数据
+       */
+      init () {
+        this.loading = true
+        this.getDetail(this.majorClientId).then((majorClientDetail) => {
+          majorClientDetail.id = '0'
+          this.majorClient = majorClientDetail
+          this.getData()
+        })
+      },
+      /**
+       * 获取组织列表
+       */
       getDetail (id) {
         return new Promise((resolve, reject) => {
           var params = {
@@ -315,7 +327,6 @@
           }
           api.heavyBuyer.getHeavyBuyer(params).then((res) => {
             if (this.organizationData.length) return
-            console.log(res)
             var majorClient = res.data.list[0]
             var majorClientDetail = {
               id: majorClient.id,
@@ -335,58 +346,30 @@
       getData () {
         this.loading = true
         api.heavyBuyer.getOrganizationList(this.majorClientId, this.queryCondition).then((res) => {
-          console.log(res)
           this.organizationData = [this.majorClient].concat(res.data.list)
           this.loading = false
         }).catch((res) => {
           this.loading = false
           this.handleError(res)
         })
-        // this.organizationData = [
-        //   {
-        //     'id': this.majorClientId,
-        //     // 'parent': '',
-        //     'name': '0',
-        //     'sort': '3',
-        //     'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
-        //   },
-        //   {
-        //     'id': '33',
-        //     'parent': '22',
-        //     'name': '0-0-0',
-        //     'sort': '5',
-        //     'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
-        //   },
-        //   {
-        //     'id': '22',
-        //     'parent': this.majorClientId,
-        //     'name': '0-0',
-        //     'sort': '1',
-        //     'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
-        //   },
-        //   {
-        //     'id': '44',
-        //     'parent': this.majorClientId,
-        //     'name': '0-1',
-        //     'sort': '5',
-        //     'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
-        //   }
-        // ]
       },
 
+      /**
+       * 浮层确定按钮
+       */
       onComfirm () {
         this.editing = true
         switch (this.modalType) {
           case ADDBROTHER:
-            console.log('添加兄弟组织')
+            // 添加兄弟组织
             this.addBrother()
             break
           case ADDCHILD:
-            console.log('添加子组织')
+            // 添加子组织
             this.addChild()
             break
           case EDIT:
-            console.log('编辑组织')
+            // 编辑组织
             this.editOrganization()
             break
           default:
@@ -400,7 +383,6 @@
        * 添加兄弟组织
        */
       addBrother () {
-        console.log('添加兄弟组织')
         var list = {
           name: this.modal.name,
           parent: this.selectedList.parent,
@@ -410,8 +392,6 @@
         this.selectedTreeIndex = this.selectedTreeIndex.replace(/\d$/, this.selectedList.sort - 0 + 1)
         var params = list
         var updateParams = this.getBrother(list, 1)
-        console.log('要添加的')
-        console.log(params)
         var allCallBackCount = 2
         var callBackCount = 0
         api.heavyBuyer.addOrganization(this.majorClientId, params).then((res) => {
@@ -448,8 +428,6 @@
         this.organizationData.push(list)
         this.selectedTreeIndex += '-' + list.sort
         var params = list
-        console.log('要添加的')
-        console.log(params)
         api.heavyBuyer.addOrganization(this.majorClientId, params).then((res) => {
           this.onCloseEditModal()
           this.getData()
@@ -466,11 +444,9 @@
           id: this.selectedList.id,
           name: this.modal.name,
           parent: this.selectedList.parent,
-          sort: this.selectedList.parent
+          sort: this.selectedList.sort
         }
         var params = [list]
-        console.log('要修改的')
-        console.log(params)
         api.heavyBuyer.updateOrganizations(this.majorClientId, params).then((res) => {
           this.getData()
           this.onCloseEditModal()
@@ -479,6 +455,9 @@
         })
       },
 
+      /**
+       * 删除组织
+       */
       deleteOrganization () {
         var toDeleteIds = []
         var toDeleteLists = []
@@ -492,13 +471,10 @@
             toDeleteLists.push(item)
           }
         })
-        console.log(toDeleteIds)
         toDeleteLists.forEach((item) => {
           this.organizationData.$remove(item.prototype)
         })
         this.selectedTreeIndex = ''
-        console.log('要删除的')
-        console.log(toDeleteList)
         api.heavyBuyer.deleteOrganization(this.majorClientId, toDeleteList.id).then((res) => {
           this.getDate()
         }).catch((res) => {
@@ -510,7 +486,6 @@
        * 上移
        */
       upOrganization () {
-        console.log('上移')
         var toUp = this.selectedList
         var toDown = {}
         this.organizationTree.forEach((item) => {
@@ -529,15 +504,18 @@
         })
         this.selectedTreeIndex = this.selectedTreeIndex.replace(/\d$/, toUp.sort)
         var params = [toUp, toDown]
-        console.log('要修改的数组')
-        console.log(params)
+        api.heavyBuyer.updateOrganizations(this.majorClientId, params).then((res) => {
+          this.getData()
+          this.onCloseEditModal()
+        }).catch((res) => {
+          this.handleError(res)
+        })
       },
 
       /**
        * 下移
        */
       downOrganization () {
-        console.log('下移')
         var toUp = {}
         var toDown = this.selectedList
         this.organizationTree.forEach((item) => {
@@ -556,8 +534,12 @@
         })
         this.selectedTreeIndex = this.selectedTreeIndex.replace(/\d$/, toDown.sort)
         var params = [toUp, toDown]
-        console.log('要修改的数组')
-        console.log(params)
+        api.heavyBuyer.updateOrganizations(this.majorClientId, params).then((res) => {
+          this.getData()
+          this.onCloseEditModal()
+        }).catch((res) => {
+          this.handleError(res)
+        })
       },
 
       /**
@@ -577,6 +559,9 @@
         }
       },
 
+      /**
+       * 关闭编辑浮层
+       */
       onCloseEditModal () {
         this.$resetValidation()
         this.showModal = false
@@ -588,17 +573,21 @@
        * 组件内数据变化
        */
       changed (selectedTreeIndex, data) {
-        console.log(selectedTreeIndex)
-        console.log(data)
         this.selectedTreeIndex = selectedTreeIndex
       },
 
+      /**
+       * 添加兄弟组织事件
+       */
       onAddBrother () {
         this.showModal = true
         this.modalType = ADDBROTHER
         this.modal.name = ''
       },
 
+      /**
+       * 添加子组织事件
+       */
       onAddChild () {
         this.showModal = true
         this.modalType = ADDCHILD
@@ -612,6 +601,45 @@
         this.showModal = true
         this.modalType = EDIT
         this.modal.name = this.selectedList.name
+      },
+
+      /**
+       * 返回组织等级
+       */
+      organizationLevel (list) {
+        if (!list.treeIndex) return 1
+        return list.treeIndex.split('-').length
+      },
+
+      /**
+       * 计算组织名称
+       */
+      computedName (id) {
+        var result = ''
+        if (!id) return '无'
+        this.organizationTree.forEach((item) => {
+          if (item.id === id) {
+            result = item.name
+          }
+        })
+        return result
+      },
+
+      /**
+       * 组织等级文案
+       */
+      computedLevelText (level) {
+        var results = {
+          '1': '一',
+          '2': '二',
+          '3': '三',
+          '4': '四',
+          '5': '五',
+          '6': '六',
+          '7': '七',
+          '8': '八'
+        }
+        return `${results[level]}级组织` || ''
       },
 
       /**
