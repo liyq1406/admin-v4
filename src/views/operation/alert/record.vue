@@ -32,7 +32,7 @@
     </div>
     <div class="panel">
       <div class="panel-bd">
-        <x-table :headers="headers" :selecting="selecting" @selected-change="selectChange" @tbody-content="getInfo" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
+        <x-table :headers="headers" :selecting="selecting" @selected-change="selectChange" @tbody-content="getInfo" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy" @tbody-mac="jumpInfo">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -299,19 +299,20 @@ export default {
     tables () {
       var result = []
       this.alerts.forEach((item) => {
-        let levelCls = ({
-          [this.$t('operation.product.alert.warning')]: 'text-label-warning',
-          [this.$t('operation.product.alert.danger')]: 'text-label-danger'
-        })[item.tags] || ''
+        // let levelCls = ({
+        //   [this.$t('operation.product.alert.warning')]: 'text-label-warning',
+        //   [this.$t('operation.product.alert.danger')]: 'text-label-danger'
+        // })[item.tags] || ''
 
         let content = '<a class="table-limit-width hl-red">' + item.content + '</a>'
         let alert = {
           content: content,
-          mac: item.mac,
+          mac: '<a class="hl-red">' + item.mac + '</a>',
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls}">${item.tags || this.$t('operation.product.alert.info')}</div>`,
+          // level: `<div class="level level1 text-label ${levelCls}">${item.tags || this.$t('operation.product.alert.info')}</div>`,
+          level: item.tags || this.$t('operation.product.alert.info'),
           state: item.is_read ? `<span class="hl-green">${this.$t('operation.product.alert.processed')}</span>` : `<span>${this.$t('operation.product.alert.no_processed')}</span>`,
           prototype: item
         }
@@ -337,6 +338,7 @@ export default {
 
   // 监听属性变动
   watch: {
+
     products () {
       if (this.products.length > 0) {
         this.getFirstProduct()
@@ -347,6 +349,11 @@ export default {
   },
 
   methods: {
+    // 跳转设备详情
+    jumpInfo (info) {
+      this.$route.router.go({path: '/operation/products/' + this.currentProduct.id + '/devices/' + info.id + '/info'})
+      // console.log(info)
+    },
     /**
      * 处理时间区段改变
      */

@@ -40,13 +40,13 @@
       </div>
     </div>
 
-    <nav class="tab">
+    <!-- <nav class="tab">
       <ul>
         <li v-for="item in tabItems">
           <a @click="onTabSelect(item)" :class="{'active':currTag===item}">{{ item }}</a>
         </li>
       </ul>
-    </nav>
+    </nav> -->
     <div class="panel">
       <div class="panel-bd">
         <div class="row">
@@ -153,7 +153,7 @@ export default {
   computed: {
     // 是否正在加载趋势数据
     loadingTrend () {
-      return this.trendCount < 3
+      return this.trendCount < this.tags.length
     },
 
     // 是否正在加载标签数据
@@ -231,6 +231,7 @@ export default {
     // 告警图表配置
     tagOptions () {
       return {
+        tags: [],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -259,23 +260,33 @@ export default {
 
   watch: {
     products () {
-      this.init()
+      this.getTags()
     }
   },
 
   route: {
     data () {
-      this.init()
+      this.getTags()
     }
   },
 
   methods: {
+    getTags () {
+      api.alert.getAlertTags().then((res) => {
+        if (res.status === 200) {
+          this.tags = res.data.tags
+          this.init()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     /**
      * 初始化
      */
     init () {
       // 选项卡数据
-      this.tabItems = [this.locales.common.all].concat(this.locales.data.RULE_CANDIDATE_TAGS)
+      this.tabItems = [this.locales.common.all].concat(this.tags)
 
       // 当前标签
       this.currTag = this.tabItems[0]
@@ -297,7 +308,7 @@ export default {
      */
     initTagData () {
       let data = {}
-      this.locales.data.RULE_CANDIDATE_TAGS.forEach((tag) => {
+      this.tags.forEach((tag) => {
         data[tag] = []
       })
       this.tagData = data
@@ -387,7 +398,7 @@ export default {
 
       let xAxis = []
       let series = []
-      const TAGS = this.locales.data.RULE_CANDIDATE_TAGS
+      const TAGS = this.tags
 
       this.trendCount = 0
       for (let i = 0, len = TAGS.length; i < len; i++) {
@@ -517,7 +528,7 @@ export default {
         let ruleGroups = _.groupBy(res.data, 'tag')
 
         // 选出只在 this.locales.data.RULE_CANDIDATE_TAGS 中定义的标签规则
-        ruleGroups = _.pick(ruleGroups, this.locales.data.RULE_CANDIDATE_TAGS)
+        ruleGroups = _.pick(ruleGroups, this.tags)
 
         return ruleGroups
       }).then((groups) => {

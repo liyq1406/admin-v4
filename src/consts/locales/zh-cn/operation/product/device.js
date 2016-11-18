@@ -94,7 +94,7 @@ export default {
     minutes: '分钟', // 分钟
     second: '秒', // 秒
     time_length: '持续时长', // 持续市长
-    alert_level: '告警等级', // 告警等级
+    alert_level: '告警类型', // 告警等级
     state: '状态', // 状态
     warning: '轻微', // 轻微
     danger: '严重', // 严重

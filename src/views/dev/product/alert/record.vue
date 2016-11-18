@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-bd">
-      <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
+      <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy" @tbody-mac="jumpInfo">
         <div slot="filter-bar" class="filter-bar">
           <div class="filter-group fl">
             <div class="filter-group-item">
@@ -74,7 +74,7 @@
           title: '持续时长'
         }, {
           key: 'level',
-          title: '告警等级'
+          title: '告警类型'
         }, {
           key: 'state',
           title: '状态'
@@ -162,15 +162,16 @@
           temp[locales[Vue.config.lang].data.ALERT_LEVELS.red] = 'text-label-danger'
           temp[locales[Vue.config.lang].data.ALERT_LEVELS.orange] = 'text-label-warning'
 
-          let levelCls = temp[item.tags] || ''
+          // let levelCls = temp[item.tags] || ''
           let content = '<span class="table-limit-width">' + item.content + '</span>'
           let alert = {
             content: content,
-            mac: item.mac,
+            mac: '<a class="hl-red">' + item.mac + '</a>',
             create_date: formatDate(item.create_date),
             duration: this.prettyDuration(item.lasting),
             id: item.from,
-            level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
+            // level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
+            level: item.tags,
             state: item.is_read ? '已处理' : '未处理',
             prototype: item
           }
@@ -238,6 +239,12 @@
       }
     },
     methods: {
+      // 跳转设备详情
+      jumpInfo (info) {
+        this.$route.router.go({path: '/operation/products/' + this.$route.params.id + '/devices/' + info.id + '/info'})
+        // console.log(info)
+      },
+
       getAlerts (reset) {
         if (reset === true) {
           this.currentPage = 1

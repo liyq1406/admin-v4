@@ -119,7 +119,7 @@
         if (this.tags.length === this.limit) {
           this.showNotice({
             type: 'error',
-            content: '标签最多只能填写20个！'
+            content: '标签最多只能填写' + this.limit + '个！'
           })
           return
         }

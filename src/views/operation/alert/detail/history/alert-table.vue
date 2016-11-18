@@ -197,10 +197,10 @@ export default {
     tables () {
       var result = []
       this.alerts.map((item) => {
-        let levelCls = ({
-          [this.$t('operation.product.alert.warning')]: 'text-label-warning',
-          [this.$t('operation.product.alert.danger')]: 'text-label-danger'
-        })[item.tags] || ''
+        // let levelCls = ({
+        //   [this.$t('operation.product.alert.warning')]: 'text-label-warning',
+        //   [this.$t('operation.product.alert.danger')]: 'text-label-danger'
+        // })[item.tags] || ''
         let content = '<span class="table-limit-width">' + item.content + '</span>'
         let alert = {
           content: content,
@@ -208,7 +208,8 @@ export default {
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls}">${item.tags || this.$t('operation.product.alert.info')}</div>`,
+          // level: `<div class="level level1 text-label ${levelCls}">${item.tags || this.$t('operation.product.alert.info')}</div>`,
+          level: item.tags || this.$t('operation.product.alert.info'),
           state: item.is_read ? this.$t('operation.product.alert.processed') : this.$t('operation.product.alert.no_processed'),
           prototype: item
         }
