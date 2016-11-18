@@ -34,6 +34,10 @@
           return []
         }
       },
+      selectedTreeIndex: {
+        type: String,
+        default: ''
+      },
       editing: {
         type: Boolean,
         default: false
@@ -46,8 +50,6 @@
         unitPadding: '35',
         // 行高
         unitLineHeight: 32,
-        // 已选择索引
-        selectedTreeIndex: '',
         // 对外暴露数据
         emitData: []
       }
@@ -101,9 +103,12 @@
 
     methods: {
       init () {
-        window.addEventListener('click', () => {
-          this.selectedTreeIndex = ''
-        }, false)
+        setTimeout(() => {
+          var treeBox = document.getElementById('tree-box')
+          treeBox.addEventListener('click', () => {
+            this.selectedTreeIndex = ''
+          }, false)
+        }, 1000)
       },
       onBlur () {
         this.selectedTreeIndex = ''

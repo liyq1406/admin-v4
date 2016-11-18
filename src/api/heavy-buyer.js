@@ -19,31 +19,61 @@ export default {
   //  }
   addHeavyBuyer (params) {
     return http.post(
-      `${API_SERVER.default}/v2/heavy_buyer`, params
+      `${API_SERVER.heavyBuyer}/v2/heavy_buyer`, params
     )
   },
 
   editHeavyBuyer (id, params) {
     return http.put(
-      `${API_SERVER.default}/v2/heavy_buyer/${id}`, params
+      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${id}`, params
     )
   },
 
   delHeavyBuyer (id) {
     return http.del(
-      `${API_SERVER.default}/v2/heavy_buyer/${id}`
+      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${id}`
     )
   },
 
   getHeavyBuyer (params) {
     return http.post(
-      `${API_SERVER.default}/v2/heavy_buyer_list`, params
+      `${API_SERVER.heavyBuyer}/v2/heavy_buyer_list`, params
     )
   },
 
+  /**
+   * 获取组织列表
+   */
   getOrganizationList (heavyBuyerId, params) {
     return http.post(
-      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/organization_list`, params
+      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/organization_list`, params
+    )
+  },
+
+  /**
+   * 添加一个组织
+   */
+  addOrganization (heavyBuyerId, params) {
+    return http.post(
+      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/organization`, params
+    )
+  },
+
+  /**
+   * 批量修改组织
+   */
+  updateOrganizations (heavyBuyerId, params) {
+    return http.put(
+      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/organization_list`, params
+    )
+  },
+
+  /**
+   * 批量修改组织
+   */
+  deleteOrganization (heavyBuyerId, organizationId) {
+    return http.del(
+      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/organization/${organizationId}`
     )
   }
 }

@@ -1,14 +1,14 @@
 <template>
   <div class="panel">
     <div class="organization-box">
-      <div class="tree-box">
+      <div class="tree-box" id="tree-box">
         <div class="btn-group-box">
           <!-- 添加兄弟接点 -->
           <button class="btn btn-ghost btn-sm"
           :disabled="!btnCanUse.add"
           :class="{'disabled': !btnCanUse.add}"
           @click.stop="onAddBrother">
-            <!-- <i class="fa fa-share"></i> -->1
+            <!-- <i class="fa fa-share"></i> -->同
           </button>
 
           <!-- 添加子节点 -->
@@ -16,27 +16,30 @@
           :disabled="!btnCanUse.addChild"
           :class="{'disabled': !btnCanUse.addChild}"
           @click.stop="onAddChild">
-            <!-- <i class="fa fa-share"></i> -->2
+            <!-- <i class="fa fa-share"></i> -->子
           </button>
 
           <!-- 删除 -->
           <button class="btn btn-ghost btn-sm"
           :disabled="!btnCanUse.delete"
-          :class="{'disabled': !btnCanUse.delete}">
+          :class="{'disabled': !btnCanUse.delete}"
+          @click.stop="deleteOrganization">
             <i class="fa fa-trash-o"></i>
           </button>
 
           <!-- 上移 -->
           <button class="btn btn-ghost btn-sm"
           :disabled="!btnCanUse.up"
-          :class="{'disabled': !btnCanUse.up}">
+          :class="{'disabled': !btnCanUse.up}"
+          @click.stop="upOrganization">
             <i class="fa fa-long-arrow-up"></i>
           </button>
 
           <!-- 下移 -->
           <button class="btn btn-ghost btn-sm"
           :disabled="!btnCanUse.down"
-          :class="{'disabled': !btnCanUse.down}">
+          :class="{'disabled': !btnCanUse.down}"
+          @click.stop="downOrganization">
             <i class="fa fa-long-arrow-down"></i>
           </button>
 
@@ -49,19 +52,38 @@
           </button>
         </div>
         <div class="tree-container">
-          <tree1 :data="organizationTree" @changed="changed"></tree1>
+          <tree1 :data="organizationTree" :selected-tree-index="selectedTreeIndex" @changed="changed"></tree1>
           <div class="loading-box" v-show="loading">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
         </div>
       </div>
-      <div class="detail-box">222</div>
+      <div class="detail-box">
+        <div class="title-box">
+          <span class="title">{{ showedList.name }}</span>
+          <span class="level" v-show="showedList.id === '0'">一级组织</span>
+        </div>
+        <div class="content-box">
+          <div class="row">
+            <span class="label">上级组织: </span>
+            <span class="value">{{ showedList.parent }}</span>
+          </div>
+          <div class="row">
+            <span class="label">旗下组织: </span>
+            <span class="value">5个</span>
+          </div>
+          <div class="row">
+            <span class="label">账户数: </span>
+            <span class="value">1个</span>
+          </div>
+        </div>
+      </div>
     </div>
     <modal :show.sync="showModal" @close="onCloseEditModal">
       <h3 slot="header">组织名称</h3>
       <div slot="body" class="form">
         <validator name="validation">
-          <form autocomplete="off" novalidate @submit.stop.prevent="onComfirm">
+          <form autocomplete="off" novalidate>
             <div class="form-row row">
               <label class="form-control col-6">组织名称:</label>
               <div class="controls col-18">
@@ -74,7 +96,7 @@
               </div>
             </div>
             <div class="form-actions">
-              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button @click.stop.prevent="onComfirm" type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
               <button @click.prevent.stop="onCloseEditModal" class="btn btn-default">{{ $t("common.cancel") }}</button>
             </div>
           </form>
@@ -85,7 +107,7 @@
 </template>
 
 <script>
-  // import api from 'api'
+  import api from 'api'
   // 添加兄弟组织
   const ADDBROTHER = 1
   // 添加子组织
@@ -102,6 +124,7 @@
       return {
         // 已选择的树索引
         selectedTreeIndex: '',
+        majorClient: {},
         // 组织数据
         organizationData: [],
         // 正在编辑状态标志位
@@ -128,7 +151,8 @@
           var list = _.clone(item)
           list.label = item.name
           list.open = true
-          list.treeIndex = (item.id === this.majorClientId) ? '0' : ''
+          list.treeIndex = (item.id === this.majorClientId || item.id - 0 === 0) ? '0' : ''
+          list.prototype = item
           result.push(list)
         })
         result = this.resetTreeIndex(result)
@@ -143,7 +167,7 @@
       // 按爹分组的列表
       groupLists () {
         const PARENTID = 'main'
-        var srotLists = _.clone(this.organizationData)
+        var srotLists = this.organizationData
         if (!srotLists.length) return {}
         var listsObj = {}
         srotLists.forEach((item) => {
@@ -170,7 +194,7 @@
        */
       resetSortLists () {
         var result = []
-        var groupLists = _.clone(this.groupLists)
+        var groupLists = this.groupLists
         for (var key in groupLists) {
           if (groupLists.hasOwnProperty(key)) {
             result = result.concat(groupLists[key])
@@ -201,13 +225,13 @@
         if (!this.selectedTreeIndex) return result
 
         // 如果有选中 可编辑 可添加同级组织 可添加下级组织
-        result.edit = true
-        result.add = true
         result.addChild = true
         // 如果选中的是第一个 可删除
         if (this.selectedTreeIndex.length === 1) return result
+        result.edit = true
         // 如果选中的不是第一个
         result.delete = true
+        result.add = true
         var indexs = this.selectedTreeIndex.split('-')
         var sort = indexs[indexs.length - 1]
         if (sort > 0) {
@@ -225,8 +249,29 @@
 
       selectedList () {
         var result = {}
+        if (!this.selectedTreeIndex) return result
         this.organizationTree.forEach((item) => {
           if (item.treeIndex === this.selectedTreeIndex) {
+            result = item
+          }
+        })
+        return result
+      },
+
+      showedList () {
+        var result = {}
+        if (this.selectedTreeIndex) {
+          result = this.selectedList
+        } else {
+          result = this.currentMajorClient
+        }
+        return result
+      },
+
+      currentMajorClient () {
+        var result = {}
+        this.organizationTree.forEach((item) => {
+          if (item.id === '0') {
             result = item
           }
         })
@@ -245,7 +290,12 @@
 
     route: {
       data () {
-        this.getData()
+        this.loading = true
+        this.getDetail(this.majorClientId).then((majorClientDetail) => {
+          majorClientDetail.id = '0'
+          this.majorClient = majorClientDetail
+          this.getData()
+        })
       }
     },
 
@@ -253,49 +303,284 @@
     },
 
     methods: {
+      getDetail (id) {
+        return new Promise((resolve, reject) => {
+          var params = {
+            filter: ['id', 'name', 'create_time'],
+            limit: 1,
+            offset: 0,
+            query: {
+              id: {'$in': [id]}
+            }
+          }
+          api.heavyBuyer.getHeavyBuyer(params).then((res) => {
+            if (this.organizationData.length) return
+            console.log(res)
+            var majorClient = res.data.list[0]
+            var majorClientDetail = {
+              id: majorClient.id,
+              name: majorClient.name,
+              sort: 0,
+              create_time: majorClient.create_time
+            }
+            this.loading = false
+            resolve(majorClientDetail)
+          }).catch((res) => {
+            this.loading = false
+            this.handleError(res)
+          })
+        })
+      },
       // 获取数据
       getData () {
-        // api.heavyBuyer.getOrganizationList(this.majorClientId, this.condition).then((res) => {
-        //   console.log(res)
-        // })
-        this.organizationData = [
-          {
-            'id': '11',
-            // 'parent': '',
-            'name': '0',
-            'sort': '3',
-            'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
-          },
-          {
-            'id': '33',
-            'parent': '22',
-            'name': '0-0-0',
-            'sort': '5',
-            'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
-          },
-          {
-            'id': '22',
-            'parent': '11',
-            'name': '0-0',
-            'sort': '1',
-            'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
-          },
-          {
-            'id': '44',
-            'parent': '11',
-            'name': '0-1',
-            'sort': '5',
-            'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
-          }
-        ]
+        this.loading = true
+        api.heavyBuyer.getOrganizationList(this.majorClientId, this.queryCondition).then((res) => {
+          console.log(res)
+          this.organizationData = [this.majorClient].concat(res.data.list)
+          this.loading = false
+        }).catch((res) => {
+          this.loading = false
+          this.handleError(res)
+        })
+        // this.organizationData = [
+        //   {
+        //     'id': this.majorClientId,
+        //     // 'parent': '',
+        //     'name': '0',
+        //     'sort': '3',
+        //     'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
+        //   },
+        //   {
+        //     'id': '33',
+        //     'parent': '22',
+        //     'name': '0-0-0',
+        //     'sort': '5',
+        //     'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
+        //   },
+        //   {
+        //     'id': '22',
+        //     'parent': this.majorClientId,
+        //     'name': '0-0',
+        //     'sort': '1',
+        //     'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
+        //   },
+        //   {
+        //     'id': '44',
+        //     'parent': this.majorClientId,
+        //     'name': '0-1',
+        //     'sort': '5',
+        //     'create_time': '创建时间,例:2015-10-09T08:15:40.843Z'
+        //   }
+        // ]
       },
 
       onComfirm () {
-        console.log('确定提交')
+        this.editing = true
+        switch (this.modalType) {
+          case ADDBROTHER:
+            console.log('添加兄弟组织')
+            this.addBrother()
+            break
+          case ADDCHILD:
+            console.log('添加子组织')
+            this.addChild()
+            break
+          case EDIT:
+            console.log('编辑组织')
+            this.editOrganization()
+            break
+          default:
+            this.editing = false
+            console.error('无法判断当前提交类型')
+            break
+        }
+      },
+
+      /**
+       * 添加兄弟组织
+       */
+      addBrother () {
+        console.log('添加兄弟组织')
+        var list = {
+          name: this.modal.name,
+          parent: this.selectedList.parent,
+          sort: this.selectedList.sort - 0 + 0.5
+        }
+        this.organizationData.push(list)
+        this.selectedTreeIndex = this.selectedTreeIndex.replace(/\d$/, this.selectedList.sort - 0 + 1)
+        var params = list
+        var updateParams = this.getBrother(list, 1)
+        console.log('要添加的')
+        console.log(params)
+        var allCallBackCount = 2
+        var callBackCount = 0
+        api.heavyBuyer.addOrganization(this.majorClientId, params).then((res) => {
+          callBackCount++
+          if (callBackCount === allCallBackCount) {
+            this.getData()
+            this.onCloseEditModal()
+          }
+        }).catch((res) => {
+          callBackCount++
+          this.handleError(res)
+        })
+        api.heavyBuyer.updateOrganizations(this.majorClientId, updateParams).then((res) => {
+          callBackCount++
+          if (callBackCount === allCallBackCount) {
+            this.getData()
+            this.onCloseEditModal()
+          }
+        }).catch((res) => {
+          callBackCount++
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 添加子组织
+       */
+      addChild () {
+        var list = {
+          name: this.modal.name,
+          parent: this.selectedList.id,
+          sort: this.groupLists[this.selectedList.id] && this.groupLists[this.selectedList.id].length || 0
+        }
+        this.organizationData.push(list)
+        this.selectedTreeIndex += '-' + list.sort
+        var params = list
+        console.log('要添加的')
+        console.log(params)
+        api.heavyBuyer.addOrganization(this.majorClientId, params).then((res) => {
+          this.onCloseEditModal()
+          this.getData()
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 修改名字
+       */
+      editOrganization () {
+        var list = {
+          id: this.selectedList.id,
+          name: this.modal.name,
+          parent: this.selectedList.parent,
+          sort: this.selectedList.parent
+        }
+        var params = [list]
+        console.log('要修改的')
+        console.log(params)
+        api.heavyBuyer.updateOrganizations(this.majorClientId, params).then((res) => {
+          this.getData()
+          this.onCloseEditModal()
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
+      deleteOrganization () {
+        var toDeleteIds = []
+        var toDeleteLists = []
+        var toDeleteList = {}
+        this.organizationTree.forEach((item) => {
+          if (item.treeIndex === this.selectedTreeIndex) {
+            toDeleteList = item
+          }
+          if (item.treeIndex.indexOf(this.selectedTreeIndex) === 0) {
+            toDeleteIds.push(item.id)
+            toDeleteLists.push(item)
+          }
+        })
+        console.log(toDeleteIds)
+        toDeleteLists.forEach((item) => {
+          this.organizationData.$remove(item.prototype)
+        })
+        this.selectedTreeIndex = ''
+        console.log('要删除的')
+        console.log(toDeleteList)
+        api.heavyBuyer.deleteOrganization(this.majorClientId, toDeleteList.id).then((res) => {
+          this.getDate()
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 上移
+       */
+      upOrganization () {
+        console.log('上移')
+        var toUp = this.selectedList
+        var toDown = {}
+        this.organizationTree.forEach((item) => {
+          if (item.treeIndex === (this.selectedList.treeIndex.replace(/\d$/, this.selectedList.sort - 1))) {
+            toDown = item
+          }
+        })
+        this.organizationData.forEach((item, index) => {
+          if (item.id === toUp.id) {
+            toUp.sort--
+            this.organizationData.$set(index, toUp)
+          } else if (item.id === toDown.id) {
+            toDown.sort++
+            this.organizationData.$set(index, toDown)
+          }
+        })
+        this.selectedTreeIndex = this.selectedTreeIndex.replace(/\d$/, toUp.sort)
+        var params = [toUp, toDown]
+        console.log('要修改的数组')
+        console.log(params)
+      },
+
+      /**
+       * 下移
+       */
+      downOrganization () {
+        console.log('下移')
+        var toUp = {}
+        var toDown = this.selectedList
+        this.organizationTree.forEach((item) => {
+          if (item.treeIndex === (this.selectedList.treeIndex.replace(/\d$/, this.selectedList.sort - 0 + 1))) {
+            toUp = item
+          }
+        })
+        this.organizationData.forEach((item, index) => {
+          if (item.id === toUp.id) {
+            toUp.sort--
+            this.organizationData.$set(index, toUp)
+          } else if (item.id === toDown.id) {
+            toDown.sort++
+            this.organizationData.$set(index, toDown)
+          }
+        })
+        this.selectedTreeIndex = this.selectedTreeIndex.replace(/\d$/, toDown.sort)
+        var params = [toUp, toDown]
+        console.log('要修改的数组')
+        console.log(params)
+      },
+
+      /**
+       * 获取当前项的兄弟节点
+       */
+      getBrother (list, relation) {
+        var brothers = this.groupLists[list.parent]
+        if (!relation) return brothers
+        if (relation > 0) {
+          return brothers.filter((item) => {
+            return item.sort > list.sort
+          })
+        } else {
+          return brothers.filter((item) => {
+            return item.sort < list.sort
+          })
+        }
       },
 
       onCloseEditModal () {
+        this.$resetValidation()
         this.showModal = false
+        this.editing = false
         this.modal.name = ''
       },
 
@@ -428,5 +713,27 @@
       height 100%
       overflow auto
       box-sizing border-box
-      padding 15px
+      padding 30px
+      .title-box
+        height 50px
+        line-height 50px
+        .title
+          font-size 30px
+        .level
+          background #ff6600
+          color #FFF
+          padding 3px
+          margin-left 10px
+      .content-box
+        margin-top 20px
+        .row
+          height 40px
+          line-height 40px
+          .label
+            display inline-block
+            width 70px
+            text-align right
+            color #999
+          .value
+            margin-left 30px
 </style>
