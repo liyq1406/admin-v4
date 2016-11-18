@@ -48,7 +48,8 @@
                   <span class="limit-width">{{rule.content }}</span></td>
                 <td>{{* rule.type | ruleLabel }}</td>
                 <td>
-                  <span class="text-label" :class="tagStyle(rule.tag)">{{rule.tag}}</span>
+                  <!-- <span class="text-label" :class="tagStyle(rule.tag)">{{rule.tag}}</span> -->
+                  <span>{{rule.tag}}</span>
                   <!-- <span class="text-label text-label-warning level-style">{{rule.tag}}</span> -->
                 </td>
                 <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
@@ -121,7 +122,12 @@
     },
     filters: {
       ruleLabel (value) {
-        return this.ruleTypes[value - 1]
+        if (value === 1 || value === 2) {
+          return this.ruleTypes[value - 1]
+        } else if (value === 3) {
+          return '数据端点'
+        }
+        // return this.ruleTypes[value - 1]
       }
     },
     ready () {

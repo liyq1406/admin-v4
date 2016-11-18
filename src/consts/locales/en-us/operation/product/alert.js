@@ -21,7 +21,7 @@ export default {
   minutes: 'min', // 分钟
   second: 'sec', // 秒
   time_length: 'Duration', // 持续市长
-  alert_level: 'Level', // Alert 等级
+  alert_level: 'Type', // Alert 等级
   state: 'Status', // 状态
   warning: 'Warning', // 轻微
   danger: 'Critical', // 严重

@@ -33,6 +33,7 @@ export default {
 
   data () {
     return {
+      tags: [],
       periods: [1, 7, 30],
       startTime: null,
       endTime: null,
@@ -49,7 +50,7 @@ export default {
   computed: {
     // 是否正在加载数据
     loadingData () {
-      return this.recvDataCount < 3
+      return this.recvDataCount < this.tags.length
     },
 
     // 图例
@@ -89,11 +90,23 @@ export default {
 
   watch: {
     productId () {
-      this.getTagTrend()
+      // this.getTagTrend()
+      this.getTags()
     }
   },
 
   methods: {
+    // 获取告警类型
+    getTags () {
+      api.alert.getAlertTags().then((res) => {
+        if (res.status === 200) {
+          this.tags = res.data.tags
+          this.getTagTrend()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     /**
      * 处理时间选择
      * @author shengzhi
@@ -130,7 +143,7 @@ export default {
 
       let xAxis = []
       let series = []
-      const TAGS = this.locales.data.RULE_CANDIDATE_TAGS
+      const TAGS = this.tags
 
       this.recvDataCount = 0
       for (let i = 0, len = TAGS.length; i < len; i++) {

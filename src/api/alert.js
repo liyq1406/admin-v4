@@ -156,6 +156,23 @@ export default {
     )
   },
   /**
+   * 获取告警类型标签
+   */
+  getAlertTags () {
+    return http.get(
+      `${API_SERVER.default}/v2/alert_tag`
+    )
+  },
+  /**
+   * 设置告警类型标签
+   * @param {Array}
+   */
+  setAlertTags (params) {
+    return http.put(
+      `${API_SERVER.default}/v2/alert_tag`, params
+    )
+  },
+  /**
    * 告警消息产品下标签小时趋势
    * @param {Array} params 消息列表
    */

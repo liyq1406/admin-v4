@@ -215,13 +215,14 @@
                 </div>
               </div>
               <div class="form-row row tag-row">
-                <label class="form-control col-5 alert-label">告警等级:</label>
+                <label class="form-control col-5 alert-label">告警类型:</label>
                 <div class="controls col-19">
-                  <x-select width="120px" :label="model.tag">
+                  <!-- <x-select width="120px" :label="model.tag">
                     <select v-model="model.tag">
                       <option v-for="opt in locales.data.RULE_CANDIDATE_TAGS" :value="opt">{{ opt }}</option>
                     </select>
-                  </x-select>
+                  </x-select> -->
+                  <tag-input :value.sync="model.tag" :candidate="tags" :limit=1 :input-disabled="true"></tag-input>
                 </div>
               </div>
               <div class="form-row row tag-row">
@@ -343,6 +344,7 @@ export default {
 
   data () {
     return {
+      tags: [],
       interval: '',
       ruleTypes: [
         { label: '普通', value: 1 },
@@ -353,7 +355,7 @@ export default {
       originModel: {           // 添加数据模型
         product_id: this.$route.params.id,
         name: '',
-        tag: '通知',
+        tag: '',
         type: 1,
         notify_target: [],
         notify_apps: [],
@@ -441,6 +443,7 @@ export default {
 
   ready () {
     this.getDataPoint()
+    this.getTags()
 
     if (this.type === 'add') {
       this.model = _.clone(this.originModel)
@@ -450,6 +453,16 @@ export default {
   },
 
   methods: {
+    // 获取告警类型
+    getTags () {
+      api.alert.getAlertTags().then((res) => {
+        if (res.status === 200) {
+          this.tags = res.data.tags
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     /**
      * 获取规则
      * @author shengzhi

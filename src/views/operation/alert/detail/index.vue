@@ -58,6 +58,7 @@ export default {
 
   data () {
     return {
+      tags: [],
       alerts: [],
       accounts: [],
       currentProduct: {},
@@ -186,6 +187,16 @@ export default {
   },
 
   methods: {
+    // 获取告警类型
+    getTags () {
+      api.alert.getAlertTags().then((res) => {
+        if (res.status === 200) {
+          this.tags = res.data.tags
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     /**
      * 获取产品
      */

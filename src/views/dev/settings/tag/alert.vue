@@ -10,7 +10,7 @@
             </div>
           </div>
           <div class="form-action">
-            <button class="btn btn-primary btn-lg" @click.prevent="">保存</button>
+            <button class="btn btn-primary btn-lg" :class="{'disabled': setting}" :disabled="setting" @click.prevent="setTags">保存</button>
           </div>
         </div>
       </div>
@@ -19,23 +19,63 @@
 </template>
 
 <script>
-// import api from 'api'
+import api from 'api'
 
 export default {
   name: 'AlertSettings',
 
   data () {
     return {
+      setting: false,
       tags: []
     }
   },
 
   route: {
     data () {
+      this.getTags()
     }
   },
 
   methods: {
+    getTags () {
+      this.setting = true
+      api.alert.getAlertTags().then((res) => {
+        if (res.status === 200) {
+          this.tags = res.data.tags
+          this.setting = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    setTags () {
+      var param = {
+        tags: this.tags
+      }
+      this.setting = true
+      if (this.tags.length > 8) {
+        this.showNotice({
+          type: 'error',
+          content: '标签设置不能超过8个！'
+        })
+        this.setting = false
+        return
+      }
+      api.alert.setAlertTags(param).then((res) => {
+        if (res.status === 200) {
+          this.showNotice({
+            type: 'success',
+            content: '标签设置成功！'
+          })
+          this.getTags()
+          this.setting = false
+        }
+      }).catch((res) => {
+        this.setting = false
+        this.handleError(res)
+      })
+    }
   }
 }
 </script>
