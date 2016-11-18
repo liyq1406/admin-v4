@@ -9,31 +9,6 @@
           <chart :options="regionOptions" :loading="loadingData" type="china-map" height="450px"></chart>
         </div>
         <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
-          <!-- <div class="data-table">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>地域</th>
-                  <th>设备数量</th>
-                  <th>占比</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="data in dataPer">
-                  <template v-if="data.value">
-                    <td>{{data.name}}</td>
-                    <td>{{data.value}}</td>
-                    <td>{{data.percent | toPercentage}}</td>
-                  </template>
-                </tr>
-                <tr v-if="dataPer.length === 0">
-                  <td colspan="6" class="tac">
-                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div> -->
           <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
         </div>
       </div>
@@ -49,21 +24,15 @@ import {numToPercent} from 'utils'
 export default {
   name: 'Distributing',
 
-  // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
-  vuex: {
-    getters: {
-      currentProduct: ({ products }) => products.curr
-    }
-  },
-
   components: {
     Chart
   },
 
   data () {
     return {
+      states: [],
       dataPer: [],
-      regionData: [],
+      regionDataRaw: {},
       loadingData: false,
       headers: [
         {
@@ -175,72 +144,52 @@ export default {
         result.push(distribute)
       })
       return result
-    }
-  },
-
-  watch: {
-    currentProduct () {
-      if (this.currentProduct.id) {
-        this.getRegion(this.currentProduct.id)
-      }
-    }
-  },
-
-  route: {
-    data () {
-    }
-  },
-
-  ready () {
-    if (this.currentProduct.id) {
-      this.getRegion(this.currentProduct.id)
-    }
-  },
-
-  methods: {
-    sort (header) {
-      this.headers.forEach((item) => {
-        if (item.key === 'percent') {
-          item.sortType = header.sortType * -1
-        }
-      })
     },
-    getRegion (pruductId) {
-      this.loadingData = true
-      api.statistics.getProductRegion(pruductId).then((res) => {
-        if (res.status === 200) {
-          var CNData = res.data['中国']
-          var resData = []
-          var regions = []
-          for (let i in CNData) {
-            if (i !== 'activated' && i !== 'online') {
-              regions.push({
-                name: i,
-                value: CNData[i].activated
+    regionData () {
+      let res = []
+      for (let i in this.regionDataRaw) {
+        let findState = _.find(this.states, (item) => {
+          return item.code === i
+        })
+        if (!findState) {
+          continue
+        }
+        if (i === '11' /* 北京 */ || i === '31' /* 上海 */ || i === '50' /* 重庆 */ || i === '12' /* 天津 */ || i === '81' /* 香港 */ || i === '82' /* 澳门 */) {
+          res.push({
+            name: findState.name,
+            value: this.regionDataRaw[i].sale_total
+          })
+        } else {
+          for (let j in this.regionDataRaw[i]) {
+            let findCity = _.find(findState.citys || [], (item) => {
+              return item.code === j
+            })
+            if (findCity) {
+              res.push({
+                name: findCity.name,
+                value: this.regionDataRaw[i][j].sale_total
               })
-              for (let j in CNData[i]) {
-                if (j !== 'activated' && j !== 'online') {
-                  let temp = {
-                    name: j,
-                    value: CNData[i][j].activated || 0
-                  }
-                  resData.push(temp)
-                }
-              }
             }
           }
-          this.sortRegion(regions)
-          this.regionData = resData
-          this.loadingData = false
         }
-      }).catch((res) => {
-        this.handleError(res)
-        this.loadingData = false
-      })
+      }
+      return res
     },
-    sortRegion (regions) {
-      // 由大到小排序
-      regions.sort((a, b) => {
+    dataPer () {
+      let res = []
+      for (let i in this.regionDataRaw) {
+        let findState = _.find(this.states, (item) => {
+          return item.code === i
+        })
+        if (!findState) {
+          continue
+        }
+        res.push({
+          name: findState.name,
+          value: this.regionDataRaw[i].sale_total
+        })
+      }
+      res.sort((a, b) => {
         if (a.value > b.value) {
           return -1
         } else if (a.value < b.value) {
@@ -250,11 +199,50 @@ export default {
         }
       })
 
-      if (regions.length > 10) {
-        this.dataPer = numToPercent(regions.slice(0, 10), 'value')
+      if (res.length > 10) {
+        res = numToPercent(res.slice(0, 10), 'value')
       } else {
-        this.dataPer = numToPercent(regions, 'value')
+        res = numToPercent(res, 'value')
       }
+      return res
+    }
+  },
+
+  route: {
+    data () {
+    }
+  },
+
+  ready () {
+    this.getRegion()
+    this.getChinaCityCode()
+  },
+
+  methods: {
+    getChinaCityCode () {
+      this.$http.get('/static/data/areas/zh-cn/1.json').then((res) => {
+        this.states = res.data.states
+      })
+    },
+    sort (header) {
+      this.headers.forEach((item) => {
+        if (item.key === 'percent') {
+          item.sortType = header.sortType * -1
+        }
+      })
+    },
+    getRegion (pruductId) {
+      this.loadingData = true
+      api.statistics.getDealeSaleRegion().then((res) => {
+        if (res.status === 200) {
+          // 只取中国区数据
+          this.regionDataRaw = res.data.distribution[1] // 1表示中国区代码
+        }
+        this.loadingData = false
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
+      })
     }
   }
 }
