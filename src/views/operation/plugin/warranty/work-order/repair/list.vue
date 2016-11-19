@@ -36,6 +36,9 @@
     </div>
     <div class="panel mt10">
       <div class="panel-bd">
+        <div class="action-bar">
+          <button class="btn btn-primary" @click="onAddBtnClick"><i class="fa fa-plus"></i>添加工单</button>
+        </div>
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fl">
@@ -47,9 +50,15 @@
                   </select>
                 </x-select>
               </div>
-              <div class="filter-group-item">
-                <button class="btn btn-primary" @click="onAddBtnClick"><i class="fa fa-plus"></i>添加工单</button>
-              </div>
+
+              <span class="ml10">{{ $t('operation.product.device.alert.time') }}: </span>
+              <x-select width="98px" size="small" :label="rangeOption.label">
+                <select v-model="rangeOption" @change="onRangeOptionChange">
+                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </x-select>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
+
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -70,6 +79,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import locales from 'consts/locales/index'
 import { warrantyMixins } from '../../mixins'
 import api from 'api'
 import * as config from 'consts/config'
@@ -162,6 +173,13 @@ export default {
           title: '7日维修数'
         }
       },
+      rangeOption: {
+        label: this.$t('common.any'),
+        value: 'any'
+      },
+      timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
+      startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+      endTime: new Date(),
       headers: [
         {
           key: 'id',
@@ -275,6 +293,14 @@ export default {
           $in: [this.selectedProduct.id]
         }
       }
+
+      if (this.rangeOption.value === 'specified') {
+        condition.query['create_time'] = {
+          '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+          '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
+        }
+      }
+
       if (this.queryType.value !== 'all') {
         condition.query.status = this.queryType.value
       }
@@ -374,6 +400,27 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理时间区段改变
+     */
+    onRangeOptionChange () {
+      if (this.rangeOption.value === 'any') {
+        this.getOrderWorkList(true)
+      }
+    },
+
+    /**
+     * 时间范围改变
+     * @param  {[type]} startDate [description]
+     * @param  {[type]} endDate   [description]
+     * @return {[type]}           [description]
+     */
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getOrderWorkList(true)
+    },
+
     /**
      * 处理导出 CSV 按钮点击
      */
