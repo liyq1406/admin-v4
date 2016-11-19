@@ -1,142 +1,211 @@
 <template>
   <div class="panel dealer">
-    账户管理
+    <div class="panel-bd">
+      <div class="action-bar">
+        <div class="action-group" style="display:inline-block">
+          <a v-link="'/operation/major-clients/' + $route.params.id + '/account/add'">
+            <button class="btn btn-primary" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加账户</button>
+          </a>
+        </div>
+      </div>
+      <x-table :headers="headers" :tables="tables" :loading="loadingData" :page="page">
+
+        <div class="filter-bar" slot="filter-bar">
+          <div class="filter-group fl">
+            <h3>账户列表</h3>
+          </div>
+
+          <div class="filter-group fr">
+            <div class="filter-group-item">
+              <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
+            </div>
+            <div class="filter-group-item">
+              <search-box :key.sync="key" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getData(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getData(true)">
+                <x-select width="100px" :label="queryType.label" size="small">
+                  <select v-model="queryType">
+                    <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                  </select>
+                </x-select>
+                <button slot="search-button" @click.prevent="getData(true)" class="btn"><i class="fa fa-search"></i></button>
+              </search-box>
+            </div>
+          </div>
+        </div>
+      </x-table>
+
+    </div>
   </div>
 </template>
 
 <script>
-import api from 'api'
-import { isEmpty } from 'utils'
-import { DEALER_SCOPE_SEPERATOR } from 'consts/config'
+  // import locales from 'consts/locales/index'
+  // import api from 'api'
+  // import formatDate from 'filters/format-date'
 
-export default {
-  name: 'Dealers',
-  vuex: {
-    getters: {
-      currDevice: ({ products }) => products.currDevice
-    }
-  },
+  export default {
+    name: 'DealerList',
 
-  data () {
-    return {
-      dealer: {},
-      superior: {},
-      loadingData: true
-    }
-  },
+    mixins: [],
 
-  route: {
-    data () {
-    }
-  },
-
-  watch: {
-    currDevice () {
-      this.getDealer()
-    }
-  },
-
-  methods: {
-    /**
-     * 经销商是否存在
-     * @params {Object} 经销商
-     * @return {Boolean}
-     */
-    isDealerExists (dealer) {
-      return !isEmpty(dealer)
+    components: {
     },
 
-    /**
-     * 获取经销商
-     * @author shengzhi
-     */
-    getDealer () {
-      // 模拟数据开始 ------------------------------
-      // this.dealer = {
-      //   id: 'afao22dda',
-      //   name: '广州区二级代理',
-      //   email: 'abcd@xlink.cn',
-      //   phone: '13800138000',
-      //   address: '广州市海珠区',
-      //   status: 1,
-      //   dealer_code: 'afao22dda',
-      //   upper_dealer_code: '1eafadsaad',
-      //   create_time: '2016-07-21T10:30:35Z'
-      // }
-      // this.superior = {
-      //   id: '1eafadsaad',
-      //   name: '广州区总代理',
-      //   email: 'abcd@xlink.cn',
-      //   phone: '13800138000',
-      //   address: '广州市海珠区',
-      //   status: 1,
-      //   dealer_code: '1eafadsaad',
-      //   upper_dealer_code: '',
-      //   create_time: '2016-07-21T10:30:35Z'
-      // }
-      // 模拟数据结束 ------------------------------
+    data () {
+      return {
+        // 正在加载
+        loadingData: false,
+        // 正在导出
+        exporting: false,
+        // 正在搜索
+        searching: false,
 
-      // this.currDevice是从 store 取的值，这里要等它值取回来了才作下一步操作
-      if (isEmpty(this.currDevice) || !this.currDevice.dealer_scope) {
-        this.loadingData = false
-        return
-      }
+        queryTypeOptions: [
+          // { label: '名称', value: 'name' },
+          // { label: '帐号', value: 'email' },
+          // { label: '联系人', value: 'contacter' }
+        ],
 
-      // 经销商 code
-      let codes = this.currDevice.dealer_scope.split(DEALER_SCOPE_SEPERATOR)
+        queryType: {
+          label: '名称',
+          value: 'name'
+        },
 
-      // 获取经销商
-      api.dealer.get(codes[codes.length - 1]).then((res) => {
-        this.loadingData = false
-        if (res.status === 200) {
-          this.dealer = res.data
-        }
-      }).catch((res) => {
-        this.loadingData = false
-        // this.handleError(res)
-      })
+        total: 0,
+        countPerPage: 10,
+        currentPage: 1,
+        key: '',
 
-      // 上级经销商
-      if (codes.length > 1) {
-        api.dealer.get(codes[codes.length - 2]).then((res) => {
-          if (res.status === 200) {
-            this.superior = res.data
+        headers: [
+          {
+            key: 'name',
+            title: '客户名称'
+          },
+          {
+            key: 'account',
+            title: '账户名'
+          },
+          {
+            key: 'password',
+            title: '密码'
+          },
+          {
+            key: 'contacter',
+            title: '联系人'
+          },
+          {
+            key: 'contact_way',
+            title: '联系方式'
+          },
+          {
+            key: 'organization',
+            title: '所属组织'
+          },
+          {
+            key: 'organization_level',
+            title: '所属组织'
+          },
+          {
+            key: 'state',
+            title: '状态'
+          },
+          {
+            key: 'last_login',
+            title: '最后登陆'
           }
-        })
+        ]
+      }
+    },
+
+    computed: {
+      tables () {
+        return []
+      },
+      page () {
+        return {
+          total: this.total,
+          countPerPage: this.countPerPage,
+          currentPage: this.currentPage
+        }
+      },
+      // 基本筛选条件
+      baseCondition () {
+        let condition = {
+          filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time'],
+          query: {},
+          order: {
+            create_time: 'desc'
+          }
+        }
+
+        if (this.key.length > 0) {
+          condition.query[this.queryType.value] = {$in: [this.key]}
+        }
+
+        return condition
+      },
+
+      // 列表查询条件
+      queryCondition () {
+        let condition = _.cloneDeep(this.baseCondition)
+
+        condition.limit = this.countPerPage
+        condition.offset = (this.currentPage - 1) * this.countPerPage
+
+        return condition
+      }
+    },
+
+    route: {
+      data () {
+        this.getData()
+      }
+    },
+    ready () {
+    },
+
+    methods: {
+      /**
+       * 获取列表
+       */
+      getData (reset) {
+        if (reset === true) {
+          this.currentPage = 1
+        }
+        console.log('获取列表')
+      },
+      /**
+       * 处理导出 CSV 按钮点击
+       */
+      onExportBtnClick () {
+        console.log('导出')
+      },
+
+      // 切换搜索
+      toggleSearching () {
+        this.searching = !this.searching
+      },
+
+      // 搜索
+      handleSearch () {
+        if (this.key.length === 0) {
+          this.getData(true)
+        }
+      },
+      pageCountChange (countPerPage) {
+        this.countPerPage = countPerPage
+        this.getData()
       }
     }
   }
-}
 </script>
-<style lang="stylus">
+
+<style lang="stylus" scoped>
   @import '../../../../assets/stylus/common'
 
-  .dealer
-    .info-box
-      padding 10px
-      box-sizing border-box
-      clearfix()
-      .dealer-name-box
-        font-size 16px
-        float left
-        color #333
-        width 190px
-        padding 0 20px 0 10px
-        box-sizing border-box
-      .dealer-info-box
-        font-size 14px
-        border-left 1px solid #ccc
-        width 500px
-        float left
-        padding 0 10px
-        line-height 30px
-        .label
-          text-align right
-          padding-right 15px
-          box-sizing border-box
-          color #999
-        .info
-          color #666
-          white-space nowrap
-          height 20px
+  .form
+    max-width 640px
+
+  .select-group
+    .x-select
+      display inline-block
 </style>

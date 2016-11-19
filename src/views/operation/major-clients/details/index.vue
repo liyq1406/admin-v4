@@ -54,10 +54,10 @@ export default {
       majorClient: {},
       secondaryNav: [],
       breadcrumbNav: [{
-        label: this.$t('operation.user.details.major.main_title'),
-        link: '/operation/users/major-clients'
+        label: '全部',
+        link: '/operation/major-clients'
       }, {
-        label: this.$t('operation.user.details.curr')
+        label: '客户信息'
       }]
     }
   },
