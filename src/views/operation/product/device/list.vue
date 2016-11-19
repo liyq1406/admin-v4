@@ -23,12 +23,6 @@
 
     <div class="panel">
       <div class="panel-hd">
-        <!-- <div class="actions">
-          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.overview.add_device") }}</button>
-          <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
-            <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("ui.overview.import_devices") }}
-          </label>
-        </div> -->
         <h2>{{ $t('operation.product.device.manager.list') }}</h2>
       </div>
       <div class="panel-bd">
