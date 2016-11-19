@@ -17,6 +17,20 @@
             <i class="fa fa-refresh fa-spin"></i>
           </div>
           <div class="filter-bar">
+
+            <div class="filter-group fl">
+              <span>经销商列表</span>
+
+              <span class="ml10">创建时间: </span>
+              <x-select width="98px" size="small" :label="rangeOption.label">
+                <select v-model="rangeOption" @change="onRangeOptionChange">
+                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </x-select>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
+
+            </div>
+
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
@@ -32,7 +46,6 @@
                 </search-box>
               </div>
             </div>
-            <h3>经销商列表</h3>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>
@@ -45,6 +58,7 @@
                 <th>从属于</th>
                 <th>年销售指标</th>
                 <th>已售数量</th>
+                <th>创建时间</th>
                 <th>状态</th>
                 <!-- <th class="tac">{{ $t("common.action") }}</th> -->
               </tr>
@@ -61,6 +75,7 @@
                   <td>{{* dealer.belongTo || '--' }}</td>
                   <td>{{* dealer.sale_goal || '--'}}</td>
                   <td>{{* dealer.saled_amount || '--' }}</td>
+                  <td>{{* dealer.create_time || '--' }}</td>
                   <td><span v-if="dealer.status === 1" class="hl-green">启用</span><span v-else class="hl-gray">停用</span></td>
                   <!-- <td class="tac">
                     <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
@@ -82,8 +97,12 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import locales from 'consts/locales/index'
   import { pluginMixins } from '../mixins'
   import api from 'api'
+  import formatDate from 'filters/format-date'
+
   export default {
     name: 'DealerList',
 
@@ -149,7 +168,14 @@
         currentPage: 1,
         key: '',
         adding: false,
-        exporting: false
+        exporting: false,
+        rangeOption: {
+          label: this.$t('common.any'),
+          value: 'any'
+        },
+        timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
+        startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+        endTime: new Date()
       }
     },
 
@@ -181,6 +207,13 @@
           }
         }
 
+        if (this.rangeOption.value === 'specified') {
+          condition.query['create_time'] = {
+            '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+            '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
+          }
+        }
+
         if (this.key.length > 0) {
           condition.query[this.queryType.value] = {$in: [this.key]}
         }
@@ -204,6 +237,26 @@
     },
 
     methods: {
+      /**
+       * 处理时间区段改变
+       */
+      onRangeOptionChange () {
+        if (this.rangeOption.value === 'any') {
+          this.getDealer(true)
+        }
+      },
+
+      /**
+       * 时间范围改变
+       * @param  {[type]} startDate [description]
+       * @param  {[type]} endDate   [description]
+       * @return {[type]}           [description]
+       */
+      onTimeChange (start, end) {
+        this.startTime = start
+        this.endTime = end
+        this.getDealer(true)
+      },
       /**
        * 处理导出 CSV 按钮点击
        */
