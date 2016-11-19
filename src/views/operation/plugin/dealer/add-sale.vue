@@ -24,7 +24,14 @@
                 <div class="form-row row">
                   <label class="form-control col-5 dealer-label">所在地区:</label>
                   <div class="controls col-19">
-                    <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" select-size="small" @province-change="" @city-change="" @district-change=""></area-select>
+                    <loc-select :showregion="false"
+                                :default-country-code="defaultCountryCode"
+                                :default-state-code="defaultStateCode"
+                                :default-city-code="defaultCityCode"
+                                @country-change="handleCountryChange"
+                                @state-change="handleStateChange"
+                                @city-change="handleCityChange">
+                              </loc-select>
                   </div>
                 </div>
                 <div class="form-row row">
@@ -82,9 +89,6 @@
 
     data () {
       return {
-        curProvince: {},
-        curCity: {},
-        curDistrict: {},
         nowDate: new Date(),
         submitting: false,
         type: '',
@@ -104,7 +108,13 @@
         }],
         saleTime: new Date(),
         clientType: 'common_buyer',
-        delChecked: false
+        delChecked: false,
+        cityCode: '',
+        countryCode: '',
+        stateCode: '',
+        defaultCountryCode: '',
+        defaultStateCode: '',
+        defaultCityCode: ''
       }
     },
 
@@ -169,7 +179,7 @@
       },
       getDealerInfo () {
         var condition = {
-          filter: ['name', 'id', 'email', 'phone', 'client_type', 'province', 'city', 'address', 'sn', 'sale_time', 'product_mod', 'mac', 'product_id', 'device_id'],
+          filter: ['name', 'id', 'email', 'phone', 'client_type', 'province', 'city', 'address', 'sn', 'sale_time', 'product_mod', 'mac', 'product_id', 'device_id', 'country'],
           limit: 1,
           offset: 0,
           query: {
@@ -183,9 +193,9 @@
             this.saled.phone = saleInfo.phone || ''
             this.saled.address = saleInfo.address || ''
             this.clientType = saleInfo.client_type || 'common_buyer'
-            this.curProvince.name = saleInfo.province
-            this.curCity.name = saleInfo.city
-            this.curDistrict.name = saleInfo.region
+            this.defaultCountryCode = saleInfo.country
+            this.defaultStateCode = saleInfo.province
+            this.defaultCityCode = saleInfo.city
             if (saleInfo.sale_time) {
               let time = +new Date()
               try {
@@ -221,10 +231,16 @@
           phone: this.saled.phone,
           sale_time: this.saleTime,
           client_type: this.clientType,
-          dealer_id: this.$route.params.dealer_id,
-          province: this.curProvince.name || '',
-          city: this.curCity.name || '',
-          region: this.curDistrict.name || ''
+          dealer_id: this.$route.params.dealer_id
+        }
+        if (this.countryCode) { // 国家代码
+          params.country = this.countryCode
+        }
+        if (this.stateCode) { // 省份代码
+          params.province = this.stateCode
+        }
+        if (this.cityCode) { // 城市代码
+          params.city = this.cityCode
         }
         api.dealer.editClientInfo(this.$route.params.sale_id, params).then((res) => {
           if (res.status === 200) {
@@ -239,6 +255,15 @@
       },
       timeChange (time) {
         this.saleTime = new Date(+time + 8 * 3600 * 1000)
+      },
+      handleCountryChange (countryCode) {
+        this.countryCode = countryCode
+      },
+      handleStateChange (stateCode) {
+        this.stateCode = stateCode
+      },
+      handleCityChange (cityCode) {
+        this.cityCode = cityCode
       }
     }
   }

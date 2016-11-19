@@ -124,8 +124,8 @@
                                 :default-city-code="defaultCityCode"
                                 @country-change="handleCountryChange"
                                 @state-change="handleStateChange"
-                                @city-change="handleCityChange"
-                    ></loc-select>
+                                @city-change="handleCityChange">
+                              </loc-select>
                   </div>
                 </div>
                 <div class="form-row row mt20">
