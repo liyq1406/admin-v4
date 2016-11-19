@@ -17,6 +17,7 @@
     "jssha": "^2.2.0",
     "lodash": "^4.9.0",
     "promise": "^7.1.1",
+    "qrcode2": "^1.2.3",
     "socket.io-client": "^1.4.5",
     "tinymce": "^4.3.12",
     "vue": "^1.0.18",

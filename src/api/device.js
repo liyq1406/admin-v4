@@ -191,5 +191,14 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/product/${productId}/devices/geography`, params
     )
+  },
+
+  /**
+   * 生成设备二维码
+   */
+  genQrcode (productId, deviceId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}/qrcode`, params
+    )
   }
 }

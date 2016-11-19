@@ -24,6 +24,7 @@ import Alert from './view/alert/Alert'
 import AlertBar from './view/alert/AlertBar'
 import Dropdown from './view/dropdown/Dropdown'
 import Notification from './view/notification/Notification'
+import Qrcode from './view/qrcode/Qrcode'
 
 // 表单类
 import Editor from './form/editor/Editor'
@@ -73,6 +74,7 @@ const components = {
   AlertBar,
   Dropdown,
   Notification,
+  Qrcode,
   Editor,
   DatePicker,
   DatePicker2,
