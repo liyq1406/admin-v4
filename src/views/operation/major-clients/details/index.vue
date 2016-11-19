@@ -1,138 +1,106 @@
 <template>
-  <div class="main device-details">
+  <div class="main">
     <div class="main-title">
-      <h2>{{ $t('operation.product.device.detail.title') }}</h2>
+      <h2>{{ $t('operation.user.details.major.main_title') }}</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt15 mb20 no-split-line">
       <div class="panel-bd row">
         <div class="col-16">
-          <info-card :info="deviceSummary" :pic="(currentProduct.pics && currentProduct.pics.length) ? currentProduct.pics[0] : ''"></info-card>
+          <div class="alert-record-summary">
+            <div class="up">
+              <h1 class="mt10">{{ majorClient.name }}</h1>
+            </div>
+          </div>
           <div v-stretch="182">
-            <info-list :info="deviceInfo"></info-list>
+            <info-list :info="clientsInfo"></info-list>
           </div>
         </div>
-        <div class="col-8 device-map with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
+        <div class="col-8 with-loading">
+          <div class="position-map ml30 mt10">
+            <x-map :addr="(majorClient.city || '') + majorClient.location" :zoom="majorClient.location?15:10" height="220px"></x-map>
           </div>
-          <div class="mt10 ml30">
-            <x-map :location="deviceLocation" height="220px"></x-map>
-            <div class="device-ip mt5">
-              <span v-show="!currVirtualDevice.ip">{{ $t('operation.product.device.detail.not_actived') }}</span>
-              <span v-show="currVirtualDevice.ip">{{ currVirtualDevice.ip }} </span>
-              <span v-show="province">{{province}} {{city}}</span>
-            </div>
+          <div class="position-msg ml30">
+            <span v-show="majorClient.province"> {{ (majorClient.province + ' ' + (majorClient.city || '')) }} </span>
           </div>
         </div>
       </div>
     </div>
     <tab :nav="secondaryNav"></tab>
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
+    <!-- <div class="panel">
+      <div class="panel-hd panel-hd-full">
+        <h2>帐号状态</h2>
+      </div>
+      <div class="panel-bd">
+        <span>{{ clientsInfo.status-0===1 ? '已启用' : '已停用' }}</span>
+        <button :class="{'btn-primary': clientsInfo.status-0===1, 'btn-success': clientsInfo.status-0===2, 'disabled': toggling}" :disabled="toggling" @click="toggleMember(clientsInfo)" class="btn btn-sm"><i :class="{'fa-stop': clientsInfo.status, 'fa-play': !clientsInfo.status}" class="fa"></i>{{ clientsInfo.status-0===1 ? '停用' : '启用' }}</button>
+      </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import api from 'api'
-import { getCurrProduct, setCurrDevice, setCurrVirtualDevice } from 'store/actions/products'
 import formatDate from 'filters/format-date'
-
 export default {
-  name: 'Device',
+  name: 'MajorClients',
   components: {
-  },
-
-  vuex: {
-    getters: {
-      currentProduct: ({ products }) => products.curr,
-      currDevice: ({ products }) => products.currDevice,
-      currVirtualDevice: ({ products }) => products.currVirtualDevice
-    },
-    actions: {
-      getCurrProduct,
-      setCurrDevice,
-      setCurrVirtualDevice
-    }
   },
 
   data () {
     return {
-      province: '',
-      city: '',
-      deviceLocation: [],
+      // 当前大客户详情
+      majorClient: {},
       secondaryNav: [],
       breadcrumbNav: [{
-        label: this.$t('common.all'),
-        link: `/operation/products/${this.$route.params.product_id}/devices`
+        label: this.$t('operation.user.details.major.main_title'),
+        link: '/operation/users/major-clients'
       }, {
-        label: this.$t('operation.product.device.detail.title')
+        label: this.$t('operation.user.details.curr')
       }]
     }
   },
 
   computed: {
-    // 设备简介
-    deviceSummary () {
-      return {
-        title: this.currDevice.name || this.currentProduct.name,
-        online: this.currDevice.is_online,
-        time: formatDate(this.currDevice.last_login)
-      }
-    },
-
-    // 设备信息
-    deviceInfo () {
-      let activeInfo = this.currDevice.is_active ? this.$t('operation.product.device.detail.actived') + ' ' + formatDate(this.currDevice.active_date) : this.$t('operation.product.device.detail.not_actived')
-      let onlineLongInfo = this.currVirtualDevice.online_count
-
-      if (typeof onlineLongInfo !== 'undefined') {
-        onlineLongInfo = onlineLongInfo > 3600 ? `${(onlineLongInfo / 3600).toFixed(1)}小时` : `${onlineLongInfo}秒`
-      } else {
-        onlineLongInfo = '-'
-      }
-
-      return {
-        mac: {
-          label: this.$t('operation.product.device.detail.mac'),
-          value: this.currDevice.mac || '-'
+    clientsInfo () {
+      var result = {
+        name: {
+          label: this.$t('operation.user.details.contacter'),
+          value: this.majorClient.name
         },
-        onlineLong: {
-          label: this.$t('operation.product.device.detail.online_long'),
-          value: onlineLongInfo
+        phone: {
+          label: this.$t('common.phone'),
+          value: this.majorClient.phone
         },
-        isActive: {
-          label: this.$t('operation.product.device.detail.active_status'),
-          value: activeInfo
+        industry: {
+          label: this.$t('operation.user.details.industry'),
+          value: this.majorClient.industry
         },
-        model: {
-          label: this.$t('operation.product.device.detail.mode'),
-          value: this.currentProduct.mode || '-'
+        email: {
+          label: this.$t('common.email'),
+          value: this.majorClient.email
         },
-        firmware_mod: {
-          label: this.$t('operation.product.device.detail.version'),
-          value: this.currDevice.firmware_mod || '-'
+        create_time: {
+          label: this.$t('operation.user.details.create_date'),
+          value: formatDate(this.majorClient.create_time)
         },
-        id: {
-          label: this.$t('operation.product.device.detail.device_id'),
-          value: this.currDevice.id || '-'
+        area: {
+          label: this.$t('operation.user.details.area'),
+          value: `${this.majorClient.country || ''}${this.majorClient.province || ''}${this.majorClient.city || ''}`
         },
-        sn: {
-          label: this.$t('operation.product.device.detail.sn'),
-          value: this.currDevice.sn || '-'
+        location: {
+          label: this.$t('operation.user.details.address'),
+          value: this.majorClient.location
         }
       }
+      return result
     }
   },
 
   route: {
-    activate () {
-      // this.getCurrProduct(this.$route.params.product_id)
-      // this.getDeviceGeography()
-      // this.getDeviceInfo()
-      // this.getVDevice()
-    },
-
     data (transition) {
+      this.getMajorClient()
       let deviceDetailRoot = `/operation/major-clients/${this.$route.params.id}`
 
       return {
@@ -154,51 +122,43 @@ export default {
   },
 
   methods: {
-    /**
-     * 获取虚拟设备数据
-     * @author shengzhi
-     */
-    getVDevice () {
-      api.product.getVDevice(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
-        if (res.status === 200) {
-          this.setCurrVirtualDevice(res.data)
-          // this.deviceInfo.onlineLong.value = '100小时'
+    getMajorClient () {
+      this.loadingData = true
+      var params = {
+        filter: [
+          'id',
+          'name',
+          'email',
+          'phone',
+          'industry',
+          'location',
+          'contacter',
+          'create_time',
+          'country',
+          'province',
+          'city'
+        ],
+        limit: 1,
+        query: {
+          'id': { $in: [this.$route.params.id] }
         }
-      }).catch((res) => {
-        this.setCurrVirtualDevice({})
-        // this.handleError(res)
-      })
-    },
-
-    /**
-     * 获取设备信息
-     * @author shengzhi
-     */
-    getDeviceInfo () {
-      api.device.getInfo(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
-        if (res.status === 200) {
-          this.setCurrDevice(res.data)
-          // this.device = res.data
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
-    },
-
-    /**
-     * 获取设备的地理坐标
-     * @author shengzhi
-     */
-    getDeviceGeography () {
-      api.device.getGeography(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
-        let {province, city} = res.data
-        this.province = province
-        this.city = city
-        if (res.status === 200) {
-          this.deviceLocation = [res.data.lon, res.data.lat]
-        }
+      }
+      api.heavyBuyer.getHeavyBuyer(params).then((res) => {
+        this.loadingData = false
+        this.majorClient = res.data.list[0]
+        this.total = res.data.count
+      }).catch((err) => {
+        this.loadingData = false
+        this.handleError(err)
       })
     }
   }
 }
 </script>
+<style lang="stylus" scoped>
+  .position-map
+    box-sizing border-box
+  .position-msg
+    padding-left 10px
+    padding-top 5px
+</style>
