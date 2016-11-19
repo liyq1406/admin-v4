@@ -249,3 +249,15 @@ export const ALERT_MESSAGES = {
   not_published: '您尚未发布产品，请在开发平台完成产品发布。如需了解运营平台功能您可以通过<a class="hl-red" href="http://ap.xlink.cn/#!/auto-login" target="_blank">查看demo</a>了解示例',
   not_authorized: '您尚未获得此应用的使用权限，请联系商务获取支持，<a class="hl-red" href="http://www.xlink.cn/about.html" target="_blank">查看联系方式</a>'
 }
+
+// 数据端点来源
+export const DATAPOINT_SOURCES = [{
+  label: '设备上报',
+  value: 1
+}, {
+  label: '公式计算',
+  value: 2
+}, {
+  label: '应用设置',
+  value: 3
+}]

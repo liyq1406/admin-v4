@@ -33,13 +33,49 @@
                   </div>
                 </div>
               </div>
+              <!-- 数据来源 -->
+              <div class="form-row row">
+                <label class="form-control col-6">数据来源:</label>
+                <div class="controls col-18">
+                  <div class="radio-group">
+                    <label v-for="source in locales.data.DATAPOINT_SOURCES" class="radio">
+                      <input type="radio" v-model="model.source" name="source" :value="source.value" @change="onSelectSource" number/>{{ source.label }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <!-- 计算公式 -->
+              <div class="form-row row" v-if="model.source===2">
+                <label class="form-control col-6">
+                  计算公式:
+                  <tooltip placement="right" width="350px">
+                    <p>@：数据端点简称，@1@表示索引号为1的数据端点。</p>
+                    <p>#：产品属性，#age#表示产品key为age的属性。</p>
+                    <p>例子：</p>
+                    <p>@1@ * 2 + 30 - @2@/2</p>
+                    <p>表示数据端点1乘以2，加上30，减去数据端点2除以2</p>
+                    <p>@1@ * 2 + 30 - #age#/2</p>
+                    <p>表示数据端点1乘以2，加上30，减去产品属性中的age除以2</p>
+                    <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+                  </tooltip>
+                </label>
+                <div class="controls col-18">
+                  <div v-placeholder="'@1@*2+30-#2#/2'" class="input-text-wrap">
+                    <input v-model="model.expression" type="text" name="model.expression" v-validate:expression="{required: true}" class="input-text"/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.expression.touched && $validation.expression.required">计算公式为必填项</span>
+                  </div>
+                </div>
+              </div>
+              <!-- 数据类型 -->
               <div class="form-row row">
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.type") }}:</label>
                 <div class="controls col-18">
                   <div class="select">
                     <x-select :label="modelType.label">
                       <select v-model="modelType" name="type">
-                        <option v-for="type in locales.data.DATAPOINT_TYPES" :value="type">{{ type.label }}</option>
+                        <option v-for="opt in typeOptions" :value="opt">{{ opt.label }}</option>
                       </select>
                     </x-select>
                   </div>
@@ -88,42 +124,13 @@
               <div class="form-row row">
                 <label class="form-control col-6">读写状态:</label>
                 <div class="controls col-18">
-                  <div class="input-box">
-                    <label>
-                      <input type="radio" name="writeType" v-model="model.is_write" :value="true">
-                      <span>可读写</span>
+                  <div class="radio-group">
+                    <label class="radio">
+                      <input type="radio" v-model="model.is_write" name="writeType" :value="true"/>可读写
                     </label>
-                    <label class="ml10">
-                      <input type="radio" name="writeType" v-model="model.is_write" :value="false">
-                      <span>只读</span>
+                    <label class="radio">
+                      <input type="radio" v-model="model.is_write" name="writeType" :value="false"/>只读
                     </label>
-                  </div>
-                </div>
-              </div>
-              <!-- 只允许数值类型添加公式计算 -->
-              <div class="form-row row">
-                <label class="form-control col-6">数据来源:</label>
-                <div class="controls col-18">
-                  <div class="input-box">
-                    <label>
-                      <input type="radio" name="source" v-model="model.source" :value="1">
-                      <span>设备上报</span>
-                    </label>
-                    <label class="ml10">
-                      <input type="radio" name="source" v-model="model.source" :value="2">
-                      <span>公式计算</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row row" v-if="model.source===2">
-                <label class="form-control col-6">计算公式:</label>
-                <div class="controls col-18">
-                  <div v-placeholder="'@1@*2+30-#2#/2'" class="input-text-wrap">
-                    <input v-model="model.expression" type="text" name="model.expression" v-validate:expression="{required: true}" class="input-text"/>
-                  </div>
-                  <div class="form-tips form-tips-error">
-                    <span v-if="$validation.expression.touched && $validation.expression.required">计算公式为必填项</span>
                   </div>
                 </div>
               </div>
@@ -138,7 +145,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-row col-offset-6" v-if="type === 'edit'">
+              <div class="form-row col-offset-6" v-if="formType === 'edit'">
                 <label class="del-check">
                   <input type="checkbox" name="del" v-model="delChecked"/> {{ $t("ui.datapoint.del_datapoint") }}
                 </label>
@@ -220,8 +227,22 @@ export default {
     },
 
     // 当前是编辑还是添加
-    type () {
+    formType () {
       return this.dataPointId ? 'edit' : 'add'
+    },
+
+    // 可选类型
+    typeOptions () {
+      let result = this.locales.data.DATAPOINT_TYPES
+      let source = this.model.source
+
+      if (source && source === 2) {
+        result = _.filter(result, (item) => {
+          return item.hasOwnProperty('min')
+        })
+      }
+
+      return result
     },
 
     // 端点id
@@ -257,6 +278,7 @@ export default {
         index: this.model.index,
         description: this.model.description,
         symbol: this.model.symbol,
+        source: this.model.source,
         is_read: true,
         is_write: this.model.is_write
       }
@@ -267,8 +289,13 @@ export default {
         params.max = this.model.max
       }
 
+      // 来源是公式计算，需要提交公式
+      if (this.model.source === 2) {
+        params.expression = this.model.expression
+      }
+
       // 如果是编辑，则加上数据端点的 id
-      if (this.type === 'edit') {
+      if (this.formType === 'edit') {
         params.id = this.model.id
       }
 
@@ -289,15 +316,22 @@ export default {
 
   route: {
     data () {
-      if (this.type === 'edit') {
+      if (this.formType === 'edit') {
         this.getDatapoint()
-      } else if (this.type === 'add') {
+      } else if (this.formType === 'add') {
         this.model.index = this.$route.params.addIndex
       }
     }
   },
 
   methods: {
+    /**
+     * 处理数据来源切换
+     */
+    onSelectSource () {
+      this.modelType = this.typeOptions[0]
+    },
+
     /**
      * 根据数据端点类型获取指定属性值
      * @author shengzhi
@@ -368,7 +402,7 @@ export default {
           act: api.product.deleteDataPoint,
           label: '删除'
         }
-      })[this.delChecked ? 'del' : this.type]
+      })[this.delChecked ? 'del' : this.formType]
 
       // 执行动作并处理回调
       process.act(productId, this.formParams).then((res) => {

@@ -251,3 +251,15 @@ export const ALERT_MESSAGES = {
   not_published: 'You have not released product. Please release your product in the development platform. If you need to learn about the functions of the operation platform, you could run <a class="hl-red" href="http://ap.xlink.cn/#!/auto-login" target="_blank">view demo</a> to view the examples',
   not_authorized: 'You have not got the access permission of this application. Please contact business for support. <a class="hl-red" href="http://www.xlink.cn/about.html" target="_blank">view contact information</a>'
 }
+
+// 数据端点来源
+export const DATAPOINT_SOURCES = [{
+  label: '设备上报',
+  value: 1
+}, {
+  label: '公式计算',
+  value: 2
+}, {
+  label: '应用设置',
+  value: 3
+}]
