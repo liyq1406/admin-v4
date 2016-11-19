@@ -1,71 +1,43 @@
 <template>
-  <div class="main device-list">
-    <div class="main-title">
-      <h2>{{ $t('operation.product.device.manager.title') }}</h2>
+  <div class="panel">
+    <div class="panel-hd">
+      <h2>{{ $t('operation.product.device.manager.list') }}</h2>
     </div>
-
-    <!-- Start: 产品信息统计 -->
-    <div class="row statistic-group mb30">
-      <div class="col-6">
-        <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" :title="$t('operation.product.device.manager.sum.count')" align="left"></statistic>
-      </div>
-      <div class="col-6">
-        <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" :title="$t('operation.product.device.manager.activated.count')" align="left"></statistic>
-      </div>
-      <div class="col-6">
-        <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" :title="$t('operation.product.device.manager.online.count')" align="left"></statistic>
-      </div>
-      <div class="col-6">
-        <statistic :total="statistic.users.total" :change="statistic.users.change" :title="$t('operation.product.device.manager.users.count')" align="left"></statistic>
-      </div>
-    </div>
-    <!-- End: 产品信息统计 -->
-
-    <div class="panel">
-      <div class="panel-hd">
-        <!-- <div class="actions">
-          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.overview.add_device") }}</button>
-          <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
-            <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("ui.overview.import_devices") }}
-          </label>
-        </div> -->
-        <h2>{{ $t('operation.product.device.manager.list') }}</h2>
-      </div>
-      <div class="panel-bd">
-        <div class="data-table with-loading">
-          <div class="filter-bar">
-            <div class="filter-group fr">
-              <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
-              </div>
-              <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)" :max="(queryType.value === 'id'?2100000000: false)">
-                  <x-select width="90px" :label="queryType.label" size="small">
-                    <select v-model="queryType">
-                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-                    </select>
-                  </x-select>
-                  <button slot="search-button" @click="getDevices" class="btn"><i class="fa fa-search"></i></button>
-                </search-box>
-              </div>
+    <div class="panel-bd">
+      <div class="data-table with-loading">
+        <div class="filter-bar">
+          <div class="filter-group fr">
+            <div class="filter-group-item">
+              <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
             </div>
-            <div class="filter-group">
-              <x-select width="90px" size="small" :label="visibility.label">
-                <span slot="label">{{ $t('common.display') }}: </span>
-                <select v-model="visibility" @change="getDevices">
-                  <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
-                </select>
-              </x-select>
-              <span class="ml10">{{ $t('operation.product.device.manager.active_date') }}: </span>
-              <x-select width="98px" size="small" :label="rangeOption.label">
-                <select v-model="rangeOption" @change="onRangeOptionChange">
-                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
-                </select>
-              </x-select>
-              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
+            <div class="filter-group-item">
+              <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)" :max="(queryType.value === 'id'?2100000000: false)">
+                <x-select width="90px" :label="queryType.label" size="small">
+                  <select v-model="queryType">
+                    <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                  </select>
+                </x-select>
+                <button slot="search-button" @click="getDevices" class="btn"><i class="fa fa-search"></i></button>
+              </search-box>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <div class="filter-group">
+            <x-select width="90px" size="small" :label="visibility.label">
+              <span slot="label">{{ $t('common.display') }}: </span>
+              <select v-model="visibility" @change="getDevices">
+                <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
+              </select>
+            </x-select>
+            <span class="ml10">{{ $t('operation.product.device.manager.active_date') }}: </span>
+            <x-select width="98px" size="small" :label="rangeOption.label">
+              <select v-model="rangeOption" @change="onRangeOptionChange">
+                <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+              </select>
+            </x-select>
+            <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
+          </div>
+        </div>
+        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
       </div>
     </div>
   </div>
@@ -155,40 +127,6 @@ export default {
           sortType: -1
         }
       ],
-      // 统计
-      statistic: {
-        // 用户总数
-        users: {
-          options: {},
-          total: 0,
-          change: 0,
-          data: []
-        },
-        // 设备
-        devices: {
-          // 总数
-          sum: {
-            options: {},
-            total: 0,
-            change: 0,
-            data: []
-          },
-          // 激活设备
-          activated: {
-            options: {},
-            total: 0,
-            change: 0,
-            data: []
-          },
-          // 在线设备
-          online: {
-            options: {},
-            total: 0,
-            change: 0,
-            data: []
-          }
-        }
-      },
       startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
       endTime: new Date()
     }
@@ -288,16 +226,14 @@ export default {
     }
   },
 
-  route: {
-    data () {
-      this.query = ''
-      this.originAddModel = _.clone(this.addModel)
-      this.currentPage = 1
-      this.getDevices()
+  ready () {
+    this.query = ''
+    this.originAddModel = _.clone(this.addModel)
+    this.currentPage = 1
+    this.getDevices()
 
-      // getProductSummary 方法来自 productSummaryMixin
-      this.getProductSummary()
-    }
+    // getProductSummary 方法来自 productSummaryMixin
+    this.getProductSummary()
   },
 
   methods: {
@@ -430,7 +366,4 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
-
-.statistic-group
-  border-top 1px solid default-border-color
 </style>
