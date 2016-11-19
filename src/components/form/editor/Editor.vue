@@ -126,6 +126,9 @@ export default {
 @import '../../../assets/stylus/common'
 
 .rich-text-editor
+  i
+    font-style italic
+
   .wangEditor-container
     border 1px solid default-border-color !important
 

@@ -277,7 +277,7 @@ export default {
       this.url = ''
 
       api.exportTask.getTaskUrl(taskId).then((res) => {
-        this.url = decodeURIComponent(res.data.link_url)
+        this.url = res.data.link_url
         this.showModal = true
       }).catch((res) => {
         this.handleError(res)
