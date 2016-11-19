@@ -90,7 +90,7 @@
             </tbody>
           </table>
         </div>
-        <pagination :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDealer"></pagination>
+        <pagination :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDealer" @count-update="pageCountChange"></pagination>
       </div>
     </div>
   </div>
@@ -311,6 +311,10 @@
         if (this.key.length === 0) {
           this.getDealer(true)
         }
+      },
+      pageCountChange (countPerPage) {
+        this.countPerPage = countPerPage
+        this.getDealer()
       }
     }
   }
