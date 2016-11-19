@@ -211,7 +211,7 @@
             id: item.id,
             mac: item.mac,
             active_date: formatDate(item.active_date),
-            sn: '--',
+            sn: item.sn || '--',
             mode: this.selectProduct.mode,
             user: userInfo ? userInfo.nickname || '--' : '--',
             phone: userInfo ? userInfo.phone || '--' : '--',
