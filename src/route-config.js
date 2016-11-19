@@ -938,15 +938,7 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // 数据端点
-        'products/:id/data-point': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/product/data-point'))
-            }, 'admin')
-          }
-        },
-        // 通知与告警
+        // 告警信息
         'products/:id/alerts': {
           component (resolve) {
             require.ensure([], (require) => {
@@ -962,15 +954,7 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // 热力分布
-        // 'products/:id/distributing': {
-        //   component (resolve) {
-        //     require.ensure([], (require) => {
-        //       resolve(require('./views/operation/product/distributing'))
-        //     }, 'admin')
-        //   }
-        // },
-        // 使用分析
+        // 产品分析
         'products/:id/analysis': {
           component (resolve) {
             require.ensure([], (require) => {
@@ -978,30 +962,6 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // // 扩展
-        // 'products/:id/addon': {
-        //   component (resolve) {
-        //     require.ensure([], (require) => {
-        //       resolve(require('./views/operation/product/addon'))
-        //     }, 'admin')
-        //   }
-        // },
-        // 固件升级
-        'products/:id/upgrade': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/product/upgrade'))
-            }, 'admin')
-          }
-        },
-        // 微信导入
-        // 'products/:id/wechat': {
-        //   component (resolve) {
-        //     require.ensure([], (require) => {
-        //       resolve(require('./views/operation/product/wechat'))
-        //     }, 'admin')
-        //   }
-        // },
         // 设备详情
         'products/:product_id/devices/:device_id': {
           component (resolve) {
