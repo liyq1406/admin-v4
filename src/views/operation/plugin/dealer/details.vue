@@ -146,6 +146,10 @@
             label: '负责区域',
             value: ''
           },
+          loc: {
+            label: '地理位置',
+            value: ''
+          },
           belong: {
             label: '从属于',
             value: ''

@@ -152,7 +152,7 @@ export default {
       })
       if (findRegion) {
         this.region = findRegion
-        this.handleCityChange(findRegion.code)
+        this.handleRegionChange(findRegion.code)
       }
     },
     setDefaultState () {

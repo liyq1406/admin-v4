@@ -94,19 +94,6 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 dealer-label">所在区域:</label>
-                  <div class="controls col-19">
-                    <loc-select :showregion="false"
-                                :default-country-code="defaultCountryCode"
-                                :default-state-code="defaultStateCode"
-                                :default-city-code="defaultCityCode"
-                                @country-change="handleCountryChange"
-                                @state-change="handleStateChange"
-                                @city-change="handleCityChange"
-                    ></loc-select>
-                  </div>
-                </div>
-                <div class="form-row row mt20">
                   <label class="form-control col-5 dealer-label">联系地址:</label>
                   <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.address')" class="input-text-wrap">
@@ -126,6 +113,19 @@
                     <div class="form-tips form-tips-error">
                       <span v-if="$autoValidation.dutyarea.touched && $autoValidation.dutyarea.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span>
                     </div>
+                  </div>
+                </div>
+                <div class="form-row row mt20">
+                  <label class="form-control col-5 dealer-label">地理位置:</label>
+                  <div class="controls col-19">
+                    <loc-select :showregion="false"
+                                :default-country-code="defaultCountryCode"
+                                :default-state-code="defaultStateCode"
+                                :default-city-code="defaultCityCode"
+                                @country-change="handleCountryChange"
+                                @state-change="handleStateChange"
+                                @city-change="handleCityChange"
+                    ></loc-select>
                   </div>
                 </div>
                 <div class="form-row row mt20">
