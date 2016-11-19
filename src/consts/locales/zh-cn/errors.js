@@ -79,6 +79,7 @@ export default {
   '4001076': '用户不是设备管理员',
   '4001077': '微信配置相关参数类型不明确',
   '4001078': '授权设置不正确',
+  '4001079': '注册的帐号已存在',
   '4001080': '配额达到上限',
   '4001081': 'sendcloud network abnormal or domain exists or domain can not be changed',
   '4001083': '服务维护中...',

@@ -79,6 +79,7 @@ export default {
   '4001076': 'The user isn\'t device manager.',
   '4001077': 'Undefined WeChat setting related field types.',
   '4001078': 'Incorrect authorisation setting.',
+  '4001079': 'The Account is registered by another user.',
   '4001081': 'Send cloud network abnormal or domain exists or domain can not be changed',
   '4001083': 'Under maintenance...',
   '4001091': 'The product is already released.',

@@ -21,7 +21,7 @@ function parse (country, state, city, region, lang) {
       getLocByCountryCode(country, lang).then((res) => {
         parsedNames.country = res.data.name || ''
         let states = res.data.states
-        if (state && states && states.length) { // 匹配省
+        if (states && states.length) { // 匹配省
           let findState = _.find(states, (item) => {
             return item.code === state
           })
