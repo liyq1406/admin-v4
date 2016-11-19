@@ -100,6 +100,33 @@
                   </div>
                 </div>
               </div>
+              <!-- 只允许数值类型添加公式计算 -->
+              <div class="form-row row">
+                <label class="form-control col-6">数据来源:</label>
+                <div class="controls col-18">
+                  <div class="input-box">
+                    <label>
+                      <input type="radio" name="source" v-model="model.source" :value="1">
+                      <span>设备上报</span>
+                    </label>
+                    <label class="ml10">
+                      <input type="radio" name="source" v-model="model.source" :value="2">
+                      <span>公式计算</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row row" v-if="model.source===2">
+                <label class="form-control col-6">计算公式:</label>
+                <div class="controls col-18">
+                  <div v-placeholder="'@1@*2+30-#2#/2'" class="input-text-wrap">
+                    <input v-model="model.expression" type="text" name="model.expression" v-validate:expression="{required: true}" class="input-text"/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.expression.touched && $validation.expression.required">计算公式为必填项</span>
+                  </div>
+                </div>
+              </div>
               <div class="form-row row">
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.description") }}:</label>
                 <div class="controls col-18">
@@ -129,8 +156,10 @@
 
 <script>
 import api from 'api'
+
 export default {
-  name: 'Authorize',
+  name: 'DataPointForm',
+
   vuex: {
     getters: {
       products: ({ products }) => products.all
@@ -154,6 +183,8 @@ export default {
         type: 1,
         min: 0,
         max: 100,
+        source: 1,
+        expression: '',
         description: '',
         symbol: '',
         is_write: true
@@ -163,8 +194,8 @@ export default {
 
   computed: {
     /**
-     * 计算属性 最小值的表单验证
-     * @return {[type]} [description]
+     * 最小值的表单验证
+     * @return {Object}
      */
     validateMin () {
       var result = {}
@@ -174,6 +205,11 @@ export default {
       result.required = true
       return result
     },
+
+    /**
+     * 最大值的表单验证
+     * @return {Object}
+     */
     validateMax () {
       var result = {}
       result.format = 'numberic'
@@ -182,17 +218,17 @@ export default {
       result.required = true
       return result
     },
+
+    // 当前是编辑还是添加
     type () {
-      if (this.$route.params.dataPointId) {
-        return 'edit'
-      } else {
-        return 'add'
-      }
+      return this.dataPointId ? 'edit' : 'add'
     },
+
     // 端点id
     dataPointId () {
       return this.$route.params.dataPointId
     },
+
     // 面包屑导航
     breadcrumbNav () {
       return [{
@@ -211,6 +247,37 @@ export default {
     // 当前数据类型允许的最大值
     addMax () {
       return this.getByType(this.modelType.value, 'max')
+    },
+
+    // 表单参数
+    formParams () {
+      let params = {
+        name: this.model.name,
+        type: this.model.type,
+        index: this.model.index,
+        description: this.model.description,
+        symbol: this.model.symbol,
+        is_read: true,
+        is_write: this.model.is_write
+      }
+
+      // 非布尔值和字符串类型需要指定最大最小值
+      if (this.modelType.value !== 1 && this.modelType.value !== 6) {
+        params.min = this.model.min
+        params.max = this.model.max
+      }
+
+      // 如果是编辑，则加上数据端点的 id
+      if (this.type === 'edit') {
+        params.id = this.model.id
+      }
+
+      // 删除动作则只需要数据端点的 id作为参数
+      if (this.delChecked) {
+        params = this.dataPointId
+      }
+
+      return params
     }
   },
 
@@ -219,6 +286,7 @@ export default {
       this.model.type = this.modelType.value
     }
   },
+
   route: {
     data () {
       if (this.type === 'edit') {
@@ -283,32 +351,6 @@ export default {
       // 开始提交表单
       this.submitting = true
 
-      // 表单参数
-      let params = {
-        'name': this.model.name,
-        'type': this.model.type,
-        'index': this.model.index,
-        'description': this.model.description,
-        'symbol': this.model.symbol,
-        'is_read': true,
-        'is_write': this.model.is_write
-      }
-
-      if (this.modelType.value !== 1 && this.modelType.value !== 6) {
-        params.min = this.model.min
-        params.max = this.model.max
-      }
-
-      // 如果是编辑，则加上数据端点的 id
-      if (this.type === 'edit') {
-        params.id = this.model.id
-      }
-
-      // 删除动作则只需要数据端点的 id作为参数
-      if (this.delChecked) {
-        params = this.dataPointId
-      }
-
       // 产品 id
       let productId = this.$route.params.id
 
@@ -329,7 +371,7 @@ export default {
       })[this.delChecked ? 'del' : this.type]
 
       // 执行动作并处理回调
-      process.act(productId, params).then((res) => {
+      process.act(productId, this.formParams).then((res) => {
         this.showNotice({
           type: 'success',
           content: `${process.label}成功`
