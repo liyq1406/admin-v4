@@ -218,10 +218,6 @@ export default {
             break
           case 'splashwnd': // 闪屏设置
             sub.icon = 'photo'
-            sub.subs = [{
-              alias: 'list',
-              url: `/plugins/splashwnd/${item.id}/list`
-            }]
             break
           case 'nest': // Google Nest网关
             sub.icon = 'google'

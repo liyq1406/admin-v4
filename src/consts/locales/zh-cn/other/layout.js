@@ -156,10 +156,7 @@ export default {
           }
         },
         splashwnd: {
-          label: 'APP闪屏',
-          subs: {
-            list: 'APP启动页设置'
-          }
+          label: 'APP启动页设置'
         },
         helpdesk: {
           label: '用户反馈',

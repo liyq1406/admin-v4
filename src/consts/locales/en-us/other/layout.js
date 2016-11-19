@@ -163,10 +163,7 @@ export default {
           }
         },
         splashwnd: {
-          label: 'APP Splash Screen',
-          subs: {
-            list: 'Settings'
-          }
+          label: 'APP Start Page'
         },
         dealer: {
           label: 'Dealers',

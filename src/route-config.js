@@ -1891,7 +1891,6 @@ let configRouter = (router) => {
     // '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/forbidden',
     '/operation/plugins/xpay/:app_id': '/operation/plugins/xpay/:app_id/forbidden',
     '/operation/plugins/splashwnd/:app_id': '/operation/plugins/splashwnd/:app_id/list',
-    '/operation/content/splashwnd/:app_id': '/operation/content/splashwnd/:app_id',
     // '/operation/plugins/nest/:app_id': '/operation/plugins/nest/:app_id/forbidden',
     // '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/forbidden',
     '/operation/plugins/content/:app_id': '/operation/plugins/content/:app_id/articles',
