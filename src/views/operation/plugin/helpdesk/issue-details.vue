@@ -6,8 +6,10 @@
         <span>{{ issue.product_name }}</span>
       </div>
       <div class="issue-metas">
-        <span v-if="issue.status === 0" class="issue-status pending"><i class="fa fa-check-square-o"></i>未处理</span>
-        <span v-else class="issue-status handled"><i class="fa fa-check-square-o"></i>已处理</span>
+        <!-- <span v-if="issue.status === 0" class="issue-status pending"><i class="fa fa-check-square-o"></i>未处理</span> -->
+        <button v-if="issue.status === 0" class="issue-status pending btn btn-primary" @click.prevent.stop="setDeal">未处理</button>
+        <button v-else class="issue-status pending btn btn-success"  @click.prevent.stop="setUndeal">已处理</button>
+        <!-- <span v-else class="issue-status handled"><i class="fa fa-check-square-o"></i>已处理</span> -->
         <span class="issue-id">ID:{{ issue.product_id }}</span>
       </div>
     </info-card>
@@ -382,7 +384,12 @@ export default {
         api.helpdesk.saveFeedbackRecord(this.$route.params.app_id, params).then((res) => {
           if (res.status === 200) {
             this.resetSumit()
-            this.changeStatus()
+            // 客服提交成功后将状态设置为已处理
+            var status = {
+              treated_time: new Date(),
+              status: 1
+            }
+            this.changeStatus(status)
             // this.getFeedbackRecord()
           }
         }).catch((err) => {
@@ -390,14 +397,38 @@ export default {
         })
       }
     },
-    // 更新处理状态
-    changeStatus () {
+    // 设置为已处理
+    setDeal () {
       var params = {
         treated_time: new Date(),
         status: 1
       }
+      this.changeStatus(params)
+    },
+    // 设置为未处理
+    setUndeal () {
+      var params = {
+        treated_time: new Date(),
+        status: 0
+      }
+      this.changeStatus(params)
+    },
+    // 更新处理状态
+    changeStatus (params) {
       api.helpdesk.updateFeedbackList(this.$route.params.app_id, this.issue._id, params).then((res) => {
         if (res.status === 200) {
+          if (params.status === 0) {
+            this.showNotice({
+              type: 'success',
+              content: '已设置为未处理！'
+            })
+          } else {
+            this.showNotice({
+              type: 'success',
+              content: '已设置为已处理！'
+            })
+          }
+          this.getIssue()
           this.getFeedbackRecord()
         }
       }).catch((err) => {
