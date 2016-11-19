@@ -14,6 +14,7 @@
 <script>
 import Chart from 'components/Chart/index'
 import api from 'api'
+import truncate from 'filters/truncate'
 
 export default {
   name: 'ProductModel',
@@ -96,7 +97,7 @@ export default {
       api.statistics.getProductSummary(product.id).then((res) => {
         if (res.status === 200) {
           this.productsDevices.push({
-            name: product.mode || this.$t('operation.overview.model_analysis.other') + ++this.noNameCount,
+            name: truncate(product.mode || this.$t('operation.overview.model_analysis.other') + ++this.noNameCount, 24),
             value: res.data.total
           })
         }
