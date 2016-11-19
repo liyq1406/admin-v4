@@ -118,7 +118,7 @@
           key: 'active_date',
           title: '激活时间'
         }, {
-          key: 'model',
+          key: 'mode',
           title: '产品型号'
         }, {
           key: 'sn',
