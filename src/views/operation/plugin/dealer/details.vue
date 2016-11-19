@@ -108,6 +108,8 @@
   // import locales from 'consts/locales/index'
   import api from 'api'
   import { pluginMixins } from '../mixins'
+  import locParser from 'utils/location-parser'
+
   export default {
     name: 'TableDetails',
 
@@ -225,9 +227,10 @@
       },
       queryCondition () {
         var condition = {
-          filter: ['name', 'id', 'email', 'phone', 'client_type', 'province', 'city', 'address', 'sn', 'sale_time', 'product_mod', 'mac', 'product_id', 'device_id'],
+          filter: ['name', 'id', 'email', 'phone', 'client_type', 'province', 'city', 'address', 'sn', 'sale_time', 'product_mod', 'mac', 'product_id', 'device_id', 'product_mod'],
           limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage
+          offset: (this.currentPage - 1) * this.countPerPage,
+          query: {}
         }
         if (this.query.length > 0) {
           condition.query[this.queryType.value] = {$in: [this.query]}
@@ -264,6 +267,18 @@
           this.dealerInfo.area.value = this.dealer.region || '--'
           this.dealerInfo.target.value = this.dealer.sale_goal || '--'
           this.dealerInfo.sale.value = this.dealer.saled_amount || '--'
+          locParser.parse(this.dealer.country || '', this.dealer.province || '', this.dealer.city || '', '', this.lang).then((res) => {
+            if (res) {
+              let loc = res.country
+              if (res.state) {
+                loc += ' ' + res.state
+              }
+              if (res.city) {
+                loc += ' ' + res.city
+              }
+              this.dealerInfo.loc.value = loc
+            }
+          })
           this.loadingData = false
         }).catch((err) => {
           this.handleError(err)

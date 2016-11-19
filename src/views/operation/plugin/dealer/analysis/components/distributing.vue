@@ -235,7 +235,7 @@ export default {
       api.statistics.getDealeSaleRegion().then((res) => {
         if (res.status === 200) {
           // 只取中国区数据
-          this.regionDataRaw = res.data.distribution[1] // 1表示中国区代码
+          this.regionDataRaw = res.data[1] // 1表示中国区代码
         }
         this.loadingData = false
       }).catch((res) => {

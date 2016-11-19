@@ -75,7 +75,7 @@
                   <td>{{* dealer.belongTo || '--' }}</td>
                   <td>{{* dealer.sale_goal || '--'}}</td>
                   <td>{{* dealer.saled_amount || '--' }}</td>
-                  <td>{{* dealer.create_time || '--' }}</td>
+                  <td>{{ dealer.create_time | formatDate }}</td>
                   <td><span v-if="dealer.status === 1" class="hl-green">启用</span><span v-else class="hl-gray">停用</span></td>
                   <!-- <td class="tac">
                     <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>

@@ -143,7 +143,8 @@
           this.releasedProduct.forEach((item) => {
             res.push({
               label: item.name,
-              id: item.id
+              id: item.id,
+              mode: item.mode
             })
           })
           this.selectProduct = res[0]
@@ -210,8 +211,8 @@
             id: item.id,
             mac: item.mac,
             active_date: formatDate(item.active_date),
-            sn: item.sn || '--',
-            model: '--',
+            sn: '--',
+            mode: this.selectProduct.mode,
             user: userInfo ? userInfo.nickname || '--' : '--',
             phone: userInfo ? userInfo.phone || '--' : '--',
             dealer: dealerInfo ? dealerInfo.name || '--' : '--',
@@ -261,23 +262,26 @@
         if (!this.selectMarkDealer.id || !this.selectDevices.length) {
           return
         }
-        // 添加设备dealer_scope
-        this.updateProductDevices()
         // 添加销售信息
         this.addClientInfo()
       },
-      updateProductDevices () {
-        let params = {
-          dealer_scope: ''
-        }
-        params.dealer_scope = params.dealer_scope + this.selectMarkDealer.dealer_code
-        if (this.selectMarkDealer.upper_dealer_code) {
-          params.dealer_scope = this.selectMarkDealer.upper_dealer_code + ',' + params.dealer_scope
-        }
+      addClientInfo () {
         let length = this.selectDevices.length
         let count = 0
+        // 添加销售记录
         this.selectDevices.forEach((item) => {
-          api.product.updateDeviceMsg(this.selectProduct.id, item.id, params).then((res) => {
+          let params = {
+            name: item.userInfo ? item.userInfo.name : '',
+            phone: item.userInfo ? item.userInfo.phone : '',
+            sn: item.origin.sn,
+            // sale_time: item.origin.active_date,
+            client_type: 'common_buyer',
+            product_mod: item.mode,
+            mac: item.origin.mac,
+            product_id: this.selectProduct.id,
+            device_id: item.origin.id
+          }
+          api.dealer.addClientInfo(this.selectMarkDealer.id, params).then((res) => {
             count++
             if (res.status === 200) {
               // 更新成功
@@ -289,30 +293,6 @@
                 label: '无',
                 id: 0
               }
-            }
-          }).catch((res) => {
-            count++
-            this.handleError(res)
-          })
-        })
-      },
-      addClientInfo () {
-        // 添加销售记录
-        this.selectDevices.forEach((item) => {
-          let params = {
-            name: item.userInfo ? item.userInfo.name : '',
-            phone: item.userInfo ? item.userInfo.phone : '',
-            sn: item.origin.sn,
-            // sale_time: item.origin.active_date,
-            client_type: 'common_buyer',
-            // product_mod: '',
-            mac: item.origin.mac,
-            product_id: this.selectProduct.id,
-            device_id: item.origin.id
-          }
-          api.dealer.addClientInfo(this.selectMarkDealer.id, params).then((res) => {
-            if (res.status === 200) {
-              // 更新成功
             }
           }).catch((res) => {
             this.handleError(res)

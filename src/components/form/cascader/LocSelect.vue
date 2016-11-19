@@ -39,6 +39,7 @@
 
 <script>
 import _ from 'lodash'
+import locParser from 'utils/location-parser'
 
 export default {
   name: 'AreaSelect',
@@ -196,7 +197,7 @@ export default {
       }
 
       // 获取对应省份
-      this.$http.get(`/static/data/areas/${this.lang}/${countryCode}.json`).then((res) => {
+      locParser.getLocByCountryCode(countryCode, this.lang).then((res) => {
         this.originState = res.data.states || []
         if (!this.originState.length) {
           this.noState = true

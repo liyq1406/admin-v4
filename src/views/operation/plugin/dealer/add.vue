@@ -249,6 +249,10 @@
     },
     methods: {
       onSubmit () {
+        if (this.$autoValidation.invalid) {
+          this.$validate(true)
+          return
+        }
         if (this.$autoValidation.valid && !this.sending) {
           if (this.type === 'add') {
             this.addDealer()
