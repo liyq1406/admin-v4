@@ -200,5 +200,16 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}/qrcode`, params
     )
+  },
+
+  /**
+   * 获取设备地理信息
+   * @param  {String} productId 产品 ID
+   * @param  {String} deviceId   设备 ID
+   */
+  getAggregateDevices (productId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/product/${productId}/aggregate/devices`, params
+    )
   }
 }

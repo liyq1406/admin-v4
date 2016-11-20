@@ -60,6 +60,8 @@
             </div>
           </div>
           <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <pre>{{fields | json}}</pre>
+          <pre>{{fieldKeys | json}}</pre>
       </div>
     </div>
   </div>
@@ -80,8 +82,8 @@ export default {
 
   data () {
     var sortOrders = {}
-    var descProperties = ['active_date']
-    var ascProperties = ['mac']
+    var descProperties = ['active_date', 'is_online']
+    var ascProperties = []
 
     descProperties.forEach((key) => {
       sortOrders[key] = 'desc'
@@ -92,12 +94,63 @@ export default {
     })
 
     return {
+      // 基本字段
+      base_fields: [
+        {
+          'name': 'mac',
+          'label': 'MAC地址',
+          'hidden': false,
+          'sort': 1
+        },
+        {
+          'name': 'id',
+          'label': '设备ID',
+          'hidden': false,
+          'sort': 2
+        },
+        {
+          'name': 'is_active',
+          'label': '是否激活',
+          'hidden': false,
+          'sort': 3
+        },
+        {
+          'name': 'active_date',
+          'label': '激活时间',
+          'hidden': false,
+          'sort': 4
+        },
+        {
+          'name': 'is_online',
+          'label': '是否在线',
+          'hidden': false,
+          'sort': 5
+        },
+        {
+          'name': 'sn',
+          'label': 'SN',
+          'hidden': true,
+          'sort': 6
+        },
+        {
+          'name': 'online_count',
+          'label': '累计在线时间',
+          'hidden': true,
+          'sort': 7
+        },
+        {
+          'name': 'firmware_version',
+          'label': '固件版本号',
+          'hidden': true,
+          'sort': 8
+        }
+      ],
       exporting: false,
       startDate: '',
       endDate: '',
       query: '',
-      sortKey: '',
       sortOrders: sortOrders,
+      sortKey: '',
       searching: false,
       visibility: {
         label: this.$t('common.all'),
@@ -124,31 +177,35 @@ export default {
         label: 'MAC',
         value: 'mac'
       },
-      headers: [
-        {
-          key: 'mac',
-          title: this.$t('operation.product.device.manager.mac')
-        },
-        {
-          key: 'id',
-          title: this.$t('operation.product.device.manager.device_id')
-        },
-        {
-          key: 'is_active',
-          title: this.$t('operation.product.device.manager.is_active.label'),
-          tooltip: this.$t('operation.product.device.manager.is_active.tooltip')
-        },
-        {
-          key: 'active_date',
-          title: this.$t('operation.product.device.manager.active_date'),
-          sortType: -1
-        },
-        {
-          key: 'is_online',
-          title: this.$t('operation.product.device.manager.is_online'),
-          sortType: -1
-        }
-      ],
+      // headers: [
+      //   {
+      //     key: 'mac',
+      //     title: this.$t('operation.product.device.manager.mac')
+      //   },
+      //   {
+      //     key: 'id',
+      //     title: this.$t('operation.product.device.manager.device_id')
+      //   },
+      //   {
+      //     key: 'is_active',
+      //     title: this.$t('operation.product.device.manager.is_active.label'),
+      //     tooltip: this.$t('operation.product.device.manager.is_active.tooltip')
+      //   },
+      //   {
+      //     key: 'active_date',
+      //     title: this.$t('operation.product.device.manager.active_date'),
+      //     sortType: -1
+      //   },
+      //   {
+      //     key: 'is_online',
+      //     title: this.$t('operation.product.device.manager.is_online'),
+      //     sortType: -1
+      //   }
+      // ],
+      loadingDataField: false,
+      deviceFields: {},
+      loadingDataPoint: false,
+      dataPoints: [],
       // 统计
       statistic: {
         // 用户总数
@@ -202,16 +259,128 @@ export default {
     // 列表数据
     tables () {
       var result = []
+      var deviceModal = {}
+      this.fieldKeys.forEach((key) => {
+        deviceModal[key] = '-'
+        // if (key === 'mac') {
+        //   deviceModal[key] = '<a class="hl-red">-</a>'
+        // }
+      })
       this.devices.forEach((item) => {
-        var device = {
-          id: item.id,
-          mac: '<a class="hl-red">' + item.mac + '</a>',
-          is_active: item.is_active ? this.$t('common.yes') : this.$t('common.no'),
-          active_date: formatDate(item.active_date),
-          is_online: item.is_online ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>',
-          prototype: item
+        var device = deviceModal
+        for (var key in item) {
+          if (item.hasOwnProperty(key)) {
+            device[key] === item[key]
+          }
         }
+        device.mac = '<a class="hl-red">' + item.mac + '</a>'
+        device.is_active = item.is_active ? this.$t('common.yes') : this.$t('common.no')
+        device.active_date = formatDate(item.active_date) || '-'
+        device.is_online = item.is_online ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>'
+        device.online_count = item.online_count ? (item.online_count - 0).toFixed(2) + '小时' : '-'
+        device.prototype = item
+        // var device = {
+        //   id: item.id,
+        //   mac: '<a class="hl-red">' + item.mac + '</a>',
+        //   is_active: item.is_active ? this.$t('common.yes') : this.$t('common.no'),
+        //   active_date: formatDate(item.active_date),
+        //   is_online: item.is_online ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>',
+        //   prototype: item
+        // }
+
         result.push(device)
+      })
+      return result
+    },
+
+    // 字段列表
+    fields () {
+      var result = []
+      // 当前基本字段 接口有的话取接口的 没有的话取默认值
+      var baseFields = this.deviceFields.base_fields || this.base_fields
+      baseFields.forEach((item, index) => {
+        var field = _.clone(item)
+        field.category = 'base_fields'
+        result.push(field)
+      })
+
+      // 计算当前产品数据端点 更新页面数据端点字段
+      this.dataPoints.forEach((item, index) => {
+        var dataPoint = {
+          'category': 'datapoints',
+          'index': item.index,
+          'name': item.name,
+          'label': item.name,
+          'hidden': true,
+          'sort': baseFields.length + this.dataPoints.length + index
+        }
+        this.deviceFields.datapoints && this.deviceFields.datapoints.forEach((item2) => {
+          if (item2.index === dataPoint.index && item2.name === dataPoint.name) {
+            dataPoint.label = item2.label
+            dataPoint.hidden = item2.hidden
+            dataPoint.sort = item2.sort
+          }
+        })
+        result.push(dataPoint)
+      })
+
+      // 所有字段排序
+      result.sort((a, b) => {
+        return a.sort - b.sort
+      })
+      // 所有字段重新计算索引
+      result.forEach((item, index) => {
+        item.sort = index + 1
+      })
+      return result
+    },
+
+    fieldKeys () {
+      var result = []
+      this.fields.forEach((item) => {
+        if (item.hidden) return
+        result.push(item.name)
+      })
+      return result
+    },
+
+    deviceKeys () {
+      var result = []
+      result = ['mac', 'id', 'name', 'is_active', 'sn', 'active_date', 'firmware_version']
+      return result
+    },
+
+    vDevicekeys () {
+      var ignore = this.deviceKeys.concat(['is_online'])
+      var result = []
+      result = this.fieldKeys.filter((item) => {
+        return ignore.indexOf(item) === -1
+      })
+      return result
+    },
+
+    headers () {
+      var result = []
+      this.fields.forEach((item) => {
+        if (item.hidden) return
+        var header = {
+          key: item.name,
+          title: item.label
+        }
+
+        if (item.name === 'is_active') {
+          header.tooltip = this.$t('operation.product.device.manager.is_active.tooltip')
+        }
+
+        if (item.name === 'active_date') {
+          header.sortType = this.sortOrders['active_date'] === 'asc' ? 1 : -1
+        }
+
+        if (item.name === 'is_online') {
+          header.sortType = this.sortOrders['is_online'] === 'asc' ? 1 : -1
+        }
+
+        result.push(header)
       })
       return result
     },
@@ -219,18 +388,43 @@ export default {
     // 基本筛选条件
     baseCondition () {
       var condition = {
-        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
-        order: this.sortOrders,
-        query: {}
+        // filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login', 'sn', 'online_count', 'firmware_version'],
+        filter: {
+          device: this.deviceKeys,
+          vdevice: this.vDevicekeys,
+          online: ['is_online']
+        },
+        // order: this.sortOrders,
+        order: {
+          device: {},
+          vDevice: {},
+          online: {}
+        },
+
+        query: {
+          device: {},
+          vDevice: {},
+          online: {}
+        }
+      }
+
+      if (this.sortKey === 'is_online') {
+        condition.order.online = {
+          'is_online': this.sortOrders['is_online']
+        }
+      } else if (this.deviceKeys && this.deviceKeys.indexOf(this.sortKey) > -1) {
+        condition.order.device[this.sortKey] = this.sortOrders[this.sortKey]
+      } else if (this.vDeviceKeys && this.vDeviceKeys.indexOf(this.sortKey) > -1) {
+        condition.order.vdevice[this.sortKey] = this.sortOrders[this.sortKey]
       }
 
       if (this.query.length > 0) {
         this.currentPage = 1
-        condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+        condition.query.device[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
       }
 
       if (this.rangeOption.value === 'specified') {
-        condition.query['active_date'] = {
+        condition.query.device['active_date'] = {
           '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
           '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
         }
@@ -238,16 +432,16 @@ export default {
 
       switch (this.visibility.value) {
         case 'online':
-          condition.query['is_online'] = { $in: [true] }
+          condition.query.online['is_online'] = { $in: [true] }
           break
         case 'offline':
-          condition.query['is_online'] = { $in: [false] }
+          condition.query.online['is_online'] = { $in: [false] }
           break
         case 'active':
-          condition.query['is_active'] = { $in: [true] }
+          condition.query.device['is_active'] = { $in: [true] }
           break
         case 'inactive':
-          condition.query['is_active'] = { $in: [false] }
+          condition.query.device['is_active'] = { $in: [false] }
           break
         default:
       }
@@ -268,7 +462,7 @@ export default {
     // 导出CSV条件参数
     exportParams () {
       let condition = _.cloneDeep(this.baseCondition)
-      condition.filter = ['id', 'name', 'mac', 'sn', 'is_active', 'active_date', 'is_online', 'last_login', 'mcu_mod', 'mcu_version', 'firmware_mod', 'firmware_version', 'corp_id', 'product_id', 'region_id', 'create_time']
+      // condition.filter = ['id', 'name', 'mac', 'sn', 'is_active', 'active_date', 'is_online', 'last_login', 'mcu_mod', 'mcu_version', 'firmware_mod', 'firmware_version', 'corp_id', 'product_id', 'region_id', 'create_time']
 
       return {
         name: '设备列表',
@@ -287,7 +481,10 @@ export default {
       this.query = ''
       this.originAddModel = _.clone(this.addModel)
       this.currentPage = 1
-      this.getDevices()
+      this.getDataPoint()
+      this.getFiled(() => {
+        this.getDevices()
+      })
 
       // getProductSummary 方法来自 productSummaryMixin
       this.getProductSummary()
@@ -295,6 +492,40 @@ export default {
   },
 
   methods: {
+    /**
+     * 获取字段
+     */
+    getFiled (fn) {
+      this.loadingDataField = true
+      api.customization.getDeviceCustomization(this.$route.params.id).then((res) => {
+        if (res.data.base_fields && res.data.base_fields.length) {
+          this.deviceFields = res.data || {}
+        }
+        this.loadingDataField = false
+        fn && fn()
+      }).catch((res) => {
+        this.loadingDataField = false
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 获取数据端点
+     * @return {[type]} [description]
+     */
+    getDataPoint () {
+      this.loadingDataPoint = true
+      api.product.getDatapoints(this.$route.params.id).then((res) => {
+        if (res.status === 200) {
+          this.dataPoints = res.data
+          this.loadingDataPoint = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingDataPoint = false
+      })
+    },
+
     /**
      * 处理导出 CSV 按钮点击
      */
@@ -383,6 +614,7 @@ export default {
       }
       this.loadingData = true
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
+      // api.device.getAggregateDevices(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
         this.total = res.data.count
         this.loadingData = false
@@ -404,6 +636,7 @@ export default {
       if (typeof key === 'object') {
         key = key.key
       }
+      console.log(key)
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] === 'asc' ? 'desc' : 'asc'
       this.getDevices()
