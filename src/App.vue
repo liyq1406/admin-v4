@@ -1,19 +1,20 @@
 <template>
   <div :class="{'auth-page':hasLayout('auth'), 'has-topbar':hasLayout('topbar'), 'has-sidebar':hasLayout('sidebar'), 'loading-resource':loading}" class="page-container">
     <template v-if="hasLayout('auth')">
-      <header class="auth-header" transition="header" transition-mode="out-in">
+      <!-- <header class="auth-header" transition="header" transition-mode="out-in"> -->
+      <header class="auth-header">
         <div class="logo-auth">
-          <a href="http://www.xlink.cn/"></a>
+          <a href="http://www.xlink.cn/" :style="logoStyle"></a>
         </div>
       </header>
     </template>
 
     <!-- Start: 路由视图 -->
-    <router-view transition="view" transition-mode="out-in" class="view"></router-view>
+    <router-view transition="view" transition-mode="out-in" class="view" @login-success="onLoginSuccess"></router-view>
     <!-- End: 路由视图 -->
 
     <template v-if="hasLayout('topbar')">
-      <topbar></topbar>
+      <topbar :nav="mainNav" :user-role="userRole"></topbar>
     </template>
 
     <!-- Start: 错误模态窗口 -->
@@ -88,7 +89,8 @@ export default {
       refreshed: false,
       loadingCorp: false,
       loadingProducts: false,
-      customApps: []
+      customApps: [],
+      userRole: 'member'
     }
   },
 
@@ -96,16 +98,61 @@ export default {
     loadingInfo () {
       let result = this.loadingCorp || this.loadingProducts
       return result
+    },
+
+    mainNav () {
+      let nav = [{
+        label: this.$t('layout.main_nav.operation.label'),
+        url: '/operation'
+      }]
+
+      if (this.userRole === 'member') {
+        nav.unshift({
+          label: this.$t('layout.main_nav.dev.label'),
+          url: '/dev'
+        })
+      }
+
+      return nav
+    },
+
+    logoStyle () {
+      let result = {
+        backgroundColor: '#C82433',
+        backgroundImage: 'url(static/images/logo_auth.png)'
+      }
+      if (this.$route && window.location.href.indexOf('heavy-buyer-login') >= 0) {
+        result.backgroundColor = '#FFF'
+        result.backgroundImage = 'url(/static/images/topband.png)'
+      }
+      return result
     }
+
+    // 主导航
+    // mainNav () {
+    //   let nav = [{
+    //     label: this.$t('layout.main_nav.operation.label'),
+    //     url: '/operation'
+    //   }]
+    //
+    //   if (this.userRole === 'member') {
+    //     nav.unshift({
+    //       label: this.$t('layout.main_nav.dev.label'),
+    //       url: '/dev'
+    //     })
+    //   }
+    //
+    //   return nav
+    // }
   },
 
   watch: {
     layouts () {
       if (this.hasLayout('topbar')) {
         this.getMember()
-        this.getProducts()
         this.getPlugins()
         this.getCorpInfo()
+        this.getProducts()
       }
     },
 
@@ -119,9 +166,36 @@ export default {
   ready () {
     // this.refreshToken()
     document.title = this.$t('layout.platform.name')
+    this.onLoginSuccess()
   },
 
   methods: {
+    /**
+     * 生成主导航
+     */
+    // genMainNav () {
+    //   let nav = [{
+    //     label: this.$t('layout.main_nav.operation.label'),
+    //     url: '/operation'
+    //   }]
+    //   let userRole = window.localStorage.getItem('userRole')
+    //
+    //   if (userRole === 'member') {
+    //     nav.unshift({
+    //       label: this.$t('layout.main_nav.dev.label'),
+    //       url: '/dev'
+    //     })
+    //   }
+    //
+    //   this.mainNav = nav
+    //   this.userRole = userRole
+    // },
+
+    onLoginSuccess () {
+      this.userRole = window.localStorage.getItem('userRole')
+      // this.genMainNav()
+    },
+
     /**
      * 刷新token
      * @return {void}
@@ -270,8 +344,10 @@ export default {
     a
       display inline-block
       size 200px 100px
-      background red url('assets/images/logo_auth.png') no-repeat
+      /*background red url('assets/images/logo_auth.png') no-repeat*/
+      background-repeat no-repeat
       background-size 200px 100px
+      border-radius 0 0 10px 10px
 
 .loading-resource
   cursor wait

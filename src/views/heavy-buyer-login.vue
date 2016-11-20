@@ -1,7 +1,7 @@
 <template>
   <div class="auth-form login-form">
     <div class="inner">
-      <div class="form-legend">{{ $t('layout.platform.name') }}</div>
+      <div class="form-legend">Residential Battery Storage Solution</div>
       <div class="form">
         <validator name="authValidation">
           <form novalidate @submit.prevent="onSubmit">
@@ -22,7 +22,7 @@
               </div>
             </div>
             <div class="form-row row-check">
-              <a v-link="{ path: '/fetch-password-bymail' }">{{ $t("auth.forget") }}</a>
+              <!-- <a v-link="{ path: '/fetch-password-bymail' }">{{ $t("auth.forget") }}</a> -->
               <label class="checkbox">
                 <input type="checkbox" v-model="rememberPwd"/>{{ $t("auth.remember") }}
               </label>
@@ -30,15 +30,15 @@
             <div class="form-actions">
               <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submitting') : $t('auth.login_submit')" class="btn btn-primary btn-xlg btn-pill focus-input">{{ $t("auth.login_submit") }}</button>
             </div>
-            <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a></div>
+            <!-- <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a></div> -->
           </form>
         </validator>
       </div>
     </div>
     <div class="extra-actions">
-      <div class="old-entrance" v-if="isShowOldEntrance">
+      <!-- <div class="old-entrance" v-if="isShowOldEntrance">
         <a href="http://admin-v3.xlink.cn/" target="_blank">{{ $t('auth.old_entrance') }} &gt;</a>
-      </div>
+      </div> -->
       <div class="lang-switcher">
         <a href="#" :class="{'active': currLang === 'zh-cn'}" @click.prevent.stop="switchLanguage('zh-cn')">中文</a> / <a href="#" :class="{'active': currLang === 'en-us'}"  @click.prevent.stop="switchLanguage('en-us')">English</a>
       </div>
@@ -79,18 +79,6 @@
     },
 
     route: {
-      canActivate (transition) {
-        let userRole = window.localStorage.getItem('userRole')
-
-        if (userRole === 'heavy-buyer') {
-          let heavyBuyerId = window.localStorage.getItem('heavyBuyerId')
-          // console.log(transition)
-          transition.redirect(`/heavy-buyer-login/${heavyBuyerId}`)
-        }
-
-        transition.next()
-      },
-
       deactivate () {
         // 清除插件的token
         window.localStorage.removeItem('pluginsToken')
@@ -105,6 +93,8 @@
     },
 
     ready () {
+      // 清除大客户等用户登录标识
+      window.localStorage.removeItem('userRole')
       this.setLoadingStatus(false)
       if (this.rememberPwd) {
         this.model.account = this.getCookie('account')
@@ -167,13 +157,15 @@
             // window.localStorage.clear()
             window.localStorage.removeItem('pluginsToken')
             window.localStorage.removeItem('memberRole')
+            // 用户角色，1表示大客户
             window.localStorage.setItem('memberId', res.data.member_id)
             window.localStorage.setItem('corpId', res.data.corp_id)
             window.localStorage.setItem('accessToken', res.data.access_token)
             window.localStorage.setItem('refreshToken', res.data.refresh_token)
             window.localStorage.setItem('expireIn', res.data.expire_in)
             window.localStorage.setItem('expireAt', today.getTime() + res.data.expire_in * 1000)
-            window.localStorage.setItem('userRole', 'member')
+            window.localStorage.setItem('userRole', 'heavy-buyer')
+            window.localStorage.setItem('heavyBuyerId', this.$route.params.heavyBuyerId)
             // window.localStorage.setItem('expireAt', today.getTime() + 10000)
             // 设置记住密码
             if (this.rememberPwd) {
@@ -187,7 +179,9 @@
             }
             this.isLoginSuccess = true
             this.$emit('login-success')
-            this.$route.router.replace({path: '/dashboard'})
+            api.product.all().then((res) => {
+              this.$route.router.replace({path: `/operation/products/${res.data[0].id}/overview`})
+            })
           }).catch((res) => {
             this.setLoadingStatus(false)
             this.handleError(res)
@@ -217,6 +211,8 @@
   @import '../assets/stylus/common'
 
   .login-form
+    .inner
+      padding-bottom: 40px;
     .row-check
       a
         float right

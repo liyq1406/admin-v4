@@ -1,6 +1,6 @@
 <template>
   <div class="page-in">
-    <sidebar :nav="secNav"></sidebar>
+    <sidebar :nav="userRole === 'heavy-buyer' ? vipSecNav : secNav"></sidebar>
 
     <section class="main-wrap" v-if="showContent">
       <alert-bar :msg="alertMsg" v-if="!loading"></alert-bar>
@@ -41,7 +41,8 @@ export default {
     return {
       isDemo: IS_DEMO,
       showContent: false,
-      nav: {}
+      nav: {},
+      userRole: window.localStorage.getItem('userRole')
     }
   },
 
@@ -49,6 +50,43 @@ export default {
     // 是否不再显示警告遮罩
     isHideMaskForever () {
       return window.localStorage.getItem(`${this.corp.id}hideAlertMask`)
+    },
+
+    // 大客户侧栏导航
+    vipSecNav () {
+      let result = {
+        alias: 'operation',
+        url: '/operation',
+        subs: []
+      }
+      // let subs = MAIN_NAV.operation.subs
+
+      // 产品管理标题
+      result.subs.push({
+        label: this.$t('operation.product_management'),
+        type: 'title'
+      })
+
+      // 产品导航
+      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
+      this.releasedProducts.forEach((item, index) => {
+        result.subs.push({
+          name: item.name,
+          type: 'product',
+          alias: 'products',
+          icon: 'link',
+          unfold: index === 0,
+          id: item.id,
+          subs: PRO_SUBS.map((sub) => {
+            return {
+              alias: sub,
+              url: `/products/${item.id}/${sub}`
+            }
+          })
+        })
+      })
+
+      return result
     },
 
     // 侧栏导航

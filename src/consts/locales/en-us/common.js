@@ -53,6 +53,8 @@ export default {
   placeholder: {
     search: 'Search'
   },
+  username: 'Username',
+  password: 'Password',
   email: 'Email',
   phone: 'Phone',
   create_time: 'Create Time',

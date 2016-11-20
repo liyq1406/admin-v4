@@ -54,6 +54,8 @@ export default {
   placeholder: {
     search: '请输入查询内容'
   },
+  username: '用户名',
+  password: '密码',
   email: '邮箱',
   phone: '手机',
   create_time: '创建时间',

@@ -6,16 +6,16 @@
         <validator name="authValidation">
           <form novalidate @submit.prevent="onSubmit">
             <div class="form-row">
-              <div v-placeholder="$t('auth.email_phone')" class="input-text-wrap">
-                <input type="text" v-model="model.account" name="model.account" v-validate:account="{required: true}" lazy class="input-text"/>
+              <div class="input-text-wrap">
+                <input :placeholder="$t('common.username')" type="text" v-model="model.username" name="model.username" v-validate:username="{required: true}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.account.touched && $authValidation.account.required">{{ $t('common.validation.required', {field: $t('auth.fields.account')}) }}</span>
+                <span v-if="$authValidation.username.touched && $authValidation.username.required">{{ $t('common.validation.required', {field: $t('common.username')}) }}</span>
               </div>
             </div>
             <div class="form-row">
-              <div v-placeholder="$t('auth.password')" class="input-text-wrap">
-                <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true}" lazy class="input-text"/>
+              <div class="input-text-wrap">
+                <input :placeholder="$t('auth.fields.password')" type="password" v-model="model.password" name="model.password" v-validate:password="{required: true}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
                 <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
@@ -30,15 +30,15 @@
             <div class="form-actions">
               <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submitting') : $t('auth.login_submit')" class="btn btn-primary btn-xlg btn-pill focus-input">{{ $t("auth.login_submit") }}</button>
             </div>
-            <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a></div>
+            <!-- <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a></div> -->
           </form>
         </validator>
       </div>
     </div>
     <div class="extra-actions">
-      <div class="old-entrance" v-if="isShowOldEntrance">
+      <!-- <div class="old-entrance" v-if="isShowOldEntrance">
         <a href="http://admin-v3.xlink.cn/" target="_blank">{{ $t('auth.old_entrance') }} &gt;</a>
-      </div>
+      </div> -->
       <div class="lang-switcher">
         <a href="#" :class="{'active': currLang === 'zh-cn'}" @click.prevent.stop="switchLanguage('zh-cn')">中文</a> / <a href="#" :class="{'active': currLang === 'en-us'}"  @click.prevent.stop="switchLanguage('en-us')">English</a>
       </div>
@@ -70,7 +70,8 @@
         currLang: window.localStorage.getItem('lang'),
         isShowOldEntrance: IS_SHOW_OLD_ENTRANCE,
         model: {
-          account: '',
+          heavy_buyer_id: '',
+          username: '',
           password: ''
         },
         isLoginSuccess: false,
@@ -79,18 +80,6 @@
     },
 
     route: {
-      canActivate (transition) {
-        let userRole = window.localStorage.getItem('userRole')
-
-        if (userRole === 'heavy-buyer') {
-          let heavyBuyerId = window.localStorage.getItem('heavyBuyerId')
-          // console.log(transition)
-          transition.redirect(`/heavy-buyer-login/${heavyBuyerId}`)
-        }
-
-        transition.next()
-      },
-
       deactivate () {
         // 清除插件的token
         window.localStorage.removeItem('pluginsToken')
@@ -105,9 +94,12 @@
     },
 
     ready () {
+      // 清除大客户等用户登录标识
+      window.localStorage.removeItem('userRole')
       this.setLoadingStatus(false)
+      this.model.heavy_buyer_id = this.$route.params.heavyBuyerId
       if (this.rememberPwd) {
-        this.model.account = this.getCookie('account')
+        this.model.username = this.getCookie('account')
         this.model.password = this.getCookie('password')
       }
       this.focus()
@@ -162,23 +154,25 @@
       onSubmit () {
         if (this.$authValidation.valid) {
           this.setLoadingStatus(true)
-          api.corp.auth(this.model).then((res) => {
+          api.heavyBuyer.auth(this.model).then((res) => {
             var today = new Date()
             // window.localStorage.clear()
             window.localStorage.removeItem('pluginsToken')
             window.localStorage.removeItem('memberRole')
+            // 用户角色，1表示大客户
+            window.localStorage.setItem('userRole', 'heavy-buyer')
+            window.localStorage.setItem('heavyBuyerId', this.$route.params.heavyBuyerId)
             window.localStorage.setItem('memberId', res.data.member_id)
             window.localStorage.setItem('corpId', res.data.corp_id)
             window.localStorage.setItem('accessToken', res.data.access_token)
             window.localStorage.setItem('refreshToken', res.data.refresh_token)
             window.localStorage.setItem('expireIn', res.data.expire_in)
             window.localStorage.setItem('expireAt', today.getTime() + res.data.expire_in * 1000)
-            window.localStorage.setItem('userRole', 'member')
             // window.localStorage.setItem('expireAt', today.getTime() + 10000)
             // 设置记住密码
             if (this.rememberPwd) {
               this.setCookie('rememberPwd', true)
-              this.setCookie('account', this.model.account)
+              this.setCookie('account', this.model.username)
               this.setCookie('password', this.model.password)
             } else {
               this.delCookie('rememberPwd')
@@ -217,6 +211,9 @@
   @import '../assets/stylus/common'
 
   .login-form
+    .inner
+      padding-bottom: 40px;
+
     .row-check
       a
         float right

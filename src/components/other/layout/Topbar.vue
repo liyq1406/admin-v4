@@ -1,12 +1,15 @@
 <template>
   <header class="header the-header" transition="header" transition-mode="out-in">
-    <a v-link="{ path: '/dashboard' }" class="logo" :style="logo?'background-image: url('+logo+')': ''"></a>
+    <a v-link="{ path: '/dashboard' }" class="logo" :style="logoStyle"></a>
     <!-- Start: 主导航 -->
     <nav class="nav-header">
       <!-- <pre>{{mainNav | json}}</pre> -->
-      <ul>
+      <!-- <ul>
         <li><a v-link="{path: '/dev'}"><span class="link-text">{{ $t('layout.main_nav.dev.label') }}</span></a></li>
         <li><a v-link="{path: '/operation'}"><span class="link-text">{{ $t('layout.main_nav.operation.label') }}</span></a></li>
+      </ul> -->
+      <ul>
+        <li v-for="link in nav"><a v-link="{path: link.url}"><span class="link-text">{{ link.label }}</span></a></li>
       </ul>
     </nav>
     <!-- End: 主导航 -->
@@ -24,19 +27,19 @@
           <div class="email">{{ currentMember.email }}</div>
         </div>
         <ul>
-          <li class="sec-nav-item">
+          <li class="sec-nav-item" v-if="userRole === 'member'">
             <a v-link="{path: '/account/info'}"><i class="fa fa-user"></i>{{ $t("layout.account_menu.account") }}</a>
           </li>
-          <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
+          <li class="sec-nav-item" v-if="userRole === 'member' && currentMember.role && currentMember.role===1">
             <a v-link="{path: '/account/members'}"><i class="fa fa-users"></i>{{ $t("layout.account_menu.members") }}</a>
           </li>
-          <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
+          <li class="sec-nav-item" v-if="userRole === 'member' && currentMember.role && currentMember.role===1">
             <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>{{ $t("layout.account_menu.authorize") }}</a>
           </li>
-          <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
+          <li class="sec-nav-item" v-if="userRole === 'member' && currentMember.role && currentMember.role===1">
             <a v-link="{path: '/account/security'}"><i class="fa fa-shield"></i>{{ $t("layout.account_menu.security") }}</a>
           </li>
-          <li class="sec-nav-item">
+          <li class="sec-nav-item" v-if="userRole === 'member'">
             <a v-link="{path: '/account/corp'}"><i class="fa fa-newspaper-o"></i>{{ $t("layout.account_menu.corp") }}</a>
           </li>
           <li class="sec-nav-item">
@@ -48,7 +51,7 @@
     <!-- End: 用户导航 -->
 
     <!-- Start: 次导航 -->
-    <div class="extra-nav">
+    <div class="extra-nav" v-if="userRole === 'member'">
       <ul>
         <li class="link-demo">
           <a href="http://ap.xlink.cn/#!/auto-login" target="_blank" v-if="!isDemo">{{ $t('layout.view_demo') }}</a>
@@ -77,6 +80,20 @@ export default {
 
   mixins: [globalMixins],
 
+  props: {
+    nav: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+
+    userRole: {
+      type: String,
+      default: 'member'
+    }
+  },
+
   vuex: {
     getters: {
       loading: ({ system }) => system.loading,
@@ -99,8 +116,12 @@ export default {
   },
 
   computed: {
-    logo () {
-      var result = this.corp.logo
+    logoStyle () {
+      var result = {}
+      if (this.userRole === 'heavy-buyer') {
+        result.backgroundColor = '#FFF'
+        result.backgroundImage = 'url(/static/images/topband_logo.png)'
+      }
       return result
     },
 
@@ -227,6 +248,7 @@ export default {
   float left
   size 200px 55px
   background url("../../../assets/images/logo.png") no-repeat center
+  background-size cover
 
 // 头部导航
 .nav-header
