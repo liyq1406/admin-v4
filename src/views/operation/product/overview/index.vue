@@ -36,7 +36,7 @@
     <product-active v-if="isShowActive"></product-active>
     <!-- <product-distribution v-if="isShowDistribution"></product-distribution> -->
     <product-world-distribution v-if="isShowDistribution"></product-world-distribution>
-    <product-custom v-if="isShowDistribution"></product-custom>
+    <product-custom></product-custom>
   </div>
 </template>
 
