@@ -304,6 +304,20 @@ export default {
   },
   route: {
     data () {
+      // 大客户ID：3807d2b030b33600
+      // 帐号：shengzhi
+      // 密码:Xt789456
+      // api.heavyBuyer.createUser('3807d2b030b33600', {
+      //   username: 'shengzhi',
+      //   password: 'Xt789456',
+      //   organization: 0,
+      //   role: 1,
+      //   contacter: 'shengzhi',
+      //   contact_way: 'shengzhi@xlink.cn'
+      // }).then((res) => {
+      //   console.log(res)
+      // })
+
       this.getProducts()
       this.$http.get('/static/data/platform_info.json').then((res) => {
         this.tips = res.data.notify

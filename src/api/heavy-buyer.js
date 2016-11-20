@@ -2,6 +2,14 @@ import * as http from 'src/http'
 import { API_SERVER } from 'consts/config'
 
 export default {
+  /**
+   * 大客户登录认证
+   */
+  auth (params) {
+    return http.post(
+      `${API_SERVER.heavyBuyer}/v2/heavy_buyer_auth`, params
+    )
+  },
 
   /**
    * 添加大客户
@@ -83,6 +91,15 @@ export default {
   getOrganizationUsers (heavyBuyerId, params) {
     return http.post(
       `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/user_list`, params
+    )
+  },
+
+  /**
+   * 创建组织下用户
+   */
+  createUser (heavyBuyerId, params) {
+    return http.post(
+      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/user`, params
     )
   }
 }

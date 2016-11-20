@@ -8,7 +8,7 @@ import { IS_DEMO } from 'consts/config'
  * @return {Boolean}
  */
 let isAccessAuthPage = (path) => {
-  return ['/login', '/register', '/register-with-verifycode', '/fetch-password', '/fetch-password-bymail'].indexOf(path) >= 0 || path.indexOf('/member-activate') >= 0 || path.indexOf('/email-activate') >= 0 || path.indexOf('/password-reset') >= 0 || path.indexOf('/user-email-activate') >= 0 || path.indexOf('/user-password-reset') >= 0
+  return ['/login', '/register', '/register-with-verifycode', '/fetch-password', '/fetch-password-bymail'].indexOf(path) >= 0 || path.indexOf('/heavy-buyer-login') >= 0 || path.indexOf('/member-activate') >= 0 || path.indexOf('/email-activate') >= 0 || path.indexOf('/password-reset') >= 0 || path.indexOf('/user-email-activate') >= 0 || path.indexOf('/user-password-reset') >= 0
 }
 
 // function throttle (method) {
@@ -89,6 +89,15 @@ let configRouter = (router) => {
         require.ensure([], (require) => {
           resolve(require('./views/auto-login'))
         }, 'admin')
+      }
+    },
+
+    // 大客户登录
+    '/heavy-buyer-login/:heavyBuyerId': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/heavy-buyer-login'))
+        }, 'heavy-buyer-login')
       }
     },
 
