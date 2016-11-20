@@ -9,7 +9,9 @@
         <div class="col-16">
           <info-card :info="deviceSummary" :pic="(currentProduct.pics && currentProduct.pics.length) ? currentProduct.pics[0] : ''"></info-card>
           <div v-stretch="182">
-            <info-list :info="deviceInfo"></info-list>
+            <info-list :info="deviceInfo">
+              <a class="hl-red" slot="qrcode" @click.prevent="displayQrcode">{{ $t('operation.product.device.detail.view') }}</a>
+            </info-list>
           </div>
         </div>
         <div class="col-8 device-map with-loading">
@@ -27,8 +29,19 @@
         </div>
       </div>
     </div>
+
+    <!-- 选项卡 -->
     <tab :nav="secondaryNav"></tab>
+
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
+
+    <!-- 查看二维码浮层 -->
+    <modal :show.sync="showQrcodeModal" width="296px">
+      <h3 slot="header">{{ $t('operation.product.device.detail.qrcode') }}</h3>
+      <div slot="body" class="qrcode">
+        <qrcode :text="qrcode"></qrcode>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -39,6 +52,7 @@ import formatDate from 'filters/format-date'
 
 export default {
   name: 'Device',
+
   components: {
   },
 
@@ -57,6 +71,8 @@ export default {
 
   data () {
     return {
+      showQrcodeModal: false,
+      qrcode: '',
       province: '',
       city: '',
       deviceLocation: [],
@@ -119,6 +135,11 @@ export default {
         sn: {
           label: this.$t('operation.product.device.detail.sn'),
           value: this.currDevice.sn || '-'
+        },
+        qrcode: {
+          label: this.$t('operation.product.device.detail.qrcode'),
+          slot: 'qrcode'
+          // value: this.currDevice.sn || '-'
         }
       }
     }
@@ -133,7 +154,21 @@ export default {
     },
 
     data (transition) {
-      let deviceDetailRoot = `/operation/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}`
+      let productId = this.$route.params.product_id
+      let deviceId = this.$route.params.device_id
+      let deviceDetailRoot = `/operation/products/${productId}/devices/${deviceId}`
+      let qrcodeCondition = {
+        authority: 'R',
+        custom_field: ['pid', 'sn'],
+        format: {
+          encode: 'base64'
+        }
+      }
+
+      // 生成设备二维码
+      api.device.genQrcode(productId, deviceId, qrcodeCondition).then((res) => {
+        this.qrcode = res.data.qrcode
+      })
 
       return {
         secondaryNav: [{
@@ -164,6 +199,14 @@ export default {
   },
 
   methods: {
+    /**
+     * 查看二维码
+     * @author shengzhi
+     */
+    displayQrcode () {
+      this.showQrcodeModal = true
+    },
+
     /**
      * 获取虚拟设备数据
      * @author shengzhi
@@ -212,3 +255,9 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+.qrcode
+  font-size 16px
+  word-wrap break-word
+</style>

@@ -99,7 +99,7 @@ export default {
       margin 0
 
   .modal-body
-    padding 20px 30px
+    padding 20px
     max-height 540px
     box-sizing border-box
     background #FFF

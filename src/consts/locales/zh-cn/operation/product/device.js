@@ -45,6 +45,8 @@ export default {
     version: '固件版本', // 固件版本
     device_id: '设备ID', // 设备ID
     sn: 'sn', // sn
+    view: '点击查看',
+    qrcode: '二维码',
     secondary: {
       device: '设备状态', // 设备状态
       history: '历史数据', // 历史数据

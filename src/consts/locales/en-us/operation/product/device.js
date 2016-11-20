@@ -45,6 +45,8 @@ export default {
     version: 'Firmware Version', // 固件版本
     device_id: 'Device ID', // 设备ID
     sn: 'Serial Number', // sn
+    view: 'View',
+    qrcode: 'QR Code',
     secondary: {
       device: 'Device Status', // 设备状态
       history: 'History Data', // 历史数据

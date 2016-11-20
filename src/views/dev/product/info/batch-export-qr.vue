@@ -206,21 +206,10 @@
 </script>
 
 <style lang="stylus">
-@import '../../../../assets/stylus/common'
-  .modal-header
-    border-bottom none !important
-    h3
-      margin-top 10px !important
-      text-indent 20px
-      font-size 18px
-      color #666666 !important
+  @import '../../../../assets/stylus/common'
   .body-wrap
     position relative
     .filter-device
-      background-color #F2F2F2
-      margin 0 -30px
-      padding 20px 30px
-      font-size 15px
       .btn-select
         border 1px solid #FF0000
         color #FF0000
