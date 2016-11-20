@@ -60,8 +60,6 @@
             </div>
           </div>
           <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
-          <pre>{{fields | json}}</pre>
-          <pre>{{fieldKeys | json}}</pre>
       </div>
     </div>
   </div>
@@ -170,8 +168,8 @@ export default {
       loadingData: false,
       queryTypeOptions: [
         { label: this.$t('operation.product.device.manager.mac'), value: 'mac' },
-        { label: this.$t('operation.product.device.manager.device_id'), value: 'id' },
-        { label: this.$t('operation.product.device.manager.device_name'), value: 'name' }
+        { label: this.$t('operation.product.device.manager.device_id'), value: 'id' }
+        // { label: this.$t('operation.product.device.manager.device_name'), value: 'name' }
       ],
       queryType: {
         label: 'MAC',
@@ -256,6 +254,30 @@ export default {
       return result
     },
 
+    deviceList () {
+      var result = []
+      this.devices.forEach((item) => {
+        var obj = {}
+        for (let key in item.device) {
+          if (item.device.hasOwnProperty(key)) {
+            obj[key] = item.device[key]
+          }
+        }
+        for (let key in item.online) {
+          if (item.online.hasOwnProperty(key)) {
+            obj[key] = item.online[key]
+          }
+        }
+        for (let key in item.vdevice) {
+          if (item.vdevice.hasOwnProperty(key)) {
+            obj[key] = item.vdevice[key]
+          }
+        }
+        result.push(obj)
+      })
+      return result
+    },
+
     // 列表数据
     tables () {
       var result = []
@@ -266,11 +288,11 @@ export default {
         //   deviceModal[key] = '<a class="hl-red">-</a>'
         // }
       })
-      this.devices.forEach((item) => {
-        var device = deviceModal
+      this.deviceList.forEach((item) => {
+        var device = _.clone(deviceModal)
         for (var key in item) {
           if (item.hasOwnProperty(key)) {
-            device[key] === item[key]
+            device[key] = item[key]
           }
         }
         device.mac = '<a class="hl-red">' + item.mac + '</a>'
@@ -279,14 +301,6 @@ export default {
         device.is_online = item.is_online ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>'
         device.online_count = item.online_count ? (item.online_count - 0).toFixed(2) + '小时' : '-'
         device.prototype = item
-        // var device = {
-        //   id: item.id,
-        //   mac: '<a class="hl-red">' + item.mac + '</a>',
-        //   is_active: item.is_active ? this.$t('common.yes') : this.$t('common.no'),
-        //   active_date: formatDate(item.active_date),
-        //   is_online: item.is_online ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>',
-        //   prototype: item
-        // }
 
         result.push(device)
       })
@@ -402,6 +416,7 @@ export default {
         },
 
         query: {
+          '$logical': 'AND',
           device: {},
           vDevice: {},
           online: {}
@@ -420,7 +435,7 @@ export default {
 
       if (this.query.length > 0) {
         this.currentPage = 1
-        condition.query.device[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+        condition.query.device[this.queryType.value] = this.queryType.value === 'id' ? { $eq: Number(this.query) } : { $like: this.query }
       }
 
       if (this.rangeOption.value === 'specified') {
@@ -432,16 +447,16 @@ export default {
 
       switch (this.visibility.value) {
         case 'online':
-          condition.query.online['is_online'] = { $in: [true] }
+          condition.query.online['is_online'] = { $eq: true }
           break
         case 'offline':
-          condition.query.online['is_online'] = { $in: [false] }
+          condition.query.online['is_online'] = { $eq: false }
           break
         case 'active':
-          condition.query.device['is_active'] = { $in: [true] }
+          condition.query.device['is_active'] = { $eq: true }
           break
         case 'inactive':
-          condition.query.device['is_active'] = { $in: [false] }
+          condition.query.device['is_active'] = { $eq: false }
           break
         default:
       }
@@ -613,8 +628,8 @@ export default {
         this.currentPage = 1
       }
       this.loadingData = true
-      api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
-      // api.device.getAggregateDevices(this.$route.params.id, this.queryCondition).then((res) => {
+      // api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
+      api.device.getAggregateDevices(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
         this.total = res.data.count
         this.loadingData = false
@@ -636,7 +651,6 @@ export default {
       if (typeof key === 'object') {
         key = key.key
       }
-      console.log(key)
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] === 'asc' ? 'desc' : 'asc'
       this.getDevices()
