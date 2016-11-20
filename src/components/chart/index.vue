@@ -85,6 +85,11 @@ export default {
         echarts.registerMap('china', res.data)
         this.init()
       })
+    } else if (this.type === 'world-map') {
+      this.$http.get('/static/data/map/world.json').then((res) => {
+        echarts.registerMap('world', res.data)
+        this.init()
+      })
     } else {
       this.init()
     }
@@ -102,8 +107,17 @@ export default {
   methods: {
     init () {
       this.chart = echarts.init(this.$el)
+      if (this.type === 'world-map') {
+        this.bindMapSelectEvent()
+      }
       this.bindEvent()
       this._render()
+    },
+
+    bindMapSelectEvent () {
+      this.chart.on('click', (params) => {
+        this.$emit('world-map-select', params.name)
+      })
     },
 
     bindEvent () {

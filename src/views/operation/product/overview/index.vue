@@ -34,7 +34,9 @@
 
     <product-trend v-if="isShowTrend"></product-trend>
     <product-active v-if="isShowActive"></product-active>
-    <product-distribution v-if="isShowDistribution"></product-distribution>
+    <!-- <product-distribution v-if="isShowDistribution"></product-distribution> -->
+    <product-world-distribution v-if="isShowDistribution"></product-world-distribution>
+    <product-custom v-if="isShowDistribution"></product-custom>
   </div>
 </template>
 
@@ -42,8 +44,10 @@
 import { removeProduct, updateProduct } from 'store/actions/products'
 import { setCurrProductMixin } from '../mixins'
 import ProductTrend from './components/ProductTrend'
+import ProductCustom from './components/ProductCustom'
 import ProductActive from './components/ProductActive'
 import ProductDistribution from './components/ProductDistribution'
+import ProductWorldDistribution from './components/ProductWorldDistribution'
 import api from 'api'
 import customConfig from 'consts/custom-config'
 import toFixed from 'filters/to-fixed'
@@ -67,7 +71,9 @@ export default {
     // IntervalIcon,
     ProductTrend,
     ProductActive,
-    ProductDistribution
+    ProductDistribution,
+    ProductWorldDistribution,
+    ProductCustom
   },
 
   data () {
