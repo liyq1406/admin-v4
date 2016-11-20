@@ -1079,6 +1079,7 @@ let configRouter = (router) => {
                 }, 'admin')
               }
             },
+
             // 组织架构
             'organization': {
               component (resolve) {
@@ -1095,6 +1096,22 @@ let configRouter = (router) => {
                 }, 'admin')
               }
             }
+          }
+        },
+        // 大客户-账户添加
+        'major-clients/:id/account/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/major-clients/details/account-form'))
+            }, 'admin')
+          }
+        },
+        // 大客户-账户编辑
+        'major-clients/:id/account/edit/:accountId': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/major-clients/details/account-form'))
+            }, 'admin')
           }
         },
 

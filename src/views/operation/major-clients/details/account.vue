@@ -75,6 +75,7 @@
         currentPage: 1,
         key: '',
 
+        organizationUsers: [],
         headers: [
           {
             key: 'name',
@@ -118,7 +119,8 @@
 
     computed: {
       tables () {
-        return []
+        var result = []
+        return result
       },
       page () {
         return {
@@ -130,10 +132,10 @@
       // 基本筛选条件
       baseCondition () {
         let condition = {
-          filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time'],
+          filter: [],
           query: {},
           order: {
-            create_time: 'desc'
+            // create_time: 'desc'
           }
         }
 
