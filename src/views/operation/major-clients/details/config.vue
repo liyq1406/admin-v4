@@ -15,17 +15,46 @@
       </div>
     </div>
 
+    <div class="panel-sub-hd bordered mb20">域名配置</div>
+
     <div class="part form">
-      <div class="panel-sub-hd bordered mb20">域名配置</div>
-      <div class="form-row row pl10">
-        <label class="form-control col-4">域名</label>
+      <div class="form-row row pl20">
+        <label class="form-control col-4">域名:</label>
         <div class="controls col-20">
-          <div class="input-text-wrap">
-            <input type="text" class="input-text">
+          <div class="input-text-wrap" v-placeholder="'域名'">
+            <input type="text" class="input-text" v-model="domainName">
           </div>
         </div>
       </div>
     </div>
+
+    <div class="panel-sub-hd bordered mb20">界面UI配置</div>
+
+    <div class="part form">
+      <div class="form-row row pl20">
+        <label class="form-control col-4">登陆页面文案:</label>
+        <div class="controls col-20">
+          <div class="input-text-wrap" v-placeholder="'登陆页面文案'">
+            <input type="text" class="input-text" v-model="">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row row pl20">
+        <label class="form-control col-4">企业Logo:</label>
+        <div class="controls col-20">
+          <div class="thumb-info">
+            <div class="thumb">
+              <image-uploader :images="images" @modified="onModifiedImages"></image-uploader>
+              <div class="form-tips">图片规格：400*110</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-sub-hd bordered mb20">权限配置</div>
+
 
   </div>
 </template>
@@ -42,7 +71,8 @@ export default {
 
   data () {
     return {
-
+      domainName: '',
+      images: ['']
     }
   },
   computed: {
@@ -55,7 +85,9 @@ export default {
   },
 
   methods: {
-
+    onModifiedImages (images) {
+      console.log(images)
+    }
   }
 }
 </script>
@@ -68,8 +100,8 @@ export default {
     box-sizing border-box
     .part
       margin-bottom 30px
-    .pl10
-      padding-left 10px
+    .pl20
+      padding-left 20px
       box-sizing border-box
     .onoff-server-box
       width 700px
