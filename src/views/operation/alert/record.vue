@@ -166,11 +166,12 @@ export default {
         label: this.$t('operation.alert.record.all_level'),
         value: 'all'
       },
+      tags: [],
       visibilityOptions: [
-        { label: this.$t('operation.product.alert.all_level'), value: 'all' },
-        { label: this.$t('operation.product.alert.info'), value: this.$t('operation.product.alert.info') },
-        { label: this.$t('operation.product.alert.warning'), value: this.$t('operation.product.alert.warning') },
-        { label: this.$t('operation.product.alert.danger'), value: this.$t('operation.product.alert.danger') }
+        { label: this.$t('operation.product.alert.all_level'), value: 'all' }
+        // { label: this.$t('operation.product.alert.info'), value: this.$t('operation.product.alert.info') },
+        // { label: this.$t('operation.product.alert.warning'), value: this.$t('operation.product.alert.warning') },
+        // { label: this.$t('operation.product.alert.danger'), value: this.$t('operation.product.alert.danger') }
       ],
       headers: [{
         key: 'content',
@@ -262,17 +263,21 @@ export default {
         }
       }
 
-      switch (this.visibility.value) {
-        case `${this.$t('operation.alert.record.info')}`:
-          condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.info')}`] }
-          break
-        case `${this.$t('operation.alert.record.warning')}`:
-          condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.warning')}`] }
-          break
-        case `${this.$t('operation.alert.record.danger')}`:
-          condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.danger')}`] }
-          break
-        default:
+      // switch (this.visibility.value) {
+      //   case `${this.$t('operation.alert.record.info')}`:
+      //     condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.info')}`] }
+      //     break
+      //   case `${this.$t('operation.alert.record.warning')}`:
+      //     condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.warning')}`] }
+      //     break
+      //   case `${this.$t('operation.alert.record.danger')}`:
+      //     condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.danger')}`] }
+      //     break
+      //   default:
+      // }
+      // 显示指定告警类型
+      if (this.visibility.value !== 'all') {
+        condition.query.tags = { $in: [this.visibility.label] }
       }
 
       this.headers.forEach((item) => {
@@ -331,6 +336,7 @@ export default {
       this.getFirstProduct()
       this.getSummary()
       this.getAlerts()
+      this.getTags()
     }
   },
 
@@ -342,11 +348,28 @@ export default {
         this.getFirstProduct()
         this.getSummary()
         this.getAlerts(true)
+        this.getTags()
       }
     }
   },
 
   methods: {
+    // 获取告警类型
+    getTags () {
+      api.alert.getAlertTags().then((res) => {
+        if (res.status === 200) {
+          this.tags = res.data.tags
+          this.tags.forEach((tag) => {
+            var obj = {
+              label: tag
+            }
+            this.visibilityOptions.push(obj)
+          })
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     // 跳转设备详情
     jumpInfo (info) {
       this.$route.router.go({path: '/operation/products/' + this.currentProduct.id + '/devices/' + info.id + '/info'})

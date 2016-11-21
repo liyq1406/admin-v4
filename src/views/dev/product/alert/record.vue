@@ -6,7 +6,7 @@
           <div class="filter-group fl">
             <div class="filter-group-item">
               <x-select width="90px" :label="curLevel.label" size="small">
-                <span slot="label">告警等级:</span>
+                <span slot="label">告警类型:</span>
                 <select v-model="curLevel" name="product" @change="getAlerts(true)">
                   <option v-for="level in warningLevels" :value="level">{{ level.label }}</option>
                 </select>
@@ -120,22 +120,23 @@
           value: 0,
           label: '全部'
         },
+        tags: [],
         warningLevels: [
           {
             value: 0,
             label: '全部'
-          },
-          {
-            value: 1,
-            label: locales[Vue.config.lang].data.ALERT_LEVELS.orange
-          },
-          {
-            value: 2,
-            label: locales[Vue.config.lang].data.ALERT_LEVELS.blue
-          },
-          {
-            value: 3,
-            label: locales[Vue.config.lang].data.ALERT_LEVELS.red
+          // },
+          // {
+          //   value: 1,
+          //   label: locales[Vue.config.lang].data.ALERT_LEVELS.orange
+          // },
+          // {
+          //   value: 2,
+          //   label: locales[Vue.config.lang].data.ALERT_LEVELS.blue
+          // },
+          // {
+          //   value: 3,
+          //   label: locales[Vue.config.lang].data.ALERT_LEVELS.red
           }
         ],
         loadingData: false,
@@ -230,6 +231,7 @@
     },
     ready () {
       this.getAlerts()
+      this.getTags()
     },
     watch: {
       productID () {
@@ -239,6 +241,22 @@
       }
     },
     methods: {
+      // 获取告警类型
+      getTags () {
+        api.alert.getAlertTags().then((res) => {
+          if (res.status === 200) {
+            this.tags = res.data.tags
+            this.tags.forEach((tag) => {
+              var obj = {
+                label: tag
+              }
+              this.warningLevels.push(obj)
+            })
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
       // 跳转设备详情
       jumpInfo (info) {
         this.$route.router.go({path: '/operation/products/' + this.$route.params.id + '/devices/' + info.id + '/info'})

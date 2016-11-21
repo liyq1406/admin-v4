@@ -74,12 +74,13 @@ export default {
       selecting: true,
       alerts: [],
       visibilityOptions: [
-        { label: this.$t('operation.product.alert.all_level'), value: 'all' },
-        { label: this.$t('operation.product.alert.info'), value: this.$t('operation.product.alert.info') },
-        { label: this.$t('operation.product.alert.warning'), value: this.$t('operation.product.alert.warning') },
-        { label: this.$t('operation.product.alert.danger'), value: this.$t('operation.product.alert.danger') }
+        { label: this.$t('operation.product.alert.all_level'), value: 'all' }
+        // { label: this.$t('operation.product.alert.info'), value: this.$t('operation.product.alert.info') },
+        // { label: this.$t('operation.product.alert.warning'), value: this.$t('operation.product.alert.warning') },
+        // { label: this.$t('operation.product.alert.danger'), value: this.$t('operation.product.alert.danger') }
       ],
       visibility: {},
+      tags: [],
       queryTypeOptions: [
         { label: this.$t('operation.product.alert.mac'), value: 'mac' },
         { label: this.$t('operation.product.alert.device_id'), value: 'from' },
@@ -170,7 +171,7 @@ export default {
 
       // 显示指定告警类型
       if (this.visibility.value !== 'all') {
-        condition.query.tags = { $in: [this.visibility.value] }
+        condition.query.tags = { $in: [this.visibility.label] }
       }
 
       if (this.rangeOption.value === 'specified') {
@@ -228,18 +229,39 @@ export default {
     currentProduct () {
       if (this.currentProduct.id) {
         this.currentPage = 1
-        this.init()
+        // this.init()
+        this.getTags()
       }
     }
   },
 
   ready () {
     if (this.currentProduct.id) {
-      this.init()
+      // this.init()
+      this.getTags()
     }
   },
 
   methods: {
+    // 获取告警类型
+    getTags () {
+      api.alert.getAlertTags().then((res) => {
+        if (res.status === 200) {
+          this.tags = res.data.tags
+          this.tags.forEach((tag) => {
+            var obj = {
+              label: tag
+            }
+            this.visibilityOptions.push(obj)
+          })
+          if (this.visibilityOptions.length === this.tags.length + 1) {
+            this.init()
+          }
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     init () {
       this.visibility = this.visibilityOptions[0]
       this.queryType = this.queryTypeOptions[0]
