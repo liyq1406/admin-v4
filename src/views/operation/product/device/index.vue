@@ -31,7 +31,7 @@
     </div>
 
     <!-- 选项卡 -->
-    <tab :nav="secondaryNav"></tab>
+    <tab :nav="filteredSecNav"></tab>
 
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
 
@@ -87,6 +87,29 @@ export default {
   },
 
   computed: {
+    filteredSecNav () {
+      // 入口排除列表
+      let excludedList = []
+      let userRole = window.localStorage.getItem('userRole')
+
+      // 如果是大客户，排除远程诊断入口
+      if (userRole === 'heavy-buyer') {
+        excludedList.push('diagnose')
+      }
+
+      return _.filter(this.secondaryNav, (item) => {
+        let included = true
+        _.forEach(excludedList, (o) => {
+          let reg = new RegExp(o + '$')
+          if (reg.test(item.link.path)) {
+            included = false
+            return
+          }
+        })
+        return included
+      })
+    },
+
     // 设备简介
     deviceSummary () {
       return {
@@ -170,31 +193,29 @@ export default {
         this.qrcode = res.data.qrcode
       })
 
-      return {
-        secondaryNav: [{
-          label: this.$t('operation.product.device.detail.secondary.device'),
-          link: { path: `${deviceDetailRoot}/info` }
-        }, {
-          label: this.$t('operation.product.device.detail.secondary.history'),
-          link: { path: `${deviceDetailRoot}/history` }
-        }, {
-          label: this.$t('operation.product.device.detail.secondary.alert'),
-          link: { path: `${deviceDetailRoot}/alerts` }
-        }, {
-          label: this.$t('operation.product.device.detail.secondary.remote'),
-          link: { path: `${deviceDetailRoot}/diagnose` }
-        }, {
-          label: this.$t('operation.product.device.detail.secondary.users'),
-          link: { path: `${deviceDetailRoot}/users` }
-        // 暂时隐藏
-        // }, {
-        //   label: this.$t('operation.product.device.detail.secondary.warranty'),
-        //   link: { path: `${deviceDetailRoot}/warranty` }
-        // }, {
-        //   label: this.$t('operation.product.device.detail.secondary.dealers'),
-        //   link: { path: `${deviceDetailRoot}/dealers` }
-        }]
-      }
+      this.secondaryNav = [{
+        label: this.$t('operation.product.device.detail.secondary.device'),
+        link: { path: `${deviceDetailRoot}/info` }
+      }, {
+        label: this.$t('operation.product.device.detail.secondary.history'),
+        link: { path: `${deviceDetailRoot}/history` }
+      }, {
+        label: this.$t('operation.product.device.detail.secondary.alert'),
+        link: { path: `${deviceDetailRoot}/alerts` }
+      }, {
+        label: this.$t('operation.product.device.detail.secondary.remote'),
+        link: { path: `${deviceDetailRoot}/diagnose` }
+      }, {
+        label: this.$t('operation.product.device.detail.secondary.users'),
+        link: { path: `${deviceDetailRoot}/users` }
+      // 暂时隐藏
+      // }, {
+      //   label: this.$t('operation.product.device.detail.secondary.warranty'),
+      //   link: { path: `${deviceDetailRoot}/warranty` }
+      // }, {
+      //   label: this.$t('operation.product.device.detail.secondary.dealers'),
+      //   link: { path: `${deviceDetailRoot}/dealers` }
+      }]
     }
   },
 

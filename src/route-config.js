@@ -1851,6 +1851,25 @@ let configRouter = (router) => {
               resolve(require('./views/operation/plugin/airquality'))
             }, 'admin')
           }
+        },
+
+        // 大客户系统设置
+        'heavy-buyer-settings': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/heavy-buyer-settings/index'))
+            }, 'admin')
+          },
+          subRoutes: {
+            // 独立入口配置
+            'entrance': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/heavy-buyer-settings/entrance'))
+                }, 'admin')
+              }
+            }
+          }
         }
       }
     }
@@ -1890,7 +1909,8 @@ let configRouter = (router) => {
     '/operation/alerts/detail/:id': '/operation/alerts/detail/:id/history',
     '/dev/firmware/manage': '/dev/firmware/manage/message',
     '/dev/settings/tag': '/dev/settings/tag/alert',
-    '/operation/major-clients/:id': '/operation/major-clients/:id/device'
+    '/operation/major-clients/:id': '/operation/major-clients/:id/device',
+    '/operation/heavy-buyer-settings': '/operation/heavy-buyer-settings/entrance'
   })
 
   router.beforeEach((transition) => {
