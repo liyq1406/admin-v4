@@ -27,25 +27,25 @@ export default {
   //  }
   addHeavyBuyer (params) {
     return http.post(
-      `${API_SERVER.heavyBuyer}/v2/heavy_buyer`, params
+      `${API_SERVER.default}/v2/heavy_buyer`, params
     )
   },
 
   editHeavyBuyer (id, params) {
     return http.put(
-      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${id}`, params
+      `${API_SERVER.default}/v2/heavy_buyer/${id}`, params
     )
   },
 
   delHeavyBuyer (id) {
     return http.del(
-      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${id}`
+      `${API_SERVER.default}/v2/heavy_buyer/${id}`
     )
   },
 
   getHeavyBuyer (params) {
     return http.post(
-      `${API_SERVER.heavyBuyer}/v2/heavy_buyer_list`, params
+      `${API_SERVER.default}/v2/heavy_buyer_list`, params
     )
   },
 
@@ -54,7 +54,7 @@ export default {
    */
   getOrganizationList (heavyBuyerId, params) {
     return http.post(
-      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/organization_list`, params
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/organization_list`, params
     )
   },
 
@@ -63,7 +63,7 @@ export default {
    */
   addOrganization (heavyBuyerId, params) {
     return http.post(
-      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/organization`, params
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/organization`, params
     )
   },
 
@@ -72,7 +72,7 @@ export default {
    */
   updateOrganizations (heavyBuyerId, params) {
     return http.put(
-      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/organization_list`, params
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/organization_list`, params
     )
   },
 
@@ -81,7 +81,7 @@ export default {
    */
   deleteOrganization (heavyBuyerId, organizationId) {
     return http.del(
-      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/organization/${organizationId}`
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/organization/${organizationId}`
     )
   },
 
@@ -90,7 +90,7 @@ export default {
    */
   getOrganizationUsers (heavyBuyerId, params) {
     return http.post(
-      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/user_list`, params
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/user_list`, params
     )
   },
 
