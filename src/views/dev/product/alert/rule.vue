@@ -97,22 +97,23 @@
           value: 0,
           label: '全部'
         },
+        tags: [],
         warningLevels: [
           {
             value: 0,
             label: '全部'
-          },
-          {
-            value: 1,
-            label: locales[Vue.config.lang].data.ALERT_LEVELS.orange
-          },
-          {
-            value: 2,
-            label: locales[Vue.config.lang].data.ALERT_LEVELS.blue
-          },
-          {
-            value: 3,
-            label: locales[Vue.config.lang].data.ALERT_LEVELS.red
+          // },
+          // {
+          //   value: 1,
+          //   label: locales[Vue.config.lang].data.ALERT_LEVELS.orange
+          // },
+          // {
+          //   value: 2,
+          //   label: locales[Vue.config.lang].data.ALERT_LEVELS.blue
+          // },
+          // {
+          //   value: 3,
+          //   label: locales[Vue.config.lang].data.ALERT_LEVELS.red
           }
         ],
         loadingData: false,
@@ -132,6 +133,7 @@
     },
     ready () {
       this.getRules()
+      this.getTags()
     },
     computed: {
       rulesFilter () {
@@ -158,6 +160,22 @@
       }
     },
     methods: {
+      // 获取告警类型
+      getTags () {
+        api.alert.getAlertTags().then((res) => {
+          if (res.status === 200) {
+            this.tags = res.data.tags
+            this.tags.forEach((tag) => {
+              var obj = {
+                label: tag
+              }
+              this.warningLevels.push(obj)
+            })
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
       /**
        * 处理添加按钮点击
        * @author shengzhi
