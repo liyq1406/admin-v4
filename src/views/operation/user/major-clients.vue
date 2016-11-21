@@ -72,18 +72,18 @@
               <label class="form-control col-6">{{ $t('operation.user.major.columns.name') }}:</label>
               <div class="controls col-18">
                 <div v-placeholder="$t('operation.user.major.placeholders.name')" class="input-text-wrap">
-                  <input v-model="addModal.username" type="text" name="addModal.username" v-validate:username="{required: true, minlength: 6, maxlength: 32, format: 'account'}" lazy class="input-text"/>
+                  <input v-model="addModal.name" type="text" name="addModal.name" v-validate:name="{required: true, minlength: 2, maxlength: 32}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$majorClientValidation.username.touched && $majorClientValidation.username.required">{{ $t('common.validation.required', {field: $t('operation.user.major.columns.name')}) }}</span>
-                  <span v-if="$majorClientValidation.username.touched && $majorClientValidation.username.modified && $majorClientValidation.username.minlength">{{ $t('common.validation.minlength', [$t('operation.user.major.columns.name'), 6]) }}</span>
-                  <span v-if="$majorClientValidation.username.touched && $majorClientValidation.username.modified && $majorClientValidation.username.maxlength">{{ $t('common.validation.maxlength', [$t('operation.user.major.columns.name'), 40]) }}</span>
-                  <span v-if="$majorClientValidation.username.touched && $majorClientValidation.username.modified && $majorClientValidation.username.format">{{ $t('common.validation.account', {field: $t('operation.user.major.columns.name')}) }}</span>
+                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.required">{{ $t('common.validation.required', {field: $t('operation.user.major.columns.name')}) }}</span>
+                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.modified && $majorClientValidation.name.minlength">{{ $t('common.validation.minlength', [$t('operation.user.major.columns.name'), 2]) }}</span>
+                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.modified && $majorClientValidation.name.maxlength">{{ $t('common.validation.maxlength', [$t('operation.user.major.columns.name'), 40]) }}</span>
+                  <!-- <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.modified && $majorClientValidation.name.format">{{ $t('common.validation.account', {field: $t('operation.user.major.columns.name')}) }}</span> -->
                 </div>
               </div>
             </div>
             <!-- 密码 -->
-            <div class="form-row row">
+            <!-- <div class="form-row row">
               <label class="form-control col-6">{{ $t('operation.user.major.password') }}:</label>
               <div class="controls col-18">
                 <div v-placeholder="$t('auth.password')" class="input-text-wrap">
@@ -95,9 +95,9 @@
                   <span v-if="$majorClientValidation.password.modified && $majorClientValidation.password.maxlength">{{ $t('common.validation.maxlength', [$t('auth.fields.password'), 16]) }}</span>
                 </div>
               </div>
-            </div>
+            </div> -->
             <!-- 确认密码 -->
-            <div class="form-row row">
+            <!-- <div class="form-row row">
               <label class="form-control col-6">{{ $t('operation.user.major.comfirm_password') }}:</label>
               <div class="controls col-18">
                 <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
@@ -108,7 +108,7 @@
                   <span v-if="$majorClientValidation.confirmPassword.modified && $majorClientValidation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('auth.fields.confirm_password'), $t('auth.fields.password')]) }}</span>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <div class="form-row row">
               <label class="form-control col-6">{{ $t('operation.user.major.columns.contacter') }}:</label>
@@ -165,6 +165,7 @@
         </validator>
       </div>
     </modal>
+
   </div>
 </template>
 
@@ -225,9 +226,9 @@ export default {
       ],
       addModal: {
         // 名称
-        username: '',
+        name: '',
 
-        password: '',
+        // password: '',
 
         // 联系人
         contacter: '',
@@ -313,7 +314,7 @@ export default {
       ],
       headers: [
         {
-          key: 'username',
+          key: 'name',
           title: this.$t('operation.user.major.columns.name')
         },
         {
@@ -409,7 +410,7 @@ export default {
       var result = []
       this.majorClients.map((item) => {
         var majorClient = {
-          username: '<a class="hl-red">' + (item.username || '-') + '</a>',
+          name: '<a class="hl-red">' + (item.name || '-') + '</a>',
           device_sum: item.device_sum,
           industry: item.industry,
           contacter: item.contacter,
@@ -427,7 +428,7 @@ export default {
       var condition = {
         filter: [
           'id',
-          'username',
+          'name',
           'industry',
           'location',
           'contacter',
@@ -717,7 +718,7 @@ export default {
     onShowAddModal () {
       var addModal = {
         // 名称
-        username: '',
+        name: '',
         // 联系人
         contacter: '',
 
@@ -792,7 +793,7 @@ export default {
       margin-right 5px
     /*针对ie 的hock*/
     .modal-body
-      padding-bottom 0 !important
+      /*padding-bottom 0 !important*/
       .form
         margin-bottom 20px !important
 </style>
