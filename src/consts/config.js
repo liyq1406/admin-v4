@@ -211,7 +211,7 @@ export const MAIN_NAV = {
         url: '/settings/message/config'
       }, {
         alias: 'views',
-        url: '/settings/views/field'
+        url: '/settings/views/overview'
       }, {
         alias: 'tag',
         url: '/settings/tag'
@@ -260,14 +260,15 @@ export const MAIN_NAV = {
       //   alias: 'analysis',
       //   url: '/users/analysis'
       }]
-    }, {
-      alias: 'major_clients', // 大客户管理
-      icon: 'users',
-      unfold: true, // 展开子级菜单
-      subs: [{
-        alias: 'list',
-        url: '/major-clients'
-      }]
+    // 上线屏蔽入口
+    // }, {
+    //   alias: 'major_clients', // 大客户管理
+    //   icon: 'users',
+    //   unfold: true, // 展开子级菜单
+    //   subs: [{
+    //     alias: 'list',
+    //     url: '/major-clients'
+    //   }]
     }, {
       alias: 'snapshots', // 快照分析
       icon: 'line-chart',
