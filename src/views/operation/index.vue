@@ -86,6 +86,12 @@ export default {
         })
       })
 
+      result.subs.push({
+        alias: 'settings',
+        icon: 'cog',
+        url: 'heavy-buyer-settings'
+      })
+
       return result
     },
 
