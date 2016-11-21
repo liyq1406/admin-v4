@@ -687,7 +687,7 @@ export default {
         api.heavyBuyer.addHeavyBuyer(params).then((res) => {
           this.showNotice({
             type: 'success',
-            content: this.$t('action_success')
+            content: this.$t('common.action_success')
           })
           this.adding = false
           this.onAddCancel()
