@@ -77,6 +77,64 @@
 
     data () {
       return {
+        base_fields: [
+          {
+            'name': 'id',
+            'label': 'ID',
+            'hidden': false,
+            'sort': 1,
+            'value_type': 2
+          },
+          {
+            'name': 'nickname',
+            'label': '昵称',
+            'hidden': false,
+            'sort': 2,
+            'value_type': 1
+          },
+          {
+            'name': 'email',
+            'label': '邮箱',
+            'hidden': false,
+            'sort': 3,
+            'value_type': 1
+          },
+          {
+            'name': 'phone',
+            'label': '手机',
+            'hidden': false,
+            'sort': 4,
+            'value_type': 1
+          },
+          {
+            'name': 'create_date',
+            'label': '注册时间',
+            'hidden': false,
+            'sort': 5,
+            'value_type': 1
+          },
+          {
+            'name': 'source',
+            'label': '来源',
+            'hidden': false,
+            'sort': 6,
+            'value_type': 2
+          },
+          // {
+          //   'name': 'is_activated',
+          //   'label': '激活状态',
+          //   'hidden': false,
+          //   'sort': 3,
+          //   'value_type': 2
+          // },
+          {
+            'name': 'status',
+            'label': '在线状态',
+            'hidden': false,
+            'sort': 7,
+            'value_type': 1
+          }
+        ],
         exporting: false,
         allTotal: 0,
         // 是否缓存用户在线状态
@@ -133,45 +191,45 @@
           value: 'any'
         },
         timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
-        headers: [
-          {
-            key: 'id', // 与tables的key对应
-            title: 'ID' // 标题的内容
-          },
-          {
-            key: 'nickname', // 与tables的key对应
-            title: this.$t('operation.user.list.columns.nickname') // 标题的内容
-          },
-          {
-            key: 'email',
-            title: this.$t('common.email')
-          },
-          {
-            key: 'phone',
-            title: this.$t('common.phone')
-          },
-          {
-            key: 'create_date',
-            title: this.$t('operation.user.list.columns.create_date'), // 标题的内容
-            sortType: -1
-            // tooltip: '提示内容'
-          },
-          {
-            key: 'source',
-            title: this.$t('operation.user.list.columns.source'), // 标题的内容
-            class: 'tac'
-          },
-          {
-            key: 'is_active',
-            title: this.$t('operation.user.list.columns.is_active'), // 标题的内容
-            class: 'tac'
-          },
-          {
-            key: 'online',
-            title: this.$t('operation.user.list.columns.online'), // 标题的内容
-            class: 'tac'
-          }
-        ],
+        // headers: [
+        //   {
+        //     key: 'id', // 与tables的key对应
+        //     title: 'ID' // 标题的内容
+        //   },
+        //   {
+        //     key: 'nickname', // 与tables的key对应
+        //     title: this.$t('operation.user.list.columns.nickname') // 标题的内容
+        //   },
+        //   {
+        //     key: 'email',
+        //     title: this.$t('common.email')
+        //   },
+        //   {
+        //     key: 'phone',
+        //     title: this.$t('common.phone')
+        //   },
+        //   {
+        //     key: 'create_date',
+        //     title: this.$t('operation.user.list.columns.create_date'), // 标题的内容
+        //     sortType: -1
+        //     // tooltip: '提示内容'
+        //   },
+        //   {
+        //     key: 'source',
+        //     title: this.$t('operation.user.list.columns.source'), // 标题的内容
+        //     class: 'tac'
+        //   },
+        //   {
+        //     key: 'is_active',
+        //     title: this.$t('operation.user.list.columns.is_active'), // 标题的内容
+        //     class: 'tac'
+        //   },
+        //   {
+        //     key: 'online',
+        //     title: this.$t('operation.user.list.columns.online'), // 标题的内容
+        //     class: 'tac'
+        //   }
+        // ],
         // 存放各个用户的在线状态 key是用户id
         usersOnlineType: [
           {
@@ -180,11 +238,48 @@
           }
         ],
         startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
-        endTime: new Date()
+        endTime: new Date(),
+        fieldData: {}
       }
     },
 
     computed: {
+      // 字段列表
+      fields () {
+        var result = []
+        var fieldData = this.base_fields
+        if (this.fieldData.base_fields && this.fieldData.base_fields.length) {
+          fieldData = this.fieldData.base_fields
+        }
+        fieldData.forEach((item, index) => {
+          var field = _.clone(item)
+          field.category = 'base_fields'
+          result.push(field)
+        })
+        result.sort((a, b) => {
+          return a.sort - b.sort
+        })
+        result.forEach((item, index) => {
+          item.sort = index + 1
+        })
+        return result
+      },
+
+      /**
+       * 表格列配置对象
+       */
+      headers () {
+        var result = []
+        this.fields.forEach((item) => {
+          if (item.hidden) return
+          var header = {
+            key: item.name,
+            title: item.label
+          }
+          result.push(header)
+        })
+        return result
+      },
       /**
        * 状态
        * @return {[type]} [description]
@@ -314,6 +409,8 @@
 
     route: {
       data () {
+        // 获取字段列表
+        this.getFields()
         // 获取用户列表
         this.getUsers()
         // 获取今日新增用户数
@@ -327,6 +424,18 @@
     },
 
     methods: {
+      /**
+       * 获取数据
+       */
+      getFields () {
+        api.customization.getUserCustomization().then((res) => {
+          if (res.data.base_fields && res.data.base_fields.length) {
+            this.fieldData = res.data || {}
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
       /**
        * 时间范围改变
        * @param  {[type]} startDate [description]
