@@ -38,67 +38,9 @@
           </div>
         </div>
       </div>
-      <div class="panel-bd">
-        <div class="data-table with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-          <div class="filter-bar">
-            <div class="filter-group fr">
-              <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getSales" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getSales">
-                  <x-select width="100px" :label="queryType.label" size="small">
-                    <select v-model="queryType">
-                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-                    </select>
-                  </x-select>
-                  <button slot="search-button" @click="getSales" class="btn"><i class="fa fa-search"></i></button>
-                </search-box>
-              </div>
-              <div class="filter-group-item">
-                <button @click="importDevices" class="btn btn-primary">{{ text.import_devices }}</button>
-              </div>
-            </div>
-            <h3>销售信息</h3>
-          </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>设备MAC</th>
-                <th>销售时间</th>
-                <th>产品型号</th>
-                <th>序列号</th>
-                <th>客户名称</th>
-                <th>手机号</th>
-                <th class="tac">{{ $t("common.action") }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="sales.length > 0">
-                <tr v-for="sale in sales">
-                  <td v-if="sale.mac" ><a v-link="'/operation/products/' + sale.product_id + '/devices/' + sale.device_id + '/info'" class="hl-red">{{ sale.mac || '--' }}</a></td>
-                  <td v-if="!sale.mac"> {{ sale.mac || '--' }} </td>
-                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/sales/' + sale.id" class="hl-red">{{ sale.sale_time | formatDate 'yyyy-MM-dd' }}</a></td>
-                  <td>{{ sale.product_mod || '--' }}</td>
-                  <td>{{ sale.sn || '--' }}</td>
-                  <td>{{ sale.name || '--' }}</td>
-                  <td>{{ sale.phone || '--' }}</td>
-                  <td class="tac">
-                    <button v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/edit/' + sale.id" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
-                  </td>
-                </tr>
-              </template>
-              <tr v-if="sales.length === 0 && !loadingData">
-                <td colspan="7" class="tac">
-                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- 分页-->
-        <pagination :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales" @count-update="onPageCountUpdate"></pagination>
-      </div>
+      <tab :nav="secondaryNav"></tab>
+      <router-view transition="view" transition-mode="out-in" class="view"></router-view>
+
     </div>
   </div>
 </template>
@@ -117,6 +59,7 @@
 
     data () {
       return {
+        secondaryNav: [],
         text: {
           import_devices: '导入设备'
         },
@@ -239,14 +182,36 @@
       }
     },
 
-    route: {
-      data () {
-      }
-    },
+    // route: {
+    //   data (transition) {
+    //     console.log(transition)
+    //     let delerRoot = `/operation/plugins/dealer/${this.$route.params.app_id}/list/${this.$route.params.dealer_id}`
+    //
+    //     return {
+    //       secondaryNav: [{
+    //         label: '设备列表',
+    //         link: { path: `${delerRoot}/devices` }
+    //       }, {
+    //         label: '独立入口配置',
+    //         link: { path: `${delerRoot}/config` }
+    //       }]
+    //     }
+    //   }
+    // },
 
     ready () {
+      let delerRoot = `/operation/plugins/dealer/${this.$route.params.app_id}/list/${this.$route.params.dealer_id}`
+
+      this.secondaryNav = [{
+        label: '设备列表',
+        link: { path: `${delerRoot}/devices` }
+      }, {
+        label: '独立入口配置',
+        link: { path: `${delerRoot}/config` }
+      }]
+
       this.getDealer()
-      this.getSales()
+      // this.getSales()
     },
     methods: {
       // 获取经销商信息
@@ -267,6 +232,7 @@
           this.dealerInfo.area.value = this.dealer.region || '--'
           this.dealerInfo.target.value = this.dealer.sale_goal || '--'
           this.dealerInfo.sale.value = this.dealer.saled_amount || '--'
+          console.log(this.dealer)
           locParser.parse(this.dealer.country || '', this.dealer.province || '', this.dealer.city || '', '', this.lang).then((res) => {
             if (res) {
               let loc = res.country
@@ -278,6 +244,7 @@
               }
               this.dealerInfo.loc.value = loc
             }
+          }).catch((res) => {
           })
           this.loadingData = false
         }).catch((err) => {

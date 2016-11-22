@@ -1531,6 +1531,24 @@ let configRouter = (router) => {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/dealer/details'))
             }, 'admin')
+          },
+          subRoutes: {
+            // 设备
+            '/devices': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/plugin/dealer/devices'))
+                }, 'admin')
+              }
+            },
+            // 入口配置
+            '/config': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/plugin/dealer/config'))
+                }, 'admin')
+              }
+            }
           }
         },
         // 添加销售记录
@@ -1904,6 +1922,7 @@ let configRouter = (router) => {
     '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/work-orders/repair',
     '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/add',
     '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/list',
+    '/operation/plugins/dealer/:app_id/list/:dealer_id': '/operation/plugins/dealer/:app_id/list/:dealer_id/devices',
     '/operation/plugins': '/operation/plugins/extensions',
     '/operation/alerts': '/operation/alerts/record',
     '/operation/alerts/detail/:id': '/operation/alerts/detail/:id/history',
