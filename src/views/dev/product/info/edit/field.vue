@@ -1,489 +1,479 @@
 <template>
   <div class="panel">
     <div class="panel-hd">
-      <p>
-        设备列表中包含以下字段，设定为“显示”字段将出现在设备列表视图中
-      </p>
+      <h2>产品字段</h2>
     </div>
     <div class="panel-bd">
-      <div class="table-content data-table with-loading">
-        <div class="icon-loading" v-show="loading">
+      <div class="data-table with-loading">
+        <div class="icon-loading" v-show="loadingData">
           <i class="fa fa-refresh fa-spin"></i>
         </div>
-        <!-- <div class="filter-bar">
-          123
-        </div> -->
-        <table class="table table-bordered">
+        <div class="filter-bar">
+          <div class="filter-group fl">
+            <div class="filter-group-item">
+              <h3>显示</h3>
+            </div>
+          </div>
+          <div class="filter-group fr">
+            <div class="actions">
+              <button class="btn btn-primary" @click="onAdd"><i class="fa fa-plus"></i> 添加产品字段</button>
+            </div>
+          </div>
+        </div>
+        <table class="table table-stripe table-bordered">
           <thead>
             <tr>
-              <th class="tac">
-                序号
-              </th>
-              <th>
-                字段ID
-              </th>
-              <th class="w50p">
-                字段名
-              </th>
-              <th class="tac">
-                类型
-              </th>
-              <th class="tac">
-                显示
-              </th>
-              <th class="tac">
-                排序
-              </th>
+              <th>字段key</th>
+              <th>字段名</th>
+              <th class="tac">字段类别</th>
+              <th class="tac">字段类型</th>
+              <th class="tac">操作</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="field in fieldList">
-              <td class="tac">{{$index + 1}}</td>
-              <td>{{field.name}}</td>
-              <td>
-                <a class="hl-red" @click="onShowEditLabelModal(field, $index)">{{field.label}}</a>
-              </td>
-              <td class="tac">{{translate(field.type)}}</td>
-              <td class="tac">
-                <switch :value="!field.hidden" @switch-toggle="toggleHidden(field)" size="small"></switch>
-              </td>
-              <td class="tac">
-                <a class="hl-red" @click="onShowEditSortModal(field, $index)">编辑</a>
-              </td>
-            </tr>
-            <tr v-if="fieldList.length === 0">
-              <td :colspan="6" class="tac">
-                <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
+            <template v-if="fields.length > 0">
+              <tr v-for="field in fields">
+                <td>
+                  <span>{{field.name}}</span>
+                </td>
+                <td>
+                  <span>{{field.label}}</span>
+                </td>
+                <td class="tac">
+                  <span>{{computedCategory(field.category)}}</span>
+                </td>
+                <td class="tac">
+                  <span>{{dataType(field.value_type)}}</span>
+                </td>
+                <td class="tac">
+                  <a class="hl-red" @click="onEdit(field, $index)">编辑</a>
+                </td>
+              </tr>
+            </template>
+            <tr v-if="fields.length === 0 && !loadingData">
+              <td colspan="5" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <!-- 编辑字段名浮层 -->
-    <modal :show.sync="showEditLabelModal">
-      <h3 slot="header">编辑字段名</h3>
+    <!-- 添加字段浮层 -->
+    <modal :show.sync="showModal" @close="onCancel">
+      <h3 slot="header">{{modalTitle}}</h3>
       <div slot="body" class="form">
-        <validator name="editLabelValidation">
-          <form autocomplete="off" novalidate @submit.prevent="onEditLabelSubmit">
-            <div class="form-row row">
-              <label class="form-control col-5">请输入字段名:</label>
-              <div class="controls col-19">
-                <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
-                  <input v-model="editLabelModal.label" v-validate:label="{required: true, maxlengtd: 20}" type="text" name="editLabelModal.label" class="input-text"/>
+        <validator name="validation">
+          <form autocomplete="off" @submit.prevent="onSubmit" novalidate>
+
+            <!-- 字段key -->
+            <div class="form-row row" v-if="canEdit">
+              <label class="form-control col-6">字段key:</label>
+              <div class="controls col-18">
+                <div v-placeholder="'请输入字段key'" class="input-text-wrap">
+                  <input v-model="modal.name" type="text" name="modal.name" v-validate:name="{required: true, notInArr: repeatKeys(modal.oldName), format: 'englist'}" class="input-text"/>
                 </div>
-                <div class="form-tips" :class="{'form-tips-error': $editLabelValidation.label.touched && $editLabelValidation.label.required || $editLabelValidation.label.modified && $editLabelValidation.label.maxlengtd}">
-                  <span>注：字段名不能为空，且不超过20个字符</span>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.name.touched && $validation.name.required">请输入字段key</span>
+                  <span v-if="$validation.name.touched && $validation.name.notInArr">字段key已存在</span>
+                  <span v-if="$validation.name.touched && $validation.name.format">字段key只能包含英文</span>
                 </div>
               </div>
             </div>
+
+            <!-- 字段名 -->
+            <div class="form-row row">
+              <label class="form-control col-6">字段名:</label>
+              <div class="controls col-18">
+                <div v-placeholder="'请输入字段名'" class="input-text-wrap">
+                  <input v-model="modal.label" type="text" name="modal.label" v-validate:label="{required: true}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.label.touched && $validation.label.required">请输入字段名</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 选择字段类型 -->
+            <div class="form-row row" v-if="canEdit">
+              <label class="form-control col-6">数据类型:</label>
+              <div class="controls filter-group-item col-18">
+                <x-select :label="dataType(modal.value_type)">
+                  <select v-model="modal.value_type">
+                    <option v-for="type in 3" :value="type+1">{{dataType(type+1)}}</option>
+                  </select>
+                </x-select>
+              </div>
+            </div>
+
+            <!-- 默认值 -->
+            <div class="form-row row" v-if="canEdit">
+              <label class="form-control col-6">默认值:</label>
+              <div class="controls col-18">
+                <div v-placeholder="'请输入默认值'" class="input-text-wrap">
+                  <input v-model="modal.default_value" type="text" name="modal.default_value" v-validate:default="{required: true}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.default.touched && $validation.default.required">请输入默认值</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 提交按钮 -->
             <div class="form-actions">
-              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <label v-if="modalType === 'edit' &&  canEdit" class="del-check">
+                <input type="checkbox" name="del" v-model="delChecked"/> 删除此字段
+              </label>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             </div>
           </form>
         </validator>
       </div>
     </modal>
-    <!-- 编辑排序浮层 -->
-    <modal :show.sync="showEditSortModal">
-      <h3 slot="header">编辑排序</h3>
-      <div slot="body" class="form">
-        <form autocomplete="off" @submit.prevent="onEditSortSubmit">
-          <div class="form-row row">
-            <label class="form-control col-5">编辑序号:</label>
-            <div class="controls col-19">
-              <x-select :label="editSortModal.targetIndex + ''">
-                <select v-model="editSortModal.targetIndex">
-                  <option v-for="n in fieldList.length" :value="n + 1">{{ n + 1 }}</option>
-                </select>
-              </x-select>
-            </div>
-          </div>
-          <div class="form-actions">
-            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-            <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-          </div>
-        </form>
-      </div>
-    </modal>
+
   </div>
 </template>
 
 <script>
-import api from 'api'
-// import * as config from 'consts/config'
-export default {
-  name: 'field',
-  components: {
-  },
+  import api from 'src/api'
+  // import locales from 'consts/locales/index'
 
-  data () {
-    return {
-      base_fields: [
-        {
-          'name': 'mac',
-          'label': 'MAC地址',
-          'hidden': false,
-          'sort': 1
-        },
-        {
-          'name': 'id',
-          'label': '设备ID',
-          'hidden': false,
-          'sort': 2
-        },
-        {
-          'name': 'is_active',
-          'label': '是否激活',
-          'hidden': false,
-          'sort': 3
-        },
-        {
-          'name': 'active_date',
-          'label': '激活时间',
-          'hidden': false,
-          'sort': 4
-        },
-        {
-          'name': 'is_online',
-          'label': '是否在线',
-          'hidden': false,
-          'sort': 5
-        },
-        {
-          'name': 'sn',
-          'label': 'SN',
-          'hidden': true,
-          'sort': 6
-        },
-        {
-          'name': 'online_count',
-          'label': '累计在线时间',
-          'hidden': true,
-          'sort': 7
-        },
-        {
-          'name': 'firmware_version',
-          'label': '固件版本号',
-          'hidden': true,
-          'sort': 8
-        }
-      ],
-      // 服务器返回的数据
-      dataList: {},
-      // 数据端点
-      datapoints: false, // 接口返回前是false  接口返回后是数组
-      // 用于显示列表的数据
-      fieldList: [],
-      // 正在加载标志位
-      loadingDataPoint: false,
-      loadingDataField: false,
-
-      showEditLabelModal: false,
-
-      editLabelModal: {
-        label: '',
-        index: 0
-      },
-      showEditSortModal: false,
-
-      editSortModal: {
-        oldIndex: 0,
-        targetIndex: 0,
-        target: {}
-      },
-      editing: false
-    }
-  },
-  // vuex: {
-  //   getters: {
-  //     products: ({ products }) => products.all
-  //   }
-  // },
-
-  computed: {
-    loading () {
-      return this.loadingDataPoint || this.loadingDataField
-    }
-  },
-
-  watch: {
-    dataList () {
-      this.init()
+  export default {
+    name: 'product',
+    vuex: {
+      getters: {
+        products: ({ products }) => products.all
+      }
     },
-    datapoints () {
-      this.init()
-    }
-  },
-  route: {
+    components: {
+    },
     data () {
-      this.getData()
-      this.getDataPoint()
-      // this.reset() // 这个方法是调试用的
-    }
-  },
-  ready () {
-  },
-
-  methods: {
-    /**
-     * 这个方法是调试用的
-     */
-    reset () {
-      var params = {
-        base_fields: [],
-        datapoints: []
-      }
-      api.product.setProductField(this.$route.params.id, params).then((res) => {
-        console.log(res)
-      }).catch((res) => {
-        console.log(res)
-      })
-    },
-    /**
-     * 编辑排序表单提交
-     * @return {[type]} [description]
-     */
-    onEditSortSubmit () {
-      var target = _.clone(this.fieldList.$remove(this.editSortModal.target)[0])
-      var fieldList = _.clone(this.fieldList)
-      fieldList.splice(this.editSortModal.targetIndex - 1, 0, target)
-      this.fieldList = fieldList
-      this.setFiled()
-    },
-    /**
-     * 显示编辑排序事件
-     * @param  {[type]} field 当前选中的字段
-     * @param  {[type]} index 当前选中字段的索引
-     * @return {[type]}       [description]
-     */
-    onShowEditSortModal (field, index) {
-      this.showEditSortModal = true
-      this.editSortModal.oldIndex = index + 1
-      this.editSortModal.targetIndex = index + 1
-      this.editSortModal.target = field
-    },
-    /**
-     * 浮层的取消按钮
-     * @return {[type]} [description]
-     */
-    onCancel () {
-      this.showEditLabelModal = false
-      this.showEditSortModal = false
-      this.$resetValidation()
-    },
-    /**
-     * 显示编辑字段名浮层
-     * @param  {[type]} field 当前选中的字段
-     * @param  {[type]} index 当前选中的字段的索引
-     * @return {[type]}       [description]
-     */
-    onShowEditLabelModal (field, index) {
-      this.showEditLabelModal = true
-      this.editLabelModal.label = field.label
-      this.editLabelModal.index = index
-    },
-    /**
-     * 获取数据端点
-     * @return {[type]} [description]
-     */
-    getDataPoint () {
-      this.loadingDataPoint = true
-      api.product.getDatapoints(this.$route.params.id).then((res) => {
-        if (res.status === 200) {
-          this.datapoints = res.data
-          this.loadingDataPoint = false
-        }
-      }).catch((res) => {
-        this.handleError(res)
-        this.loadingDataPoint = false
-      })
-    },
-    /**
-     * 编辑字段名表单提交
-     * @return {[type]} [description]
-     */
-    onEditLabelSubmit () {
-      let fieldList = _.clone(this.fieldList)
-      fieldList[this.editLabelModal.index].label = this.editLabelModal.label
-      this.setFiled(fieldList)
-    },
-    /**
-     * 是否显示按钮切换事件
-     * @param  {[type]} field [description]
-     * @return {[type]}       [description]
-     */
-    toggleHidden (field) {
-      field.hidden = !field.hidden
-      this.setFiled()
-    },
-
-    setFiled (fieldList) {
-      this.loadingDataField = true
-      api.product.setProductField(this.$route.params.id, this.sortDataList(fieldList)).then((res) => {
-        this.onCancel()
-        this.dataList = res.data
-        this.loadingDataField = false
-      }).catch((res) => {
-        this.loadingDataField = false
-        this.handleError(res)
-      })
-    },
-    /**
-     * 将当前数据重算位置 返回可以发给服务器的数据
-     * 这个函数会忽略传进来的sort参数  根据数组位置重新算出当前的sort值 然后返回一个数组
-     * @return {[type]} [description]
-     */
-    sortDataList (fieldList) {
-      fieldList = fieldList || this.fieldList
-      let result = {}
-      result.base_fields = []
-      result.datapoints = []
-      fieldList.forEach((item, index) => {
-        let obj = {
-          'name': item.name,
-          'label': item.label,
-          'hidden': item.hidden,
-          'sort': index + 1
-        }
-        if (item.type === 'datapoints') {
-          obj.index = item.index
-        }
-        result[item.type].push(obj)
-      })
-      return result
-    },
-    /**
-     * 向服务器获取数据
-     * @return {[type]} [description]
-     */
-    getData () {
-      this.loadingDataField = true
-      api.product.getProductField(this.$route.params.id).then((res) => {
-        this.dataList = res.data || {}
-        this.loadingDataField = false
-      }).catch((res) => {
-        this.loadingDataField = false
-        this.handleError(res)
-      })
-    },
-    /**
-     * 初始化 将服务器返回的数据合并成一个数据用于渲染页面
-     * @return {[type]} [description]
-     */
-    init () {
-      // 判断数据是否加载完成 如果正在loading则return
-      if (this.loading) {
-        return
-      }
-      // 存放最终的计算结果
-      var result = []
-      // 是否需要向后端重置数据的标志位 弱下方执行完成之后标志位为true 就会去向服务器发请求重置当前的字段列表
-      var needResetData = false
-      // 判断服务器时候有返回基本字段信息
-      if (!this.dataList.base_fields || (this.dataList.base_fields && !this.dataList.base_fields.length)) {
-        // 若没有返回基本字段信息 则将标志位设置为true
-        needResetData = true
-        // 读取默认的基本字段信息 默认前五个显示 三个隐藏 一共八个 具体看data()里面的定义
-        this.dataList.base_fields = this.base_fields
-      }
-      // 初始化基本字段信息 给基本字段加上是否显示字段 加上类型字段
-      this.dataList.base_fields.forEach((item) => {
-        item.show = !item.hidden
-        item.type = 'base_fields'
-      })
-      // 判断服务器有无返回数据端点
-      if (!this.dataList.datapoints) {
-        // 弱无返回数据端点 将标志位变为true
-        needResetData = true
-        // 用获取数据端点接口返回的数据端点作为当前数据端点的默认值
-        this.dataList.datapoints = this.datapoints
-      }
-      // 如果当前标志位仍然为false
-      if (!needResetData) {
-        if (this.dataList.datapoints.length === this.datapoints.length) {
-          var dArray = this.dArray(this.dataList.datapoints, this.datapoints, 'index')
-          if (dArray.length) {
-            needResetData = true
+      return {
+        // 默认字段
+        base_fields: [
+          {
+            'name': 'name',
+            'label': '产品名称',
+            'hidden': false,
+            'sort': 1,
+            'value_type': 1,
+            'default_value': ''
+          },
+          {
+            'name': 'mode',
+            'label': '产品型号',
+            'hidden': false,
+            'sort': 2,
+            'value_type': 1,
+            'default_value': ''
+          },
+          {
+            'name': 'type',
+            'label': '产品类型',
+            'hidden': false,
+            'sort': 3,
+            'value_type': 2,
+            'default_value': 0
+          },
+          {
+            'name': 'link_type',
+            'label': '连接类型',
+            'hidden': false,
+            'sort': 4,
+            'value_type': 2,
+            'default_value': 0
+          },
+          {
+            'name': 'description',
+            'label': '产品描述',
+            'hidden': false,
+            'sort': 5,
+            'value_type': 1,
+            'default_value': ''
           }
-        } else {
-          needResetData = true
-        }
+        ],
+        // 加载数据标志位
+        loadingData: false,
+        // 现实浮层
+        showModal: false,
+        // 正在编辑
+        editing: false,
+        // 删除按钮是否出现标志位
+        delChecked: false,
+        // 浮层
+        modal: {
+          label: '',
+          name: '',
+          value_type: 1,
+          default_value: '',
+          oldName: ''
+        },
+        // 浮层类型
+        modalType: '',
+        // 当前正在编辑的字段索引
+        editIndex: -1,
+        // 服务器返回的产品字段
+        productFields: {}
       }
-      // 初始化数据端点 用获取数据端点接口返回的数据端点去初始化当前的每个类型为数据端点的产品字段
-      let datapoints = []
-      this.datapoints.forEach((item1) => {
-        //  标志位 标志：当前数据端点是否在字段列表中
-        let hasPoints = false
-        this.dataList.datapoints.forEach((item2) => {
-          if (item1.index - 0 === item2.index - 0) {
-            hasPoints = true
-            let obj = {}
-            obj.name = item2.name
-            obj.label = item2.label
-            obj.hidden = item2.hidden || false
-            obj.sort = item2.sort
-            obj.show = !obj.hidden
-            obj.type = 'datapoints'
-            obj.index = item2.index
-            datapoints.push(obj)
-          }
+    },
+    computed: {
+      // 字段列表
+      fields () {
+        var result = []
+        var baseFields = this.productFields.base_fields || this.base_fields
+        baseFields.forEach((item, index) => {
+          var field = _.clone(item)
+          field.category = this.baseFieldKeys.indexOf(item.name) >= 0 ? 'base_fields' : 'custom_fields'
+          result.push(field)
         })
-        if (!hasPoints) {
-          let obj = {}
-          obj.name = item1.name
-          obj.label = item1.name
-          obj.hidden = true
-          obj.sort = item1.index + 9
-          obj.show = !obj.hidden
-          obj.type = 'datapoints'
-          obj.index = item1.index
-          datapoints.push(obj)
-        }
-      })
+        result.sort((a, b) => {
+          return a.sort - b.sort
+        })
+        result.forEach((item, index) => {
+          item.sort = index + 1
+        })
+        return result
+      },
 
-      // 将基本字段数组和数据端点数组合并成一个
-      result = this.dataList.base_fields.concat(datapoints)
-      // 用sort字段去排序
-      result.sort((a, b) => {
-        return a.sort - b.sort
-      })
-      this.fieldList = result
-      // 判断标志位needResetData 如果为true  则向服务器发请求重置字段列表
-      if (needResetData) {
-        this.setFiled()
+      /**
+       * 是否可以有更多编辑权限
+       */
+      canEdit () {
+        var result = false
+        var condition = [
+          this.modal.category === 'custom_fields',
+          this.modalType === 'add'
+        ]
+        result = condition[0] || condition[1]
+        return result
+      },
+
+      /**
+       * 基本字段key表
+       */
+      baseFieldKeys () {
+        var result = this.base_fields.map((item) => {
+          return item.name
+        })
+        return result || []
+      },
+
+      // 浮层标题
+      modalTitle () {
+        return this.modalType === 'add' ? '添加产品字段' : '编辑产品字段'
       }
     },
-    /**
-     * 计算当前的类型 返回中文文本
-     * @param  {[type]} type [description]
-     * @return {[type]}      [description]
-     */
-    translate (type) {
-      return type === 'base_fields' ? '基本字段' : '数据端点'
+    route: {
+      data () {
+        this.initData()
+      }
     },
+    methods: {
+      // 测试函数 用于清空服务器上的数据
+      test () {
+        this.updateData([])
+      },
 
-    /**
-     * 返回两个数组的非公共项 数组中的每一项必须是一个对象
-     * @param  {[type]} arr1 第一个数组
-     * @param  {[type]} arr2 第二个数组
-     * @param  {[type]} key  对比的依据
-     * @return {[type]}      [description]
-     */
-    dArray (arr1, arr2, key) {
-      var result1 = _.differenceBy(arr1, arr2, key)
-      var result2 = _.differenceBy(arr2, arr1, key)
-      return result1.concat(result2)
+      /**
+       * 初始化数据
+       */
+      initData () {
+        this.getData()
+      },
+
+      /**
+       * 向服务器获取数据
+       * @return {[type]} [description]
+       */
+      getData () {
+        this.loadingData = true
+        api.customization.getProductCustomization(this.$route.params.id).then((res) => {
+          this.productFields = res.data || {}
+          this.loadingData = false
+        }).catch((res) => {
+          this.loadingData = false
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 添加字段
+       */
+      addField () {
+        if (this.$validation.invalid) return this.$validate(true)
+        this.editing = true
+        var params = _.cloneDeep(this.fields)
+        var newField = _.clone(this.modal)
+        newField.category = 'custom_fields'
+        newField.sort = params.length + 1
+        params.push(newField)
+        this.updateData(params)
+      },
+
+      /**
+       * 编辑字段
+       */
+      editField () {
+        if (this.$validation.invalid) return this.$validate(true)
+        this.editing = true
+        var params = _.cloneDeep(this.fields)
+        var newField = _.clone(this.modal)
+        params.splice(this.editIndex, 1, newField)
+        this.updateData(params)
+      },
+
+      /**
+       * 删除字段
+       */
+      deleteField () {
+        this.editing = true
+        var params = _.cloneDeep(this.fields)
+        params.splice(this.editIndex, 1)
+        this.updateData(params)
+      },
+
+      /**
+       * 更新服务器数据
+       */
+      updateData (fields) {
+        fields.sort((a, b) => {
+          return a.sort - b.sort
+        })
+        var params = {
+          base_fields: []
+        }
+        fields.forEach((item, index) => {
+          var field = {
+            'name': item.name,
+            'label': item.label,
+            'hidden': item.hidden,
+            'sort': index + 1,
+            'value_type': item.value_type,
+            'default_value': item.default_value || ''
+          }
+          params.base_fields.push(field)
+        })
+        api.customization.setProductCustomization(this.$route.params.id, params).then((res) => {
+          this.onCancel()
+          this.productFields = res.data || {}
+        }).catch((res) => {
+          this.onCancel()
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 显示添加字段浮层
+       */
+      onAdd () {
+        this.modalType = 'add'
+        this.modal.label = ''
+        this.modal.name = ''
+        this.modal.default_value = ''
+        this.modal.oldName = ''
+        this.modal.hidden = false
+        this.showModal = true
+      },
+
+      /**
+       * 显示浮层
+       */
+      onEdit (field, index) {
+        this.modalType = 'edit'
+        this.modal = _.clone(field)
+        this.modal.oldName = field.name
+        this.editIndex = index
+        this.delChecked = false
+        this.showModal = true
+      },
+
+      /**
+       * 返回除了某个key之外的基本字段
+       */
+      repeatKeys (ignore) {
+        return this.baseFieldKeys.filter((item) => {
+          return item !== ignore
+        })
+      },
+
+      /**
+       * 提交按钮
+       */
+      onSubmit () {
+        switch (this.modalType) {
+          case 'add':
+            this.addField()
+            break
+          case 'edit':
+            if (this.delChecked) {
+              this.deleteField()
+            } else {
+              this.editField()
+            }
+            break
+          default:
+            return
+        }
+      },
+
+      /**
+       * 关闭浮层
+       * @return {[type]} [description]
+       */
+      onCancel () {
+        this.editing = false
+        this.showModal = false
+        this.$resetValidation()
+      },
+
+      /**
+       * 解析类别成文字
+       */
+      computedCategory (type) {
+        var result = ''
+        switch (type) {
+          case 'base_fields':
+            result = '默认字段'
+            break
+          case 'custom_fields':
+            result = '自定义字段'
+            break
+          default:
+            result = '未知'
+            break
+        }
+        return result
+      },
+
+      /**
+       * 解析当前类型
+       * @param  {[type]} type [description]
+       * @return {[type]}      [description]
+       */
+      dataType (type) {
+        var result = ''
+        switch (type - 0) {
+          case 1:
+            result = '字符串'
+            break
+          case 2:
+            result = '32位整形(有符号)'
+            break
+          case 3:
+            result = '浮点'
+            break
+          default:
+            result = '未知'
+            break
+        }
+        return result
+      }
     }
   }
-}
 </script>
 
 <style lang="stylus" scoped>
+@import '../../../../../assets/stylus/common'
 
-  .statistic-group
-    border-top 1px solid default-border-color
-  .w50p
-    width 50%
 </style>
