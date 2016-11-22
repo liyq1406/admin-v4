@@ -22,6 +22,9 @@ export default {
       }, {
         label: '自定义产品概览',
         link: { path: '/dev/settings/views/overview' }
+      }, {
+        label: '自定义数据源',
+        link: { path: '/dev/settings/views/source' }
       }]
     }
   },
@@ -31,6 +34,33 @@ export default {
 </script>
 
 <style lang="stylus">
-  .main .x-breadcrumb
-    border-bottom 0
+.quotas-detail
+  border 1px solid #DA4E37
+  position relative
+  .content
+    padding 15px 20px 0px
+  .arrow
+    position absolute
+    left 265px
+    top -9px
+    width 18px
+    height 18px
+    background #DA4E37
+    transform rotate(45deg)
+  .arrow-cover
+    position absolute
+    width 100%
+    top 0
+    left 0
+    z-index 1
+    height 15px
+    background white
+  .arrow-left-1
+    left 30px
+  .arrow-left-2
+    left 105px
+  .arrow-left-3
+    left 185px
+  .arrow-left-4
+    left 265px
 </style>

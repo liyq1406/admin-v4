@@ -1,0 +1,569 @@
+<template>
+  <div class="data-source">
+    <validator name="validation">
+      <form autocomplete="off" novalidate>
+        <div class="form">
+          <div class="form-row row">
+            <label class="form-control col-3 col-offset-1">选择产品:</label>
+            <div class="controls col-20">
+              <x-select :label="selectedProduct.name" width="120px">
+                <select v-model="selectedProduct">
+                  <option v-for="opt in products" :value="opt">{{ opt.name }}</option>
+                </select>
+              </x-select>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-3 col-offset-1">标题:</label>
+            <div class="controls col-10">
+              <div class="input-text-wrap">
+                <input v-model="title" type="text" placeholder="请输入标题" v-validate:name="{required: true, minlength: 2, maxlength: 30, format: 'trim'}" name="name" class="input-text input-lenght"/>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.name.touched && $validation.name.required">请输入标题</span>
+                  <span v-if="$validation.name.modified && $validation.name.minlength">标题不能少于2位</span>
+                  <span v-if="$validation.name.modified && $validation.name.maxlength">标题不能大于于30位</span>
+                  <span v-if="$validation.name.modified && $validation.name.format">标题不能包含空格</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-3 col-offset-1">显示方式:</label>
+            <div class="controls col-10">
+              <div class="controls col-20">
+                <x-select :label="selectedShowType.name" width="120px" @change="showTypeChange">
+                  <select v-model="selectedShowType">
+                    <option v-for="opt in showTypes" :value="opt">{{ opt.name }}</option>
+                  </select>
+                </x-select>
+              </div>
+            </div>
+          </div>
+          <template v-if="selectedShowType.value === 2">
+            <div class="form-row row">
+              <label class="form-control col-3 col-offset-1">图表类型:</label>
+              <div class="controls col-20">
+                <div class="input-radio-wrap chart-type">
+                  <div class="fl mr15 pie icon" :class="{ select: chartType === 1 }" @click="chartTypeSelect(1)">
+                    <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                  </div>
+                  <div class="fl mr15 bar icon" :class="{ select: chartType === 2 }" @click="chartTypeSelect(2)">
+                    <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                  </div>
+                  <div class="fl line icon" :class="{ select: chartType === 3 }" @click="chartTypeSelect(3)">
+                    <i class="fa fa-line-chart" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="chartType === 1" class="form-row row">
+              <label class="form-control col-3 col-offset-1">扇形图分类:
+                <i class="fa fa-question-circle tips-icon" v-tooltip="tipPie"></i>
+              </label>
+              <div class="controls col-20">
+                <div v-for="rule in classifty" class="row input-text-wrap" :class="[$index!==0 ? 'mt10': '']">
+                  <div class="col-4 key-input">
+                    <input placeholder="最小值" v-model="rule.min" type="text" class="input-text"/>
+                  </div>
+                  <span class="col-1 span-middle-center">-</span>
+                  <div class="col-4 value-input">
+                    <input placeholder="最大值" v-model="rule.max" type="text" class="input-text"/>
+                  </div>
+                  <div v-if="$index === classifty.length-1" class="col-2">
+                    <button class="btn btn-ghost add-btn ml10" @click="addRule($index)">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </div>
+                  <div v-else class="col-1 del-icon ml10">
+                    <i class="fa fa-times-circle" @click="delRule($index)"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <div v-if="selectedProduct.id" class="form-row row">
+            <div class="form-control col-3 col-offset-1">
+              <label>数据类型配置:</label>
+            </div>
+            <div class="controls col-20">
+              <div class="radio-button-wrap mt5">
+                <radio-button-group :items="sourceTypes" color="red" :value.sync="sourceType" @select=""></radio-button-group>
+              </div>
+              <div class="quotas-detail mt20">
+                <div class="{{ arrowClass }}"></div>
+                <div class="arrow-cover"></div>
+                <div class="content">
+                  <template v-if="sourceType === 2">
+                    <div class="form-row row">
+                      <div class="form-control col-3">
+                        <label>数据端点:</label>
+                      </div>
+                      <div class="control col-6">
+                        <x-select width="140px" :label="selectedDatapoint.name">
+                          <select v-model="selectedDatapoint" @change="">
+                            <option v-for="option in datapoints" :value="option">{{ option.name }}</option>
+                          </select>
+                        </x-select>
+                      </div>
+                    </div>
+                  </template>
+                  <template v-if="sourceType === 1">
+                    <div class="form-row row">
+                      <div class="form-control col-3">
+                        <label>数据规则:</label>
+                      </div>
+                      <div class="control col-6">
+                        <x-select width="120px" :label="selectedRule.name">
+                          <select v-model="selectedRule" @change="">
+                            <option v-for="option in statisticsRules" :value="option">{{ option.name }}</option>
+                          </select>
+                        </x-select>
+                      </div>
+                    </div>
+                    <div v-if="selectedRule.fineness && selectedRule.fineness.length && chartType !== 1" class="form-row row">
+                      <div class="form-control col-3">
+                        <label>时间粒度:</label>
+                      </div>
+                      <div class="controls col-21">
+                        <div class="input-radio-wrap">
+                          <template v-for="item in selectedRule.fineness">
+                            <template v-if="item===1">
+                              <input v-model="statisticType" type="radio" :value="1" name="fineness-type"/>
+                              <label>小时</label>
+                            </template>
+                            <template v-if="item===2">
+                              <input v-model="statisticType" type="radio" :value="2" name="fineness-type"/>
+                              <label>天</label>
+                            </template>
+                            <template v-if="item===3">
+                              <input v-model="statisticType" type="radio" :value="3" name="fineness-type"/>
+                              <label>周</label>
+                            </template>
+                            <template v-if="item===4">
+                              <input v-model="statisticType" type="radio" :value="4" name="fineness-type"/>
+                              <label>月</label>
+                            </template>
+                            <template v-if="item===5">
+                              <input v-model="statisticType" type="radio" :value="5" name="fineness-type"/>
+                              <label>年</label>
+                            </template>
+                            <template v-if="item===6">
+                              <input v-model="statisticType" type="radio" :value="6" name="fineness-type"/>
+                              <label>全部</label>
+                            </template>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="selectedRule.id" class="form-row row">
+                      <div class="form-control col-3">
+                        <label>数据端点:</label>
+                      </div>
+                      <div class="control col-6">
+                        <x-select width="120px" :label="ruleSelectedDatapoint.name">
+                          <select v-model="ruleSelectedDatapoint" @change="">
+                            <option v-for="option in ruleDatapoints" :value="option">{{ option.name }}</option>
+                          </select>
+                        </x-select>
+                      </div>
+                    </div>
+                    <div v-if="selectedRule.fineness && selectedRule.fineness.length && ruleSelectedDatapoint.id" class="form-row row">
+                      <div class="form-control col-3">
+                        <label>数据计算:</label>
+                      </div>
+                      <div class="controls col-21">
+                        <div class="input-radio-wrap">
+                          <template v-for="item in statisticsTypes">
+                            <template v-if="item.mode===1">
+                              <input v-model="statisticType" type="radio" :value="1" name="statistic-type"/>
+                              <label>最大值</label>
+                            </template>
+                            <template v-if="item.mode===2">
+                              <input v-model="statisticType" type="radio" :value="2" name="statistic-type"/>
+                              <label>最小值</label>
+                            </template>
+                            <template v-if="item.mode===3">
+                              <input v-model="statisticType" type="radio" :value="3" name="statistic-type"/>
+                              <label>平均</label>
+                            </template>
+                            <template v-if="item.mode===4">
+                              <input v-model="statisticType" type="radio" :value="4" name="statistic-type"/>
+                              <label>求和</label>
+                            </template>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-if="!(selectedShowType.value === 2 && chartType >= 2 )" class="form-row row">
+            <div class="form-control col-3 col-offset-1">
+              <label>计算周期:</label>
+            </div>
+            <div class="controls col-20">
+              <div class="input-radio-wrap fl">
+                <input v-model="period" type="radio" :value="1" name="period" @change=""/>
+                <label>24小时</label>
+                <input v-model="period" type="radio" :value="2" name="period" @change=""/>
+                <label>7日</label>
+                <input v-model="period" type="radio" :value="3" name="period" @change=""/>
+                <label>30日</label>
+                <input v-model="period" type="radio" :value="4" name="period" @change=""/>
+                <label>至今</label>
+                <input v-model="period" type="radio" :value="5" name="period" @change=""/>
+                <label>自定义时间</label>
+              </div>
+              <div v-if="period === 5" class="time-range-lineheight">
+                <date-time-range-picker :init-start-time="initStartTime" :init-end-time="initEndTime" @timechange="timeSelect"></date-time-range-picker>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row" v-if="type==='edit'">
+            <div class="col-20 col-offset-3">
+              <label class="del-check">
+                <input type="checkbox" name="del" v-model="delChecked"/> 删除数据源
+              </label>
+            </div>
+          </div>
+          <div class="form-actions row">
+            <div class="col-20 col-offset-3">
+              <button :disabled="submitting" :class="{'disabled':submitting}" class="btn btn-primary" @click.prevent="onSubmit">{{ $t('common.ok') }}</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </validator>
+  </div>
+</template>
+
+<script>
+import api from 'api'
+
+export default {
+  name: 'data-source-form',
+  components: {
+  },
+
+  vuex: {
+    getters: {
+      products: ({ products }) => products.all
+    }
+  },
+
+  props: {
+    type: {
+      type: String,
+      default: 'add'
+    }
+  },
+
+  data () {
+    return {
+      selectedProduct: {
+        name: '请选择产品'
+      },
+      selectedDatapoint: {
+        name: '请选择数据端点'
+      },
+      ruleSelectedDatapoint: {
+        name: '请选择数据端点'
+      },
+      selectedRule: {
+        name: '请选择统计规则'
+      },
+      datapoints: [],
+      statisticsRules: [],
+      submitting: false,
+      period: 1,
+      initStartTime: 0,
+      initEndTime: 0,
+      sourceType: 1,
+      title: '',
+      statisticType: 0,
+      classifty: [{
+        min: '',
+        max: ''
+      }],
+      chartType: 1,
+      tipPie: '每一个数据范围表示扇形统计的一个分类',
+      showTypes: [
+        {name: '指标', value: 1},
+        {name: '自定义图表', value: 2}
+      ],
+      selectedShowType: {name: '数据', value: 1}
+    }
+  },
+
+  computed: {
+    arrowClass () {
+      let res = 'arrow arrow-left-'
+      return res + this.sourceType
+    },
+    sourceTypes () {
+      if (this.selectedShowType.value === 1) {
+        return [
+          { label: '统计规则', value: 1 }
+        ]
+      } else {
+        return [
+          { label: '统计规则', value: 1 },
+          { label: '数据端点', value: 2 }
+        ]
+      }
+    },
+    statisticsTypes () {
+      if (typeof this.ruleSelectedDatapoint.index !== 'number' || !this.dpMode || !this.dpMode.length) {
+        return
+      }
+      let res = _.filter(this.dpMode, (item) => {
+        return item.index === this.ruleSelectedDatapoint.index
+      })
+      if (res && res.length) {
+        res.sort((a, b) => {
+          return a.mode - b.mode
+        })
+      }
+      return res || []
+    },
+    ruleDatapoints () {
+      let res = []
+      if (this.datapoints && this.datapoints.length) {
+        this.datapoints.forEach((item) => {
+          let findDpMode = _.find(this.dpMode, (dp) => {
+            return dp.index === item.index
+          })
+          if (findDpMode) {
+            res.push({
+              id: item.id,
+              name: item.name,
+              index: item.index
+            })
+          }
+        })
+      }
+      return res
+    },
+    dpMode () {
+      return this.selectedRule.dp_mode || []
+    }
+  },
+
+  watch: {
+    selectedProduct () {
+      if (this.selectedProduct.id) {
+        this.resetSelect()
+        this.getDatapoints()
+        this.getStatisticRules()
+      }
+    }
+  },
+
+  ready () {
+  },
+
+  methods: {
+    showTypeChange () {
+      this.sourceType = 1
+    },
+    resetSelect () {
+      this.selectedRule = {
+        name: '请选择统计规则'
+      }
+      this.selectedDatapoint = this.ruleSelectedDatapoint = {
+        name: '请选择数据端点'
+      }
+    },
+    chartTypeSelect (value) {
+      this.chartType = value
+    },
+    timeSelect () {},
+    /**
+     * 获取统计快照规则
+     * @author guohao
+     */
+    getStatisticRules () {
+      let params = {
+        offset: 0,
+        limit: 10000, // 取所有规则
+        product_id: [this.selectedProduct.id],
+        type: 2 // 产品规则
+      }
+      api.snapshot.getAllStatisticRules(params).then((res) => {
+        if (res.status === 200 && res.data.list && res.data.list.length) {
+          res.data.list.sort((a, b) => {
+            a = +new Date(a.create_time)
+            b = +new Date(b.create_time)
+            return a - b
+          })
+          this.statisticsRules = res.data.list
+        } else {
+          this.statisticsRules = []
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 处理翻页
+     * @param  {Number} page 目标页码
+     * @author shengzhi
+     */
+    onPageUpdate (page) {
+      this.currentPage = page
+    },
+
+    /**
+     * 获取数据端点
+     * @author shengzhi
+     */
+    getDatapoints () {
+      // 获取产品数据端点列表
+      api.product.getDatapoints(this.selectedProduct.id).then((res) => {
+        if (res.status === 200) {
+          this.currentPage = 1
+          let datapoints = res.data.sort((a, b) => {
+            return a.index - b.index
+          })
+
+          this.datapoints = datapoints
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    addRule (index) {
+      if (index >= 9) {
+        return
+      }
+      if (this.classifty[index].min === '' || this.classifty[index].max === '') {
+        return
+      }
+      this.classifty.push({
+        min: '',
+        max: ''
+      })
+    },
+    delRule (index) {
+      this.classifty.splice(index, 1)
+    },
+
+    /**
+     * 快照规则提交
+     * @author shengzhi
+     */
+    onSubmit () {
+      if (this.submitting) return
+
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
+      }
+
+      if (this.delChecked && !window.confirm('您确定要删除该规则?')) {
+        return
+      }
+
+      let model = {
+        dp_mode: this.getDpMode(),
+        fineness: this.getFineness(),
+        name: this.name,
+        describe: this.description,
+        type: 1,
+        status: this.status
+      }
+
+      let process
+
+      this.submitting = true
+      if (this.type === 'add') { // 添加
+        process = api.snapshot.ceateStatisticRules(this.selectedSnapshot.productId, this.selectedSnapshot.id, model)
+      } else {
+        if (this.delChecked) { // 删除
+          process = api.snapshot.delStatisticRules(this.selectedSnapshot.productId, this.selectedSnapshot.id, this.$route.params.rule_id)
+        } else {
+          model._id = this.$route.params.rule_id
+          process = api.snapshot.editStatisticRule(this.selectedSnapshot.productId, this.selectedSnapshot.id, this.$route.params.rule_id, model)
+        }
+      }
+      process.then((res) => {
+        this.submitting = false
+        if (res.status === 200) {
+          this.$route.router.replace('/dev/data/statistics-rule/device')
+        }
+      }).catch((res) => {
+        this.submitting = false
+        this.handleError(res)
+      })
+    }
+  }
+}
+</script>
+
+<style lang="stylus">
+@import '../../../../../assets/stylus/common'
+.chart-type
+  font-size 20px
+  color #707070
+  .icon
+    cursor pointer
+  .select
+    color #1F9CDD
+.radio-button-wrap
+  .btn
+    width 80px
+    text-align center
+.input-radio-wrap
+  position relative
+  line-height 30px
+  display inline-block
+  input, label
+    vertical-align middle
+  label
+    margin-right 20px
+.del-icon
+  height 32px
+  width 32px
+  i
+    line-height 32px !important
+.data-source
+  .form
+    max-width 800px !important
+    .quotas-detail
+      border 1px solid #DA4E37
+      position relative
+      .content
+        padding 15px 20px 0px
+      .arrow
+        position absolute
+        left 265px
+        top -9px
+        width 18px
+        height 18px
+        background #DA4E37
+        transform rotate(45deg)
+      .arrow-cover
+        position absolute
+        width 100%
+        top 0
+        left 0
+        z-index 1
+        height 15px
+        background white
+      .arrow-left-1
+        left 30px
+      .arrow-left-2
+        left 105px
+.span-middle-center
+  text-align center
+  vertical-align middle
+  line-height 32px
+  display inline-block
+.add-btn
+  height 32px
+  width 32px
+  padding 0
+</style>

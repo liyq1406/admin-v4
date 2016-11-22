@@ -815,6 +815,22 @@ let configRouter = (router) => {
           }
         },
 
+        // 新增图表
+        'settings/views/source/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/views/source/add'))
+            }, 'admin')
+          }
+        },
+        'settings/views/source/edit/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/views/source/edit'))
+            }, 'admin')
+          }
+        },
+
         // 视图自定义
         'settings/views': {
           component (resolve) {
@@ -828,6 +844,14 @@ let configRouter = (router) => {
               component (resolve) {
                 require.ensure([], (require) => {
                   resolve(require('./views/dev/settings/views/overview'))
+                }, 'admin')
+              }
+            },
+            // 自定义数据源
+            '/source': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/views/source'))
                 }, 'admin')
               }
             },

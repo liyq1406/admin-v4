@@ -50,6 +50,4 @@ export default {
 </script>
 
 <style lang="stylus">
-  .main .x-breadcrumb
-    border-bottom 0
 </style>
