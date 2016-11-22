@@ -142,7 +142,7 @@
 </template>
 
 <script>
-  import api from 'src/api'
+  import api from 'api'
   // import locales from 'consts/locales/index'
 
   export default {
@@ -423,9 +423,9 @@
             params.datapoints.push(field)
           }
         })
-        api.customization.setDeviceCustomization(this.currProduct.id, params).then((res) => {
+        api.custom.field.setCustomFieldConfig(this.currProduct.id, params).then((data) => {
           this.onCancel()
-          this.deviceFields = res.data || {}
+          this.deviceFields = data || {}
         }).catch((res) => {
           this.onCancel()
           this.handleError(res)
@@ -438,9 +438,9 @@
        */
       getData (product) {
         this.loadingDataField = true
-        api.customization.getDeviceCustomization(product.id).then((res) => {
-          if (res.data.base_fields && res.data.base_fields.length) {
-            this.deviceFields = res.data || {}
+        api.custom.field.getCustomFieldConfig(product.id).then((data) => {
+          if (data.base_fields && data.base_fields.length) {
+            this.deviceFields = data || {}
           }
           this.loadingDataField = false
         }).catch((res) => {

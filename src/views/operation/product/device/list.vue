@@ -512,9 +512,9 @@ export default {
      */
     getFiled (fn) {
       this.loadingDataField = true
-      api.customization.getDeviceCustomization(this.$route.params.id).then((res) => {
-        if (res.data.base_fields && res.data.base_fields.length) {
-          this.deviceFields = res.data || {}
+      api.custom.field.getCustomFieldConfig(this.$route.params.id).then((data) => {
+        if (data.base_fields && data.base_fields.length) {
+          this.deviceFields = data || {}
         }
         this.loadingDataField = false
         fn && fn()

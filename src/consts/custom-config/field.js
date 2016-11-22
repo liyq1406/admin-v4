@@ -38,7 +38,7 @@ const PERIODS = {
 
 let defaultKey = {
   header: 'CUSTOM_FIELD', // 标识本条记录的用途
-  version: '1.0.0', // 协议版本
+  version: '1.0.1', // 协议版本
   role: ROLES.corp,
   user_id: '', // 如果role为user时, 需要传入
   module: MODULES.operation_product, // 模块
