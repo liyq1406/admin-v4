@@ -56,6 +56,8 @@
               <label>月</label>
               <input v-model="fineness" type="checkbox" name="fineness" value="year">
               <label>年</label>
+              <input v-model="fineness" type="checkbox" name="fineness" value="all">
+              <label>全部</label>
             </div>
           </div>
           <div class="form-row row">
@@ -149,7 +151,8 @@ const SNAPSHOT_STATISTICS_FINENESS = {
   day: 2,
   week: 3,
   month: 4,
-  year: 5
+  year: 5,
+  all: 6
 }
 
 export default {
