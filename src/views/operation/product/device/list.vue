@@ -294,7 +294,6 @@ export default {
       this.devices.forEach((item) => {
         var obj = {}
         for (var key1 in item) {
-          console.log(key1)
           if (item.hasOwnProperty(key1)) {
             for (let key2 in item[key1]) {
               if (item[key1].hasOwnProperty(key2)) {
@@ -432,9 +431,9 @@ export default {
 
     computedSnapshotShuffleQuery () {
       var results = []
-      console.log(this.fields)
       this.fields.forEach((item) => {
         if (item.category !== 'snapshot_shuffle') return
+        if (item.hidden) return
         var result = {
           'index': {
             '$eq': item.datapointIndex
@@ -443,7 +442,7 @@ export default {
             '$eq': item.fineness
           },
           'statistic_rule_id': {
-            '$eq': item.dp_mode
+            '$eq': item.snapshot
           },
           'date': {
             '$lt': this.fieldEndTime(item),
@@ -737,9 +736,6 @@ export default {
     },
 
     fieldStartTime (field) {
-      // var weekDay = new Date().getDay()
-      // var startData = new Date()
-      // console.log(weekDay)
       var result = ''
       switch (field.fineness - 0) {
         // 天
@@ -761,6 +757,8 @@ export default {
         default:
           break
       }
+      console.log('开始时间')
+      console.log(result)
       return result
     },
 
@@ -782,11 +780,13 @@ export default {
           result = this.getFieldYear(field, true)
           break
         case 6:
-          result = formatDate(new Date(0), 'yyyy-MM-ddT00:00:00.000Z', true)
+          result = formatDate(new Date(), 'yyyy-MM-ddT23:59:59.999Z', true)
           break
         default:
           break
       }
+      console.log('结束时间')
+      console.log(result)
       return result
     },
 
@@ -798,9 +798,9 @@ export default {
 
     getFieldWeek (field, isEnd) {
       var isPrev = field.selectTimeType - 0 === 2
-      var dWeekDay = new Date().getDay() - 1 - (isPrev ? 7 : 0)
+      var dWeekDay = new Date().getDay() - 1 + (isPrev ? 7 : 0)
       if (isEnd) {
-        dWeekDay = isPrev ? (new Date().getDay() - 1) : 0
+        dWeekDay = isPrev ? (new Date().getDay() - 1) : -1
       }
       var result = formatDate(new Date() - dWeekDay * 1000 * 60 * 60 * 24, 'yyyy-MM-ddT00:00:00.000Z', true)
       return result
@@ -812,11 +812,13 @@ export default {
     getFieldMonth (field, isEnd) {
       var isPrev = field.selectTimeType - 0 === 2
       var prevMonthDays = this.monthmaxday(new Date().getFullYear(), new Date().getMonth)
-      var dDay = new Date().getDate() - 1 - (isPrev ? prevMonthDays : 0)
+      var dDay = new Date().getDate() - 1 + (isPrev ? prevMonthDays : 0)
+      var result = formatDate(new Date() - dDay * 1000 * 60 * 60 * 24, 'yyyy-MM-ddT00:00:00.000Z', true)
       if (isEnd) {
         dDay = isPrev ? (new Date().getDate() - 1) : 0
+        result = formatDate(new Date() - dDay * 1000 * 60 * 60 * 24, 'yyyy-MM-ddT23:59:59.999Z', true)
+        'yyyy-MM-ddT23:59:59.999Z'
       }
-      var result = formatDate(new Date() - dDay * 1000 * 60 * 60 * 24, 'yyyy-MM-ddT00:00:00.000Z', true)
       return result
     },
 
