@@ -32,7 +32,9 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-3">快照名称:</label>
+            <label class="form-control col-3">快照名称:
+              <i class="fa fa-question-circle" v-tooltip="'快照类型必须是 变化快照 或者 即时快照'"></i>
+            </label>
             <div class="controls col-21">
               <x-select :label="selectedSnapshot.label" width="200px" :disabled="type==='edit'">
                 <select v-model="selectedSnapshot" :disabled="type==='edit'">

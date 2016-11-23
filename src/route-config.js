@@ -648,6 +648,14 @@ let configRouter = (router) => {
                   resolve(require('./views/dev/data/statistics-rule/product'))
                 }, 'admin')
               }
+            },
+            // 产品规则
+            'add-to-field': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/data/statistics-rule/add-to-field'))
+                }, 'admin')
+              }
             }
           }
         },

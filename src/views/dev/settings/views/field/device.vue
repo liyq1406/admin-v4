@@ -128,9 +128,9 @@
 
             <!-- 提交按钮 -->
             <div class="form-actions">
-              <!-- <label v-if="modalType === 'edit' &&  canEdit" class="del-check">
+              <label v-if="modal.category === 'statisticsRule'" class="del-check">
                 <input type="checkbox" name="del" v-model="delChecked"/> 删除此字段
-              </label> -->
+              </label>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             </div>
@@ -240,7 +240,10 @@
       fields () {
         var result = []
         // 当前基本字段 接口有的话取接口的 没有的话取默认值
-        var baseFields = this.deviceFields.base_fields || this.base_fields
+        var baseFields = this.base_fields
+        if (this.deviceFields.base_fields && this.deviceFields.base_fields.length > 0) {
+          baseFields = this.deviceFields.base_fields
+        }
         baseFields.forEach((item, index) => {
           var field = _.clone(item)
           field.category = 'base_fields'
@@ -264,6 +267,13 @@
             }
           })
           result.push(dataPoint)
+        })
+
+        var statisticsRule = this.deviceFields.statisticsRule || []
+        statisticsRule.forEach((item, index) => {
+          var field = _.clone(item)
+          field.category = 'statisticsRule'
+          result.push(field)
         })
         // 所有字段排序
         result.sort((a, b) => {
@@ -338,7 +348,9 @@
       }
     },
     ready () {
-      // this.test()
+      // setTimeout(() => {
+      //   this.test()
+      // }, 4000)
     },
     methods: {
       test () {
@@ -387,7 +399,9 @@
       deleteField () {
         this.editing = true
         var params = _.cloneDeep(this.fields)
-        params.splice(this.sort - 1, 1)
+        console.log(this.sort)
+        params.splice(this.modal.sort - 1, 1)
+        console.log(params)
         this.updateData(params)
       },
 
@@ -400,7 +414,8 @@
         })
         var params = {
           base_fields: [],
-          datapoints: []
+          datapoints: [],
+          statisticsRule: []
         }
         fields.forEach((item, index) => {
           if (item.category === 'base_fields') {
@@ -421,6 +436,10 @@
               'sort': index + 1
             }
             params.datapoints.push(field)
+          } else if (item.category === 'statisticsRule') {
+            let field = _.clone(item)
+            field.sort = index + 1
+            params.statisticsRule.push(field)
           }
         })
         api.custom.field.setCustomFieldConfig(this.currProduct.id, params).then((data) => {
@@ -439,9 +458,9 @@
       getData (product) {
         this.loadingDataField = true
         api.custom.field.getCustomFieldConfig(product.id).then((data) => {
-          if (data.base_fields && data.base_fields.length) {
-            this.deviceFields = data || {}
-          }
+          this.deviceFields = data || {}
+          // if (data.base_fields && data.base_fields.length) {
+          // }
           this.loadingDataField = false
         }).catch((res) => {
           this.loadingDataField = false
@@ -515,7 +534,11 @@
        * 提交按钮
        */
       onSubmit () {
-        this.editField()
+        if (this.delChecked) {
+          this.deleteField()
+        } else {
+          this.editField()
+        }
         // switch (this.modalType) {
         //   case 'add':
         //     this.addField()
@@ -553,6 +576,9 @@
             break
           case 'datapoints':
             result = '数据端点'
+            break
+          case 'statisticsRule':
+            result = '统计规则'
             break
           default:
             result = '未知'

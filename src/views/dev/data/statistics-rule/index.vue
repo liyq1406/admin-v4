@@ -22,6 +22,9 @@ export default {
       }, {
         label: '产品统计',
         link: { path: '/dev/data/statistics-rule/product' }
+      }, {
+        label: '添加至自定义字段',
+        link: { path: '/dev/data/statistics-rule/add-to-field' }
       }]
     }
   },
