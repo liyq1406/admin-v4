@@ -376,9 +376,9 @@ export default {
         var params = data || {}
         params.base_fields = data.base_fields || []
         params.datapoints = data.datapoints || []
-        params.statisticsRule = data.statisticsRule || []
+        params.snapshot_shuffle = data.snapshot_shuffle || []
         var keyRepeat = false
-        params.statisticsRule.forEach((item) => {
+        params.snapshot_shuffle.forEach((item) => {
           if (item.name === model.name) {
             keyRepeat = true
           }
@@ -390,7 +390,7 @@ export default {
             content: '当前规则已存在'
           })
         }
-        params.statisticsRule.push(model)
+        params.snapshot_shuffle.push(model)
         api.custom.field.setCustomFieldConfig(this.selectedSnapshot.productId, params).then((data) => {
           this.submitting = false
           this.showNotice({

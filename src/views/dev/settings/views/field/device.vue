@@ -128,7 +128,7 @@
 
             <!-- 提交按钮 -->
             <div class="form-actions">
-              <label v-if="modal.category === 'statisticsRule'" class="del-check">
+              <label v-if="modal.category === 'snapshot_shuffle'" class="del-check">
                 <input type="checkbox" name="del" v-model="delChecked"/> 删除此字段
               </label>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
@@ -269,10 +269,10 @@
           result.push(dataPoint)
         })
 
-        var statisticsRule = this.deviceFields.statisticsRule || []
-        statisticsRule.forEach((item, index) => {
+        var snapshotShuffle = this.deviceFields.snapshot_shuffle || []
+        snapshotShuffle.forEach((item, index) => {
           var field = _.clone(item)
-          field.category = 'statisticsRule'
+          field.category = 'snapshot_shuffle'
           result.push(field)
         })
         // 所有字段排序
@@ -415,7 +415,7 @@
         var params = {
           base_fields: [],
           datapoints: [],
-          statisticsRule: []
+          snapshot_shuffle: []
         }
         fields.forEach((item, index) => {
           if (item.category === 'base_fields') {
@@ -436,10 +436,10 @@
               'sort': index + 1
             }
             params.datapoints.push(field)
-          } else if (item.category === 'statisticsRule') {
+          } else if (item.category === 'snapshot_shuffle') {
             let field = _.clone(item)
             field.sort = index + 1
-            params.statisticsRule.push(field)
+            params.snapshot_shuffle.push(field)
           }
         })
         api.custom.field.setCustomFieldConfig(this.currProduct.id, params).then((data) => {
@@ -577,7 +577,7 @@
           case 'datapoints':
             result = '数据端点'
             break
-          case 'statisticsRule':
+          case 'snapshot_shuffle':
             result = '统计规则'
             break
           default:

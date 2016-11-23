@@ -311,13 +311,15 @@ export default {
     fields () {
       var result = []
       // 当前基本字段 接口有的话取接口的 没有的话取默认值
-      var baseFields = this.deviceFields.base_fields || this.base_fields
+      var baseFields = this.base_fields
+      if (this.deviceFields.base_fields && this.deviceFields.base_fields.length > 0) {
+        baseFields = this.deviceFields.base_fields
+      }
       baseFields.forEach((item, index) => {
         var field = _.clone(item)
         field.category = 'base_fields'
         result.push(field)
       })
-
       // 计算当前产品数据端点 更新页面数据端点字段
       this.dataPoints.forEach((item, index) => {
         var dataPoint = {
@@ -338,6 +340,12 @@ export default {
         result.push(dataPoint)
       })
 
+      var snapshotShuffle = this.deviceFields.snapshot_shuffle || []
+      snapshotShuffle.forEach((item, index) => {
+        var field = _.clone(item)
+        field.category = 'snapshot_shuffle'
+        result.push(field)
+      })
       // 所有字段排序
       result.sort((a, b) => {
         return a.sort - b.sort
@@ -497,7 +505,7 @@ export default {
       this.originAddModel = _.clone(this.addModel)
       this.currentPage = 1
       this.getDataPoint()
-      this.getFiled(() => {
+      this.getField(() => {
         this.getDevices()
       })
 
@@ -510,12 +518,12 @@ export default {
     /**
      * 获取字段
      */
-    getFiled (fn) {
+    getField (fn) {
       this.loadingDataField = true
       api.custom.field.getCustomFieldConfig(this.$route.params.id).then((data) => {
-        if (data.base_fields && data.base_fields.length) {
-          this.deviceFields = data || {}
-        }
+        this.deviceFields = data || {}
+        // if (data.base_fields && data.base_fields.length) {
+        // }
         this.loadingDataField = false
         fn && fn()
       }).catch((res) => {
