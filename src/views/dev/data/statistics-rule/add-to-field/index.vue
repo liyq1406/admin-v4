@@ -376,6 +376,7 @@ export default {
         hidden: true,
         sort: 1000,
         snapshot: this.selectedSnapshot.id,
+        datapointIndex: this.selectedDataPoint.index,
         dp_mode: this.getDpMode(this.selectedDataPoint.statisticsType),
         fineness: this.getFineness(),
         describe: this.description,

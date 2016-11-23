@@ -59,7 +59,7 @@
               <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-device-active-date="sortBy" @theader-online-is-online="sortBy" @tbody-device-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
       </div>
     </div>
   </div>
@@ -92,6 +92,41 @@ export default {
     })
 
     return {
+      DEVICEFIELD: [
+        'id',
+        'mac',
+        'name',
+        'is_active',
+        'active_date',
+        'mcu_mod',
+        'mcu_version',
+        'firmware_mod',
+        'firmware_version',
+        'product_id',
+        'region_id',
+        'sn',
+        'domain',
+        'create_time',
+        'creator_id',
+        'creator_type',
+        'tags',
+        'dealer_scope',
+        'heavy_buyer',
+        'groups'
+      ],
+      VDEVICEFIELD: [
+        'cm_id',
+        'ip',
+        'online_count',
+        'last_login',
+        'last_logout',
+        'last_update'
+      ],
+      ONLINEFIELD: [
+        'is_online',
+        'last_login',
+        'last_login_ip'
+      ],
       // 基本字段
       base_fields: [
         {
@@ -258,19 +293,14 @@ export default {
       var result = []
       this.devices.forEach((item) => {
         var obj = {}
-        for (let key in item.device) {
-          if (item.device.hasOwnProperty(key)) {
-            obj[key] = item.device[key]
-          }
-        }
-        for (let key in item.online) {
-          if (item.online.hasOwnProperty(key)) {
-            obj[key] = item.online[key]
-          }
-        }
-        for (let key in item.vdevice) {
-          if (item.vdevice.hasOwnProperty(key)) {
-            obj[key] = item.vdevice[key]
+        for (var key1 in item) {
+          console.log(key1)
+          if (item.hasOwnProperty(key1)) {
+            for (let key2 in item[key1]) {
+              if (item[key1].hasOwnProperty(key2)) {
+                obj[`${key1}--${key2}`] = item[key1][key2]
+              }
+            }
           }
         }
         result.push(obj)
@@ -284,9 +314,6 @@ export default {
       var deviceModal = {}
       this.fieldKeys.forEach((key) => {
         deviceModal[key] = '-'
-        // if (key === 'mac') {
-        //   deviceModal[key] = '<a class="hl-red">-</a>'
-        // }
       })
       this.deviceList.forEach((item) => {
         var device = _.clone(deviceModal)
@@ -295,11 +322,11 @@ export default {
             device[key] = item[key]
           }
         }
-        device.mac = '<a class="hl-red">' + item.mac + '</a>'
-        device.is_active = item.is_active ? this.$t('common.yes') : this.$t('common.no')
-        device.active_date = formatDate(item.active_date) || '-'
-        device.is_online = item.is_online ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>'
-        device.online_count = item.online_count ? (item.online_count - 0).toFixed(2) + '小时' : '-'
+        device['device--mac'] = '<a class="hl-red">' + (item['device--mac'] || '-') + '</a>'
+        device['device--is_active'] = item['device--is_active'] ? this.$t('common.yes') : this.$t('common.no')
+        device['device--active_date'] = formatDate(item['device--active_date']) || '-'
+        device['online--is_online'] = item['device--is_online'] ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>'
+        device['vdevice--online_count'] = item['vdevice--online_count'] - 0 >= 0 ? (item['vdevice--online_count'] - 0).toFixed(2) + '小时' : '-'
         device.prototype = item
 
         result.push(device)
@@ -361,22 +388,7 @@ export default {
       var result = []
       this.fields.forEach((item) => {
         if (item.hidden) return
-        result.push(item.name)
-      })
-      return result
-    },
-
-    deviceKeys () {
-      var result = []
-      result = ['mac', 'id', 'name', 'is_active', 'sn', 'active_date', 'firmware_version']
-      return result
-    },
-
-    vDevicekeys () {
-      var ignore = this.deviceKeys.concat(['is_online'])
-      var result = []
-      result = this.fieldKeys.filter((item) => {
-        return ignore.indexOf(item) === -1
+        result.push(this.resetFieldKey(item).key)
       })
       return result
     },
@@ -385,20 +397,21 @@ export default {
       var result = []
       this.fields.forEach((item) => {
         if (item.hidden) return
+        var key = this.resetFieldKey(item).key
         var header = {
-          key: item.name,
+          key: key,
           title: item.label
         }
 
-        if (item.name === 'is_active') {
+        if (header.key === 'device--is_active') {
           header.tooltip = this.$t('operation.product.device.manager.is_active.tooltip')
         }
 
-        if (item.name === 'active_date') {
+        if (header.key === 'device--active_date') {
           header.sortType = this.sortOrders['active_date'] === 'asc' ? 1 : -1
         }
 
-        if (item.name === 'is_online') {
+        if (header.key === 'online--is_online') {
           header.sortType = this.sortOrders['is_online'] === 'asc' ? 1 : -1
         }
 
@@ -407,16 +420,45 @@ export default {
       return result
     },
 
+    filter () {
+      var result = {}
+      this.fieldKeys.forEach((item) => {
+        var field = item.split('--')
+        result[field[0]] = result[field[0]] || []
+        result[field[0]].push(field[1])
+      })
+      return result
+    },
+
+    computedSnapshotShuffleQuery () {
+      var results = []
+      console.log(this.fields)
+      this.fields.forEach((item) => {
+        if (item.category !== 'snapshot_shuffle') return
+        var result = {
+          'index': {
+            '$eq': item.datapointIndex
+          },
+          'fineness': {
+            '$eq': item.fineness
+          },
+          'statistic_rule_id': {
+            '$eq': item.dp_mode
+          },
+          'date': {
+            '$lt': this.fieldEndTime(item),
+            '$gt': this.fieldStartTime(item)
+          }
+        }
+        results.push(result)
+      })
+      return results
+    },
+
     // 基本筛选条件
     baseCondition () {
       var condition = {
-        // filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login', 'sn', 'online_count', 'firmware_version'],
-        filter: {
-          device: this.deviceKeys,
-          vdevice: this.vDevicekeys,
-          online: ['is_online']
-        },
-        // order: this.sortOrders,
+        filter: this.filter,
         order: {
           device: {},
           vDevice: {},
@@ -427,7 +469,9 @@ export default {
           '$logical': 'AND',
           device: {},
           vDevice: {},
-          online: {}
+          online: {},
+          snapshot_shuffle: this.computedSnapshotShuffleQuery
+          // snapshot_shuffle: {}
         }
       }
 
@@ -435,9 +479,9 @@ export default {
         condition.order.online = {
           'is_online': this.sortOrders['is_online']
         }
-      } else if (this.deviceKeys && this.deviceKeys.indexOf(this.sortKey) > -1) {
+      } else if (this.DEVICEFIELD.indexOf(this.sortKey) > -1) {
         condition.order.device[this.sortKey] = this.sortOrders[this.sortKey]
-      } else if (this.vDeviceKeys && this.vDeviceKeys.indexOf(this.sortKey) > -1) {
+      } else if (this.VDEVICEFIELD.indexOf(this.sortKey) > -1) {
         condition.order.vdevice[this.sortKey] = this.sortOrders[this.sortKey]
       }
 
@@ -602,6 +646,24 @@ export default {
       this.getDevices()
     },
 
+    resetFieldKey (field) {
+      var result = {
+        field: field
+      }
+      if (field.category === 'base_fields' && this.DEVICEFIELD.indexOf(field.name) >= 0) {
+        result.key = `device--${field.name}`
+      } else if (field.category === 'base_fields' && this.ONLINEFIELD.indexOf(field.name) >= 0) {
+        result.key = `online--${field.name}`
+      } else if (field.category === 'base_fields' && this.VDEVICEFIELD.indexOf(field.name) >= 0) {
+        result.key = `vdevice--${field.name}`
+      } else if (field.category === 'datapoints') {
+        result.key = `vdevice--${field.name}`
+      } else {
+        result.key = `${field.category}--${field.name}`
+      }
+      return result
+    },
+
     /**
      * 每页显示的数量改变
      * @author shengzhi
@@ -672,6 +734,129 @@ export default {
     // 取消搜索
     cancelSearching () {
       this.getDevices()
+    },
+
+    fieldStartTime (field) {
+      // var weekDay = new Date().getDay()
+      // var startData = new Date()
+      // console.log(weekDay)
+      var result = ''
+      switch (field.fineness - 0) {
+        // 天
+        case 2:
+          result = this.getFieldDay(field)
+          break
+        case 3:
+          result = this.getFieldWeek(field)
+          break
+        case 4:
+          result = this.getFieldMonth(field)
+          break
+        case 5:
+          result = this.getFieldYear(field)
+          break
+        case 6:
+          result = formatDate(new Date(0), 'yyyy-MM-ddT00:00:00.000Z', true)
+          break
+        default:
+          break
+      }
+      return result
+    },
+
+    // TODO
+    fieldEndTime (field) {
+      var result = ''
+      switch (field.fineness - 0) {
+        // 天
+        case 2:
+          result = this.getFieldDay(field, true)
+          break
+        case 3:
+          result = this.getFieldWeek(field, true)
+          break
+        case 4:
+          result = this.getFieldMonth(field, true)
+          break
+        case 5:
+          result = this.getFieldYear(field, true)
+          break
+        case 6:
+          result = formatDate(new Date(0), 'yyyy-MM-ddT00:00:00.000Z', true)
+          break
+        default:
+          break
+      }
+      return result
+    },
+
+    getFieldDay (field, isEnd) {
+      var isPrev = field.selectTimeType - 0 === 2
+      var result = formatDate(isPrev ? (new Date() - 1000 * 60 * 60 * 24) : (new Date()), isEnd ? 'yyyy-MM-ddT23:59:59.999Z' : 'yyyy-MM-ddT00:00:00.000Z', true)
+      return result
+    },
+
+    getFieldWeek (field, isEnd) {
+      var isPrev = field.selectTimeType - 0 === 2
+      var dWeekDay = new Date().getDay() - 1 - (isPrev ? 7 : 0)
+      if (isEnd) {
+        dWeekDay = isPrev ? (new Date().getDay() - 1) : 0
+      }
+      var result = formatDate(new Date() - dWeekDay * 1000 * 60 * 60 * 24, 'yyyy-MM-ddT00:00:00.000Z', true)
+      return result
+    },
+
+    /**
+     * 获取字段的月时间值
+     */
+    getFieldMonth (field, isEnd) {
+      var isPrev = field.selectTimeType - 0 === 2
+      var prevMonthDays = this.monthmaxday(new Date().getFullYear(), new Date().getMonth)
+      var dDay = new Date().getDate() - 1 - (isPrev ? prevMonthDays : 0)
+      if (isEnd) {
+        dDay = isPrev ? (new Date().getDate() - 1) : 0
+      }
+      var result = formatDate(new Date() - dDay * 1000 * 60 * 60 * 24, 'yyyy-MM-ddT00:00:00.000Z', true)
+      return result
+    },
+
+    /**
+     * 获取字段的年时间值
+     */
+    getFieldYear (field, isEnd) {
+      var isPrev = field.selectTimeType - 0 === 2
+      var result = formatDate((new Date().getFullYear() - (isPrev ? 1 : 0)) + '-01-01', 'yyyy-MM-ddT00:00:00.000Z', true)
+      if (isEnd) {
+        result = formatDate((new Date().getFullYear()) + '-01-01', 'yyyy-MM-ddT00:00:00.000Z', true)
+        if (!isPrev) {
+          result = formatDate(new Date(), 'yyyy-MM-ddT23:59:59.999Z')
+        }
+      }
+      return result
+    },
+
+    /**
+     * 获取某年某月有多少天  如果月为0 自动退到上一年最后一个月
+     */
+    monthmaxday (year, month) { // 返回某年某月有多少天
+      if (month === 0) {
+        year = year - 1
+        month = 12
+      }
+      if (month === 2) {
+        if (isLeapYear(year)) {
+          return 29
+        } else {
+          return 28
+        }
+      } else if (month === 4 || month === 6 || month === 9 || month === 11) {
+        return 30
+      } else {
+        return 31
+      }
+      function isLeapYear (year) { // 判断闰年
+        return (year % 4 === 0 && ((year % 100 !== 0) || (year % 400 === 0)))
+      }
     }
   }
 }
