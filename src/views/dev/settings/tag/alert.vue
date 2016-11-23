@@ -62,6 +62,18 @@ export default {
         this.setting = false
         return
       }
+
+      var cantGo = this.tags.some((item) => item.length > 8)
+
+      if (cantGo === true) {
+        this.showNotice({
+          type: 'error',
+          content: '设置的每个标签长度都不能超过8个字符！'
+        })
+        this.setting = false
+        return
+      }
+
       api.alert.setAlertTags(param).then((res) => {
         if (res.status === 200) {
           this.showNotice({

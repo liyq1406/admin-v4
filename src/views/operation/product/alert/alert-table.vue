@@ -245,6 +245,7 @@ export default {
   methods: {
     // 获取告警类型
     getTags () {
+      this.visibilityOptions = [{ label: this.$t('operation.product.alert.all_level'), value: 'all' }]
       api.alert.getAlertTags().then((res) => {
         if (res.status === 200) {
           this.tags = res.data.tags
