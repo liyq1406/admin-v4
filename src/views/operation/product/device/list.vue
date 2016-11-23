@@ -92,6 +92,12 @@ export default {
     })
 
     return {
+      SNAPSHOT_STATISTICS_TYPES: {
+        '1': 'max',
+        '2': 'min',
+        '3': 'avg',
+        '4': 'sum'
+      },
       DEVICEFIELD: [
         'id',
         'mac',
@@ -294,10 +300,18 @@ export default {
       this.devices.forEach((item) => {
         var obj = {}
         for (var key1 in item) {
-          if (item.hasOwnProperty(key1)) {
-            for (let key2 in item[key1]) {
-              if (item[key1].hasOwnProperty(key2)) {
-                obj[`${key1}--${key2}`] = item[key1][key2]
+          if (key1 === 'snapshot_shuffle') {
+            if (item[key1].list.length) {
+              console.log('这里还有问题')
+              var ruleMethod = this.ruleMethod(item[key1]['list'][0].statistic_rule_id)
+              obj[`${key1}--${item[key1]['list'][0].statistic_rule_id}`] = item[key1]['list'][0][ruleMethod]
+            }
+          } else {
+            if (item.hasOwnProperty(key1)) {
+              for (let key2 in item[key1]) {
+                if (item[key1].hasOwnProperty(key2)) {
+                  obj[`${key1}--${key2}`] = item[key1][key2]
+                }
               }
             }
           }
@@ -759,6 +773,19 @@ export default {
       }
       console.log('开始时间')
       console.log(result)
+      return result
+    },
+
+    /**
+     * 求出规则方法
+     */
+    ruleMethod (ruleId) {
+      var result = ''
+      this.deviceFields.snapshot_shuffle.forEach((item) => {
+        if (item.snapshot === ruleId) {
+          result = this.SNAPSHOT_STATISTICS_TYPES[item.dp_mode]
+        }
+      })
       return result
     },
 
