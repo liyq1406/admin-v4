@@ -90,7 +90,8 @@ export default {
       loadingCorp: false,
       loadingProducts: false,
       customApps: [],
-      userRole: 'member'
+      // userRole: 'member',
+      userRole: window.localStorage.getItem('userRole') || 'member'
     }
   },
 
@@ -149,9 +150,11 @@ export default {
   watch: {
     layouts () {
       if (this.hasLayout('topbar')) {
-        this.getMember()
+        if (this.userRole === 'member') {
+          this.getMember()
+          this.getCorpInfo()
+        }
         this.getPlugins()
-        this.getCorpInfo()
         this.getProducts()
       }
     },

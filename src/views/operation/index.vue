@@ -1,6 +1,6 @@
 <template>
   <div class="page-in">
-    <sidebar :nav="userRole === 'heavy-buyer' ? vipSecNav : secNav"></sidebar>
+    <sidebar :nav="type"></sidebar>
 
     <section class="main-wrap" v-if="showContent">
       <alert-bar :msg="alertMsg" v-if="!loading"></alert-bar>
@@ -47,9 +47,62 @@ export default {
   },
 
   computed: {
+    // 判断侧边栏类型
+    type () {
+      if (this.userRole === 'member') {
+        return this.secNav
+      } else if (this.userRole === 'dealer') {
+        return this.dealerSecNav
+      } else if (this.userRole === 'heavy-buyer') {
+        return this.vipSecNav
+      }
+    },
     // 是否不再显示警告遮罩
     isHideMaskForever () {
       return window.localStorage.getItem(`${this.corp.id}hideAlertMask`)
+    },
+
+    // 经销商侧栏导航
+    dealerSecNav () {
+      let result = {
+        alias: 'operation',
+        url: '/operation',
+        subs: []
+      }
+      // let subs = MAIN_NAV.operation.subs
+
+      // 产品管理标题
+      result.subs.push({
+        label: this.$t('operation.product_management'),
+        type: 'title'
+      })
+
+      // 产品导航
+      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
+      this.releasedProducts.forEach((item, index) => {
+        result.subs.push({
+          name: item.name,
+          type: 'product',
+          alias: 'products',
+          icon: 'link',
+          unfold: index === 0,
+          id: item.id,
+          subs: PRO_SUBS.map((sub) => {
+            return {
+              alias: sub,
+              url: `/products/${item.id}/${sub}`
+            }
+          })
+        })
+      })
+
+      // result.subs.push({
+      //   alias: 'settings',
+      //   icon: 'cog',
+      //   url: 'heavy-buyer-settings'
+      // })
+
+      return result
     },
 
     // 大客户侧栏导航
