@@ -216,6 +216,10 @@
       color #666666 !important
   .body-wrap
     position relative
+    &:after
+      content ''
+      clear both
+      display block
     .filter-device
       background-color #F2F2F2
       margin 0 -30px
