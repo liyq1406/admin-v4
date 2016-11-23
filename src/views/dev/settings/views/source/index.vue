@@ -16,6 +16,7 @@
 
 <script>
 import formatDate from 'filters/format-date'
+import api from 'api'
 
 export default {
   name: 'data-source-list',
@@ -41,16 +42,12 @@ export default {
           title: '所属产品'
         },
         {
-          key: 'chart_type',
-          title: '图表类型'
+          key: 'show_type',
+          title: '显示类型'
         },
         {
-          key: 'duration',
-          title: '统计时间'
-        },
-        {
-          key: 'statistics_type',
-          title: '统计维度'
+          key: 'data_type',
+          title: '数据类型'
         },
         {
           key: 'create_time',
@@ -60,22 +57,19 @@ export default {
     }
   },
 
-  route: {
-    data () {
-    }
-  },
-
   computed: {
     tables () {
       let res = []
       this.list.forEach((item) => {
+        let product = _.find(this.products, (prod) => {
+          return prod.id === item.product_id
+        })
         res.push({
           title: '<a class="hl-red">' + (item.title || ' - ') + '</a>',
-          chart_type: item.chart_type,
-          duration: item.duration,
-          create_time: formatDate(item.create_time),
-          statistics_type: item.statistics_type,
-          product: item.productId
+          product: product ? product.name : '',
+          show_type: item.show_type === 1 ? '指标' : '图表',
+          data_type: item.data_from === 1 ? '统计规则' : '数据端点',
+          create_time: formatDate(item.id, true) // id 为时间戳
         })
       })
 
@@ -87,13 +81,26 @@ export default {
   },
 
   watch: {
-    products () {
-      if (this.products && this.products.length) {
-      }
+  },
+
+  route: {
+    data () {
+      this.getList()
     }
   },
 
   methods: {
+    getList () {
+      api.custom.dataSource.get().then((res) => {
+        if (res) {
+          this.list = res
+        } else {
+          this.list = []
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     editRule (rule) {
       this.$route.router.go({path: 'edit/1'})
     }

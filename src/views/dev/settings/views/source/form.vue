@@ -61,21 +61,21 @@
                 <i class="fa fa-question-circle tips-icon" v-tooltip="tipPie"></i>
               </label>
               <div class="controls col-20">
-                <div v-for="rule in classifty" class="row input-text-wrap" :class="[$index!==0 ? 'mt10': '']">
+                <div v-for="(index, rule) in classifty" class="row input-text-wrap" :class="[index!==0 ? 'mt10': '']">
                   <div class="col-4 key-input">
-                    <input placeholder="最小值" v-model="rule.min" type="text" class="input-text"/>
+                    <input placeholder="最小值" v-model="rule.min" type="number" class="input-text"/>
                   </div>
                   <span class="col-1 span-middle-center">-</span>
                   <div class="col-4 value-input">
-                    <input placeholder="最大值" v-model="rule.max" type="text" class="input-text"/>
+                    <input placeholder="最大值" v-model="rule.max" type="number" class="input-text"/>
                   </div>
-                  <div v-if="$index === classifty.length-1" class="col-2">
-                    <button class="btn btn-ghost add-btn ml10" @click="addRule($index)">
+                  <div v-if="index === classifty.length-1" class="col-2">
+                    <button class="btn btn-ghost add-btn ml10" @click.prevent.stop="addRule(index)">
                       <i class="fa fa-plus"></i>
                     </button>
                   </div>
                   <div v-else class="col-1 del-icon ml10">
-                    <i class="fa fa-times-circle" @click="delRule($index)"></i>
+                    <i class="fa fa-times-circle" @click="delRule(index)"></i>
                   </div>
                 </div>
               </div>
@@ -110,7 +110,7 @@
                   <template v-if="sourceType === 1">
                     <div class="form-row row">
                       <div class="form-control col-3">
-                        <label>数据规则:</label>
+                        <label>统计规则:</label>
                       </div>
                       <div class="control col-6">
                         <x-select width="120px" :label="selectedRule.name">
@@ -120,7 +120,7 @@
                         </x-select>
                       </div>
                     </div>
-                    <div v-if="selectedRule.fineness && selectedRule.fineness.length && chartType !== 1" class="form-row row">
+                    <div v-if="selectedRule.fineness && selectedRule.fineness.length && chartType !== 1 && selectedShowType.value === 2" class="form-row row">
                       <div class="form-control col-3">
                         <label>时间粒度:</label>
                       </div>
@@ -128,27 +128,27 @@
                         <div class="input-radio-wrap">
                           <template v-for="item in selectedRule.fineness">
                             <template v-if="item===1">
-                              <input v-model="statisticType" type="radio" :value="1" name="fineness-type"/>
+                              <input v-model="finenessType" type="radio" :value="1" name="fineness-type"/>
                               <label>小时</label>
                             </template>
                             <template v-if="item===2">
-                              <input v-model="statisticType" type="radio" :value="2" name="fineness-type"/>
+                              <input v-model="finenessType" type="radio" :value="2" name="fineness-type"/>
                               <label>天</label>
                             </template>
                             <template v-if="item===3">
-                              <input v-model="statisticType" type="radio" :value="3" name="fineness-type"/>
+                              <input v-model="finenessType" type="radio" :value="3" name="fineness-type"/>
                               <label>周</label>
                             </template>
                             <template v-if="item===4">
-                              <input v-model="statisticType" type="radio" :value="4" name="fineness-type"/>
+                              <input v-model="finenessType" type="radio" :value="4" name="fineness-type"/>
                               <label>月</label>
                             </template>
                             <template v-if="item===5">
-                              <input v-model="statisticType" type="radio" :value="5" name="fineness-type"/>
+                              <input v-model="finenessType" type="radio" :value="5" name="fineness-type"/>
                               <label>年</label>
                             </template>
                             <template v-if="item===6">
-                              <input v-model="statisticType" type="radio" :value="6" name="fineness-type"/>
+                              <input v-model="finenessType" type="radio" :value="6" name="fineness-type"/>
                               <label>全部</label>
                             </template>
                           </template>
@@ -169,7 +169,7 @@
                     </div>
                     <div v-if="selectedRule.fineness && selectedRule.fineness.length && ruleSelectedDatapoint.id" class="form-row row">
                       <div class="form-control col-3">
-                        <label>数据计算:</label>
+                        <label>统计方式:</label>
                       </div>
                       <div class="controls col-21">
                         <div class="input-radio-wrap">
@@ -216,7 +216,7 @@
                 <input v-model="period" type="radio" :value="5" name="period" @change=""/>
                 <label>自定义时间</label>
               </div>
-              <div v-if="period === 5" class="time-range-lineheight">
+              <div v-if="period === 5" class="time-range-lineheight mt5">
                 <date-time-range-picker :init-start-time="initStartTime" :init-end-time="initEndTime" @timechange="timeSelect"></date-time-range-picker>
               </div>
             </div>
@@ -283,17 +283,22 @@ export default {
       sourceType: 1,
       title: '',
       statisticType: 0,
+      finenessType: 0,
       classifty: [{
         min: '',
         max: ''
       }],
       chartType: 1,
-      tipPie: '每一个数据范围表示扇形统计的一个分类',
+      tipPie: '每一个数据范围表示扇形统计的一个分类, 不输入表示正无穷或者负无穷',
       showTypes: [
         {name: '指标', value: 1},
         {name: '自定义图表', value: 2}
       ],
-      selectedShowType: {name: '数据', value: 1}
+      selectedShowType: {name: '指标', value: 1},
+      customTime: {
+        start: 0,
+        end: 0
+      }
     }
   },
 
@@ -379,7 +384,10 @@ export default {
     chartTypeSelect (value) {
       this.chartType = value
     },
-    timeSelect () {},
+    timeSelect (startTime, endTime) {
+      this.customTime.start = startTime.getTime()
+      this.customTime.end = endTime.getTime()
+    },
     /**
      * 获取统计快照规则
      * @author guohao
@@ -451,48 +459,143 @@ export default {
       this.classifty.splice(index, 1)
     },
 
-    /**
-     * 快照规则提交
-     * @author shengzhi
-     */
-    onSubmit () {
-      if (this.submitting) return
-
+    checkSummit () {
       if (this.$validation.invalid) {
         this.$validate(true)
-        return
+        return false
+      }
+      if (this.delChecked && !window.confirm('您确定要删除该数据源么?')) {
+        return false
       }
 
-      if (this.delChecked && !window.confirm('您确定要删除该规则?')) {
+      if (!this.selectedProduct.id) {
+        this.showNotice({
+          type: 'error',
+          content: '请选择产品'
+        })
+        return false
+      }
+      if (this.selectedShowType.value === 1) { // 指标
+        if (!this.statisticCheck()) {
+          return false
+        }
+      } else { // 图表
+        if (this.sourceType === 1) { // 统计规则
+          if (!this.statisticCheck()) {
+            return false
+          }
+          if (this.chartType !== 1 && !this.finenessType) {
+            this.showNotice({
+              type: 'error',
+              content: '请选择时间粒度'
+            })
+            return false
+          }
+        } else { // 数据端点
+          if (!this.selectedDatapoint.id) {
+            this.showNotice({
+              type: 'error',
+              content: '请选择数据端点'
+            })
+            return false
+          }
+        }
+      }
+      return true
+    },
+    statisticCheck () {
+      if (!this.selectedRule.id) {
+        this.showNotice({
+          type: 'error',
+          content: '请选择统计规则'
+        })
+        return false
+      }
+      if (!this.ruleSelectedDatapoint.id) {
+        this.showNotice({
+          type: 'error',
+          content: '请选择数据端点'
+        })
+        return false
+      }
+      if (!this.statisticType) {
+        this.showNotice({
+          type: 'error',
+          content: '请选择统计方式'
+        })
+        return false
+      }
+      return true
+    },
+    /**
+     * 数据源提交
+     * @author guohao
+     */
+    onSubmit () {
+      if (this.submitting) return false
+
+      if (!this.checkSummit()) {
         return
       }
 
       let model = {
-        dp_mode: this.getDpMode(),
-        fineness: this.getFineness(),
-        name: this.name,
-        describe: this.description,
-        type: 1,
-        status: this.status
+        product_id: this.selectedProduct.id,
+        title: this.title,
+        show_type: this.selectedShowType.value
+      }
+
+      if (model.show_type === 1) { // 指标
+        model.data_from = 1 // 指标只能使用统计规则
+        model.rule_id = this.selectedRule.id
+        model.dp_index = this.ruleSelectedDatapoint.index
+        model.fineness = Math.max.apply(Math, this.selectedRule.fineness) || 0 // 取最大值
+        model.rule_type = this.statisticType
+      } else { // 图表
+        model.chart = this.chartType
+        if (this.chartType === 1) {  // 饼图
+          model.pie_classify = _.clone(this.classifty)
+        }
+        model.data_from = this.sourceType
+        if (model.data_from === 1) { // 统计规则
+          model.rule_id = this.selectedRule.id
+          model.dp_index = this.ruleSelectedDatapoint.index
+          model.rule_type = this.statisticType
+          if (this.chartType !== 1) {
+            model.fineness = this.finenessType
+          } else {  // 饼图
+            model.fineness = Math.max.apply(Math, this.selectedRule.fineness) || 0 // 取最大值
+          }
+        } else { // 数据端点
+          model.dp_index = this.selectedDatapoint.index
+        }
+      }
+
+      if (!(model.show_type === 2 && this.chartType > 1)) {
+        model.period = this.period
+        if (model.period === 5) {
+          model.custom_time = {
+            start: this.customTime.start,
+            end: this.customTime.end
+          }
+        }
       }
 
       let process
 
       this.submitting = true
       if (this.type === 'add') { // 添加
-        process = api.snapshot.ceateStatisticRules(this.selectedSnapshot.productId, this.selectedSnapshot.id, model)
+        process = api.custom.dataSource.add(model)
       } else {
         if (this.delChecked) { // 删除
-          process = api.snapshot.delStatisticRules(this.selectedSnapshot.productId, this.selectedSnapshot.id, this.$route.params.rule_id)
+          process = api.custom.dataSource.del(this.$route.params.id)
         } else {
-          model._id = this.$route.params.rule_id
-          process = api.snapshot.editStatisticRule(this.selectedSnapshot.productId, this.selectedSnapshot.id, this.$route.params.rule_id, model)
+          process = api.custom.dataSource.edit(this.$route.params.id, model)
         }
       }
       process.then((res) => {
         this.submitting = false
         if (res.status === 200) {
-          this.$route.router.replace('/dev/data/statistics-rule/device')
+          this.$route.router.replace('/dev/settings/views/source')
         }
       }).catch((res) => {
         this.submitting = false
