@@ -65,8 +65,8 @@
                 <i class="fa fa-question-circle" v-tooltip="'选择时间粒度，可根据所选时间，查看以该时间为粒度的数据统计分析，不可多选'"></i>
               </label>
               <div class="controls col-21 fineness-select mutiple-select">
-                <input v-model="fineness" type="radio" name="fineness" value="hour">
-                <label>小时</label>
+                <!-- <input v-model="fineness" type="radio" name="fineness" value="hour">
+                <label>小时</label> -->
                 <input v-model="fineness" type="radio" name="fineness" value="day">
                 <label>天</label>
                 <input v-model="fineness" type="radio" name="fineness" value="week">
@@ -77,6 +77,15 @@
                 <label>年</label>
                 <input v-model="fineness" type="radio" name="fineness" value="all">
                 <label>全部</label>
+
+                <span class="select-time" v-if="fineness && (fineness !== 'all')">
+                  <x-select :label="timeText(fineness, selectTimeType)" width="100px" :disabled="type==='edit'">
+                    <select v-model="selectTimeType" :disabled="type==='edit'">
+                      <option :value="'1'">{{ timeText(fineness, '1') }}</option>
+                      <option :value="'2'">{{ timeText(fineness, '2') }}</option>
+                    </select>
+                  </x-select>
+                </span>
               </div>
             </div>
             <div class="form-row row">
@@ -205,7 +214,8 @@ export default {
       snapshotsRules: [],
       datapoints: [],
       curSelect: 0, // 为触发computer 无意义
-      selectedDataPoint: {}
+      selectedDataPoint: {},
+      selectTimeType: '1' // 1是当前  2是上一个
     }
   },
 
@@ -368,7 +378,8 @@ export default {
         snapshot: this.selectedSnapshot.id,
         dp_mode: this.getDpMode(this.selectedDataPoint.statisticsType),
         fineness: this.getFineness(),
-        describe: this.description
+        describe: this.description,
+        selectTimeType: this.selectTimeType
       }
 
       this.submitting = true
@@ -413,6 +424,21 @@ export default {
     getFineness () {
       let res = SNAPSHOT_STATISTICS_FINENESS[this.fineness]
       return res
+    },
+    timeText (fineness, type) {
+      var result1 = {
+        day: '今天',
+        week: '本周',
+        month: '本月',
+        year: '今年'
+      }
+      var result2 = {
+        day: '昨天',
+        week: '上周',
+        month: '上月',
+        year: '去年'
+      }
+      return type === '1' ? result1[fineness] : result2[fineness]
     }
   }
 }
@@ -425,6 +451,9 @@ export default {
   max-width 800px
   .input-lenght
     width 200px
+  .select-time
+    margin-left 15px
+    display inline-block
 .fineness-select
   display inline-block
   line-height 32px
