@@ -82,7 +82,18 @@ let defaultValue = {
   },
   trend: true,
   active: true,
-  distribution: true
+  distribution: true,
+  custom_chart: [
+    {
+      index: 1,
+      enable: false,
+      series: [
+        {
+          data_source_id: ''
+        }
+      ]
+    }
+  ]
 }
 
 function genKey (productId) {

@@ -151,5 +151,48 @@ export default {
     return http.del(
       `${API_SERVER.default}/v2/dealer/client_info/${clientInfoId}`
     )
+  },
+  /**
+   * 获取经销商入口配置
+   * @param  {String}
+   * @return {Promise}
+   */
+  getConfig (dealerId) {
+    return http.get(
+      `${API_SERVER.default}/v2/dealer/${dealerId}/entry_config`, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': '1111'
+        }
+      }
+    )
+  },
+  /**
+   * 设置经销商入口配置
+   * @param  {String}
+   * @return {Promise}
+   */
+  setConfig (dealerId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/dealer/${dealerId}/entry_config`, params
+    )
+  },
+  /**
+   * 经销商登录认证
+   * @param  {Object} params 登录信息
+      {
+        'account': '手机号/邮箱地址',
+        'password': '登陆密码'
+      }
+   * @return {Promise}
+   */
+  login (params) {
+    return http.post(
+      `${API_SERVER.default}/v2/dealer_auth`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
   }
 }

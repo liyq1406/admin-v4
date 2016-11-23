@@ -10,145 +10,148 @@
         </div>
         <div class="control mt10">
           <span class="label mr20">开启独立入口服务</span>
-          <switch></switch>
+          <switch :value.sync="model.is_enable"></switch>
         </div>
       </div>
     </div>
+    <div v-if="model.is_enable">
+      <div class="panel-sub-hd bordered mb20">域名配置</div>
 
-    <div class="panel-sub-hd bordered mb20">域名配置</div>
-
-    <div class="part form">
-      <div class="form-row row pl20">
-        <label class="form-control col-4">域名:</label>
-        <div class="controls col-20">
-          <div class="input-text-wrap" v-placeholder="'域名'">
-            <input type="text" class="input-text" v-model="domainName">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel-sub-hd bordered mb20">界面UI配置</div>
-
-    <div class="part form">
-      <div class="form-row row pl20">
-        <label class="form-control col-4">登陆页面文案:</label>
-        <div class="controls col-20">
-          <div class="input-text-wrap" v-placeholder="'登陆页面文案'">
-            <input type="text" class="input-text" v-model="">
-          </div>
-        </div>
-      </div>
-
-      <div class="form-row row pl20">
-        <label class="form-control col-4">企业Logo:</label>
-        <div class="controls col-20">
-          <div class="thumb-info">
-            <div class="thumb">
-              <image-uploader :images="images" @modified="onModifiedImages"></image-uploader>
-              <div class="form-tips">图片规格：400*110</div>
+      <div class="part form">
+        <div class="form-row row pl20">
+          <label class="form-control col-4">域名:</label>
+          <div class="controls col-20">
+            <div class="input-text-wrap">
+              <input type="text" placeholder="域名" class="input-text" v-model="model.domain" name="model.domain" readonly="true">
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="panel-sub-hd bordered mb20">权限配置</div>
+      <div class="panel-sub-hd bordered mb20">界面UI配置</div>
 
-    <div class="panel-bd products-container">
-      <!-- 应用列表  -->
-      <div v-if="!productList.length" class="non">暂无产品</div>
-      <div  v-if="productList.length" class="product-list-box">
-        <div class="product" v-for="product in productList" :class="{'selected': product.id === selectedProduct.id}" @click="selectedProduct=product">
-          <div>
-            <span class="product-name">{{ product.name }}</span>
-            <span class="product-name">设备数: {{ product.quota }}</span>
+      <div class="part form">
+        <div class="form-row row pl20">
+          <label class="form-control col-4">登陆页面文案:</label>
+          <div class="controls col-20">
+            <div class="input-text-wrap">
+              <input type="text" placeholder="登陆页面文案" class="input-text" v-model="model.login_context">
+            </div>
           </div>
-          <!-- <div class="product-type">
-            <span class="type">{{computedproductType(product.type)}}</span>
-            <span class="ml5">版本号</span>
-          </div> -->
         </div>
-      </div>
-      <!-- 应用详情 -->
-      <div v-if="productList.length" class="panel product-details-box">
-        <!-- 详情头部 -->
-        <!-- <div class="panel-hd">
-          <div class="product-name">
-            <span>{{selectedproduct.name}}</span>
-          </div>
-        </div> -->
-        <!-- 详情内容 -->
-        <div class="panel mt15 mb20 no-split-line">
-          <div class="panel-bd row">
-            <div>
-              <info-card :info="productSummary">
-                <div class="alert-record-summary">
-                  <div class="up">
-                    <h3 class="textoverflow wid">{{selectedProduct.name || '-'}}</h3>
-                  </div>
-                  <div class="down row">
-                    <div class="col-12">
-                      <span>{{selectedProduct.create_time | formatDate}}</span>
-                    </div>
-                    <div class="col-12">
-                      <!-- <button>
-                        <i class="fa fa-check"></i>
-                        已处理
-                      </button> -->
-                      <label class="label mr20">
-                        授权可见：
-                        <tooltip placement="left" width="300px">
-                          <p>开启授权可见，经销商账户可登录账号查看该产品下设备信息、状态、告警信息等。</p>
-                          <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-                        </tooltip>
-                      </label>
-                      <switch></switch>
-                    </div>
-                  </div>
-                </div>
-              </info-card>
-              <div>
-                <info-list :info="productInfo"></info-list>
+
+        <div class="form-row row pl20">
+          <label class="form-control col-4">企业Logo:</label>
+          <div class="controls col-20">
+            <div class="thumb-info">
+              <div class="thumb">
+                <image-uploader :images="images" @modified="onModifiedImages"></image-uploader>
+                <div class="form-tips">图片规格：400*110</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="panel-sub-hd bordered mb20">模块配置</div>
+      <div class="panel-sub-hd bordered mb20">权限配置</div>
 
-    <div class="intelligent-table-box part">
-      <table class="table table-stripe table-bordered">
-        <thead>
-          <tr>
-            <th>功能模块</th>
-            <th class="tac">描述</th>
-            <th class="tac">授权可见</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="tables.length > 0">
-            <tr v-for="table in tables" track-by="$index">
-              <td class="hl-red">{{ table.title }}</td>
-              <td>{{ table.description }}</td>
-              <td class="tac"><switch :value.sync="table.status" size="small"></switch></td>
+      <div class="panel-bd products-container">
+        <!-- 应用列表  -->
+        <div v-if="!allProducts.length" class="non">暂无产品</div>
+        <div  v-if="allProducts.length" class="product-list-box">
+          <div class="product" v-for="product in allProducts" :class="{'selected': product.id === selectedProduct.id}" @click="selectProduct(product)">
+            <div>
+              <span class="product-name">{{ product.name }}</span>
+              <span class="product-name">设备数: {{ product.quota }}</span>
+            </div>
+            <!-- <div class="product-type">
+              <span class="type">{{computedproductType(product.type)}}</span>
+              <span class="ml5">版本号</span>
+            </div> -->
+          </div>
+        </div>
+        <!-- 应用详情 -->
+        <div v-if="allProducts.length" class="panel product-details-box">
+          <!-- 详情头部 -->
+          <!-- <div class="panel-hd">
+            <div class="product-name">
+              <span>{{selectedproduct.name}}</span>
+            </div>
+          </div> -->
+          <!-- 详情内容 -->
+          <div class="panel mt15 mb20 no-split-line">
+            <div class="panel-bd row">
+              <div>
+                <info-card :info="productSummary">
+                  <div class="alert-record-summary">
+                    <div class="up">
+                      <h3 class="textoverflow wid">{{selectedProduct.name || '-'}}</h3>
+                    </div>
+                    <div class="down row">
+                      <div class="col-12">
+                        <span>{{selectedProduct.create_time | formatDate}}</span>
+                      </div>
+                      <div class="col-12">
+                        <!-- <button>
+                          <i class="fa fa-check"></i>
+                          已处理
+                        </button> -->
+                        <label class="label mr20">
+                          授权可见：
+                          <tooltip placement="left" width="300px">
+                            <p>开启授权可见，经销商账户可登录账号查看该产品下设备信息、状态、告警信息等。</p>
+                            <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+                          </tooltip>
+                        </label>
+                        <switch :value="selectedProduct.is_visible" @switch-toggle="productToggle"></switch>
+                      </div>
+                    </div>
+                  </div>
+                </info-card>
+                <!-- <pre>{{selectedProduct|json}}</pre> -->
+                <div>
+                  <info-list :info="productInfo"></info-list>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-sub-hd bordered mb20">模块配置</div>
+
+      <div class="intelligent-table-box part">
+        <table class="table table-stripe table-bordered">
+          <thead>
+            <tr>
+              <th>功能模块</th>
+              <th class="tac">描述</th>
+              <th class="tac">授权可见</th>
             </tr>
-          </template>
-          <tr v-if="tables.length === 0 && !loadingData">
-            <td :colspan="3" class="tac">
-              <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <template v-if="tables.length > 0">
+              <tr v-for="table in tables" track-by="$index">
+                <td class="hl-red">{{ table.title }}</td>
+                <td>{{ table.description }}</td>
+                <td class="tac"><switch :value.sync="table.is_visible" size="small"></switch></td>
+              </tr>
+            </template>
+            <tr v-if="tables.length === 0 && !loadingData">
+              <td :colspan="3" class="tac">
+                <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+    <button class="btn btn-primary btn-lg" @click.prevent.stop="setConfig">提交</button>
   </div>
 </template>
 
 <script>
-// import api from 'src/api'
+import api from 'src/api'
 import formatDate from 'filters/format-date'
 
 export default {
@@ -166,33 +169,48 @@ export default {
     return {
       tables: [{
         title: '产品概览',
+        type: 'summary',
         description: '查看产品概览，包括激活趋势、增长总数、产品热力分部等',
-        status: true
+        is_visible: false
       }, {
         title: '设备管理',
+        type: 'device_list',
         description: '查看设备列表、远程调试设备、查看历史记录、查看经销商、维保记录等',
-        status: true
+        is_visible: false
       }, {
         title: '告警信息',
+        type: 'alert',
         description: '管理告警详情与告警分析',
-        status: true
+        is_visible: false
       }, {
         title: '设备地图',
+        type: 'device_map',
         description: '查看设备地理位置详细分布',
-        status: true
+        is_visible: false
       }, {
         title: '产品分析',
+        type: 'analyse',
         description: '通过三个维度分析产品，包括单次时长、使用次数、时段分部等',
-        status: true
+        is_visible: false
       }, {
         title: '智能维保',
+        type: 'warranty',
         description: '管理设备维修、延保等内容',
-        status: true
+        is_visible: false
       }, {
         title: '用户反馈',
+        type: 'helpdesk',
         description: '用户端可提交相关产品反馈至平台，可使用反馈分析等模块',
-        status: true
+        is_visible: false
       }],
+      model: {
+        is_enable: false,
+        domain: '',
+        login_context: '',
+        logo_url: ''
+      },
+      allProducts: [],
+      productsStaus: [],
       domainName: '',
       images: [''],
       // productList: [{
@@ -239,6 +257,19 @@ export default {
         }
       }
     },
+    // allProducts () {
+    //   var result = []
+    //   _.cloneDeep(this.productList).forEach((product) => {
+    //     product.is_visible = false
+    //     this.productsStaus.forEach((status) => {
+    //       if (status.product_id === product.id) {
+    //         product.is_visible = status.is_visible || false
+    //       }
+    //     })
+    //   })
+    //   result = this.productList
+    //   return result
+    // },
     currType () {
       var value = this.selectedProduct.link_type
       var result
@@ -255,6 +286,7 @@ export default {
 
   ready () {
     this.init()
+    // this.getConfig()
   },
 
   watch: {
@@ -268,11 +300,95 @@ export default {
      */
     init () {
       if (this.productList.length) {
-        this.selectedProduct = this.productList[0]
+        let products = _.cloneDeep(this.productList).map((product) => {
+          product.is_visible = false
+          return product
+        })
+        this.allProducts = products
+        this.selectedProduct = products[0]
+        this.getConfig()
       }
     },
+    selectProduct (product) {
+      this.selectedProduct = product
+      // this.selectProduct.is_visible = product.is_visible
+    },
+    // 获取配置信息
+    getConfig () {
+      api.dealer.getConfig(this.$route.params.dealerId).then((res) => {
+        console.log(res)
+        this.model = res.data
+        this.model.domain = res.data.domain || 'www.baidu.com'
+        if (this.model.logo_url) {
+          this.images[0] = this.model.logo_url
+        }
+        // 处理产品配置
+        res.data.product.forEach((product) => {
+          this.allProducts.forEach((item) => {
+            if (item.id === product.product_id) {
+              item.is_visible = product.is_visible
+            }
+          })
+        })
+        // 处理模块配置
+        res.data.module.forEach((model) => {
+          this.tables.forEach((table) => {
+            if (table.type === model.type) {
+              table.is_visible = model.is_visible
+            }
+          })
+        })
+      }).catch((err) => {
+        this.handleError(err)
+      })
+    },
+
     onModifiedImages (images) {
-      console.log(images)
+      // console.log(images)
+      this.images = images
+    },
+
+    productToggle (val) {
+      console.log(val)
+      this.selectedProduct.is_visible = val
+      // console.log(status)
+    },
+    setConfig () {
+      if (this.model.login_context === '') {
+        alert('登录页面文案不能为空！')
+        return
+      }
+      // 处理模块配置提交数据
+      let modeType = []
+      this.tables.forEach((table) => {
+        var obj = {
+          type: table.type,
+          is_visible: table.is_visible
+        }
+        modeType.push(obj)
+      })
+      // 处理产品权限配置数据
+      let limitType = []
+      this.allProducts.forEach((product) => {
+        var pobj = {
+          product_id: product.id,
+          is_visible: product.is_visible
+        }
+        limitType.push(pobj)
+      })
+      // 处理logo图片数据
+      this.model.logo_url = this.images[0]
+      if (limitType.length === this.allProducts.length && modeType.length === this.tables.length) {
+        this.model.product = limitType
+        this.model.module = modeType
+        console.log(this.model)
+        api.dealer.setConfig(this.$route.params.dealer_id, this.model).then((res) => {
+          console.log(res)
+          this.init()
+        }).catch((err) => {
+          this.handleError(err)
+        })
+      }
     }
   }
 }

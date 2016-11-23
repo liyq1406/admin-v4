@@ -25,7 +25,7 @@ export default {
     return {
       breadcrumbNav: [{
         label: '自定义数据源',
-        link: '/dev/data/statistics-rule/device'
+        link: '/dev/settings/views/source'
       }, {
         label: '修改数据源'
       }]

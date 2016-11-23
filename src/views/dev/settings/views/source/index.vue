@@ -69,13 +69,15 @@ export default {
           product: product ? product.name : '',
           show_type: item.show_type === 1 ? '指标' : '图表',
           data_type: item.data_from === 1 ? '统计规则' : '数据端点',
-          create_time: formatDate(item.id, true) // id 为时间戳
+          create_time: formatDate(item.id, true), // id 为时间戳
+          id: item.id || 0
         })
       })
 
       res.sort((a, b) => {
-        return new Date(b.timeOrigin) - new Date(a.timeOrigin)
+        return b.id - a.id
       })
+      console.log(res)
       return res
     }
   },
@@ -102,7 +104,7 @@ export default {
       })
     },
     editRule (rule) {
-      this.$route.router.go({path: 'edit/1'})
+      this.$route.router.go({path: 'source/edit/' + rule.id})
     }
   }
 }

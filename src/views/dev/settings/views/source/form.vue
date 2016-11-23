@@ -17,7 +17,7 @@
             <label class="form-control col-3 col-offset-1">标题:</label>
             <div class="controls col-10">
               <div class="input-text-wrap">
-                <input v-model="title" type="text" placeholder="请输入标题" v-validate:name="{required: true, minlength: 2, maxlength: 30, format: 'trim'}" name="name" class="input-text input-lenght"/>
+                <input v-model="title" type="text" placeholder="请输入标题" v-validate:name="{required: true, minlength: 2, maxlength: 30, format: 'trim'}" name="name" class="input-text input-lenght cover-fontsize"/>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.name.touched && $validation.name.required">请输入标题</span>
                   <span v-if="$validation.name.modified && $validation.name.minlength">标题不能少于2位</span>
@@ -126,7 +126,7 @@
                       </div>
                       <div class="controls col-21">
                         <div class="input-radio-wrap">
-                          <template v-for="item in selectedRule.fineness">
+                          <template v-for="item in finenessTypes">
                             <template v-if="item===1">
                               <input v-model="finenessType" type="radio" :value="1" name="fineness-type"/>
                               <label>小时</label>
@@ -149,7 +149,7 @@
                             </template>
                             <template v-if="item===6">
                               <input v-model="finenessType" type="radio" :value="6" name="fineness-type"/>
-                              <label>全部</label>
+                              <label>至今</label>
                             </template>
                           </template>
                         </div>
@@ -298,7 +298,9 @@ export default {
       customTime: {
         start: 0,
         end: 0
-      }
+      },
+      originSelect: {},
+      delChecked: false
     }
   },
 
@@ -353,6 +355,11 @@ export default {
     },
     dpMode () {
       return this.selectedRule.dp_mode || []
+    },
+    finenessTypes () {
+      return this.selectedRule.fineness.sort((a, b) => {
+        return a - b
+      })
     }
   },
 
@@ -363,13 +370,107 @@ export default {
         this.getDatapoints()
         this.getStatisticRules()
       }
+    },
+    products () {
+      this.setDefaultProduct()
     }
   },
 
   ready () {
+    if (this.type === 'edit') {
+      this.getConfig()
+    }
   },
 
   methods: {
+    getConfig () {
+      api.custom.dataSource.get().then((res) => {
+        if (Array.isArray(res)) {
+          let origin = _.find(res, (item) => {
+            return item.id === parseInt(this.$route.params.id)
+          })
+          console.log(origin)
+          this.originSelect = origin
+          this.setDefaultSelect()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    setDefaultSelect () {
+      this.setDefaultProduct()
+      this.setDefaultDatapoint()
+      this.setDefaultRule()
+      this.setDefaultRuleDatapoint()
+      this.title = this.originSelect.title
+      this.sourceType = this.originSelect.data_from
+      this.selectedShowType = _.find(this.showTypes, (item) => {
+        return item.value === this.originSelect.show_type
+      })
+      if (this.originSelect.show_type === 2) { // 图表
+        this.chartType = this.originSelect.chart
+        if (this.chartType === 1) { // 饼图
+          this.classifty = this.originSelect.pie_classify
+        }
+      }
+      if (this.originSelect.period) {
+        this.period = this.originSelect.period
+        if (this.period === 5) {
+          this.initStartTime = this.customTime.start = this.originSelect.custom_time.start || 0
+          this.initEndTime = this.customTime.end = this.originSelect.custom_time.end || 0
+        }
+      }
+      if (this.originSelect.fineness) {
+        this.finenessType = this.originSelect.fineness
+      }
+    },
+    setDefaultProduct () {
+      if (!this.products.length || !this.originSelect.product_id) {
+        return
+      }
+      let finded = _.find(this.products, (item) => {
+        return item.id === this.originSelect.product_id
+      })
+      if (finded) {
+        this.selectedProduct = finded
+      }
+    },
+    setDefaultDatapoint () {
+      if (!this.datapoints.length || !this.originSelect.dp_index || this.originSelect.data_from === 1) {
+        return
+      }
+      let finded = _.find(this.datapoints, (item) => {
+        return item.index === this.originSelect.dp_index
+      })
+      if (finded) {
+        this.selectedDatapoint = finded
+      }
+    },
+    setDefaultRule () {
+      if (!this.statisticsRules.length || !this.originSelect.rule_id) {
+        return
+      }
+      let finded = _.find(this.statisticsRules, (item) => {
+        return item.id === this.originSelect.rule_id
+      })
+      if (finded) {
+        this.selectedRule = finded
+        if (this.originSelect.rule_type) {
+          this.statisticType = this.originSelect.rule_type
+        }
+      }
+    },
+    setDefaultRuleDatapoint () {
+      if (!this.ruleDatapoints.length || !this.originSelect.dp_index || this.originSelect.data_from !== 1) {
+        return
+      }
+      let finded = _.find(this.ruleDatapoints, (item) => {
+        return item.index === this.originSelect.dp_index
+      })
+      if (finded) {
+        this.ruleSelectedDatapoint = finded
+      }
+    },
     showTypeChange () {
       this.sourceType = 1
     },
@@ -407,6 +508,9 @@ export default {
             return a - b
           })
           this.statisticsRules = res.data.list
+          this.setDefaultRule()
+          this.setDefaultRuleDatapoint()
+          this.setDefaultDatapoint()
         } else {
           this.statisticsRules = []
         }
@@ -436,8 +540,9 @@ export default {
           let datapoints = res.data.sort((a, b) => {
             return a.index - b.index
           })
-
           this.datapoints = datapoints
+          this.setDefaultRuleDatapoint()
+          this.setDefaultDatapoint()
         }
       }).catch((res) => {
         this.handleError(res)
@@ -445,9 +550,6 @@ export default {
     },
     addRule (index) {
       if (index >= 9) {
-        return
-      }
-      if (this.classifty[index].min === '' || this.classifty[index].max === '') {
         return
       }
       this.classifty.push({
@@ -589,7 +691,7 @@ export default {
         if (this.delChecked) { // 删除
           process = api.custom.dataSource.del(this.$route.params.id)
         } else {
-          process = api.custom.dataSource.edit(this.$route.params.id, model)
+          process = api.custom.dataSource.put(this.$route.params.id, model)
         }
       }
       process.then((res) => {
@@ -669,4 +771,6 @@ export default {
   height 32px
   width 32px
   padding 0
+.cover-fontsize
+  font-size 13px !important
 </style>

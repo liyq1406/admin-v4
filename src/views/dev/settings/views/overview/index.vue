@@ -192,6 +192,39 @@
               </div>
             </div>
           </div>
+          <div v-if="releasedProduct.length" class="form-row row">
+            <div class="form-control col-3">
+              <label class="middle-word">自定义图表:</label>
+            </div>
+            <div class="controls col-21">
+              <div class="row">
+                <div class="form-control col-3">
+                  <label>自定义产品分析:</label>
+                </div>
+                <div class="input-radio-wrap col-4">
+                  <input v-model="features.distribution" type="radio" :value="true" name="distribution"/>
+                  <label>显示</label>
+                  <input v-model="features.distribution" type="radio" :value="false" name="distribution"/>
+                  <label>隐藏</label>
+                </div>
+                <div class="col-2 add-btn-wrap">
+                  <button class="btn btn-ghost" @click.prevent.stop="addRule(index)">
+                    添加数据源
+                  </button>
+                </div>
+              </div>
+              <div class="row mt10">
+                <div class="col-offset-3">
+                </div>
+                <div class="col-19">
+                  <div class="col-1 del-icon ml10">
+                    <i class="fa fa-times-circle" @click="delRule(index)"></i>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="form-actions save-config">
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.save')" class="btn btn-primary mt20"></button>
           </div>
@@ -230,6 +263,11 @@ export default {
 
   data () {
     return {
+      customCharts: [
+        {
+          data_source_id: ''
+        }
+      ],
       initStartTime: 0,
       initEndTime: 0,
       editing: false,
@@ -330,6 +368,7 @@ export default {
   ready () {
   },
   methods: {
+    addRow () {},
     // 重置当前产品配置
     resetConfig () {
       for (let i in this.configLoaded) {
@@ -663,4 +702,8 @@ export default {
     margin-left 140px
 .time-range-lineheight
   margin-top 2px
+.add-btn-wrap
+  height 32px
+  display inline-block
+  vertical-align middle
 </style>
