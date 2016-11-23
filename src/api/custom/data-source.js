@@ -25,9 +25,7 @@ function add (params) {
       } else {
         reject()
       }
-      console.log(value)
       let key = config.genKey()
-      console.log(key)
       api.customization.setCorpCustomization({ [key]: value }).then((res) => {
         if (res.status === 200) {
           if (pool.data) {
@@ -51,15 +49,29 @@ function add (params) {
  */
 function put (id, params) {
   return new Promise((resolve, reject) => {
-    let key = config.genKey()
-    let value = JSON.stringify(params)
-    api.customization.setCorpCustomization({ [key]: value }).then((res) => {
-      if (res.status === 200) {
-        if (pool.data) {
-          pool.expired = true
-        }
+    get().then((res) => {
+      if (Array.isArray(res)) {
+        let temp = _.clone(res)
+        let deled = _.filter(temp, (item) => {
+          return item.id !== parseInt(id)
+        })
+        params.id = parseInt(id)
+        deled.push(params)
+        let value = JSON.stringify(deled)
+        let key = config.genKey()
+        api.customization.setCorpCustomization({ [key]: value }).then((res) => {
+          if (res.status === 200) {
+            if (pool.data) {
+              pool.expired = true
+            }
+          }
+          resolve(res)
+        }).catch((res) => {
+          reject(res)
+        })
+      } else {  // 没有记录
+        reject()
       }
-      resolve(res)
     }).catch((res) => {
       reject(res)
     })
@@ -73,7 +85,30 @@ function put (id, params) {
  */
 function del (id) {
   return new Promise((resolve, reject) => {
-    // let key = config.genKey()
+    get().then((res) => {
+      if (Array.isArray(res)) {
+        let temp = _.clone(res)
+        let deled = _.filter(temp, (item) => {
+          return item.id !== parseInt(id)
+        })
+        let value = JSON.stringify(deled)
+        let key = config.genKey()
+        api.customization.setCorpCustomization({ [key]: value }).then((res) => {
+          if (res.status === 200) {
+            if (pool.data) {
+              pool.expired = true
+            }
+          }
+          resolve(res)
+        }).catch((res) => {
+          reject(res)
+        })
+      } else {  // 没有记录
+        reject()
+      }
+    }).catch((res) => {
+      reject(res)
+    })
   })
 }
 
