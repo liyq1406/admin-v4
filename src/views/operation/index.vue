@@ -48,6 +48,26 @@ export default {
   },
 
   computed: {
+    // 当前企业反馈ID
+    helpdeskId () {
+      var result = ''
+      this.plugins.forEach((item) => {
+        if (item.plugin === 'helpdesk') {
+          result = item.id
+        }
+      })
+      return result
+    },
+    // 当前企业维保ID
+    warrantyId () {
+      var result = ''
+      this.plugins.forEach((item) => {
+        if (item.plugin === 'warranty') {
+          result = item.id
+        }
+      })
+      return result
+    },
     // 判断侧边栏类型
     type () {
       if (this.userRole === 'member') {
@@ -147,36 +167,58 @@ export default {
         })
       })
 
-      // result.subs.push({
-      //   alias: 'helpdesk',  // 用户反馈
-      //   icon: 'inbox',
-      //   sub.subs: [{
-      //     alias: 'overview',
-      //     url: `/plugins/helpdesk/${item.id}/overview`
-      //   }, {
-      //     alias: 'issues',
-      //     url: `/plugins/helpdesk/${item.id}/issues`
-      //   }, {
-      //     alias: 'settings',
-      //     url: `/plugins/helpdesk/${item.id}/settings`
-      //   }]
-      // })
-      //
+      this.configInfo.module.forEach((model) => {
+        if (model.type === 'helpdesk' && model.is_visible) {
+          result.subs.push({
+            alias: 'helpdesk',  // 用户反馈
+            icon: 'inbox',
+            subs: [{
+              alias: 'overview',
+              url: '/plugins/helpdesk/' + this.helpdeskId + '/overview'
+            }, {
+              alias: 'issues',
+              url: '/plugins/helpdesk/' + this.helpdeskId + '/issues'
+            }, {
+              alias: 'settings',
+              url: '/plugins/helpdesk/' + this.helpdeskId + '/settings'
+            }]
+          })
+        } else if (model.type === 'warranty' && model.is_visible) {
+          result.subs.push({
+            alias: 'warranty',  // 智能维保
+            icon: 'support',
+            subs: [{
+              alias: 'repair',
+              url: '/plugins/warranty/' + this.warrantyId + '/work-orders/repair'
+            }, {
+              alias: 'extended_warranties',
+              url: '/plugins/warranty/' + this.warrantyId + '/work-orders/extended-warranties'
+            }, {
+              alias: 'accounts',
+              url: '/plugins/warranty/' + this.warrantyId + '/accounts'
+            }, {
+              alias: 'settings',
+              url: '/plugins/warranty/' + this.warrantyId + '/settings'
+            }]
+          })
+        }
+      })
+
       // result.subs.push({
       //   alias: 'warranty',  // 智能维保
       //   icon: 'support',
-      //   sub.subs: [{
+      //   subs: [{
       //     alias: 'repair',
-      //     url: `/plugins/warranty/${item.id}/work-orders/repair`
+      //     url: '/plugins/warranty/' + this.warrantyId + '/work-orders/repair'
       //   }, {
       //     alias: 'extended_warranties',
-      //     url: `/plugins/warranty/${item.id}/work-orders/extended-warranties`
+      //     url: '/plugins/warranty/' + this.warrantyId + '/work-orders/extended-warranties'
       //   }, {
       //     alias: 'accounts',
-      //     url: `/plugins/warranty/${item.id}/accounts`
+      //     url: '/plugins/warranty/' + this.warrantyId + '/accounts'
       //   }, {
       //     alias: 'settings',
-      //     url: `/plugins/warranty/${item.id}/settings`
+      //     url: '/plugins/warranty/' + this.warrantyId + '/settings'
       //   }]
       // })
 

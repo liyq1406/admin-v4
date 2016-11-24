@@ -3,7 +3,7 @@
     <loginarea :config="config"></loginarea>
     <div class="auth-form login-form">
       <div class="inner">
-        <div class="form-legend">Residential Battery Storage Solution</div>
+        <div class="form-legend">{{config.login_context}}</div>
         <div class="form">
           <validator name="authValidation">
             <form novalidate @submit.prevent="onSubmit">
