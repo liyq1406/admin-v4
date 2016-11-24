@@ -6,7 +6,7 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="initMap(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
+          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="onSearchCancel" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
             <x-select width="106px" :label="queryType.label" size="small">
               <select v-model="queryType">
                 <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -20,17 +20,17 @@
     </div>
 
     <!-- 设备地图 -->
-    <div class="device-list-wrap with-loading">
-      <div class="icon-loading" v-show="loadingDevices">
+    <div class="device-list-wrap">
+      <!-- <div class="icon-loading" v-show="loadingDevices">
         <i class="fa fa-refresh fa-spin"></i>
-      </div>
-      <alert v-show="!devices.length && !loadingDevices" :cols="18">
+      </div> -->
+      <alert v-show="!deviceList.length && !loadingData" :cols="18">
         <p>{{ infoMsg }}</p>
       </alert>
-      <div v-show="deviceList.length" class="device-list mb20">
-        <div class="device-list-item" v-for="device in deviceList" :class="{'active':currIndex===$index || currHover===$index}" @click="handleDeviceItemClick($index)" @mouseover="pullUp($index)" @mouseout="pushDown($index)">
+      <div v-show="deviceList.length && !loadingData" class="device-list mb20">
+        <div class="device-list-item" v-for="(deviceIndex, device) in deviceList" :class="{'active':currIndex===deviceIndex}" @click="onDeviceClick(deviceIndex)" @mouseover="onDeviceHover(deviceIndex)" @mouseout="onDeviceOut(deviceIndex)">
           <div class="list-item-cont">
-            <div class="icon-num">{{ $index+1 }}</div>
+            <div class="icon-num">{{ deviceIndex+1 }}</div>
             <div class="device-id">{{ device.mac }}</div>
             <div class="device-address">{{ device.address }}</div>
             <div class="status">
@@ -39,14 +39,16 @@
             </div>
           </div>
         </div>
-        <pagination v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getGeographies" :simple="true"></pagination>
+        <pagination v-if="total > countPerPage" :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="onPageUpdate" :simple="true"></pagination>
       </div>
     </div>
-    <div class="device-map with-loading">
-      <div class="icon-loading" v-show="loadingData">
-        <i class="fa fa-refresh fa-spin"></i>
-      </div>
+    <div class="device-map">
       <div id="device-map" style="height: 100%"></div>
+    </div>
+
+    <!-- spiner -->
+    <div class="device-loading" v-show="loadingData">
+      <spinner :text="loadingText"></spinner>
     </div>
   </div>
 </template>
@@ -55,8 +57,50 @@
 import { setCurrProductMixin } from './mixins'
 import api from 'api'
 import * as config from 'consts/config'
-// import AMap from 'AMap'
 import formatDate from 'filters/format-date'
+import Vue from 'vue'
+
+let icon1, icon2, infoWindow
+
+/**
+ * 计算边界
+ * @param  {Object} bounds 边界
+ * @return {Object}        可视区域的尺寸
+ */
+function getBoundsSize (bounds) {
+  let NE, SW, lat1, lat2, lng1, lng2, horizontalLatLng1, horizontalLatLng2, verticalLatLng1, verticalLatLng2, horizontal, vertical
+
+  // 获取东北角和西南角的经纬度坐标
+  NE = bounds.getNorthEast()
+  SW = bounds.getSouthWest()
+  lat1 = NE.lat()
+  lat2 = SW.lat()
+  lng1 = NE.lng()
+  lng2 = SW.lng()
+
+  // 计算横向和纵向的距离
+  horizontalLatLng1 = new google.maps.LatLng(lat1, lng1)
+  horizontalLatLng2 = new google.maps.LatLng(lat1, lng2)
+  verticalLatLng1 = new google.maps.LatLng(lat1, lng1)
+  verticalLatLng2 = new google.maps.LatLng(lat2, lng1)
+  horizontal = getDistance(horizontalLatLng1, horizontalLatLng2)
+  vertical = getDistance(verticalLatLng1, verticalLatLng2)
+
+  return {
+    horizontal: horizontal,
+    vertical: vertical
+  }
+}
+
+/**
+ * 计算两点之间的距离
+ * @param  {Object} point1 坐标点1
+ * @param  {Object} point2 坐标点2
+ * @return {Number}        两点之间的距离
+ */
+function getDistance (point1, point2) {
+  return google.maps.geometry.spherical.computeDistanceBetween(point1, point2)
+}
 
 export default {
   name: 'DeviceMap',
@@ -65,17 +109,27 @@ export default {
 
   data () {
     return {
-      ids: [],
-      devices: [],
-      vDevices: [],
-      geographies: [],
+      map: null,
+      markers: [],
+      infoWindow: null,
+      geocoder: null,
+      zoomLevel: 10,
+      sizes: null,
+      currIndex: 0,
+      hoverIndex: -1,
+      mapCenter: [],
       query: '',
       searching: false,
-      queryTypeOptions: [
-        { label: this.$t('operation.product.devicemap.device_id'), value: 'id' },
-        { label: 'MAC', value: 'mac' },
-        { label: this.$t('operation.product.devicemap.region'), value: 'area' }
-      ],
+      queryTypeOptions: [{
+        label: this.$t('operation.product.devicemap.device_id'),
+        value: 'id'
+      }, {
+        label: 'MAC',
+        value: 'mac'
+      }, {
+        label: this.$t('operation.product.devicemap.region'),
+        value: 'region'
+      }],
       queryType: {
         label: this.$t('operation.product.devicemap.device_id'),
         value: 'id'
@@ -83,42 +137,58 @@ export default {
       currentPage: 1,
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
-      oldCurrIndex: 0,
-      currIndex: 0,
-      currHover: -1,
-      map: null,
-      points: [],
-      markers: [],
-      infoWindow: {},
-      geocoder: {},
-      citySearch: {},
-      placeSearch: {},
-      mapHeight: 500,
-      mapCenter: [],
-      zoom: 10,
-      loadingData: true,
-      loadingProducts: true,
+      loadingGeographies: true,
       loadingDevices: true,
-      infoMsg: ''
+      loadingVDevices: true,
+      devices: [],
+      vDevices: [],
+      geographies: [],
+      infoMsg: '',
+      loadingText: ''
     }
   },
 
   computed: {
+    // 半径
+    radius () {
+      let result = 0
+
+      if (this.sizes) {
+        // 获取较短的距离作为半径
+        let horizontal = this.sizes.horizontal
+        let vertical = this.sizes.vertical
+        result = horizontal > vertical ? vertical : horizontal
+      }
+
+      return result / 2
+    },
+
     // 查询条件
     queryCondition () {
-      var condition = {
+      return {
         offset: this.countPerPage * (this.currentPage - 1),
         limit: this.countPerPage,
         spherical: true,
         coord: this.mapCenter,
-        max_dist: this.map.getResolution() * this.map.getSize().height / 2,
+        max_dist: this.radius,
         query: {}
       }
-      if (this.query.length > 0) {
-        condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+    },
+
+    // 设备列表
+    deviceList () {
+      let result = []
+
+      if (!this.loadingData) {
+        result = _(this.devices) // 链式调用开始
+          .keyBy('id') // 将数组转换为以 id 为键的对象
+          .merge(_.keyBy(this.vDevices, 'id')) // 合并虚拟设备信息
+          .merge(_.keyBy(this.geographies, 'id')) // 合并经纬度信息
+          .values() // 将对象转换回数组
+          .value()
       }
 
-      return condition
+      return result
     },
 
     // 当前产品 ID
@@ -126,78 +196,40 @@ export default {
       return this.$route.params.id
     },
 
-    // 设备列表
-    deviceList () {
-      let result = []
-
-      // 给设备列表添加虚拟设备信息
-      result = this.devices.map((item) => {
-        let vDevice = _.find(this.vDevices, (obj) => {
-          return obj.device_id === item.id
-        }) || {}
-
-        item.last_login = vDevice.last_login || ''
-        item.ip = vDevice.ip || ''
-        item.online_count = vDevice.online_count || 0
-
-        return item
-      })
-
-      // 给设备列表添加地理位置信息
-      result = result.map((item) => {
-        let geo = _.find(this.geographies, (obj) => {
-          return obj.device_id === item.id
-        }) || {}
-
-        item.lat = geo.lat || null
-        item.lon = geo.lon || null
-        item.address = geo.address
-
-        return item
-      })
-
-      return result
+    // 是否正在加载数据
+    loadingData () {
+      return this.loadingDevices || this.loadingVDevices || this.loadingGeographies
     }
   },
 
   ready () {
     window.init = this.initMap
-    if (typeof window.AMap === 'undefined') {
-      var mapApi = document.createElement('script')
-      let protocol = process.env.NODE_ENV !== 'production' ? 'https:' : window.location.protocol
-
-      mapApi.src = `${protocol}//webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
-      document.getElementsByTagName('body')[0].appendChild(mapApi)
+    if (typeof google === 'undefined') {
+      // this.loadingText = this.$t('operation.product.devicemap.targeting')
+      this.loadingText = '地图初始化...'
+      var elem = document.createElement('script')
+      elem.async = true
+      elem.defer = 'defer'
+      elem.src = `https://maps.google.cn/maps/api/js?libraries=geometry&key=${config.GOOGLE_MAP_KEY}&callback=init`
+      document.getElementsByTagName('body')[0].appendChild(elem)
     } else {
       this.initMap()
     }
   },
 
   watch: {
-    // 当前产品 ID
     currentProductId () {
-      this.initMap()
+      // 监听当前产品 ID 的切换，每次切换都对地图重新初始化
+      // this.sizes = null
+      this.currIndex = 0
+      this.query = ''
+      this.getGeographies(true)
+      // this.initMap()
     },
 
-    // 缩放
-    zoom () {
-      if (this.queryType.value === 'area' || !this.query) {
-        this.currentPage = 1
-        this.getGeographies()
-      }
-    },
-
-    // 地图中心坐标
-    mapCenter () {
-      if (this.queryType.value === 'area' || !this.query) {
-        this.getGeographies()
-      }
-    },
-
-    // 当前滑过的设备列表项
-    currHover () {
-      if (this.currHover >= 0) {
-        this.markers[this.currHover].setzIndex(10000)
+    deviceList () {
+      if (!this.loadingData) {
+        this.setMarkers()
       }
     }
   },
@@ -208,73 +240,68 @@ export default {
 
   methods: {
     initMap () {
-      // 地图初始化
-      this.map = new AMap.Map('device-map', {
-        resizeEnable: true,
-        zoom: this.zoom
+      if (!window.navigator.geolocation) {
+        console.log('No Geolocation Support')
+        return
+      }
+
+      // 地图初始化配置
+      let options = {
+        // center: new google.maps.LatLng(this.mapCenter[1], this.mapCenter[0]),
+        zoom: this.zoomLevel,
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.TOP_LEFT
+        },
+        streetViewControl: false,
+        mapTypeControl: false
+      }
+
+      // 初始化
+      this.map = new google.maps.Map(document.getElementById('device-map'), options)
+
+      this.loadingText = this.$t('operation.product.devicemap.targeting')
+      navigator.geolocation.getCurrentPosition(position => {
+        let lat = position.coords.latitude
+        let lng = position.coords.longitude
+        let geolocate = new google.maps.LatLng(lat, lng)
+        this.mapCenter = [lng, lat]
+        this.map.setCenter(geolocate)
       })
 
-      // 信息窗口
-      this.infoWindow = new AMap.InfoWindow({
-        offset: new AMap.Pixel(-10, -46)
+      icon1 = {
+        url: '/static/images/map/marker_normal.png',
+        labelOrigin: new google.maps.Point(17, 17)
+      }
+
+      icon2 = {
+        url: '/static/images/map/marker_active.png',
+        labelOrigin: new google.maps.Point(17, 17)
+      }
+
+      infoWindow = new google.maps.InfoWindow({
+        content: '123'
       })
 
-      // 工具条与比例尺
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.CitySearch', 'AMap.PlaceSearch', 'AMap.Geocoder'], () => {
-        var toolBar = new AMap.ToolBar()
-        var scale = new AMap.Scale()
+      this.geocoder = new google.maps.Geocoder()
 
-        this.citySearch = new AMap.CitySearch()
-        this.placeSearch = new AMap.PlaceSearch({
-          pageSize: 10,
-          pageIndex: 1,
-          city: this.$t('operation.product.devicemap.nationwide') // 城市
-        })
-        this.geocoder = new AMap.Geocoder({
-          radius: 1000,
-          extensions: 'all'
-        })
+      google.maps.event.addListener(this.map, 'bounds_changed', () => {
+        let bounds = this.map.getBounds()
+        if (!this.sizes) {
+          this.sizes = getBoundsSize(bounds)
+          this.getGeographies(true)
+          return
+        }
+        this.sizes = getBoundsSize(bounds)
+      })
 
-        this.map.addControl(toolBar)
-        this.map.addControl(scale)
+      google.maps.event.addListener(this.map, 'dragend', () => {
+        let center = this.map.getCenter()
+        this.mapCenter = [center.lng(), center.lat()]
+        this.getGeographies(true)
+      })
 
-        this.citySearch.getLocalCity()
-        AMap.event.addListener(this.citySearch, 'complete', (res) => {
-          if (res && res.city && res.bounds) {
-            var cityCenter = res.bounds.getCenter()
-            this.mapCenter = [cityCenter.lng, cityCenter.lat]
-          } else {
-            this.showNotice({
-              type: 'error',
-              content: this.$t('operation.product.devicemap.no_location')
-            })
-          }
-        })
-
-        AMap.event.addListener(this.placeSearch, 'complete', (res) => {
-          if (res && res.poiList && res.poiList.pois.length > 0) {
-            var poiArr = res.poiList.pois
-            var lng = poiArr[0].location.getLng()
-            var lat = poiArr[0].location.getLat()
-            this.mapCenter = [lng, lat]
-          } else {
-            this.showNotice({
-              type: 'error',
-              content: this.$t('operation.product.devicemap.no_area')
-            })
-          }
-        })
-
-        // 监听缩放事件
-        AMap.event.addListener(this.map, 'zoomchange', (res) => {
-          this.zoom = this.map.getZoom()
-        })
-
-        // 监听拖动事件
-        AMap.event.addListener(this.map, 'dragend', (res) => {
-          var center = this.map.getCenter()
-          this.mapCenter = [center.lng, center.lat]
-        })
+      google.maps.event.addListener(this.map, 'zoom_changed', () => {
+        this.getGeographies(true)
       })
     },
 
@@ -283,208 +310,199 @@ export default {
      * @return {[type]} [description]
      */
     getDevices () {
+      let idList = _.map(this.geographies, 'id')
+      // this.ids = _.map(res.data.devices, 'device_id')
       let condition = {
         filter: ['id', 'name', 'mac', 'is_online', 'last_login'],
         limit: this.countPerPage,
         query: {
           'id': {
-            $in: this.ids
+            $in: idList
           }
         }
       }
-      this.loadingDevices = true
-      api.device.getList(this.$route.params.id, condition).then((res) => {
-        this.devices = res.data.list
-        this.total = res.data.count
 
-        // 获取虚拟设备
-        api.product.getVDevices(this.$route.params.id, this.ids).then((r) => {
-          this.loadingData = false
-          this.loadingDevices = false
-          this.vDevices = r.data.list
-          this.setMarkers()
-        })
+      // 获取设备列表
+      this.loadingDevices = true
+      this.loadingVDevices = true
+      api.device.getList(this.$route.params.id, condition).then((res) => {
+        this.loadingDevices = false
+        this.devices = res.data.list
       })
+
+      // 获取相应的虚拟设备列表
+      api.product.getVDevices(this.$route.params.id, idList).then(this.setVDevices)
     },
 
     /**
-     * 获取某个设备的地理信息
-     * @param  {Number} deviceId 设备ID
+     * 生成地址
      */
-    getGeography (deviceId) {
-      this.loadingData = true
-      // api.device.getInfo(this.$route.params.id, deviceId).then((res) => {
-      //   console.log(res.data)
-      // })
-      api.device.getGeography(this.$route.params.id, deviceId).then((res) => {
-        if (res.status === 200) {
-          this.currIndex = 0
-          this.oldCurrIndex = 0
-          this.ids = [res.data.device_id]
-          this.points = [res.data]
-          this.mapCenter = [res.data.lon, res.data.lat]
-          this.map.setCenter(this.mapCenter)
-          this.getDevices()
+    genAddress (geography) {
+      let address = []
+      let properties = ['country', 'province', 'city', 'district']
+      let lang = Vue.config.lang
+
+      properties.forEach((prop) => {
+        if (geography.hasOwnProperty(prop) && geography[prop]) {
+          address.push(geography[prop])
         }
-      }).catch((res) => {
-        this.ids = []
-        this.devices = []
-        this.map.clearMap()
-        this.loadingData = false
-        this.handleError(res)
       })
+
+      if (lang === 'en-us') {
+        address = address.reverse().join(', ')
+      } else {
+        address = address.join(' ')
+      }
+
+      return address
     },
 
     /**
      * 获取区域设备地理信息
      */
-    getGeographies () {
-      this.loadingData = true
+    getGeographies (reset) {
+      // if (this.query.length && this.queryType.value !== 'region') return
+
+      if (reset) {
+        this.currentPage = 1
+      }
+      // this.drawRegion()
+      this.loadingText = this.$t('operation.product.devicemap.searching')
+      this.loadingGeographies = true
       api.device.getGeographies(this.$route.params.id, this.queryCondition).then((res) => {
-        if (res.data.count) {
-          this.ids = _.map(res.data.devices, 'device_id')
-          // console.log(res.data.devices)
-          res.data.devices.forEach((item, index) => {
-            this.geocoder.getAddress([item.lon, item.lat], (status, result) => {
-              let address = ''
-              if (status === 'complete' && result.info === 'OK') {
-                // console.log(result.regeocode)
-                address = result.regeocode.formattedAddress
-              }
-              this.geographies.push({
-                device_id: item.device_id,
-                lon: item.lon,
-                lat: item.lat,
-                address: address
-              })
-            })
-          })
-        } else {
-          this.ids = []
+        this.loadingGeographies = false
+
+        // 区域无设备时给出提示
+        if (!res.data.count) {
+          this.loadingVDevices = false
+          this.loadingDevices = false
+          this.total = 0
+          this.geographies = []
+          this.devices = []
+          this.vDevices = []
           this.infoMsg = this.$t('operation.product.devicemap.no_device')
+          return
         }
-        this.currIndex = 0
-        this.oldCurrIndex = 0
-        this.points = res.data.devices
+
         this.total = res.data.count
-        this.map.setCenter(this.mapCenter)
+        this.geographies = _.map(res.data.devices, (item) => {
+          let address = this.genAddress(item)
+
+          return {
+            id: item.device_id,
+            lon: item.lon,
+            lat: item.lat,
+            address: address
+          }
+        })
         this.getDevices()
       }).catch((res) => {
-        this.loadingData = false
+        this.loadingGeographies = false
       })
     },
 
     /**
-     * 设置点标记
+     * 设置虚拟设备列表
+     * @param {Object} res 服务器返回信息
      */
-    setMarkers () {
-      var markers = []
-      this.map.clearMap()
-
-      // 绘制搜索区域
-      // this.drawRegion()
-      // 点
-      _.clone(this.deviceList).forEach((device, index) => {
-        device.index = index
-        // point.device = this.deviceList[index]
-        var classes = ['map-marker']
-        if (index === this.currIndex) {
-          classes.push('map-marker-active')
+    setVDevices (res) {
+      this.loadingVDevices = false
+      this.vDevices = _.map(res.data.list, (item) => {
+        return {
+          id: item.device_id,
+          v_last_login: item.last_login,
+          online_count: item.online_count
         }
-        var marker = new AMap.Marker({
-          map: this.map,
-          position: [device.lon, device.lat],
-          icon: 'static/images/marker.png',
-          content: `<span class="${classes.join(' ')}">${index + 1}</span>`,
-          offset: {x: -15, y: -36}
-        })
-        marker.extData = device
-        marker.on('click', this.onMarkerClick)
-        marker.on('mouseover', this.onMarkerMouseOver)
-        marker.on('mouseout', this.onMarkerMouseOut)
-        if (index === this.currIndex) {
-          marker.setzIndex(1000)
-        }
-        markers.push(marker)
       })
-      this.markers = markers
-    },
-
-    /**
-     * 处理侧栏设备点击
-     * @param  {Number} index 设备索引
-     */
-    handleDeviceItemClick (index) {
-      var currMarker = this.markers[index]
-      this.currIndex = index
-      currMarker.emit('click', {target: currMarker})
-      // this.oldCurrIndex = index
-    },
-
-    /**
-     * 将目标点标识提升至顶部
-     * @param  {Number} index 目标标识索引
-     */
-    pullUp (index) {
-      this.currHover = index
-      var classes = ['map-marker']
-      if (index === this.currIndex) {
-        classes.push('map-marker-active')
-      }
-      classes.push('map-marker-hover')
-      this.markers[index].setContent(`<span class="${classes.join(' ')}">${index + 1}</span>`)
-      this.markers[index].setzIndex(10000)
-    },
-
-    /**
-     * 取消目标点标识提升至顶部
-     * @param  {Number} index 目标标识索引
-     */
-    pushDown (index) {
-      this.currHover = -1
-      var classes = ['map-marker']
-      if (index === this.currIndex) {
-        classes.push('map-marker-active')
-      }
-      this.markers[index].setContent(`<span class="${classes.join(' ')}">${index + 1}</span>`)
-      this.markers[index].setzIndex(index === this.currIndex ? 1000 : 100)
     },
 
     /**
      * 绘制搜索区域
-     * @return {[type]} [description]
      */
     drawRegion () {
-      var circle = new AMap.Circle({
-        center: new AMap.LngLat(this.mapCenter[0], this.mapCenter[1]), // 圆心位置
-        radius: this.map.getResolution() * this.map.getSize().height / 2, // 半径
-        strokeColor: '#F33', // 线颜色
-        strokeOpacity: 0, // 线透明度
-        strokeWeight: 0, // 线粗细度
-        fillColor: '#ee2200', // 填充颜色
-        fillOpacity: 0.2 // 填充透明度
+      let circle = new google.maps.Circle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35,
+        center: new google.maps.LatLng(this.mapCenter[1], this.mapCenter[0]),
+        radius: this.radius
       })
       circle.setMap(this.map)
     },
 
     /**
-     * 处理点标记点击
-     * @param  {Event} e 事件
+     * 设置地图标记
      */
-    onMarkerClick (e) {
-      var markerData = e.target.extData
-      var oldCurrMarker = this.markers[this.oldCurrIndex]
-      var currMarker = this.markers[markerData.index]
-      this.currIndex = markerData.index
+    setMarkers () {
+      if (this.loadingData) return
 
-      oldCurrMarker.setContent(`<span class="map-marker">${this.oldCurrIndex + 1}</span>`)
-      oldCurrMarker.setzIndex(100)
-      currMarker.setContent(`<span class="map-marker map-marker-active">${this.currIndex + 1}</span>`)
-      currMarker.setzIndex(1000)
+      this.clearMarkers()
+      this.deviceList.forEach((item, index) => {
+        let marker = new google.maps.Marker({
+          map: this.map,
+          position: {lat: item.lat, lng: item.lon},
+          icon: icon1,
+          label: {
+            text: `${index + 1}`,
+            color: 'white',
+            fontSize: '18px',
+            fontWeight: 'bold'
+          },
+          zIndex: index
+        })
 
-      this.showPopup(markerData)
-      this.infoWindow.open(this.map, e.target.getPosition())
-      this.oldCurrIndex = this.currIndex
+        marker.addListener('click', () => {
+          this.handleDeviceItemClick(index)
+        })
+
+        marker.addListener('mouseover', () => {
+          this.onDeviceHover(index)
+        })
+
+        marker.addListener('mouseout', () => {
+          this.onDeviceOut(index)
+        })
+
+        this.markers.push(marker)
+        this.activateMarker(this.markers[0], this.countPerPage)
+      })
+    },
+
+    /**
+     * 清除所有标记
+     */
+    clearMarkers () {
+      for (let i = 0, len = this.markers.length; i < len; i++) {
+        this.markers[i].setMap(null)
+      }
+      this.markers = []
+    },
+
+    /**
+     * 激活标记
+     */
+    activateMarker (marker, index) {
+      marker.setIcon(icon2)
+      marker.setZIndex(index)
+    },
+
+    /**
+     * 取消激活标记
+     */
+    deactivateMarker (marker, index) {
+      marker.setIcon(icon1)
+      marker.setZIndex(index)
+    },
+
+    /**
+     * 取消激活标记
+     */
+    deactivateAllMarkers () {
+      for (let i = 0, len = this.markers.length; i < len; i++) {
+        this.deactivateMarker(this.markers[i], i)
+      }
     },
 
     /**
@@ -503,96 +521,188 @@ export default {
     },
 
     /**
-     * 显示设备信息弹窗
-     * @param  {Object} data 设备数据信息
+     * 处理侧栏设备点击
+     * @param  {Number} index 设备索引
      */
-    showPopup (data) {
-      var content = ['<div class="map-popup">']
-      content.push('<div class="map-popup-header">')
-      content.push(`<h3>${data.name || this.currentProduct.name}</h3>`)
-      content.push('</div>')
-      content.push('<div class="map-popup-body">')
-      content.push(`<div class="info-row mt5 mb10">${data.is_online ? '<span class="on-line">在线</span>' : '<span class="off-line">下线</span>'} ${formatDate(data.last_login)}</div>`)
-      // content.push(`<div class="info-row"><span class="label">设备ID: </span>${data.device.id}</div>`)
-      content.push(`<div class="info-row"><span class="label">MAC: </span>${data.mac}</div>`)
-      content.push(`<div class="info-row"><span class="label">地址: </span>${data.address}</div>`)
-      content.push(`<div class="info-row"><span class="label">在线时长: </span>${this.prettyDuration(data.online_count)}</div>`)
-      content.push(`<div class="info-row tar"><a href="/#!/operation/products/${this.$route.params.id}/devices/${data.id}">${this.$t('operation.product.devicemap.detail')}&gt;&gt;</a></div>`)
-      content.push('</div>')
-      content.push('</div>')
-      this.infoWindow.setContent(content.join(''))
+    onDeviceClick (index) {
+      let currMarker = this.markers[index]
+      let device = this.deviceList[index]
+      let contentString = `
+      <div class="info-window-content">
+        <div class="info-window-content-header">
+          <h3>${device.name || this.currentProduct.name}</h3>
+        </div>
+        <div class="info-window-content-body">
+          <div class="info-row mt5 mb10">${device.is_online ? '<span class="on-line">在线</span>' : '<span class="off-line">下线</span>'} ${formatDate(device.last_login || device.v_last_login)}</div>
+          <div class="info-row"><span class="label">MAC: </span>${device.mac}</div>
+          <div class="info-row"><span class="label">地址: </span>${device.address}</div>
+          <div class="info-row"><span class="label">在线时长: </span>${this.prettyDuration(device.online_count)}</div>
+          <div class="info-row tar"><a href="/#!/operation/products/${this.$route.params.id}/devices/${device.id}" class="hl-red">查看详情&gt;&gt;</a></div>
+        </div>
+      </div>`
+
+      this.currIndex = index
+      this.deactivateAllMarkers()
+      this.activateMarker(currMarker, this.countPerPage)
+      infoWindow.setContent(contentString)
+      infoWindow.open(this.map, currMarker)
     },
 
     /**
-     * 处理点标识鼠标悬停
-     * @param  {Event} e 事件
+     * 处理鼠标滑过设备列表
+     * @param  {Number} index 目标标识索引
      */
-    onMarkerMouseOver (e) {
-      this.currHover = e.target.extData.index
+    onDeviceHover (index) {
+      if (index === this.currIndex) return
+      this.activateMarker(this.markers[index], this.countPerPage + 1)
+      this.hoverIndex = index
     },
 
     /**
-     * 处理点标识鼠标划出
-     * @param  {Event} e 事件
+     * 处理鼠标滑出设备列表
+     * @param  {Number} index 目标标识索引
      */
-    onMarkerMouseOut (e) {
-      this.currHover = -1
-    },
-
-    // 搜索
-    handleSearch () {
-      if (this.query.length !== 0) {
-        if (this.queryType.value === 'id') {
-          this.getGeography(Number(this.query))
-        } else if (this.queryType.value === 'mac') {
-          // 通过mac先获取对应设备信息
-          var params = {
-            filter: ['id'],
-            offset: 0,
-            limit: 10,
-            query: {
-              mac: {
-                $in: [this.query]
-              }
-            }
-          }
-          api.device.getList(this.$route.params.id, params).then((res) => {
-            // console.log(res.data)
-            if (res.data.list.length) {
-              var did = res.data.list[0].id
-              // console.log(did)
-              this.getGeography(Number(did))
-            } else {
-              this.devices = []
-              this.infoMsg = this.$t('operation.product.devicemap.no_device_find')
-              this.setMarkers()
-            }
-          }).catch((res) => {
-            this.handleError(res)
-          })
-        } else {
-          this.placeSearch.search(this.query)
-        }
-      } else {
-        if (this.queryType.value === 'id' && !this.searching) {
-          this.showNotice({
-            type: 'error',
-            content: this.$t('operation.product.devicemap.input_device_id')
-          })
-        } else {
-          this.citySearch.getLocalCity()
-        }
+    onDeviceOut (index) {
+      if (this.hoverIndex >= 0 && this.hoverIndex !== this.currIndex) {
+        this.deactivateMarker(this.markers[this.hoverIndex], this.hoverIndex)
       }
+      this.hoverIndex = -1
     },
 
-    // 切换搜索
+    /**
+     * 处理页码更新
+     */
+    onPageUpdate (page) {
+      this.currentPage = page
+      this.currIndex = 0
+      this.getGeographies()
+    },
+
+    /**
+     * 切换搜索
+     */
     toggleSearching () {
       this.searching = !this.searching
     },
 
-    // 取消搜索
-    cancelSearching () {
-      this.getGeography()
+    /**
+     * 取消搜索
+     */
+    onSearchCancel () {
+      this.getGeographies(true)
+    },
+
+    /**
+     * 搜索
+     */
+    handleSearch () {
+      if (!this.query.length) {
+        this.showError(this.$t('operation.product.devicemap.input_keyword'))
+        return
+      }
+
+      switch (this.queryType.value) {
+        case 'mac':
+          this.searchByMac()
+          break
+        case 'region':
+          this.searchByRegion()
+          break
+        default:
+          this.searchById()
+      }
+    },
+
+    /**
+     * 搜索指定区域
+     */
+    searchByRegion () {
+      this.geocoder.geocode({
+        address: this.query
+      }, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+          let center = results[0].geometry.location
+          this.mapCenter = [center.lng(), center.lat()]
+          this.map.setCenter(center)
+          this.map.setZoom(10)
+          this.getGeographies(true)
+        } else {
+          console.log(results)
+        }
+      })
+    },
+
+    /**
+     * 搜索指定deviceId
+     */
+    searchById () {
+      let opt = {
+        'id': {
+          $in: [this.query]
+        }
+      }
+      return this.searchBy(opt)
+    },
+
+    /**
+     * 搜索指定MAC
+     */
+    searchByMac () {
+      let opt = {
+        'mac': {
+          $like: this.query
+        }
+      }
+      return this.searchBy(opt)
+    },
+
+    /**
+     * 搜索指定MAC
+     */
+    searchBy (opt) {
+      let condition = {
+        filter: ['id', 'name', 'mac', 'is_online', 'last_login'],
+        limit: this.countPerPage,
+        query: opt
+      }
+
+      this.loadingText = this.$t('operation.product.devicemap.searching')
+      this.loadingDevices = true
+      api.device.getList(this.$route.params.id, condition).then((res) => {
+        this.loadingDevices = false
+        let list = res.data.list
+
+        // 未搜索到设备
+        if (!list.length) {
+          this.infoMsg = this.$t('operation.product.devicemap.no_device_find')
+          this.geographies = []
+          this.devices = []
+          this.vDevices = []
+          return
+        }
+
+        this.devices = list
+        this.total = res.data.count
+        let deviceId = list[0].id
+
+        // 获取相应的虚拟设备列表
+        this.loadingVDevices = true
+        api.product.getVDevices(this.$route.params.id, [deviceId]).then(this.setVDevices)
+
+        // 获取相应的地理位置信息
+        this.loadingGeographies = true
+        api.device.getGeography(this.$route.params.id, deviceId).then((res) => {
+          this.loadingGeographies = false
+          let address = this.genAddress(res.data)
+          this.geographies = [{
+            id: res.data.device_id,
+            lon: res.data.lon,
+            lat: res.data.lat,
+            address: address
+          }]
+          this.map.setCenter(new google.maps.LatLng(res.data.lat, res.data.lon))
+        })
+      })
     }
   }
 }
@@ -699,64 +809,43 @@ export default {
     &.map-marker-hover
       z-index 10000
 
-.amap-info
-  a
-    color #FFF
+.info-window-content
+  min-width 260px
+  max-width 360px
+  .info-window-content-header
+    h3
+      margin 0
+      padding 15px 0 10px 15px
+      font-size 16px
 
-.amap-info-content
-  padding 0
-  background rgba(0, 0, 0, .75)
-  box-shadow none
-  color #FFF
+  .info-window-content-body
+    padding-left 10px
+    font-size 12px
 
-  &:hover
-    box-shadow none
+    .info-row
+      line-height 20px
 
-  .map-popup
-    .map-popup-header
-      h3
-        margin 0
-        padding 15px 0 10px 15px
-        font-size 14px
+    .on-line
+    .off-line
+      position relative
+      padding-left 12px
 
-    .map-popup-body
-      padding 0 15px 15px
-      font-size 12px
+      &:before
+        absolute left top 3px
+        content ''
+        size 8px
+        border-radius 10px
+        background-color #C3C3C3
 
-      .info-row
-        line-height 20px
+    .off-line
+      &:before
+        background-color #C3C3C3
 
-      .on-line
-      .off-line
-        position relative
-        padding-left 12px
+    .on-line
+      color green
+      &:before
+        background-color green
 
-        &:before
-          absolute left top 3px
-          content ''
-          size 8px
-          border-radius 10px
-          background-color #C3C3C3
-
-      .off-line
-        &:before
-          background-color #C3C3C3
-
-      .on-line
-        color green
-        &:before
-          background-color green
-
-.amap-info-sharp
-  display none !important
-
-.amap-logo
-  right 0 !important
-  left auto !important
-  display none
-
-.amap-copyright
-  right 70px !important
-  left auto !important
-  display none
+.device-loading
+  absolute top 110px right bottom left
 </style>

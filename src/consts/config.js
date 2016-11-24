@@ -83,6 +83,9 @@ export const BMAP_KEY = 'iqGzDSunIlUeEK1H8rkRfptH'
 // 高德地图 key
 export const AMAP_KEY = '5f21a013829b628d05551513d352f3f7'
 
+// Google地图 key
+export const GOOGLE_MAP_KEY = 'AIzaSyBPrXR9UjxbviJchght_axnkJxn_BBexvg'
+
 // 允许上传的最大固件文件大小（单位：Mb）
 export const MAX_FIRMWARE_FILE_SIZE = 8
 

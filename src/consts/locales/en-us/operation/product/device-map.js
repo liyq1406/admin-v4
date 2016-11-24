@@ -16,5 +16,7 @@ export default {
   no_device: 'No device found in current region.',
   detail: 'View Detail',
   no_device_find: 'The device not found.',
-  input_device_id: 'Please input device ID'
+  input_keyword: 'Please input keyword',
+  targeting: 'Targeting your city...',
+  searching: 'Searching devices...'
 }
