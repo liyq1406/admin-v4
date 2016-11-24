@@ -27,6 +27,7 @@
               <th>字段名</th>
               <th class="tac">字段类别</th>
               <th class="tac">字段类型</th>
+              <th class="tac">参数</th>
               <th class="tac">操作</th>
             </tr>
           </thead>
@@ -46,12 +47,15 @@
                   <span>{{dataType(field.value_type)}}</span>
                 </td>
                 <td class="tac">
+                  <span>{{ field.category === 'base_fields' ? '无' : (field.default_value) }}</span>
+                </td>
+                <td class="tac">
                   <a class="hl-red" @click="onEdit(field, $index)">编辑</a>
                 </td>
               </tr>
             </template>
             <tr v-if="fields.length === 0 && !loadingData">
-              <td colspan="5" class="tac">
+              <td colspan="6" class="tac">
                 <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
               </td>
             </tr>
@@ -106,15 +110,15 @@
               </div>
             </div>
 
-            <!-- 默认值 -->
+            <!-- 参数 -->
             <div class="form-row row" v-if="canEdit">
-              <label class="form-control col-6">默认值:</label>
+              <label class="form-control col-6">参数:</label>
               <div class="controls col-18">
-                <div v-placeholder="'请输入默认值'" class="input-text-wrap">
+                <div v-placeholder="'请输入参数'" class="input-text-wrap">
                   <input v-model="modal.default_value" type="text" name="modal.default_value" v-validate:default="{required: true}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.default.touched && $validation.default.required">请输入默认值</span>
+                  <span v-if="$validation.default.touched && $validation.default.required">请输入参数</span>
                 </div>
               </div>
             </div>
@@ -174,7 +178,7 @@
             'hidden': false,
             'sort': 3,
             'value_type': 2,
-            'default_value': 0
+            'default_value': ''
           },
           {
             'name': 'link_type',
@@ -182,7 +186,7 @@
             'hidden': false,
             'sort': 4,
             'value_type': 2,
-            'default_value': 0
+            'default_value': ''
           },
           {
             'name': 'description',
@@ -221,7 +225,10 @@
       // 字段列表
       fields () {
         var result = []
-        var baseFields = this.productFields.base_fields || this.base_fields
+        var baseFields = this.base_fields
+        if (this.productFields.base_fields && this.productFields.base_fields.length) {
+          baseFields = this.productFields.base_fields
+        }
         baseFields.forEach((item, index) => {
           var field = _.clone(item)
           field.category = this.baseFieldKeys.indexOf(item.name) >= 0 ? 'base_fields' : 'custom_fields'
@@ -268,6 +275,8 @@
       data () {
         this.initData()
       }
+    },
+    ready () {
     },
     methods: {
       // 测试函数 用于清空服务器上的数据
@@ -350,7 +359,7 @@
             'hidden': item.hidden,
             'sort': index + 1,
             'value_type': item.value_type,
-            'default_value': item.default_value || ''
+            'default_value': item.default_value
           }
           params.base_fields.push(field)
         })
