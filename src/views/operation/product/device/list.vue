@@ -59,7 +59,7 @@
               <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-device-active-date="sortBy" @theader-online-is-online="sortBy" @tbody-device-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-device--active-date="sortBy" @theader--online-is-online="sortBy" @tbody-device--mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
 
           <!-- {{snapshotShuffle | json}} -->
       </div>
@@ -455,22 +455,28 @@ export default {
 
     filter () {
       var result = {}
+      var hasSnapshotShuffle = false
       this.fieldKeys.forEach((item) => {
         var field = item.split('--')
+        if (field[0] === 'snapshot_shuffle') {
+          hasSnapshotShuffle = true
+        }
         result[field[0]] = result[field[0]] || []
         result[field[0]].push(field[1])
       })
-      result.snapshot_shuffle = [
-        'statistic_rule_id',
-        'index',
-        'fineness',
-        'date_start',
-        'date_end',
-        'sum',
-        'max',
-        'min',
-        'avg'
-      ]
+      if (hasSnapshotShuffle) {
+        result.snapshot_shuffle = [
+          'statistic_rule_id',
+          'index',
+          'fineness',
+          'date_start',
+          'date_end',
+          'sum',
+          'max',
+          'min',
+          'avg'
+        ]
+      }
       return result
     },
 
@@ -760,7 +766,8 @@ export default {
      * @return {[type]}       [description]
      */
     linkToDetails (table) {
-      this.$route.router.go(`${this.$route.path}/${table.prototype.id}`)
+      console.log(table.prototype)
+      this.$route.router.go(`${this.$route.path}/${table.prototype['device--id']}`)
     },
 
     // 获取设备列表
