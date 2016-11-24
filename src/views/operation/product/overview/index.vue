@@ -36,7 +36,9 @@
     <product-active v-if="isShowActive"></product-active>
     <!-- <product-distribution v-if="isShowDistribution"></product-distribution> -->
     <product-world-distribution v-if="isShowDistribution"></product-world-distribution>
-    <product-custom></product-custom>
+    <template v-for="row in customCharts">
+      <product-custom v-if="row.enable" :title="row.title" :data-source="row.dataSources"></product-custom>
+    </template>
   </div>
 </template>
 
@@ -78,6 +80,7 @@ export default {
 
   data () {
     return {
+      customCharts: [],
       configLoaded: false,
       quatas: {},
       dpQuatasValues: {
@@ -271,6 +274,11 @@ export default {
         if (this.quatas[i].dataFrom === customConfig.DATAFROM.datapoint) {
           this.getStatictisValue(this.quatas[i].datapoint, i)
         }
+      }
+      if (config.custom_chart && config.custom_chart.length) {
+        this.customCharts = config.custom_chart
+      } else {
+        this.customCharts = []
       }
     },
     getStatictisValue (datapoint, i) {

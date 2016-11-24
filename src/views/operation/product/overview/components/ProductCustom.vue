@@ -1,17 +1,17 @@
 <template>
   <div class="panel mt20 mb20">
     <div class="panel-hd panel-hd-full bordered">
-      <h2>自定义分析</h2>
+      <h2>{{ title }}</h2>
     </div>
     <div class="row">
-      <div class="col-8">
-        <chart :options="modelOptions1"></chart>
+      <div :class="[firstcol]">
+        <chart :options="fisrtModelOptions"></chart>
       </div>
-      <div class="col-8">
-        <chart :options="modelOptions2"></chart>
+      <div v-if="secondConfig.id" :class="[secondcol]">
+        <chart :options="secondModelOptions"></chart>
       </div>
-      <div class="col-8">
-        <chart :options="modelOptions3"></chart>
+      <div v-if="thirdConfig.id" :class="[thirdcol]">
+        <chart :options="thirdModelOptions"></chart>
       </div>
     </div>
   </div>
@@ -19,6 +19,8 @@
 
 <script>
 import Chart from 'components/Chart/index'
+import echartOptions from './echart-options'
+import api from 'api'
 
 export default {
   name: 'ProductModel',
@@ -26,166 +28,130 @@ export default {
     Chart
   },
 
-  vuex: {
-    getters: {
-      releasedProducts: ({ products }) => products.released
+  props: {
+    title: {
+      type: String,
+      default: '自定义图表'
+    },
+    /**
+     * dataSource 格式如下
+     * [{
+     *   index: 1,
+     *   id: ''
+     * }..]
+     */
+    dataSource: {
+      type: Array,
+      default () {
+        return []
+      }
     }
   },
 
   data () {
     return {
-      active: { // 激活设备数据
-        series: [],
-        xAxis: []
-      },
-      activated: 0,
-      total: 0,
-      chartData1: [],
-      chartData2: [],
-      chartData3: [],
       inited: false,
-      noNameCount: 0
+      noNameCount: 0,
+      dataSourceList: [],
+      firstConfig: {},
+      secondConfig: {},
+      thirdConfig: {}
     }
   },
 
   computed: {
-    modelOptions1 () {
-      return {
-        title: {
-          text: '各型号出货量占比',
-          x: 'center'
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-          data: _.map(this.chartData1, 'name'),
-          left: 'left',
-          orient: 'vertical'
-        },
-        series: [{
-          name: this.$t('common.count'),
-          type: 'pie',
-          radius: '55%',
-          center: ['50%', '60%'],
-          data: this.chartData1,
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }]
+    firstcol () {
+      if (this.firstConfig.chart === 1) {
+        return 'col-8'
       }
+      if (this.firstConfig.chart > 1 && !this.secondConfig.chart) {
+        return 'col-24'
+      }
+      if (this.firstConfig.chart > 1 && this.secondConfig.chart > 1) {
+        return 'col-12'
+      }
+      if (this.firstConfig.chart > 1 && this.secondConfig.chart === 1) {
+        return 'col-16'
+      }
+      return 'col-8'
     },
-    modelOptions2 () {
-      return {
-        title: {
-          text: 'PV功率占比',
-          x: 'center'
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-          data: _.map(this.chartData2, 'name'),
-          left: 'left',
-          orient: 'vertical'
-        },
-        series: [{
-          name: this.$t('common.count'),
-          type: 'pie',
-          radius: '55%',
-          center: ['50%', '60%'],
-          data: this.chartData2,
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }]
+    secondcol () {
+      if (this.firstConfig.chart === 1 && this.secondConfig.chart === 1) {
+        return 'col-8'
       }
+      if (this.firstConfig.chart === 1 && this.secondConfig.chart > 1) {
+        return 'col-16'
+      }
+      if (this.firstConfig.chart > 1 && this.secondConfig.chart === 1) {
+        return 'col-8'
+      }
+      if (this.firstConfig.chart > 1 && this.secondConfig.chart > 1) {
+        return 'col-12'
+      }
+      return 'col-8'
     },
-    modelOptions3 () {
-      return {
-        title: {
-          text: '设备年均发电量分布',
-          x: 'center'
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-          data: _.map(this.chartData3, 'name'),
-          left: 'left',
-          orient: 'vertical'
-        },
-        series: [{
-          name: this.$t('common.count'),
-          type: 'pie',
-          radius: '55%',
-          center: ['50%', '60%'],
-          data: this.chartData3,
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }]
+    thirdcol () {
+      if (this.firstConfig.chart === 1 && this.secondConfig.chart === 1) {
+        return 'col-8'
       }
+      return ''
+    },
+    fisrtModelOptions () {
+      return echartOptions.pie
+    },
+    secondModelOptions () {
+      return echartOptions.pie
+    },
+    thirdModelOptions () {
+      return echartOptions.pie
     }
   },
 
   watch: {
-    // 因为使用了 Vuex 中的产品列表，这里需要监听产品列表的
-    // 变化去触发初始化
-    releasedProducts () {
-      this.init()
+    dataSource () {
+      this.searchDataSourceConfig()
     }
   },
 
   ready () {
-    this.init()
+    this.searchDataSourceConfig()
+    this.getDataSourceList()
   },
 
   methods: {
-    init () {
-      // 假数据
-      this.chartData1 = [{
-        name: '7.7kwh',
-        value: 15000
-      }, {
-        name: '15.4kWh',
-        value: 4000
-      }]
-      this.chartData2 = [{
-        name: '<4kw',
-        value: 4000
-      }, {
-        name: '4~6kw',
-        value: 7000
-      }, {
-        name: '>6kw',
-        value: 5000
-      }]
-      this.chartData3 = [{
-        name: '<200kwh',
-        value: 1990
-      }, {
-        name: '200~500kwh',
-        value: 5880
-      }, {
-        name: '>500kwh',
-        value: 10000
-      }]
+    searchDataSourceConfig () {
+      if (!this.dataSource || !this.dataSource.length || !this.dataSourceList.length) {
+        return
+      }
+      this.dataSource.forEach((item) => {
+        let finded = _.find(this.dataSourceList, (ds) => {
+          return ds.id === item.id
+        })
+        if (finded) {
+          if (item.index === 1) {
+            this.firstConfig = finded
+          }
+          if (item.index === 2) {
+            this.secondConfig = finded
+          }
+          if (item.index === 3) {
+            this.thirdConfig = finded
+            this.getStatictisValue(finded)
+          }
+        }
+      })
+    },
+    getDataSourceList () {
+      api.custom.dataSource.get().then((res) => {
+        if (res) {
+          this.dataSourceList = res
+          this.searchDataSourceConfig()
+        } else {
+          this.dataSourceList = []
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
     }
   }
 }
