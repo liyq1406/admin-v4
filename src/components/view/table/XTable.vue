@@ -346,7 +346,7 @@
   }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 @import '../../../assets/stylus/common'
 
   .intelligent-table-box
@@ -360,7 +360,7 @@
     .pointer
       cursor pointer
     .theader
-      min-width 80px
+      /*min-width 80px*/
     .theader-box
       position relative
       width 100%
