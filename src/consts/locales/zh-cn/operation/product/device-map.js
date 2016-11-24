@@ -16,5 +16,7 @@ export default {
   no_device: '当前区域未找到设备',
   detail: '查看详情',
   no_device_find: '未找到该设备',
-  input_device_id: '请输入设备ID'
+  input_keyword: '请输入搜索参数',
+  targeting: '正在定位您所在的城市...',
+  searching: '正在搜索设备...'
 }

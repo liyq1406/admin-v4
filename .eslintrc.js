@@ -11,6 +11,7 @@ module.exports = {
     'io': true,
     'alert': true,
     'AMap': true,
+    'google': true,
     'describe': true,
     'before': true,
     'beforeEach': true,
