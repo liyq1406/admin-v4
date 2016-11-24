@@ -157,10 +157,18 @@
         // 默认字段
         base_fields: [
           {
-            'name': 'name',
-            'label': '产品名称',
+            'name': 'id',
+            'label': '产品ID',
             'hidden': false,
             'sort': 1,
+            'value_type': 1,
+            'default_value': ''
+          },
+          {
+            'name': 'name',
+            'label': '产品名称',
+            'hidden': true,
+            'sort': 2,
             'value_type': 1,
             'default_value': ''
           },
@@ -168,7 +176,7 @@
             'name': 'mode',
             'label': '产品型号',
             'hidden': false,
-            'sort': 2,
+            'sort': 3,
             'value_type': 1,
             'default_value': ''
           },
@@ -176,7 +184,7 @@
             'name': 'type',
             'label': '产品类型',
             'hidden': false,
-            'sort': 3,
+            'sort': 4,
             'value_type': 2,
             'default_value': ''
           },
@@ -184,7 +192,7 @@
             'name': 'link_type',
             'label': '连接类型',
             'hidden': false,
-            'sort': 4,
+            'sort': 5,
             'value_type': 2,
             'default_value': ''
           },
@@ -192,7 +200,7 @@
             'name': 'description',
             'label': '产品描述',
             'hidden': false,
-            'sort': 5,
+            'sort': 6,
             'value_type': 1,
             'default_value': ''
           }
@@ -277,6 +285,7 @@
       }
     },
     ready () {
+      // this.test()
     },
     methods: {
       // 测试函数 用于清空服务器上的数据

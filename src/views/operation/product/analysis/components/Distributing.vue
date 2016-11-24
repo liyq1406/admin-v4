@@ -1,40 +1,18 @@
 <template>
   <div class="panel">
-    <div class="panel-hd bordered panel-hd-full">
+    <div class="panel-hd panel-hd-full bordered">
       <h2>{{ $t('operation.product.analysis.hot.title') }}</h2>
     </div>
     <div class="panel-bd">
       <div class="row">
-        <div class="col-11">
-          <chart :options="regionOptions" :loading="loadingData" type="china-map" height="450px"></chart>
+        <div class="col-13 tac" v-if="showWorld">
+          <chart :options="worldDistributeOptions" @world-map-select="worldMapSelect" :loading="loadingData" height="450px" type="world-map"></chart>
         </div>
-        <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
-          <!-- <div class="data-table">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>地域</th>
-                  <th>设备数量</th>
-                  <th>占比</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="data in dataPer">
-                  <template v-if="data.value">
-                    <td>{{data.name}}</td>
-                    <td>{{data.value}}</td>
-                    <td>{{data.percent | toPercentage}}</td>
-                  </template>
-                </tr>
-                <tr v-if="dataPer.length === 0">
-                  <td colspan="6" class="tac">
-                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div> -->
-          <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
+        <div class="col-13 tac" v-if="!showWorld">
+          <chart :options="distributeOptions" :loading="loadingData" height="450px" type="china-map"></chart>
+        </div>
+        <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
+          <percent-table :headers="columns" :tables="distributeData" @theader-percent="sort"></percent-table>
         </div>
       </div>
     </div>
@@ -42,41 +20,46 @@
 </template>
 
 <script>
-import api from 'api'
 import Chart from 'components/Chart/index'
-import convertData from 'components/chart/convert-data'
 import {numToPercent} from 'utils'
-export default {
-  name: 'Distributing',
+import { toPercentage } from 'filters/format-date'
+import PROVINCE_MAP from 'consts/mapping/provinces'
+import api from 'api'
 
-  // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
+export default {
+  name: 'ProductDistribution',
+  components: {
+    // ChinaMap,
+    Chart
+  },
+
   vuex: {
     getters: {
       currentProduct: ({ products }) => products.curr
     }
   },
 
-  components: {
-    Chart
-  },
-
   data () {
     return {
-      dataPer: [],
-      regionData: [],
+      showWorld: true,
       loadingData: false,
-      headers: [
+      data: [],
+      worldData: [],
+      chinaDataPer: [],
+      worldDataPer: [],
+      // provinces: [],
+      columns: [
         {
           key: 'region',
-          title: this.$t('operation.product.analysis.hot.region')
+          title: this.$t('operation.product.overview.distribution.region')
         },
         {
           key: 'count',
-          title: this.$t('operation.product.analysis.hot.device_count')
+          title: this.$t('operation.product.overview.distribution.device_count')
         },
         {
           key: 'percent',
-          title: this.$t('operation.product.analysis.hot.percent'),
+          title: this.$t('operation.product.overview.distribution.percent'),
           sortType: -1
         }
       ]
@@ -84,88 +67,15 @@ export default {
   },
 
   computed: {
-    // 区域地图配置
-    regionOptions () {
-      return {
-        tooltip: {
-          trigger: 'item',
-          formatter (params) {
-            return params.name + ' : ' + params.value[2]
-          }
-        },
-        visualMap: {
-          min: 0,
-          max: this.max,
-          calculable: true,
-          inRange: {
-            color: ['#50a3ba', '#eac736', '#d94e5d']
-          },
-          textStyle: {
-            color: '#fff'
-          }
-        },
-        geo: {
-          map: 'china',
-          label: {
-            emphasis: {
-              show: false
-            }
-          },
-          itemStyle: {
-            normal: {
-              areaColor: '#FFF',
-              borderColor: '#666'
-            },
-            emphasis: {
-              areaColor: '#EEE'
-            }
-          }
-        },
-        series: [{
-          name: this.$t('operation.product.analysis.hot.device_count'),
-          type: 'scatter',
-          coordinateSystem: 'geo',
-          data: convertData(this.regionData),
-          symbolSize: 12,
-          label: {
-            normal: {
-              show: false
-            },
-            emphasis: {
-              show: false
-            }
-          },
-          itemStyle: {
-            emphasis: {
-              borderColor: '#fff',
-              borderWidth: 1
-            }
-          }
-        }]
-      }
-    },
-
-    // 最大值
-    max () {
-      let ret = 0
-      if (this.regionData.length) {
-        ret = _.max(_.map(this.regionData, 'value'))
-      }
-      return ret
-    },
-
-    // 分页信息
-    page () {
-      return {
-        total: this.total,
-        currentPage: this.currentPage,
-        countPerPage: this.countPerPage
-      }
-    },
-    tables () {
+    distributeData () {
       var result = []
-      this.dataPer.forEach((item) => {
-        if (!item.value) return
+      let dataPer
+      if (this.showWorld) {
+        dataPer = this.worldDataPer
+      } else {
+        dataPer = this.chinaDataPer
+      }
+      dataPer.map((item) => {
         var distribute = {
           region: item.name,
           count: item.value,
@@ -175,86 +85,265 @@ export default {
         result.push(distribute)
       })
       return result
+    },
+
+    worldDistributeOptions () {
+      return {
+        title: {
+          // text: '',
+          left: 'center',
+          top: 'top'
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: function (obj) {
+            let data = obj.data
+            let valStr = '-'
+            if (data && 'value' in data) {
+              let percentage = Math.round(data.percent * Math.pow(10, 4)) / Math.pow(10, 2)
+              valStr = `${data.value} (${percentage}%)`
+            }
+            return `${obj.seriesName} <br/>${data.name} : ${valStr}`
+          }
+        },
+        toolbox: {
+          show: true,
+          orient: 'vertical',
+          left: 'right',
+          top: 'center',
+          feature: {
+            // dataView: {readOnly: false},
+            // restore: {},
+            // saveAsImage: {}
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: this.max,
+          text: ['High', 'Low'],
+          realtime: false,
+          calculable: true,
+          inRange: {
+            color: ['lightskyblue', 'yellow', 'orangered']
+          }
+        },
+        series: [
+          {
+            name: '设备数量',
+            type: 'map',
+            mapType: 'world',
+            roam: true,
+            itemStyle: {
+              emphasis: {label: {show: true}}
+            },
+            data: this.worldData
+          }
+        ]
+      }
+    },
+
+    distributeOptions () {
+      let res = {
+        tooltip: {
+          trigger: 'item',
+          formatter (obj) {
+            let data = obj.data
+            let valStr = '-'
+            if (data && 'value' in data) {
+              let percentage = Math.round(data.percent * Math.pow(10, 4)) / Math.pow(10, 2)
+              valStr = `${data.value} (${percentage}%)`
+            }
+            return `${obj.seriesName} <br/>${data.name} : ${valStr}`
+          }
+        },
+        toolbox: {
+          show: true,
+          orient: 'vertical',
+          right: '30',
+          top: '30',
+          feature: {
+            myTool1: {
+              show: true,
+              title: '返回上一级',
+              icon: 'image:///static/images/left-arrow.png',
+              onclick: function () {}
+            }
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: this.max,
+          left: 10,
+          bottom: 20,
+          text: ['高', '低'],
+          calculable: true
+        },
+        series: [{
+          name: '设备数量',
+          type: 'map',
+          mapType: 'china',
+          roam: false,
+          label: {
+            normal: {
+              show: true
+            },
+            emphasis: {
+              show: true
+            }
+          },
+          itemStyle: {
+            normal: {
+              areaColor: '#FFF',
+              borderColor: '#666'
+            }
+          },
+          data: this.data
+        }]
+      }
+      res.toolbox.feature.myTool1.onclick = () => {
+        this.showWorld = true
+      }
+      return res
+    },
+
+    max () {
+      let ret = 0
+      if (this.data.length) {
+        ret = _.max(_.map(this.data, 'value'))
+      }
+      return ret
     }
   },
 
   watch: {
     currentProduct () {
       if (this.currentProduct.id) {
-        this.getRegion(this.currentProduct.id)
+        this.getProductsDistribution()
       }
     }
   },
 
-  route: {
-    data () {
-    }
-  },
-
   ready () {
-    if (this.currentProduct.id) {
-      this.getRegion(this.currentProduct.id)
-    }
+    this.getProductsDistribution()
+    // this.getProvinces()
   },
 
   methods: {
+    toPercentage,
+
+    /**
+     * 排序
+     */
     sort (header) {
-      this.headers.forEach((item) => {
+      this.columns.forEach((item) => {
         if (item.key === 'percent') {
           item.sortType = header.sortType * -1
         }
       })
     },
-    getRegion (pruductId) {
+
+    // getProvinces () {
+    //   this.$http.get('/static/data/map/china.json').then((res) => {
+    //     this.provinces = _.map(res.data.features, (item) => {
+    //       return item.properties.name
+    //     })
+    //   })
+    // },
+    worldMapSelect (name) {
+      if (name === 'China') {
+        this.showWorld = false
+      }
+    },
+
+    getProductsDistribution () {
+      var prodRegions = []
       this.loadingData = true
-      api.statistics.getProductRegion(pruductId).then((res) => {
-        if (res.status === 200) {
-          var CNData = res.data['中国']
-          var resData = []
-          var regions = []
-          for (let i in CNData) {
-            if (i !== 'activated' && i !== 'online') {
-              regions.push({
-                name: i,
-                value: CNData[i].activated
-              })
-              for (let j in CNData[i]) {
-                if (j !== 'activated' && j !== 'online') {
-                  let temp = {
-                    name: j,
-                    value: CNData[i][j].activated || 0
-                  }
-                  resData.push(temp)
-                }
-              }
-            }
-          }
-          this.sortRegion(regions)
-          this.regionData = resData
-          this.loadingData = false
-        }
+      api.statistics.getProductRegion(this.$route.params.id).then((res) => {
+        // 英文索引数据
+        // 去掉'activated'和'online'，使之只包含省份数据
+        let enData = _.omit(res.data['China'], ['activated', 'online'])
+
+        // 中文索引数据
+        // 去掉'activated'和'online'，使之只包含省份数据
+        let cnData = _.omit(res.data['中国'], ['activated', 'online'])
+
+        let cn2Data = _.omit(res.data['china'], ['activated', 'online'])
+
+        prodRegions.push(enData)
+        prodRegions.push(cnData)
+        prodRegions.push(cn2Data)
+        this.combineData(prodRegions)
+        this.loadingData = false
+        this.genWorldData(res.data)
       }).catch((res) => {
         this.handleError(res)
         this.loadingData = false
       })
     },
-    sortRegion (regions) {
-      // 由大到小排序
-      regions.sort((a, b) => {
-        if (a.value > b.value) {
-          return -1
-        } else if (a.value < b.value) {
-          return 1
-        } else {
-          return 0
+    genWorldData (data, chinaData) {
+      let res = []
+      for (let i in data) {
+        if (i !== 'china' && i !== 'unknown' && i !== '中国' && i !== 'China') {
+          res.push({
+            name: i,
+            value: data[i].activated
+          })
+        }
+      }
+      res.push({
+        name: 'China',
+        value: data['China'].activated + data['china'].activated + data['中国'].activated
+      })
+      res = numToPercent(res, 'value')
+      let worldDataPer = _.clone(res)
+      worldDataPer.sort((a, b) => {
+        return a.value - b.value
+      })
+      this.worldDataPer = worldDataPer.slice(0, 10)
+      this.worldData = res
+    },
+    combineData (data) {
+      let regions = {}
+      data.forEach((item) => {
+        for (var i in item) {
+          let key = i
+          if (PROVINCE_MAP.hasOwnProperty(i)) {
+            key = PROVINCE_MAP[i]
+          }
+
+          if (typeof regions[key] !== 'undefined') {
+            regions[key] += item[i].activated
+          } else {
+            regions[key] = item[i].activated
+          }
         }
       })
-
-      if (regions.length > 10) {
-        this.dataPer = numToPercent(regions.slice(0, 10), 'value')
-      } else {
-        this.dataPer = numToPercent(regions, 'value')
+      this.fillMapData(regions)
+    },
+    fillMapData (regions) {
+      var mapDataArr = []
+      for (let i in regions) {
+        if (regions[i] !== 0) {
+          mapDataArr.push({
+            name: i,
+            value: regions[i]
+          })
+        }
       }
+
+      // 由大到小排序
+      mapDataArr.sort((a, b) => {
+        return a.value - b.value
+      })
+
+      if (mapDataArr.length > 10) {
+        this.chinaDataPer = numToPercent(mapDataArr.slice(0, 10), 'value')
+      } else {
+        this.chinaDataPer = numToPercent(mapDataArr, 'value')
+      }
+
+      mapDataArr = numToPercent(mapDataArr, 'value')
+      this.data = mapDataArr
     }
   }
 }
