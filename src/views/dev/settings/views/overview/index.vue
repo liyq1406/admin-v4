@@ -446,9 +446,9 @@ export default {
         return
       }
       this.customCharts.forEach((item) => {
-        if (item.data_source.fisrt.id) {
-          item.data_source.fisrt = _.find(this.dataSourceDefaultOptions, (ds) => {
-            return ds.id === item.data_source.fisrt.id
+        if (item.data_source.first.id) {
+          item.data_source.first = _.find(this.dataSourceDefaultOptions, (ds) => {
+            return ds.id === item.data_source.first.id
           })
         }
         if (item.data_source.second.id) {
