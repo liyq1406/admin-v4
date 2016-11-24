@@ -206,7 +206,7 @@ export default {
       }],
       model: {
         is_enable: false,
-        domain: '',
+        domain: 'http://test.admin.xlink.cn/#!/dealer/' + this.corp.id + '/' + this.$route.params.dealer_id,
         login_context: '',
         logo_url: ''
       },
@@ -319,7 +319,7 @@ export default {
       api.dealer.getConfig(this.$route.params.dealer_id, this.corp.id).then((res) => {
         console.log(res)
         this.model = res.data
-        this.model.domain = res.data.domain || 'www.baidu.com'
+        this.model.domain = 'http://test.admin.xlink.cn/#!/dealer/' + this.corp.id + '/' + this.$route.params.dealer_id
         if (this.model.logo_url) {
           this.images[0] = this.model.logo_url
         }

@@ -67,6 +67,21 @@ export default {
       return window.localStorage.getItem(`${this.corp.id}hideAlertMask`)
     },
 
+    // 判断经销商授权产品
+    dealerProducts () {
+      var result = []
+      this.configInfo.product.forEach((item) => {
+        if (item.is_visible) {
+          this.releasedProducts.forEach((product) => {
+            if (product.id === item.product_id) {
+              result.push(product)
+            }
+          })
+        }
+      })
+      return result
+    },
+
     // 经销商侧栏导航
     dealerSecNav () {
       let result = {
@@ -83,20 +98,25 @@ export default {
       })
 
       // 产品导航
-      // const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
+      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
       var openArr = []
       var hashMap = {
-        'summary': 'overview',
-        'device_list': 'devices',
-        'alert': 'alerts',
-        'device_map': 'device-map',
-        'analyse': 'analysis'
+        'overview': 'summary',
+        'devices': 'device_list',
+        'alerts': 'alert',
+        'device-map': 'device_map',
+        'analysis': 'analyse'
       }
-      this.configInfo.module.forEach((mode) => {
-        if (mode.is_visible) {
-          openArr.push(hashMap[mode.type])
-        }
+      PRO_SUBS.forEach((type) => {
+        this.configInfo.module.forEach((mode) => {
+          if (mode.is_visible) {
+            if (hashMap[type] === mode.type) {
+              openArr.push(type)
+            }
+          }
+        })
       })
+      console.log(openArr)
       // this.configInfo.module.forEach((mode) => {
       //   if (mode.type === 'summary' && mode.is_visible) {
       //     openArr.push('overview')
@@ -110,7 +130,7 @@ export default {
       //     openArr.push('analysis')
       //   }
       // })
-      this.releasedProducts.forEach((item, index) => {
+      this.dealerProducts.forEach((item, index) => {
         result.subs.push({
           name: item.name,
           type: 'product',
@@ -126,6 +146,39 @@ export default {
           })
         })
       })
+
+      // result.subs.push({
+      //   alias: 'helpdesk',  // 用户反馈
+      //   icon: 'inbox',
+      //   sub.subs: [{
+      //     alias: 'overview',
+      //     url: `/plugins/helpdesk/${item.id}/overview`
+      //   }, {
+      //     alias: 'issues',
+      //     url: `/plugins/helpdesk/${item.id}/issues`
+      //   }, {
+      //     alias: 'settings',
+      //     url: `/plugins/helpdesk/${item.id}/settings`
+      //   }]
+      // })
+      //
+      // result.subs.push({
+      //   alias: 'warranty',  // 智能维保
+      //   icon: 'support',
+      //   sub.subs: [{
+      //     alias: 'repair',
+      //     url: `/plugins/warranty/${item.id}/work-orders/repair`
+      //   }, {
+      //     alias: 'extended_warranties',
+      //     url: `/plugins/warranty/${item.id}/work-orders/extended-warranties`
+      //   }, {
+      //     alias: 'accounts',
+      //     url: `/plugins/warranty/${item.id}/accounts`
+      //   }, {
+      //     alias: 'settings',
+      //     url: `/plugins/warranty/${item.id}/settings`
+      //   }]
+      // })
 
       // result.subs.push({
       //   alias: 'settings',

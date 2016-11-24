@@ -205,14 +205,53 @@
             }
             this.isLoginSuccess = true
             this.$emit('login-success')
-            api.product.all().then((res) => {
-              this.$route.router.replace({path: `/operation/products/${res.data[0].id}/overview`})
-            })
+            // 登陆成功后跳转逻辑
+            this.jump()
           }).catch((res) => {
             this.setLoadingStatus(false)
             this.handleError(res)
           })
         }
+      },
+
+      // 登陆后跳转逻辑
+      jump () {
+        var firProductId = ''
+        var modePage = ''
+        var ableStopModel = false
+        var ableStopProduct = false
+        var routeArr = {
+          'summary': '/overview',
+          'device_list': '/devices',
+          'alert': '/alerts',
+          'device_map-map': '/device-map',
+          'analyse': '/analysis'
+        }
+        var PRO_SUBS = ['summary', 'device_list', 'alert', 'device_map-map', 'analyse']
+        this.config.product.forEach((item) => {
+          if (item.is_visible && !modePage) {
+            firProductId = item.product_id
+            PRO_SUBS.forEach((type) => {
+              this.config.module.forEach((mode) => {
+                if (type === mode.type && mode.is_visible && !modePage) {
+                  modePage = mode.type
+                  console.log(modePage)
+                  ableStopModel = true
+                  return
+                }
+              })
+            })
+            ableStopProduct = true
+            return
+          }
+        })
+        console.log(firProductId, modePage)
+        if (ableStopProduct && ableStopModel) {
+          this.$route.router.replace({path: `/operation/products/${firProductId}${routeArr[modePage]}`})
+        }
+        // api.product.all().then((res) => {
+        //   this.$route.router.replace({path: `/operation/products/${res.data[0].id}/overview`})
+        // })
       },
 
       /**

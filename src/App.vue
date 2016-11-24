@@ -90,6 +90,7 @@ export default {
       loadingCorp: false,
       loadingProducts: false,
       customApps: [],
+      config: {},
       // userRole: 'member',
       userRole: window.localStorage.getItem('userRole') || 'member'
     }
@@ -153,6 +154,8 @@ export default {
         if (this.userRole === 'member') {
           this.getMember()
           this.getCorpInfo()
+        } else if (this.userRole === 'dealer') {
+          this.getConfig()
         }
         this.getPlugins()
         this.getProducts()
@@ -170,9 +173,26 @@ export default {
     // this.refreshToken()
     document.title = this.$t('layout.platform.name')
     this.onLoginSuccess()
+    this.getConfig()
   },
 
   methods: {
+    // 获取配置信息
+    getConfig () {
+      if (this.$route.params.dealerId && this.$route.params.corpId) {
+        api.dealer.getConfig(this.$route.params.dealerId, this.$route.params.corpId).then((res) => {
+          console.log(res)
+          this.config = res.data
+          let value = JSON.stringify(res.data)
+          window.localStorage.setItem('dealerConfig', value)
+          // if (this.model.logo_url) {
+          //   this.images[0] = this.model.logo_url
+          // }
+        }).catch((err) => {
+          this.handleError(err)
+        })
+      }
+    },
     /**
      * 生成主导航
      */
