@@ -1,14 +1,17 @@
 <template>
-  <div class="auth-form">
-    <div class="auth-msg-box" v-show="activateSuccess">
-      <alert :cols="16" type="success" :title="$t('auth.activate_success')">
-        <p>{{ $t("auth.activate_success_msg") }}</p>
-      </alert>
-    </div>
-    <div class="auth-msg-box" v-show="activateFail">
-      <alert :cols="16" type="error" :title="$t('auth.activate_fail')">
-        <p>{{ $t("auth.activate_fail_msg") }}</p>
-      </alert>
+  <div>
+    <loginarea></loginarea>
+    <div class="auth-form">
+      <div class="auth-msg-box" v-show="activateSuccess">
+        <alert :cols="16" type="success" :title="$t('auth.activate_success')">
+          <p>{{ $t("auth.activate_success_msg") }}</p>
+        </alert>
+      </div>
+      <div class="auth-msg-box" v-show="activateFail">
+        <alert :cols="16" type="error" :title="$t('auth.activate_fail')">
+          <p>{{ $t("auth.activate_fail_msg") }}</p>
+        </alert>
+      </div>
     </div>
   </div>
 </template>
@@ -20,8 +23,13 @@
 <script>
   import api from 'api'
   import base64 from 'utils/base64'
+  import Loginarea from 'components/other/layout/Loginarea'
   export default {
     name: 'EmailActivateForm',
+
+    components: {
+      Loginarea
+    },
 
     layouts: ['auth'],
     data () {

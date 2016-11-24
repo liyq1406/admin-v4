@@ -42,7 +42,8 @@ export default {
       isDemo: IS_DEMO,
       showContent: false,
       nav: {},
-      userRole: window.localStorage.getItem('userRole')
+      userRole: window.localStorage.getItem('userRole'),
+      config: window.localStorage.getItem('dealerConfig')
     }
   },
 
@@ -56,6 +57,10 @@ export default {
       } else if (this.userRole === 'heavy-buyer') {
         return this.vipSecNav
       }
+    },
+    // 经销商独立配置信息
+    configInfo () {
+      return JSON.parse(this.config)
     },
     // 是否不再显示警告遮罩
     isHideMaskForever () {
@@ -78,7 +83,33 @@ export default {
       })
 
       // 产品导航
-      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
+      // const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
+      var openArr = []
+      var hashMap = {
+        'summary': 'overview',
+        'device_list': 'devices',
+        'alert': 'alerts',
+        'device_map': 'device-map',
+        'analyse': 'analysis'
+      }
+      this.configInfo.module.forEach((mode) => {
+        if (mode.is_visible) {
+          openArr.push(hashMap[mode.type])
+        }
+      })
+      // this.configInfo.module.forEach((mode) => {
+      //   if (mode.type === 'summary' && mode.is_visible) {
+      //     openArr.push('overview')
+      //   } else if (mode.type === 'device_list' && mode.is_visible) {
+      //     openArr.push('devices')
+      //   } else if (mode.type === 'alert' && mode.is_visible) {
+      //     openArr.push('alerts')
+      //   } else if (mode.type === 'device_map' && mode.is_visible) {
+      //     openArr.push('device-map')
+      //   } else if (mode.type === 'analyse' && mode.is_visible) {
+      //     openArr.push('analysis')
+      //   }
+      // })
       this.releasedProducts.forEach((item, index) => {
         result.subs.push({
           name: item.name,
@@ -87,7 +118,7 @@ export default {
           icon: 'link',
           unfold: index === 0,
           id: item.id,
-          subs: PRO_SUBS.map((sub) => {
+          subs: openArr.map((sub) => {
             return {
               alias: sub,
               url: `/products/${item.id}/${sub}`

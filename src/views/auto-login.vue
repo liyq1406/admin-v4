@@ -1,42 +1,45 @@
 <template>
-  <div class="auth-form login-form">
-    <div class="inner">
-      <div class="form-legend">{{ $t('auth.platform_name') }}</div>
-      <div class="form">
-        <validator name="authValidation">
-          <form autocomplete="off" novalidate @submit.prevent="onSubmit">
-            <div class="form-row">
-              <div v-placeholder="$t('auth.email_phone')" class="input-text-wrap">
-                <input type="text" v-model="model.account" name="model.account" v-validate:account="{required: true}" lazy class="input-text"/>
+  <div>
+    <loginarea></loginarea>
+    <div class="auth-form login-form">
+      <div class="inner">
+        <div class="form-legend">{{ $t('auth.platform_name') }}</div>
+        <div class="form">
+          <validator name="authValidation">
+            <form autocomplete="off" novalidate @submit.prevent="onSubmit">
+              <div class="form-row">
+                <div v-placeholder="$t('auth.email_phone')" class="input-text-wrap">
+                  <input type="text" v-model="model.account" name="model.account" v-validate:account="{required: true}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$authValidation.account.touched && $authValidation.account.required">{{ $t('common.validation.required', {field: $t('auth.fields.account')}) }}</span>
+                </div>
               </div>
-              <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.account.touched && $authValidation.account.required">{{ $t('common.validation.required', {field: $t('auth.fields.account')}) }}</span>
+              <div class="form-row">
+                <div v-placeholder="$t('auth.password')" class="input-text-wrap">
+                  <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
+                </div>
               </div>
-            </div>
-            <div class="form-row">
-              <div v-placeholder="$t('auth.password')" class="input-text-wrap">
-                <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true}" lazy class="input-text"/>
+              <div class="form-row row-check">
+                <a v-link="{ path: '/fetch-password-bymail' }">{{ $t("auth.forget") }}</a>
+                <label class="checkbox">
+                  <input type="checkbox" v-model="rememberPwd"/>{{ $t("auth.remember") }}
+                </label>
               </div>
-              <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
+              <div class="form-actions">
+                <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submitting') : $t('auth.login_submit')" class="btn btn-primary btn-xlg btn-pill focus-input">{{ $t("auth.login_submit") }}</button>
               </div>
-            </div>
-            <div class="form-row row-check">
-              <a v-link="{ path: '/fetch-password-bymail' }">{{ $t("auth.forget") }}</a>
-              <label class="checkbox">
-                <input type="checkbox" v-model="rememberPwd"/>{{ $t("auth.remember") }}
-              </label>
-            </div>
-            <div class="form-actions">
-              <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submitting') : $t('auth.login_submit')" class="btn btn-primary btn-xlg btn-pill focus-input">{{ $t("auth.login_submit") }}</button>
-            </div>
-            <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a></div>
-          </form>
-        </validator>
+              <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a></div>
+            </form>
+          </validator>
+        </div>
       </div>
-    </div>
-    <div class="old-entrance" v-if="isShowOldEntrance">
-      <a href="http://admin-v3.xlink.cn/" target="_blank">{{ $t('auth.old_entrance') }} &gt;</a>
+      <div class="old-entrance" v-if="isShowOldEntrance">
+        <a href="http://admin-v3.xlink.cn/" target="_blank">{{ $t('auth.old_entrance') }} &gt;</a>
+      </div>
     </div>
   </div>
 </template>
@@ -45,6 +48,7 @@
   import api from 'api'
   import { setLoadingStatus } from 'store/actions/system'
   import { IS_SHOW_OLD_ENTRANCE } from 'consts/config'
+  import Loginarea from 'components/other/layout/Loginarea'
 
   export default {
     name: 'LoginForm',
@@ -57,6 +61,9 @@
       actions: {
         setLoadingStatus
       }
+    },
+    components: {
+      Loginarea
     },
 
     data () {

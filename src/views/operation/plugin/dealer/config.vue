@@ -55,10 +55,10 @@
 
       <div class="panel-sub-hd bordered mb20">权限配置</div>
 
-      <div class="panel-bd products-container">
+      <div class="panel-bd products-container clearfix">
         <!-- 应用列表  -->
         <div v-if="!allProducts.length" class="non">暂无产品</div>
-        <div  v-if="allProducts.length" class="product-list-box">
+        <div  v-if="allProducts.length" class="product-list-box fl">
           <div class="product" v-for="product in allProducts" :class="{'selected': product.id === selectedProduct.id}" @click="selectProduct(product)">
             <div>
               <span class="product-name">{{ product.name }}</span>
@@ -71,7 +71,7 @@
           </div>
         </div>
         <!-- 应用详情 -->
-        <div v-if="allProducts.length" class="panel product-details-box">
+        <div v-if="allProducts.length" class="panel product-details-box fr">
           <!-- 详情头部 -->
           <!-- <div class="panel-hd">
             <div class="product-name">
@@ -158,6 +158,7 @@ export default {
   name: 'config',
   vuex: {
     getters: {
+      corp: ({ system }) => system.corp,
       productList: ({ products }) => products.all
     }
   },
@@ -315,7 +316,7 @@ export default {
     },
     // 获取配置信息
     getConfig () {
-      api.dealer.getConfig(this.$route.params.dealerId).then((res) => {
+      api.dealer.getConfig(this.$route.params.dealer_id, this.corp.id).then((res) => {
         console.log(res)
         this.model = res.data
         this.model.domain = res.data.domain || 'www.baidu.com'
@@ -399,13 +400,14 @@ export default {
   .products-container
     position relative
     width 100%
-    height 100%
+    height auto
     .product-list-box
+      position relative
       width 200px
       height auto
-      position absolute
+      /*position absolute
       left 0
-      top 0
+      top 0*/
       z-index 1
       .product
         width 100%
@@ -438,11 +440,14 @@ export default {
         font-size 13px
         text-overflow 100%
     .product-details-box
+      position absolute
+      top 0
       height 100%
-      margin-left 200px
+      /*margin-left 200px*/
       border 1px solid #ddd
       /*min-height 500px*/
-      padding 20px 35px
+      padding 20px 35px 20px 235px
+      width 100%
       box-sizing border-box
       .product-name
         font-size 22px
