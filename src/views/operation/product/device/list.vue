@@ -60,6 +60,8 @@
             </div>
           </div>
           <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-device-active-date="sortBy" @theader-online-is-online="sortBy" @tbody-device-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+
+          <!-- {{snapshotShuffle | json}} -->
       </div>
     </div>
   </div>
@@ -92,6 +94,12 @@ export default {
     })
 
     return {
+      SNAPSHOT_STATISTICS_TYPES: {
+        '1': 'max',
+        '2': 'min',
+        '3': 'avg',
+        '4': 'sum'
+      },
       DEVICEFIELD: [
         'id',
         'mac',
@@ -239,6 +247,7 @@ export default {
       deviceFields: {},
       loadingDataPoint: false,
       dataPoints: [],
+      snapshotShuffleData: null,
       // 统计
       statistic: {
         // 用户总数
@@ -294,15 +303,40 @@ export default {
       this.devices.forEach((item) => {
         var obj = {}
         for (var key1 in item) {
-          if (item.hasOwnProperty(key1)) {
-            for (let key2 in item[key1]) {
-              if (item[key1].hasOwnProperty(key2)) {
-                obj[`${key1}--${key2}`] = item[key1][key2]
+          if (key1 === 'snapshot_shuffle') {
+            this.snapshotShuffle.forEach((snapshot) => {
+              if (snapshot.deviceId === item.device.id) {
+                obj[snapshot.key] = snapshot.value
+              }
+            })
+          } else {
+            if (item.hasOwnProperty(key1)) {
+              for (let key2 in item[key1]) {
+                if (item[key1].hasOwnProperty(key2)) {
+                  obj[`${key1}--${key2}`] = item[key1][key2]
+                }
               }
             }
           }
         }
         result.push(obj)
+      })
+      return result
+    },
+
+    snapshotShuffle () {
+      var result = []
+      if (!this.deviceFields.snapshot_shuffle || !this.deviceFields.snapshot_shuffle.length) return []
+      var showSnapshotShuffleFields = this.deviceFields.snapshot_shuffle.filter((item) => !item.hidden)
+      showSnapshotShuffleFields.forEach((field) => {
+        this.devices.forEach((device) => {
+          var obj = {
+            key: 'snapshot_shuffle--' + field.name,
+            deviceId: device.device.id,
+            value: this.getSnapshotShuffleValue(field, device)
+          }
+          result.push(obj)
+        })
       })
       return result
     },
@@ -318,7 +352,7 @@ export default {
         var device = _.clone(deviceModal)
         for (var key in item) {
           if (item.hasOwnProperty(key)) {
-            device[key] = item[key]
+            device[key] = item[key] || '-'
           }
         }
         device['device--mac'] = '<a class="hl-red">' + (item['device--mac'] || '-') + '</a>'
@@ -645,6 +679,42 @@ export default {
       this.getDevices()
     },
 
+    getSnapshotShuffleValue (field, device) {
+      var result = null
+      if (device.snapshot_shuffle.list.length) return result
+      var snapshotShuffleList = device.snapshot_shuffle.list || []
+      // snapshotShuffleList = [
+      //   {
+      //     'statistic_rule_id': '5833b3d6a26e6a341df86d68',
+      //     'index': '0',
+      //     'fineness': '6',
+      //     'date_start': '1970-01-01T00:00:00.000Z',
+      //     'date_end': '结束时间',
+      //     'sum': '求和',
+      //     'max': '最大值',
+      //     'min': '最小值',
+      //     'avg': '平均值'
+      //   }
+      // ]
+      var snapshotId = field.snapshot
+      var datapointIndex = field.datapointIndex
+      var fineness = field.fineness
+      var dateStart = this.fieldStartTime(field)
+      snapshotShuffleList.forEach((item) => {
+        var conditions = [
+          item.index - 0 === datapointIndex - 0,
+          item.statistic_rule_id === snapshotId,
+          item.fineness - 0 === fineness - 0,
+          item.date_start === dateStart
+        ]
+        // 如果条件满足
+        if (conditions.every((condition) => condition)) {
+          result = item[this.SNAPSHOT_STATISTICS_TYPES[field.dp_mode]]
+        }
+      })
+      return result
+    },
+
     resetFieldKey (field) {
       var result = {
         field: field
@@ -700,6 +770,7 @@ export default {
       // api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
       api.device.getAggregateDevices(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
+        this.snapshotShuffleData = res.data.list.snapshot_shuffle || []
         this.total = res.data.count
         this.loadingData = false
       }).catch((res) => {
@@ -757,8 +828,19 @@ export default {
         default:
           break
       }
-      console.log('开始时间')
-      console.log(result)
+      return result
+    },
+
+    /**
+     * 求出规则方法
+     */
+    ruleMethod (ruleId) {
+      var result = ''
+      this.deviceFields.snapshot_shuffle.forEach((item) => {
+        if (item.snapshot === ruleId) {
+          result = this.SNAPSHOT_STATISTICS_TYPES[item.dp_mode]
+        }
+      })
       return result
     },
 
@@ -785,8 +867,6 @@ export default {
         default:
           break
       }
-      console.log('结束时间')
-      console.log(result)
       return result
     },
 
