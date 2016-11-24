@@ -181,6 +181,7 @@ export default {
         countPerPage: 10 // 每页数量
       },
       loadingData: false,
+      loadingFields: false,
       queryTypeOptions: [
         { label: 'MAC', value: 'mac' },
         { label: 'SN', value: 'sn' },
@@ -198,6 +199,57 @@ export default {
       deviceEditModal: {
         sn: ''
       },
+      // 默认字段
+      base_fields: [
+        {
+          'name': 'id',
+          'label': '产品ID',
+          'hidden': false,
+          'sort': 1,
+          'value_type': 1,
+          'default_value': ''
+        },
+        {
+          'name': 'name',
+          'label': '产品名称',
+          'hidden': true,
+          'sort': 2,
+          'value_type': 1,
+          'default_value': ''
+        },
+        {
+          'name': 'mode',
+          'label': '产品型号',
+          'hidden': false,
+          'sort': 3,
+          'value_type': 1,
+          'default_value': ''
+        },
+        {
+          'name': 'type',
+          'label': '产品类型',
+          'hidden': false,
+          'sort': 4,
+          'value_type': 2,
+          'default_value': ''
+        },
+        {
+          'name': 'link_type',
+          'label': '连接类型',
+          'hidden': false,
+          'sort': 5,
+          'value_type': 2,
+          'default_value': ''
+        },
+        {
+          'name': 'description',
+          'label': '产品描述',
+          'hidden': false,
+          'sort': 6,
+          'value_type': 1,
+          'default_value': ''
+        }
+      ],
       headers: [{
         key: 'mac',
         title: 'MAC'
@@ -227,7 +279,8 @@ export default {
         title: '在线状态',
         sortType: -1,
         class: 'wp10'
-      }]
+      }],
+      productFields: {}
     }
   },
 
@@ -292,6 +345,37 @@ export default {
       return result
     },
 
+    // 字段列表
+    fields () {
+      var result = []
+      var baseFields = this.base_fields
+      if (this.productFields.base_fields && this.productFields.base_fields.length) {
+        baseFields = this.productFields.base_fields
+      }
+      baseFields.forEach((item, index) => {
+        var field = _.clone(item)
+        field.category = this.baseFieldKeys.indexOf(item.name) >= 0 ? 'base_fields' : 'custom_fields'
+        result.push(field)
+      })
+      result.sort((a, b) => {
+        return a.sort - b.sort
+      })
+      result.forEach((item, index) => {
+        item.sort = index + 1
+      })
+      return result
+    },
+
+    /**
+     * 基本字段key表
+     */
+    baseFieldKeys () {
+      var result = this.base_fields.map((item) => {
+        return item.name
+      })
+      return result || []
+    },
+
     // 设备列表
     tables () {
       var result = []
@@ -347,36 +431,74 @@ export default {
 
     // 产品信息
     productInfo () {
-      return {
-        mode: {
-          label: '产品型号',
-          value: this.currentProduct.mode || '-'
-        },
-        type: {
-          label: '产品类型',
-          value: this.getTypeLabelByValue(this.currentProduct.type)
-        },
-        link_type: {
-          label: '连接类型',
-          value: this.locales.data.DEVICE_TYPES[this.currentProduct.link_type - 1]
-        },
-        id: {
-          label: '产品ID',
-          value: this.currentProduct.id
-        },
-        description: {
-          label: '产品描述',
-          value: this.currentProduct.description
-        },
-        key: {
-          label: '产品密钥',
-          slot: true
-        },
-        qrcode: {
-          label: '产品二维码',
-          slot: true
-        }
+      let result = {}
+      // 产品基本字段信息
+      let product = {
+        id: this.currentProduct.id,
+        mode: this.currentProduct.mode || '-',
+        type: this.getTypeLabelByValue(this.currentProduct.type),
+        link_type: this.locales.data.DEVICE_TYPES[this.currentProduct.link_type - 1],
+        description: this.currentProduct.description
       }
+
+      // 根据字段设置筛选字段
+      _.forEach(this.fields, (item) => {
+        if (item.hidden) return
+
+        if (product.hasOwnProperty(item.name)) {
+          result[item.name] = {
+            label: item.label,
+            value: product[item.name]
+          }
+        } else {
+          result[item.name] = {
+            label: item.label,
+            value: item.default_value
+          }
+        }
+      })
+
+      // 默认显示产品密钥和二维码
+      result.key = {
+        label: '产品密钥',
+        slot: true
+      }
+      result.qrcode = {
+        label: '产品二维码',
+        slot: true
+      }
+
+      return result
+      // return {
+      //   mode: {
+      //     label: '产品型号',
+      //     value: this.currentProduct.mode || '-'
+      //   },
+      //   type: {
+      //     label: '产品类型',
+      //     value: this.getTypeLabelByValue(this.currentProduct.type)
+      //   },
+      //   link_type: {
+      //     label: '连接类型',
+      //     value: this.locales.data.DEVICE_TYPES[this.currentProduct.link_type - 1]
+      //   },
+      //   id: {
+      //     label: '产品ID',
+      //     value: this.currentProduct.id
+      //   },
+      //   description: {
+      //     label: '产品描述',
+      //     value: this.currentProduct.description
+      //   },
+      //   key: {
+      //     label: '产品密钥',
+      //     slot: true
+      //   },
+      //   qrcode: {
+      //     label: '产品二维码',
+      //     slot: true
+      //   }
+      // }
     }
   },
 
@@ -389,6 +511,7 @@ export default {
       // 初次获取设备列表，并将获取的数量作为已用配额
       this.firstRequest = true
       this.getDevices()
+      this.getData()
       // let condition = {
       //   filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'last_login'],
       //   limit: this.countPerPage,
@@ -406,6 +529,24 @@ export default {
   },
 
   methods: {
+    /**
+     * 向服务器获取数据
+     * @return {[type]} [description]
+     */
+    getData () {
+      this.loadingFields = true
+      api.customization.getProductCustomization(this.$route.params.id).then((res) => {
+        this.productFields = res.data || {}
+        this.loadingFields = false
+      }).catch((res) => {
+        this.loadingFields = false
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 设置SN
+     */
     setSn () {
       let productId = this.$route.params.id
       let deviceId = this.deviceEditModal.deviceId
