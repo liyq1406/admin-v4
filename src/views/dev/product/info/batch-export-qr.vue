@@ -209,6 +209,10 @@
   @import '../../../../assets/stylus/common'
   .body-wrap
     position relative
+    &:after
+      content ''
+      clear both
+      display block
     .filter-device
       .btn-select
         border 1px solid #FF0000

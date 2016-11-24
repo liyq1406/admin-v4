@@ -194,35 +194,54 @@
           </div>
           <div v-if="releasedProduct.length" class="form-row row">
             <div class="form-control col-3">
-              <label class="middle-word">自定义图表:</label>
+              <label class="middle-word">自定义图表:
+                <i class="fa fa-question-circle" v-tooltip="customChartTooltip"></i>
+              </label>
             </div>
-            <div class="controls col-21">
-              <div class="row">
-                <div class="form-control col-3">
-                  <label>自定义产品分析:</label>
+            <div class="col-21 custom-chart">
+              <div v-for="(index, chart) in customCharts" class="row form-row">
+                <div class="form-control col-2">
+                  <label class="input-text">添加标题:</label>
                 </div>
-                <div class="input-radio-wrap col-4">
-                  <input v-model="features.distribution" type="radio" :value="true" name="distribution"/>
-                  <label>显示</label>
-                  <input v-model="features.distribution" type="radio" :value="false" name="distribution"/>
-                  <label>隐藏</label>
-                </div>
-                <div class="col-2 add-btn-wrap">
-                  <button class="btn btn-ghost" @click.prevent.stop="addRule(index)">
-                    添加数据源
-                  </button>
-                </div>
-              </div>
-              <div class="row mt10">
-                <div class="col-offset-3">
-                </div>
-                <div class="col-19">
-                  <div class="col-1 del-icon ml10">
-                    <i class="fa fa-times-circle" @click="delRule(index)"></i>
+                <div class="controls col-4">
+                  <div class="input-text-wrap">
+                    <input v-model="chart.title" type="text" placeholder="请输入标题" class="input-text" v-validate="{required: true}" lazy :field="'chart' + index"/>
+                    <div class="form-tips form-tips-error">
+                      <span v-if="$validation['chart' + index].touched && $validation['chart' + index].required">标题不能为空</span>
+                    </div>
                   </div>
                 </div>
+                <div class="form-control col-3 ml20">
+                  <label class="input-text">添加数据源:</label>
+                </div>
+                <div class="form-control col-4 ml10">
+                  <x-select width="120px" :label="chart.data_source.first.title">
+                    <select v-model="chart.data_source.first" @change="dataSourceSelect">
+                      <option v-for="option in dataSourceDefaultOptions" :value="option">{{ option.title }}</option>
+                    </select>
+                  </x-select>
+                </div>
+                <div v-if="showSecond(chart.data_source.first)" class="form-control col-4 ml10">
+                  <x-select width="120px" :label="chart.data_source.second.title">
+                    <select v-model="chart.data_source.second" @change="dataSourceSelect">
+                      <option v-for="option in dataSourceDefaultOptions" :value="option">{{ option.title }}</option>
+                    </select>
+                  </x-select>
+                </div>
+                <div v-if="showThird(chart.data_source.first, chart.data_source.second)" class="form-control col-4 ml10">
+                  <x-select width="120px" :label="chart.data_source.third.title">
+                    <select v-model="chart.data_source.third" @change="dataSourceSelect">
+                      <option v-for="option in dataSourcePieOptions" :value="option">{{ option.title }}</option>
+                    </select>
+                  </x-select>
+                </div>
+                <div v-if="index === customCharts.length - 1" class="form-control col-1 ml10">
+                  <a class="fa fa-times-circle" @click="delRow(index)"></a>
                 </div>
               </div>
+              <button name="button" class="btn btn-ghost" @click.prevent.stop="addRow">添加行
+                <i class="fa fa-plus"></i>
+              </button>
             </div>
           </div>
           <div class="form-actions save-config">
@@ -263,11 +282,21 @@ export default {
 
   data () {
     return {
-      customCharts: [
-        {
-          data_source_id: ''
+      defaultCustomChartRow: {
+        title: '',
+        data_source: {
+          first: {
+            title: '请选择数据源'
+          },
+          second: {
+            title: '请选择数据源'
+          },
+          third: {
+            title: '请选择数据源'
+          }
         }
-      ],
+      },
+      customCharts: [],
       initStartTime: 0,
       initEndTime: 0,
       editing: false,
@@ -299,13 +328,28 @@ export default {
         2: false,
         3: false,
         4: false
-      }
+      },
+      dataSourceList: [],
+      customChartTooltip: '每列最多包含2个折线图或柱状图或3个扇形图'
     }
   },
   computed: {
+    secondOverflow () {
+      return true
+    },
     arrowClass () {
       let res = 'arrow arrow-left-'
       return res + this.selectedQuota
+    },
+    dataSourceDefaultOptions () {
+      return _.filter(this.dataSourceList, (item) => {
+        return item.product_id === this.selectProduct && item.show_type === 2
+      })
+    },
+    dataSourcePieOptions () {
+      return _.filter(this.dataSourceDefaultOptions, (item) => {
+        return item.chart === 1
+      })
     },
     datapointOptions () {
       let res = []
@@ -366,9 +410,68 @@ export default {
     }
   },
   ready () {
+    this.getDataSourceList()
   },
   methods: {
-    addRow () {},
+    showSecond (first) {
+      if (!first || !first.id) {
+        return false
+      }
+      return true
+    },
+    showThird (first, second) {
+      if (!first || !first.id || !second || !second.id) {
+        return false
+      }
+      if (first.chart > 1 || second.chart > 1) {
+        return false
+      }
+      return true
+    },
+    dataSourceSelect () {},
+    getDataSourceList () {
+      api.custom.dataSource.get().then((res) => {
+        if (res) {
+          this.dataSourceList = res
+        } else {
+          this.dataSourceList = []
+        }
+        this.setDefaultCustomChart()
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    setDefaultCustomChart () {
+      if (!this.customCharts.length) {
+        return
+      }
+      this.customCharts.forEach((item) => {
+        if (item.data_source.first.id) {
+          item.data_source.first = _.find(this.dataSourceDefaultOptions, (ds) => {
+            return ds.id === item.data_source.first.id
+          })
+        }
+        if (item.data_source.second.id) {
+          item.data_source.second = _.find(this.dataSourceDefaultOptions, (ds) => {
+            return ds.id === item.data_source.second.id
+          })
+        }
+        if (item.data_source.third.id) {
+          item.data_source.third = _.find(this.dataSourceDefaultOptions, (ds) => {
+            return ds.id === item.data_source.third.id
+          })
+        }
+      })
+    },
+    addRow () {
+      if (this.customCharts.length >= 3) {
+        return
+      }
+      this.customCharts.push(_.cloneDeep(this.defaultCustomChartRow))
+    },
+    delRow (index) {
+      this.customCharts.splice(index, 1)
+    },
     // 重置当前产品配置
     resetConfig () {
       for (let i in this.configLoaded) {
@@ -423,6 +526,46 @@ export default {
       if (this.curQuotaData.custom_time) {
         this.initStartTime = this.curQuotaData.custom_time.start || 0
         this.initEndTime = this.curQuotaData.custom_time.end || 0
+      }
+      if (!pConfig.custom_chart || !pConfig.custom_chart.length) {
+        this.customCharts = []
+      } else {
+        pConfig.custom_chart.forEach((item) => {
+          let temp = _.cloneDeep(this.defaultCustomChartRow)
+          temp.title = item.title
+          if (item.dataSources && item.dataSources.length) {
+            item.dataSources.forEach((source) => {
+              let finded
+              if (this.dataSourceDefaultOptions.length) {
+                finded = _.find(this.dataSourceDefaultOptions, (ds) => {
+                  return ds.id === source.id
+                })
+              }
+              if (source.index === 1) {
+                if (finded) {
+                  temp.data_source.first = finded
+                } else {
+                  temp.data_source.first.id = source.id
+                }
+              }
+              if (source.index === 2) {
+                if (finded) {
+                  temp.data_source.second = finded
+                } else {
+                  temp.data_source.second.id = source.id
+                }
+              }
+              if (source.index === 3) {
+                if (finded) {
+                  temp.data_source.third = finded
+                } else {
+                  temp.data_source.third.id = source.id
+                }
+              }
+            })
+          }
+          this.customCharts.push(temp)
+        })
       }
       this.setStatisticesConfig()
       this.$nextTick(() => {
@@ -575,6 +718,39 @@ export default {
         params.quatas[this.selectedQuota].datapoint.statistics_rule_id = this.selectedRule.id
         params.quatas[this.selectedQuota].datapoint.snapshot_id = this.selectedRule.snapshot_id
       }
+
+      if (this.customCharts.length) {
+        params.custom_chart = []
+        let index = 0
+        this.customCharts.forEach((item) => {
+          let sourceIndex = 0
+          let temp = {
+            index: ++index,
+            enable: true,
+            title: item.title,
+            dataSources: []
+          }
+          if (item.data_source.first.id) {
+            temp.dataSources.push({
+              index: ++sourceIndex,
+              id: item.data_source.first.id
+            })
+          }
+          if (item.data_source.second.id) {
+            temp.dataSources.push({
+              index: ++sourceIndex,
+              id: item.data_source.second.id
+            })
+          }
+          if (item.data_source.third.id) {
+            temp.dataSources.push({
+              index: ++sourceIndex,
+              id: item.data_source.third.id
+            })
+          }
+          params.custom_chart.push(temp)
+        })
+      }
       proxy.setCustomOverviewConfig(this.selectProduct, params).then((res) => {
         if (res.status === 200) {
           // 设置成功
@@ -703,7 +879,16 @@ export default {
 .time-range-lineheight
   margin-top 2px
 .add-btn-wrap
-  height 32px
-  display inline-block
-  vertical-align middle
+  margin-top 2px
+  button
+    background #DA4E38
+.custom-row-wrap
+  border 1px solid default-border-color
+  padding 10px 15px 0 15px
+.custom-chart
+  .x-select
+    .x-select-wrap
+      vertical-align baseline
+  .form-row
+    margin-bottom 5px
 </style>

@@ -77,7 +77,6 @@ export default {
       res.sort((a, b) => {
         return b.id - a.id
       })
-      console.log(res)
       return res
     }
   },

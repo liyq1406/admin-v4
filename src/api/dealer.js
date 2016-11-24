@@ -157,12 +157,12 @@ export default {
    * @param  {String}
    * @return {Promise}
    */
-  getConfig (dealerId) {
+  getConfig (dealerId, corpId) {
     return http.get(
-      `${API_SERVER.default}/v2/dealer/${dealerId}/entry_config`, {
+      `${API_SERVER.default}/v2/dealer/${dealerId}/entry_config?corp_id=${corpId}`, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': '1111'
+          'Content-Type': 'application/x-www-form-urlencoded'
+          // 'Access-Token': '1111'
         }
       }
     )

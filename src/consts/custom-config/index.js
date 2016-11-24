@@ -10,7 +10,8 @@ const ROLES = {
 
 const DATAFROM = { // 数据来源
   datapoint: 1, // 数据端点
-  preset: 2 // 绑定预设项
+  preset: 2, // 绑定预设项
+  custom: 3 // 自定义数据源
 }
 
 const PRESET = {
@@ -63,6 +64,7 @@ let defaultValue = {
       //     end: 0 // 时间戳
       //   }
       // }
+      // custom: '' // 自定义数据源id
     },
     2: {
       dataFrom: DATAFROM.preset,
@@ -84,15 +86,17 @@ let defaultValue = {
   active: true,
   distribution: true,
   custom_chart: [
-    {
-      index: 1,
-      enable: false,
-      series: [
-        {
-          data_source_id: ''
-        }
-      ]
-    }
+    // {
+    //   index: 1,
+    //   title: '',
+    //   enable: false,
+    //   dataSources: [
+    //     {
+    //       index: 1,
+    //       id: ''
+    //     }
+    //   ]
+    // }
   ]
 }
 

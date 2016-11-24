@@ -2,11 +2,11 @@
   <div :class="{'auth-page':hasLayout('auth'), 'has-topbar':hasLayout('topbar'), 'has-sidebar':hasLayout('sidebar'), 'loading-resource':loading}" class="page-container">
     <template v-if="hasLayout('auth')">
       <!-- <header class="auth-header" transition="header" transition-mode="out-in"> -->
-      <header class="auth-header">
+      <!-- <header class="auth-header">
         <div class="logo-auth">
           <a href="http://www.xlink.cn/" :style="logoStyle"></a>
         </div>
-      </header>
+      </header> -->
     </template>
 
     <!-- Start: 路由视图 -->
