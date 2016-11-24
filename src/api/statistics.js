@@ -374,5 +374,23 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/statistics/dealer/sale_region`
     )
+  },
+  /**
+   * 设备数据端点分析
+   * @return {Promise}
+   */
+  deviceDatapointAnalytics (productId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/statistics/product/${productId}/datapoint/device_analytics`, params
+    )
+  },
+  /**
+   * 设备统计数据分析
+   * @return {Promise}
+   */
+  deviceStatisticAnalytics (snapshotId, statisticsId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/statistics/snapshot/${snapshotId}/statistic_rule/${statisticsId}/device_analytics`, params
+    )
   }
 }
