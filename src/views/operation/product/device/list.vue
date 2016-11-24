@@ -460,6 +460,17 @@ export default {
         result[field[0]] = result[field[0]] || []
         result[field[0]].push(field[1])
       })
+      result.snapshot_shuffle = [
+        'statistic_rule_id',
+        'index',
+        'fineness',
+        'date_start',
+        'date_end',
+        'sum',
+        'max',
+        'min',
+        'avg'
+      ]
       return result
     },
 
