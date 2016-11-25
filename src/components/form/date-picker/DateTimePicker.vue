@@ -10,7 +10,7 @@
     <div class="wrap month" v-if="monthShow">
       <ul>
         <li class="btn" @click.stop="toggleToYear">{{ year }}</li>
-        <li v-for="item in months" :class="{ active: (month === $index + 1) }" @click.stop="chooseMonth($index + 1)">{{ item }}</li>
+        <li v-for="(monthIndex, item) in months" :class="{ active: (month === monthIndex + 1) }" @click.stop="chooseMonth(monthIndex + 1)">{{ item }}</li>
       </ul>
     </div>
     <div class="wrap date" v-if="dateShow">
