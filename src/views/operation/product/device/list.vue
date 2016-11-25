@@ -496,8 +496,8 @@ export default {
             '$eq': item.snapshot
           },
           'date': {
-            '$lt': this.fieldEndTime(item),
-            '$gt': this.fieldStartTime(item)
+            '$lte': this.fieldEndTime(item),
+            '$gte': this.fieldStartTime(item)
           }
         }
         results.push(result)
@@ -698,21 +698,8 @@ export default {
 
     getSnapshotShuffleValue (field, device) {
       var result = null
-      if (device.snapshot_shuffle.list.length) return result
+      if (!device.snapshot_shuffle.list.length) return result
       var snapshotShuffleList = device.snapshot_shuffle.list || []
-      // snapshotShuffleList = [
-      //   {
-      //     'statistic_rule_id': '5833b3d6a26e6a341df86d68',
-      //     'index': '0',
-      //     'fineness': '6',
-      //     'date_start': '1970-01-01T00:00:00.000Z',
-      //     'date_end': '结束时间',
-      //     'sum': '求和',
-      //     'max': '最大值',
-      //     'min': '最小值',
-      //     'avg': '平均值'
-      //   }
-      // ]
       var snapshotId = field.snapshot
       var datapointIndex = field.datapointIndex
       var fineness = field.fineness
@@ -722,7 +709,7 @@ export default {
           item.index - 0 === datapointIndex - 0,
           item.statistic_rule_id === snapshotId,
           item.fineness - 0 === fineness - 0,
-          item.date_start === dateStart
+          item.date_start.indexOf(dateStart.split('T')[0]) === 0
         ]
         // 如果条件满足
         if (conditions.every((condition) => condition)) {
