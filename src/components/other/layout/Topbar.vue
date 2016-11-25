@@ -1,6 +1,6 @@
 <template>
   <header class="header the-header" transition="header" transition-mode="out-in">
-    <a v-link="{ path: '/dashboard' }" class="logo" :style="logoStyle"></a>
+    <a v-link="linkInfo" class="logo" :style="logoStyle"></a>
     <!-- Start: 主导航 -->
     <nav class="nav-header">
       <!-- <pre>{{mainNav | json}}</pre> -->
@@ -19,7 +19,7 @@
       <!-- DEMO环境成员默认为已认证 -->
       <span class="user-name" v-if="isDemo"><i class="badge badge-authorized">{{ $t('layout.levels.authorized') }}</i>{{ currentMember.name }}</span>
       <!-- 正式环境成员认证状态动态读取 -->
-      <span class="user-name" v-else>{{ currentMember.name }}<i class="badge" :class="{'badge-authorized': corp.status===1, 'badge-vip': corp.status===2}" v-show="corp.status>=0">{{ levelLabel }}</i></span>
+      <span class="user-name" v-else><span v-if="config">经销商</span><span v-else>{{ currentMember.name }} </span><i class="badge" :class="{'badge-authorized': corp.status===1, 'badge-vip': corp.status===2}" v-show="corp.status>=0">{{ levelLabel }}</i></span>
       <i class="arrow-down"></i>
       <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" v-show="isShowUserNav" class="sec-nav">
         <div class="user-info">
@@ -117,6 +117,14 @@ export default {
   },
 
   computed: {
+    // 顶栏是否有首页链接
+    linkInfo () {
+      var result = {}
+      if (this.userRole === 'member') {
+        result = { path: '/dashboard' }
+      }
+      return result
+    },
     // 经销商独立配置信息
     configInfo () {
       return JSON.parse(this.config)

@@ -72,3 +72,14 @@ export const showAlertMask = ({ dispatch }) => {
 export const removeAlertMask = ({ dispatch }) => {
   dispatch(types.REMOVE_ALERT_MASK)
 }
+
+// 动态加载echart script标签
+export const importEcharts = ({ dispatch }) => {
+  dispatch(types.SET_ECHARTS_STATUS, 1) // 加载中
+  let script = document.createElement('script')
+  script.src = '/static/vendor/echart/echarts.min.js'
+  document.body.appendChild(script)
+  script.addEventListener('load', () => {
+    dispatch(types.SET_ECHARTS_STATUS, 2) // 加载完成
+  })
+}

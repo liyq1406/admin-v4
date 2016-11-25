@@ -77,6 +77,10 @@ function getBoundsSize (bounds) {
   lat2 = SW.lat()
   lng1 = NE.lng()
   lng2 = SW.lng()
+  // console.log('东北角纬度:' + lat1)
+  // console.log('东北角经度:' + lng1)
+  // console.log('西南角纬度:' + lat2)
+  // console.log('西南角经度:' + lng2)
 
   // 计算横向和纵向的距离
   horizontalLatLng1 = new google.maps.LatLng(lat1, lng1)
@@ -206,7 +210,7 @@ export default {
     window.init = this.initMap
     if (typeof google === 'undefined') {
       // this.loadingText = this.$t('operation.product.devicemap.targeting')
-      this.loadingText = '地图初始化...'
+      this.loadingText = this.$t('operation.product.devicemap.init_map')
       var elem = document.createElement('script')
       elem.async = true
       elem.defer = 'defer'

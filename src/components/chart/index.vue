@@ -4,11 +4,20 @@
 
 <script>
 import EventListener from 'utils/event-listener'
-import echarts from 'echarts'
 import { CHART_COLORS } from 'consts/config'
+import { importEcharts } from 'store/actions/system'
 
 export default {
   name: 'Chart',
+
+  vuex: {
+    getters: {
+      echartsStatus: ({ system }) => system.echartsStatus
+    },
+    actions: {
+      importEcharts
+    }
+  },
 
   props: {
     // 高度
@@ -76,22 +85,22 @@ export default {
 
     options (val) {
       this._render()
+    },
+
+    echartsStatus (val, oldVal) {
+      if (oldVal === 1 && val === 2) {
+        this.init()
+      }
     }
   },
 
   ready () {
-    if (this.type === 'china-map' || this.type === 'bmap') {
-      this.$http.get('/static/data/map/china.json').then((res) => {
-        echarts.registerMap('china', res.data)
-        this.init()
-      })
-    } else if (this.type === 'world-map') {
-      this.$http.get('/static/data/map/world.json').then((res) => {
-        echarts.registerMap('world', res.data)
-        this.init()
-      })
-    } else {
+    if (window.echarts && this.echartsStatus === 2) {
       this.init()
+    } else {
+      if (this.echartsStatus === 0) {
+        this.importEcharts()
+      }
     }
   },
 
@@ -106,7 +115,22 @@ export default {
 
   methods: {
     init () {
-      this.chart = echarts.init(this.$el)
+      if (this.type === 'china-map' || this.type === 'bmap') {
+        this.$http.get('/static/data/map/china.json').then((res) => {
+          window.echarts.registerMap('china', res.data)
+          this.initEchart()
+        })
+      } else if (this.type === 'world-map') {
+        this.$http.get('/static/data/map/world.json').then((res) => {
+          window.echarts.registerMap('world', res.data)
+          this.initEchart()
+        })
+      } else {
+        this.initEchart()
+      }
+    },
+    initEchart () {
+      this.chart = window.echarts.init(this.$el)
       if (this.type === 'world-map') {
         this.bindMapSelectEvent()
       }

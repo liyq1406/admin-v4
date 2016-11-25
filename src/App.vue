@@ -97,6 +97,34 @@ export default {
   },
 
   computed: {
+    // 外层容器类
+    classes () {
+      let result = []
+      let authClassMap = {
+        auth: 'auth-page',
+        topbar: 'has-topbar',
+        sidebar: 'has-sidebar'
+      }
+      let roleClassMap = {
+        member: 'auth-page-normal',
+        dealer: 'auth-page-other'
+      }
+
+      for (var key in authClassMap) {
+        if (this.hasLayout(key)) {
+          result.push(authClassMap[key])
+        }
+      }
+
+      if (this.$route.params.dealerId && this.$route.params.corpId) {
+        result.push(roleClassMap.dealer)
+      } else {
+        result.push(roleClassMap.member)
+      }
+
+      return result.join(' ')
+    },
+
     loadingInfo () {
       let result = this.loadingCorp || this.loadingProducts
       return result
@@ -126,6 +154,16 @@ export default {
       if (this.$route && window.location.href.indexOf('heavy-buyer-login') >= 0) {
         result.backgroundColor = '#FFF'
         result.backgroundImage = 'url(/static/images/topband.png)'
+      }
+      return result
+    },
+
+    bgStyle () {
+      let result = {
+        background: 'url(/static/images/main_bg.jpg) no-repeat center top'
+      }
+      if (this.$route && this.userRole === 'dealer') {
+        result.background = 'url(/static/images/dealer_bg.png) no-repeat center top'
       }
       return result
     }
@@ -357,7 +395,10 @@ export default {
 .auth-page
   background url('assets/images/main_bg.jpg') no-repeat center top
   overflow-y auto
-
+.auth-page-normal
+  background url('assets/images/main_bg.jpg') no-repeat center top
+.auth-page-other
+  background url('assets/images/dealer_bg.png') no-repeat center top
 .auth-header
   position relative
   text-align center

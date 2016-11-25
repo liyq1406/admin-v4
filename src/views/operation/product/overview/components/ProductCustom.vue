@@ -5,13 +5,13 @@
     </div>
     <div class="row mt20">
       <div :class="[firstcol]">
-        <chart :options="fisrtModelOptions"></chart>
+        <chart :options="fisrtModelOptions" :loading="fisrtLoading"></chart>
       </div>
       <div v-if="secondConfig.id" :class="[secondcol]">
-        <chart :options="secondModelOptions"></chart>
+        <chart :options="secondModelOptions" :loading="secondLoading"></chart>
       </div>
       <div v-if="thirdConfig.id" :class="[thirdcol]">
-        <chart :options="thirdModelOptions"></chart>
+        <chart :options="thirdModelOptions" :loading="thirdLoading"></chart>
       </div>
     </div>
   </div>
@@ -50,6 +50,9 @@ export default {
 
   data () {
     return {
+      fisrtLoading: false,
+      secondLoading: false,
+      thirdLoading: false,
       datapoints: [],
       inited: false,
       noNameCount: 0,
@@ -292,6 +295,13 @@ export default {
           }
         }
       }
+      if (index === 1) {
+        this.fisrtLoading === true
+      } else if (index === 2) {
+        this.secondLoading === true
+      } else {
+        this.thirdLoading === true
+      }
       api.statistics.deviceDatapointAnalytics(config.product_id, params).then((res) => {
         if (res.status === 200) {
           this.dealResult(res.data, config, index)
@@ -313,14 +323,17 @@ export default {
         data.push(temp)
       }
       if (index === 1) {
+        this.fisrtLoading === false
         this.firstData.data = data
         this.firstData.dp_index = config.dp_index
         this.firstData.title = config.title
       } else if (index === 2) {
+        this.secondLoading === false
         this.secondData.data = data
         this.secondData.dp_index = config.dp_index
         this.secondData.title = config.title
       } else {
+        this.thirdLoading === false
         this.thirdData.title = config.title
         this.thirdData.dp_index = config.dp_index
         this.thirdData.data = data

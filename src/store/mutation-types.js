@@ -84,3 +84,6 @@ export const UPDATE_PLUGIN = 'UPDATE_PLUGIN'
 
 // 设置当前浏览插件
 export const SET_CURRENT_PLUGIN = 'SET_CURRENT_PLUGIN'
+
+// 设置echart script标签的加载状态
+export const SET_ECHARTS_STATUS = 'SET_ECHARTS_STATUS'
