@@ -5,10 +5,13 @@
     </div>
     <div class="panel-bd">
       <div class="row">
-        <div class="col-11">
-          <chart :options="regionOptions" :loading="loadingData" type="china-map" height="450px"></chart>
+        <div class="col-13 tac" v-if="showWorld">
+          <chart :options="worldDistributeOptions" @world-map-select="worldMapSelect" :loading="loadingData" height="450px" type="world-map"></chart>
         </div>
-        <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
+        <div class="col-13 tac" v-if="!showWorld">
+          <chart :options="distributeOptions" :loading="loadingData" height="450px" type="china-map"></chart>
+        </div>
+        <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
           <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
         </div>
       </div>
@@ -19,7 +22,6 @@
 <script>
 import api from 'api'
 import Chart from 'components/Chart/index'
-import convertData from 'components/chart/convert-data'
 import {numToPercent} from 'utils'
 export default {
   name: 'Distributing',
@@ -30,7 +32,9 @@ export default {
 
   data () {
     return {
-      states: [],
+      showWorld: true,
+      countrys: [],
+      chinaProvinces: [],
       regionDataRaw: {},
       loadingData: false,
       headers: [
@@ -52,87 +56,153 @@ export default {
   },
 
   computed: {
+    distributeData () {
+      let dataPer
+      if (this.showWorld) {
+        dataPer = this.worldDataPer
+      } else {
+        dataPer = this.chinaDataPer
+      }
+      return dataPer
+    },
     // 区域地图配置
-    regionOptions () {
+    worldDistributeOptions () {
       return {
+        title: {
+          // text: '',
+          left: 'center',
+          top: 'top'
+        },
         tooltip: {
           trigger: 'item',
-          formatter (params) {
-            return params.name + ' : ' + params.value[2]
+          formatter: function (obj) {
+            let data = obj.data
+            let valStr = '-'
+            if (data && 'value' in data) {
+              let percentage = Math.round(data.percent * Math.pow(10, 4)) / Math.pow(10, 2)
+              valStr = `${data.value} (${percentage}%)`
+            }
+            return `${obj.seriesName} <br/>${data.name} : ${valStr}`
+          }
+        },
+        toolbox: {
+          show: true,
+          orient: 'vertical',
+          left: 'right',
+          top: 'center',
+          feature: {
+            // dataView: {readOnly: false},
+            // restore: {},
+            // saveAsImage: {}
           }
         },
         visualMap: {
           min: 0,
           max: this.max,
+          text: ['High', 'Low'],
+          realtime: false,
           calculable: true,
           inRange: {
-            color: ['#50a3ba', '#eac736', '#d94e5d']
-          },
-          textStyle: {
-            color: '#fff'
+            color: ['lightskyblue', 'yellow', 'orangered']
           }
         },
-        geo: {
-          map: 'china',
+        series: [
+          {
+            name: '设备数量',
+            type: 'map',
+            mapType: 'world',
+            roam: true,
+            itemStyle: {
+              emphasis: {label: {show: true}}
+            },
+            data: this.worldDataPer
+          }
+        ]
+      }
+    },
+
+    distributeOptions () {
+      let res = {
+        tooltip: {
+          trigger: 'item',
+          formatter (obj) {
+            let data = obj.data
+            let valStr = '-'
+            if (data && 'value' in data) {
+              let percentage = Math.round(data.percent * Math.pow(10, 4)) / Math.pow(10, 2)
+              valStr = `${data.value} (${percentage}%)`
+            }
+            return `${obj.seriesName} <br/>${data.name} : ${valStr}`
+          }
+        },
+        toolbox: {
+          show: true,
+          orient: 'vertical',
+          right: '30',
+          top: '30',
+          feature: {
+            myTool1: {
+              show: true,
+              title: '返回上一级',
+              icon: 'image:///static/images/left-arrow.png',
+              onclick: function () {}
+            }
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: this.max,
+          left: 10,
+          bottom: 20,
+          text: ['高', '低'],
+          calculable: true
+        },
+        series: [{
+          name: '设备数量',
+          type: 'map',
+          mapType: 'china',
+          roam: false,
           label: {
+            normal: {
+              show: true
+            },
             emphasis: {
-              show: false
+              show: true
             }
           },
           itemStyle: {
             normal: {
               areaColor: '#FFF',
               borderColor: '#666'
-            },
-            emphasis: {
-              areaColor: '#EEE'
-            }
-          }
-        },
-        series: [{
-          name: this.$t('operation.product.analysis.hot.device_count'),
-          type: 'scatter',
-          coordinateSystem: 'geo',
-          data: convertData(this.regionData),
-          symbolSize: 12,
-          label: {
-            normal: {
-              show: false
-            },
-            emphasis: {
-              show: false
             }
           },
-          itemStyle: {
-            emphasis: {
-              borderColor: '#fff',
-              borderWidth: 1
-            }
-          }
+          data: this.chinaDataPer
         }]
       }
+      res.toolbox.feature.myTool1.onclick = () => {
+        this.showWorld = true
+      }
+      return res
     },
 
     // 最大值
     max () {
       let ret = 0
-      if (this.regionData.length) {
-        ret = _.max(_.map(this.regionData, 'value'))
+      let data
+      if (this.showWorld) {
+        data = this.worldDataPer
+      } else {
+        data = this.chinaDataPer
+      }
+      if (data.length) {
+        ret = _.max(_.map(data, 'value'))
       }
       return ret
     },
-
-    // 分页信息
-    page () {
-      return {
-        total: this.total,
-        currentPage: this.currentPage,
-        countPerPage: this.countPerPage
-      }
-    },
     tables () {
       var result = []
-      this.dataPer.forEach((item) => {
+      let cated = this.distributeData.slice(0, 10)
+      cated.forEach((item) => {
         if (!item.value) return
         var distribute = {
           region: item.name,
@@ -142,68 +212,49 @@ export default {
         }
         result.push(distribute)
       })
+      if (result.length) {
+        result.sort((a, b) => {
+          return b.count - a.count
+        })
+      }
       return result
     },
-    regionData () {
-      let res = []
+    worldDataPer () {
+      let worldRes = []
       for (let i in this.regionDataRaw) {
-        let findState = _.find(this.states, (item) => {
+        let findCountry = _.find(this.countrys, (item) => {
           return item.code === i
         })
-        if (!findState) {
+        if (!findCountry) {
           continue
         }
-        if (i === '11' /* 北京 */ || i === '31' /* 上海 */ || i === '50' /* 重庆 */ || i === '12' /* 天津 */ || i === '81' /* 香港 */ || i === '82' /* 澳门 */) {
-          res.push({
-            name: findState.name,
-            value: this.regionDataRaw[i].sale_total
-          })
-        } else {
-          for (let j in this.regionDataRaw[i]) {
-            let findCity = _.find(findState.citys || [], (item) => {
-              return item.code === j
-            })
-            if (findCity) {
-              res.push({
-                name: findCity.name,
-                value: this.regionDataRaw[i][j].sale_total
-              })
-            }
-          }
-        }
-      }
-      return res
-    },
-    dataPer () {
-      let res = []
-      for (let i in this.regionDataRaw) {
-        let findState = _.find(this.states, (item) => {
-          return item.code === i
-        })
-        if (!findState) {
-          continue
-        }
-        res.push({
-          name: findState.name,
+        worldRes.push({
+          name: findCountry.name,
           value: this.regionDataRaw[i].sale_total
         })
       }
-      res.sort((a, b) => {
-        if (a.value > b.value) {
-          return -1
-        } else if (a.value < b.value) {
-          return 1
-        } else {
-          return 0
-        }
-      })
-
-      if (res.length > 10) {
-        res = numToPercent(res.slice(0, 10), 'value')
-      } else {
-        res = numToPercent(res, 'value')
+      worldRes = numToPercent(worldRes, 'value')
+      return worldRes
+    },
+    chinaDataPer () {
+      let chinaRes = []
+      if (!this.regionDataRaw[1]) {
+        return
       }
-      return res
+      for (let i in this.regionDataRaw[1]) {
+        let findProvinces = _.find(this.chinaProvinces, (item) => {
+          return item.code === i
+        })
+        if (!findProvinces) {
+          continue
+        }
+        chinaRes.push({
+          name: findProvinces.name,
+          value: this.regionDataRaw[1][i].sale_total
+        })
+      }
+      chinaRes = numToPercent(chinaRes, 'value')
+      return chinaRes
     }
   },
 
@@ -215,12 +266,18 @@ export default {
   ready () {
     this.getRegion()
     this.getChinaCityCode()
+    this.getWorldCountry()
   },
 
   methods: {
     getChinaCityCode () {
       this.$http.get('/static/data/areas/zh-cn/1.json').then((res) => {
-        this.states = res.data.states
+        this.chinaProvinces = res.data.states
+      })
+    },
+    getWorldCountry () {
+      this.$http.get('/static/data/areas/en-us/countryList.json').then((res) => {
+        this.countrys = res.data
       })
     },
     sort (header) {
@@ -234,14 +291,18 @@ export default {
       this.loadingData = true
       api.statistics.getDealeSaleRegion().then((res) => {
         if (res.status === 200) {
-          // 只取中国区数据
-          this.regionDataRaw = res.data[1] // 1表示中国区代码
+          this.regionDataRaw = res.data
         }
         this.loadingData = false
       }).catch((res) => {
         this.handleError(res)
         this.loadingData = false
       })
+    },
+    worldMapSelect (name) {
+      if (name === 'China') {
+        this.showWorld = false
+      }
     }
   }
 }
