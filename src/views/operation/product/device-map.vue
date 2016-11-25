@@ -113,11 +113,11 @@ export default {
       markers: [],
       infoWindow: null,
       geocoder: null,
-      zoomLevel: 10,
+      zoomLevel: 4,
       sizes: null,
       currIndex: 0,
       hoverIndex: -1,
-      mapCenter: [],
+      mapCenter: [105.0293195608, 36.6847961226],
       query: '',
       searching: false,
       queryTypeOptions: [{
@@ -240,10 +240,11 @@ export default {
 
   methods: {
     initMap () {
-      if (!window.navigator.geolocation) {
-        console.log('No Geolocation Support')
-        return
-      }
+      // 判断是否支持 GeoLocation
+      // if (!window.navigator.geolocation) {
+      //   console.log('No Geolocation Support')
+      //   return
+      // }
 
       // 地图初始化配置
       let options = {
@@ -252,6 +253,7 @@ export default {
         zoomControlOptions: {
           position: google.maps.ControlPosition.TOP_LEFT
         },
+        center: new google.maps.LatLng(this.mapCenter[1], this.mapCenter[0]),
         streetViewControl: false,
         mapTypeControl: false
       }
@@ -259,14 +261,15 @@ export default {
       // 初始化
       this.map = new google.maps.Map(document.getElementById('device-map'), options)
 
-      this.loadingText = this.$t('operation.product.devicemap.targeting')
-      navigator.geolocation.getCurrentPosition(position => {
-        let lat = position.coords.latitude
-        let lng = position.coords.longitude
-        let geolocate = new google.maps.LatLng(lat, lng)
-        this.mapCenter = [lng, lat]
-        this.map.setCenter(geolocate)
-      })
+      // 定位到当前城市
+      // this.loadingText = this.$t('operation.product.devicemap.targeting')
+      // navigator.geolocation.getCurrentPosition(position => {
+      //   let lat = position.coords.latitude
+      //   let lng = position.coords.longitude
+      //   let geolocate = new google.maps.LatLng(lat, lng)
+      //   this.mapCenter = [lng, lat]
+      //   this.map.setCenter(geolocate)
+      // })
 
       icon1 = {
         url: '/static/images/map/marker_normal.png',
@@ -454,7 +457,7 @@ export default {
         })
 
         marker.addListener('click', () => {
-          this.handleDeviceItemClick(index)
+          this.onDeviceClick(index)
         })
 
         marker.addListener('mouseover', () => {
