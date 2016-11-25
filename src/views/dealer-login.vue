@@ -2,7 +2,12 @@
   <div>
     <loginarea :config="config"></loginarea>
     <div class="auth-form login-form">
-      <div class="inner">
+      <!-- 无权限时登录页面 -->
+      <div class="inner unableinner" v-if="!able">
+        <p>该经销商暂无登录权限，</p>
+        <p>请联系相关工作人员开启对应入口权限</p>
+      </div>
+      <div class="inner" v-else>
         <div class="form-legend">{{config.login_context}}</div>
         <div class="form">
           <validator name="authValidation">
@@ -74,6 +79,7 @@
 
     data () {
       return {
+        able: false,
         config: {},
         currLang: window.localStorage.getItem('lang'),
         isShowOldEntrance: IS_SHOW_OLD_ENTRANCE,
@@ -120,6 +126,16 @@
           api.dealer.getConfig(this.$route.params.dealerId, this.$route.params.corpId).then((res) => {
             console.log(res)
             this.config = res.data
+            // 先判断总配置开关
+            if (this.config.is_enable) {
+              this.able = true
+            }
+            // 再判断是否有产品打开授权
+            this.config.product.forEach((item) => {
+              if (item.is_visible) {
+                this.able = true
+              }
+            })
             let value = JSON.stringify(res.data)
             window.localStorage.setItem('dealerConfig', value)
             // if (this.model.logo_url) {
@@ -228,6 +244,7 @@
           'analyse': '/analysis'
         }
         var PRO_SUBS = ['summary', 'device_list', 'alert', 'device_map-map', 'analyse']
+        // 先确认是否产品内有打开的模块
         this.config.product.forEach((item) => {
           if (item.is_visible && !modePage) {
             firProductId = item.product_id
@@ -274,6 +291,12 @@
 
 <style lang="stylus" scoped>
   @import '../assets/stylus/common'
+  .unableinner
+    height 201px
+    text-align center
+    padding-top 100px
+    p
+      font-size 16px
 
   .login-form
     .inner

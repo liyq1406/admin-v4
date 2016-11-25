@@ -159,7 +159,7 @@ export default {
   vuex: {
     getters: {
       corp: ({ system }) => system.corp,
-      productList: ({ products }) => products.all
+      productList: ({ products }) => products.released
     }
   },
 
@@ -359,6 +359,8 @@ export default {
         alert('登录页面文案不能为空！')
         return
       }
+      // 是否将总开关置为关闭
+      let turnOff = true
       // 处理模块配置提交数据
       let modeType = []
       this.tables.forEach((table) => {
@@ -376,10 +378,16 @@ export default {
           is_visible: product.is_visible
         }
         limitType.push(pobj)
+        if (product.is_visible) {
+          turnOff = false
+        }
       })
       // 处理logo图片数据
       this.model.logo_url = this.images[0]
       if (limitType.length === this.allProducts.length && modeType.length === this.tables.length) {
+        if (turnOff) {
+          this.model.is_enable = false
+        }
         this.model.product = limitType
         this.model.module = modeType
         console.log(this.model)
@@ -409,6 +417,7 @@ export default {
       position relative
       width 200px
       height auto
+      min-height 250px
       /*position absolute
       left 0
       top 0*/
