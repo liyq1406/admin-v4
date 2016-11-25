@@ -7,7 +7,7 @@
             <a class="btn btn-primary" v-link="{path: '/dev/settings/views/source/add'}"><i class="fa fa-plus"></i>添加数据源</a>
           </div>
         </div>
-        <x-table :headers="headers" :tables="tables" @tbody-title="editRule">
+        <x-table :headers="headers" :rows="rows" @tbody-title="editRule">
         </x-table>
       </div>
     </div>
@@ -58,7 +58,7 @@ export default {
   },
 
   computed: {
-    tables () {
+    rows () {
       let res = []
       this.list.forEach((item) => {
         let product = _.find(this.products, (prod) => {

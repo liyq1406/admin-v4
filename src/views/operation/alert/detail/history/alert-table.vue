@@ -39,7 +39,7 @@
             </div>
           </div>
         </div>
-        <x-table :headers="headers" :tables="tables" :page="page" :selecting="selecting" :loading="loadingData" @tbody-content="getInfo" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
+        <x-table :headers="headers" :rows="rows" :page="page" :selecting="selecting" :loading="loadingData" @tbody-content="getInfo" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
           <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
             <label>{{ $t('operation.product.alert.sign') }}:</label>
             <button class="btn btn-ghost" @click="setDeal">{{ $t('operation.product.alert.processed') }}</button>
@@ -192,7 +192,7 @@ export default {
       return condition
     },
 
-    tables () {
+    rows () {
       var result = []
       this.alerts.map((item) => {
         // let levelCls = ({

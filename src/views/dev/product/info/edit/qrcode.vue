@@ -7,7 +7,7 @@
       <h2>设置产品二维码信息<span class="hl-gray">（T、V、PID为系统字段，不可更改）</span></h2>
     </div>
     <div class="panel-bd">
-      <x-table :headers="columns" :tables="fieldList" @tbody-name="editField" @tbody-info="editField"></x-table>
+      <x-table :headers="columns" :rows="fieldList" @tbody-name="editField" @tbody-info="editField"></x-table>
     </div>
     <div class="panel-hd mt30">
       <h2>产品二维码</h2>

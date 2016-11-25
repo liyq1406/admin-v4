@@ -39,7 +39,7 @@
               </div>
             </div> -->
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @tbody-edit="getList"  @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData" @tbody-edit="getList"  @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
         </div>
       </div>
     </div>
@@ -125,7 +125,7 @@ export default {
       return condition
     },
     // 导入列表
-    tables () {
+    rows () {
       var result = []
       this.records.map((item) => {
         var device = {

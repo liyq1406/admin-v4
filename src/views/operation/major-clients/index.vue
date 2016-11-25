@@ -56,7 +56,7 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-username="goDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
+          <x-table :headers="headers" :rows="rows" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-username="goDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
           </x-table>
         </div>
       </div>
@@ -180,7 +180,7 @@ export default {
      * 表格内容对象
      * @return {[type]} [description]
      */
-    tables () {
+    rows () {
       var result = []
       this.majorClients.map((item) => {
         var majorClient = {

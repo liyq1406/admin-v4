@@ -290,7 +290,6 @@ export default {
       apps: [],
       currProduct: {},
       loadingFirmwares: false,
-      tables: [],
       checkdatas: [],
       adding: false,
       empowering: false,

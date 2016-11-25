@@ -7,7 +7,7 @@
     <div class="panel">
       <div class="panel-hd"></div>
       <div class="panel-bd">
-        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData"  @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" :selecting="true" @selected-change="selectChange">
+        <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData"  @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" :selecting="true" @selected-change="selectChange">
           <div slot="filter-bar" class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
@@ -194,7 +194,7 @@
         }
         return result
       },
-      tables () {
+      rows () {
         let res = []
         this.devices.forEach((item) => {
           let userInfo = _.find(this.users, (user) => {

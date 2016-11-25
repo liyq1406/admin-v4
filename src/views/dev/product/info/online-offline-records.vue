@@ -6,7 +6,7 @@
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt15">
       <div class="panel-bd">
-        <x-table :headers="columns" :tables="recordList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
+        <x-table :headers="columns" :rows="recordList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">

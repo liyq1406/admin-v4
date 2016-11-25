@@ -10,7 +10,7 @@
             <button @click.prevent.stop="isShowType = true" class="btn btn-primary"><i class="fa fa-plus"></i>添加菜谱</button>
           </div>
         </div>
-        <x-table :headers="columns" :tables="recipeList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" :simple-page="true">
+        <x-table :headers="columns" :rows="recipeList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" :simple-page="true">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">

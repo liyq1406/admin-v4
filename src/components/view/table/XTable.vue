@@ -26,17 +26,17 @@
           </tr>
         </thead>
         <tbody>
-          <template v-if="tables.length > 0">
-            <tr v-for="(tableIndex, table) in tables" track-by="$index">
+          <template v-if="rows.length > 0">
+            <tr v-for="(rowIndex, row) in rows" track-by="$index">
               <th v-show="selecting" class="tac">
-                <input type="checkbox" :checked="selectedTables.indexOf(table) > -1" @change="selectedTablesChange(table)">
+                <input type="checkbox" :checked="selectedRows.indexOf(row) > -1" @change="selectedRowsChange(row)">
               </th>
-              <td v-for="tHeader in headers" :class="tHeader.class" @click.prevent="tbodyClick(tHeader, table, tableIndex, $event)">
-                {{{table[tHeader.key]}}}
+              <td v-for="tHeader in headers" :class="tHeader.class" @click.prevent="tbodyClick(tHeader, row, rowIndex, $event)">
+                {{{row[tHeader.key]}}}
               </td>
             </tr>
           </template>
-          <tr v-if="tables.length === 0">
+          <tr v-if="rows.length === 0">
             <td :colspan="headers.length + 1" class="tac">
               <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
             </td>
@@ -66,7 +66,7 @@
       // },
       // headers：[
       //   {
-      //     key: 'id', // 与tables的key对应 （必须）
+      //     key: 'id', // 与rows的key对应 （必须）
       //     title: 'ID', // 标题的内容 （必须）
       //     class: 'tac', // 传入className 自动加入整一列中 多个类名用空格隔开 （非必须）
       //     sortType: -1, // 排序 传入1为升序 0为不排序  其他为降序 （非必须）
@@ -74,11 +74,11 @@
       //     pointer: true, // 是否显示可点 （非必须）
       //   },
       //   {
-      //     key: 'creatTime', // 与tables的key对应 （必须）
+      //     key: 'creatTime', // 与rows的key对应 （必须）
       //     title: '创建时间' // 标题的内容 （必须）
       //   }
       // ],
-      // tables: [
+      // rows: [
       //   {
       //     id: '<a href="">idididid</a>',
       //     creatTime: '123',
@@ -99,7 +99,7 @@
       // 事件名称：选择内容改变
       // @selected-change
       // 参数一个
-      // 参数是当前的已经选择的table数组
+      // 参数是当前的已经选择的row数组
 
       // 事件名称：每页显示数据条数改变
       // @page-count-update
@@ -119,7 +119,7 @@
       // 事件名称：表格点击事件 key是当前header的key值
       // @tbody-{{key}} （key要转成非驼峰形式 即中划线）
       // 参数有三个：
-      // 参数是当前的已经选择的header对象和table对象 以及当前表格table在列表中的索引index
+      // 参数是当前的已经选择的header对象和row对象 以及当前表格row在列表中的索引index
     /** **************************************/
     /** *************组件对外暴露slot*************************/
       // 表格头部内容
@@ -128,12 +128,6 @@
     name: 'XTable',
 
     props: {
-      page: {
-        type: Object,
-        default () {
-          return {}
-        }
-      },
       // 是否正在加载
       loading: {
         type: Boolean,
@@ -148,6 +142,7 @@
         twoWay: false
       },
 
+      // 表头信息
       headers: {
         type: Array,
         default () {
@@ -156,7 +151,8 @@
         twoWay: false
       },
 
-      tables: {
+      // 数据行
+      rows: {
         type: Array,
         default () {
           return []
@@ -164,124 +160,133 @@
         twoWay: false
       },
 
+      // 是否带边框
       bordered: {
         type: Boolean,
         default: true
       },
-      // page组件的样式
+
+      // 分页信息
+      page: {
+        type: Object,
+        default () {
+          return {}
+        }
+      },
+
+      // 是否简洁分页
       simplePage: {
         type: Boolean,
         default: false
       }
     },
 
-    components: {
-    },
-
     computed: {
       /**
        * 总数据数
-       * @return {[type]} [description]
+       * @return {Number}
        */
       total () {
         return this.page.total - 0 || 0
       },
+
       /**
        * 每页条数
-       * @return {[type]} [description]
+       * @return {Number}
        */
       countPerPage () {
         return this.page.countPerPage - 0 || 10
       },
+
       /**
        * 当前页码
-       * @return {[type]} [description]
+       * @return {Number}
        */
       currentPage () {
         return this.page.currentPage - 0 || 1
       }
     },
+
     data () {
       return {
-        // 已选择的数据
-        selectedTables: [],
-        // 是否全选
-        selectedAll: false
+        selectedRows: [], // 已选择的数据
+        selectedAll: false // 是否全选
       }
     },
 
     watch: {
       selecting () {
-        this.selectedTables = []
+        this.selectedRows = []
         this.selectedAll = false
       },
-      tables () {
+
+      rows () {
         this.initSelected() // 修正选择状态
       }
     },
+
     methods: {
       /**
        * 每页显示数据条数改变
-       * @param  {[type]} count [description]
-       * @return {[type]}       [description]
+       * @param  {Number} count 每页显示数据条数
        */
       pageCountUpdate (count) {
         this.$emit('page-count-update', count)
       },
+
       /**
        * 当前页改变
-       * @return {[type]} [description]
+       * @param  {Number} current 当前页
        */
       pageCurrentChange (current) {
         this.$emit('current-page-change', current)
       },
+
       /**
        * 初始化选择状态
-       * @return {[type]} [description]
        */
       initSelected () {
         if (this.selecting) {
-          if (this.tables.length) {
-            var arr = this.selectedTables.concat()
+          if (this.rows.length) {
+            var arr = this.selectedRows.concat()
             arr.map((item) => {
-              if (this.tables.indexOf(item) === -1) {
-                this.selectedTables.$remove(item)
+              if (this.rows.indexOf(item) === -1) {
+                this.selectedRows.$remove(item)
               }
             })
-            this.selectedAll = this.tables.length === this.selectedTables.length
+            this.selectedAll = this.rows.length === this.selectedRows.length
           } else {
-            this.selectedTables = []
+            this.selectedRows = []
             this.selectedAll = false
           }
-          this.$emit('selected-change', this.selectedTables)
+          this.$emit('selected-change', this.selectedRows)
         } else {
-          this.selectedTables = []
+          this.selectedRows = []
           this.selectedAll = false
         }
       },
 
       /**
        * 全选按钮被点击
-       * @param  {[type]} event [description]
-       * @return {[type]}       [description]
+       * @param  {HTML DOM Event} event 事件
        */
       selectAllEvent (event) {
         if (this.selecting) {
           var selected = event.target.checked
           if (selected) {
-            this.selectedTables = [].concat(this.tables)
+            this.selectedRows = [].concat(this.rows)
           } else {
-            this.selectedTables = []
+            this.selectedRows = []
           }
-          this.$emit('selected-change', this.selectedTables)
+          this.$emit('selected-change', this.selectedRows)
           // alert('全选')
         }
       },
+
       /**
        * theader点击事件
-       * @param  {[type]} theader [description]
-       * @param  {[type]} index   [description]
-       * @return {[type]}         [description]
+       * @param  {Object} theader 表头
+       * @param  {Number} index   对应的索引
        */
       theaderClick (theader, index) {
         var key = this.hump2line(theader.key)
@@ -291,22 +296,24 @@
 
       /**
        * tbody被点击事件
-       * @param  {[type]} tHeader [description]
-       * @param  {[type]} table   [description]
-       * @return {[type]}         [description]
+       * @param  {Object} theader 表头
+       * @param  {Object} row 数据行
+       * @param  {Number} rowIndex 数据行索引
+       * @param  {HTML DOM Event} ev 事件
        */
-      tbodyClick (theader, table, lineIndex, ev) {
+      tbodyClick (theader, row, rowIndex, ev) {
         var key = this.hump2line(theader.key)
         key = key.replace('_', '-')
         // TODO:待优化
         if (ev.target.tagName.toLowerCase() === 'a' || ev.target.tagName.toLowerCase() === 'button') {
-          this.$emit('tbody-' + key, table, theader, lineIndex)
+          this.$emit('tbody-' + key, row, theader, rowIndex)
         }
       },
+
       /**
        * 驼峰字符串转普通中划线字符串
-       * @param  {[type]} humpName [description]
-       * @return {[type]}          [description]
+       * @param  {String} humpName 驼峰字符串
+       * @return {String}
        */
       hump2line (humpName) {
         return humpName.replace(/([A-Z])/g, '-$1').toLowerCase()
@@ -314,15 +321,14 @@
 
       /**
        * checkbox点击事件
-       * @param  {[type]} table [description]
-       * @return {[type]}       [description]
+       * @param  {Object} row 数据行
        */
-      selectedTablesChange (table) {
+      selectedRowsChange (row) {
         if (this.selecting) {
-          if (this.selectedTables.indexOf(table) >= 0) {
-            this.selectedTables.$remove(table)
+          if (this.selectedRows.indexOf(row) >= 0) {
+            this.selectedRows.$remove(row)
           } else {
-            this.selectedTables.push(table)
+            this.selectedRows.push(row)
           }
           this.initSelected()
         }
@@ -330,15 +336,15 @@
 
       /**
        * 计算theader的类名
-       * @param  {[type]} tHeader [description]
-       * @return {[type]}         [description]
+       * @param  {Object} theader 表头
+       * @return {Object}
        */
-      headerClass (tHeader) {
+      headerClass (theader) {
         var result = {}
-        if (tHeader.class) {
-          result[tHeader.class] = true
+        if (theader.class) {
+          result[theader.class] = true
         }
-        result.pointer = Boolean(tHeader.sortType || tHeader.pointer)
+        result.pointer = Boolean(theader.sortType || theader.pointer)
         return result
       }
     }

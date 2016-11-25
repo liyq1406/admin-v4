@@ -8,7 +8,7 @@
           </a>
         </div>
       </div>
-      <x-table :headers="headers" :tables="tables" :loading="loadingData" :page="page">
+      <x-table :headers="headers" :rows="rows" :loading="loadingData" :page="page">
 
         <div class="filter-bar" slot="filter-bar">
           <div class="filter-group fl">
@@ -118,7 +118,7 @@
     },
 
     computed: {
-      tables () {
+      rows () {
         var result = []
         return result
       },

@@ -26,7 +26,7 @@
             </div> -->
           </div>
         </div>
-        <x-table :headers="headers" :tables="tables"></x-table>
+        <x-table :headers="headers" :rows="rows"></x-table>
       </div>
     </div>
   </div>
@@ -100,7 +100,7 @@
     },
 
     computed: {
-      tables () {
+      rows () {
         var result = []
         this.workOrders.map((item) => {
           var device = {

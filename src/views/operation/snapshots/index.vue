@@ -79,7 +79,7 @@
             </div>
           </div>
           <div class="ml10" v-if="stTable && stTable.length">
-            <x-table :headers="stHeader" :tables="stTable" :page="stPage" @current-page-change="onStCurrentPageChange" :simple-page="true"></x-table>
+            <x-table :headers="stHeader" :rows="stTable" :page="stPage" @current-page-change="onStCurrentPageChange" :simple-page="true"></x-table>
           </div>
         </div>
       </div>

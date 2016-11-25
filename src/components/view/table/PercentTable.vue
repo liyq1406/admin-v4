@@ -3,7 +3,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th v-for="tHeader in headers" :class="headerClass(tHeader)" @click="theaderClick(tHeader, $index)">
+          <th v-for="(headerIndex, tHeader) in headers" :class="headerClass(tHeader)" @click="theaderClick(tHeader, headerIndex)">
             <div class="theader-box">
               <slot :name="'theader-' + hump2line(tHeader.key)">
                 {{{tHeader.title}}}
@@ -18,19 +18,19 @@
         </tr>
       </thead>
       <tbody>
-        <template v-if="resetTables.length > 0">
-          <tr v-for="(tableIndex, table) in resetTables" track-by="$index">
+        <template v-if="resetRows.length > 0">
+          <tr v-for="(rowIndex, row) in resetRows" track-by="$index">
             <td v-for="tHeader in headers" :class="tHeader.class">
               <template v-if="tHeader.key === 'percent'">
-                <percentage-bar :percentage="table.percent" :color="table.color"></percentage-bar>
+                <percentage-bar :percentage="row.percent" :color="row.color"></percentage-bar>
               </template>
               <template v-else>
-                {{{table[tHeader.key]}}}
+                {{{row[tHeader.key]}}}
               </template>
             </td>
           </tr>
         </template>
-        <tr v-if="resetTables.length === 0">
+        <tr v-if="resetRows.length === 0">
           <td :colspan="headers.length + 1" class="tac">
             <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
           </td>
@@ -55,7 +55,7 @@
           return []
         }
       },
-      tables: {
+      rows: {
         type: Array,
         default () {
           return [
@@ -69,9 +69,9 @@
     },
 
     computed: {
-      resetTables () {
+      resetRows () {
         var result = []
-        result = this.tables.map((item, index) => {
+        result = this.rows.map((item, index) => {
           item.percent = String(item.percent).replace('%', '') + '%'
           item.color = item.color || this.colors[index]
           return item
@@ -114,7 +114,7 @@
       headers () {
         this.checkData()
       },
-      tables () {
+      rows () {
         this.checkData()
       }
     },
@@ -154,12 +154,12 @@
         //   }
         //   this.headers.push(header)
         // }
-        // 检查tables是否含有percent属性 如果没有的话默认是0
-        // this.tables.forEach((item, index) => {
+        // 检查rows是否含有percent属性 如果没有的话默认是0
+        // this.rows.forEach((item, index) => {
         //   item.percent = String(item.percent).replace('%', '') + '%'
         //   item.color = item.color || this.colors[index]
         // })
-        // console.log(this.tables)
+        // console.log(this.rows)
       },
       /**
        * 驼峰字符串转普通中划线字符串

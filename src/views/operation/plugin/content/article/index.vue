@@ -10,7 +10,7 @@
             <a class="btn btn-primary" v-link="{path: 'article/add'}"><i class="fa fa-plus"></i>添加文章</a>
           </div>
         </div>
-        <x-table :headers="columns" :tables="articleList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" :simple-page="true">
+        <x-table :headers="columns" :rows="articleList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" :simple-page="true">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">

@@ -32,7 +32,7 @@
     </div>
     <div class="panel">
       <div class="panel-bd">
-        <x-table :headers="headers" :selecting="selecting" @selected-change="selectChange" @tbody-content="getInfo" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy" @tbody-mac="jumpInfo">
+        <x-table :headers="headers" :selecting="selecting" @selected-change="selectChange" @tbody-content="getInfo" :rows="rows" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy" @tbody-mac="jumpInfo">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -299,7 +299,7 @@ export default {
       return condition
     },
 
-    tables () {
+    rows () {
       var result = []
       this.alerts.forEach((item) => {
         // let levelCls = ({

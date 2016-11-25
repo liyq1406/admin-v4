@@ -10,7 +10,7 @@
             <button class="btn btn-primary" @click="showAddModal"><i class="fa fa-plus"></i>添加运营位 </button>
           </div>
         </div>
-        <x-table :headers="columns" :tables="operationPositoinList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" @tbody-operation="showEditModal" :simple-page="true"></x-table>
+        <x-table :headers="columns" :rows="operationPositoinList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" @tbody-operation="showEditModal" :simple-page="true"></x-table>
       </div>
 
       <modal :show.sync="modal.show" @close="onSubmitCancel">

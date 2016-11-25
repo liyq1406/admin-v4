@@ -6,7 +6,7 @@
     <chart :options="mapOptions" :loading="loadingData" type="bmap" height="450px"></chart>
     <div class="panel mt20">
       <div class="panel-bd">
-        <x-table :headers="columns" :tables="tables" :loading="loadingData" :page="page" @theader-update-time="sortBySomeKey" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
+        <x-table :headers="columns" :rows="rows" :loading="loadingData" :page="page" @theader-update-time="sortBySomeKey" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group">
               <div class="filter-group-item">
@@ -374,7 +374,7 @@ export default {
       result = result.substr(0, 2)
       return result
     },
-    tables () {
+    rows () {
       var result = []
       this.dataList.forEach((item) => {
         var table = {

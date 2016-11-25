@@ -11,7 +11,7 @@
         <h2>{{ $t('account.security.log_list') }}</h2>
       </div>
       <div class="panel-bd ml20 mr20">
-        <x-table :headers="columns" :tables="logList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+        <x-table :headers="columns" :rows="logList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
       </div>
     </div>
   </div>

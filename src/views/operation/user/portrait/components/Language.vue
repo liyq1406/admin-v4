@@ -4,7 +4,7 @@
       <chart :options="languageOptions" :loading="loadingData" height="400px"></chart>
     </div>
     <div class="col-11 col-offset-1 data-table-wrap">
-      <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
+      <percent-table :headers="headers" :rows="rows" @theader-percent="sort"></percent-table>
     </div>
   </div>
 </template>
@@ -43,7 +43,7 @@ export default {
   },
 
   computed: {
-    tables () {
+    rows () {
       var result = []
       var total = 0
       this.languages.forEach((item) => {

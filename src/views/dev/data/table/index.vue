@@ -64,7 +64,7 @@
           <div class="col-20 data-table-border details-box">
             <div class="selected-first-class" v-show="selectedFirstClass.selected">
               <div class="details-table">
-                <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables" :page="page" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></intelligent-table>
+                <intelligent-table :headers.sync="vHeaders" :rows.sync="vTables" :page="page" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></intelligent-table>
                 <pagination :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate"></pagination>
               </div>
             </div>

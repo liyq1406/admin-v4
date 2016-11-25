@@ -23,7 +23,7 @@
       </div>
       <div class="panel">
         <div class="panel-bd">
-          <x-table :headers="headers" @selected-change="" @tbody-picture-id="showPic" @tbody-picture-url="showUrl" @tbody-edit="getInfo" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
+          <x-table :headers="headers" @selected-change="" @tbody-picture-id="showPic" @tbody-picture-url="showUrl" @tbody-edit="getInfo" :rows="rows" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
           </x-table>
         </div>
       </div>
@@ -151,7 +151,7 @@ export default {
       return arr
     },
 
-    tables () {
+    rows () {
       var result = []
       this.list.forEach((item) => {
         let obj = {

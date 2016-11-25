@@ -54,7 +54,7 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-create-date="sortBySomeKey" @tbody-id="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
+          <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData" @theader-create-date="sortBySomeKey" @tbody-id="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
         </div>
       </div>
     </div>
@@ -193,11 +193,11 @@
         timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
         // headers: [
         //   {
-        //     key: 'id', // 与tables的key对应
+        //     key: 'id', // 与rows的key对应
         //     title: 'ID' // 标题的内容
         //   },
         //   {
-        //     key: 'nickname', // 与tables的key对应
+        //     key: 'nickname', // 与rows的key对应
         //     title: this.$t('operation.user.list.columns.nickname') // 标题的内容
         //   },
         //   {
@@ -323,7 +323,7 @@
        * 国辉
        * @return {[type]} [description]
        */
-      tables () {
+      rows () {
         var result = []
         this.users.map((user) => {
           user.is_active = user.phone_valid || user.email_valid

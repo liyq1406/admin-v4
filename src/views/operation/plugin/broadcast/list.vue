@@ -25,7 +25,7 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-time="sortByTime" @tbody-title="goDetail"  @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
+          <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData" @theader-time="sortByTime" @tbody-title="goDetail"  @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
           </x-table>
         </div>
       </div>
@@ -104,7 +104,7 @@
     },
 
     computed: {
-      tables () {
+      rows () {
         var result = []
         this.histories.map((item) => {
           var history = {

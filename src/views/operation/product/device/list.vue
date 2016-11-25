@@ -59,7 +59,7 @@
               <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-device--active-date="sortBy" @theader--online-is-online="sortBy" @tbody-device--mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData" @theader-device--active-date="sortBy" @theader--online-is-online="sortBy" @tbody-device--mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
 
           <!-- {{snapshotShuffle | json}} -->
       </div>
@@ -350,7 +350,7 @@ export default {
     },
 
     // 列表数据
-    tables () {
+    rows () {
       var result = []
       var deviceModal = {}
       this.fieldKeys.forEach((key) => {

@@ -149,7 +149,7 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <x-table :headers="headers" :rows="rows" :page="page" @tbody-id="goDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
         </div>
       </div>
     </div>
@@ -265,7 +265,7 @@ export default {
         total: this.total
       }
     },
-    tables () {
+    rows () {
       var result = []
       this.historys.map((item) => {
         var history = {

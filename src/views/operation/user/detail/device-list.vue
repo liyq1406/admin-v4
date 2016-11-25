@@ -21,7 +21,7 @@
         </div>
         <x-table
           :headers="headers"
-          :tables="tables | filterBy query in 'id' 'mac'"
+          :rows="rows | filterBy query in 'id' 'mac'"
           :loading="tableLoadingData"
           @theader-active-date="sortBysomeKey"
           @theader-is-online="sortBysomeKey" @tbody-mac="linkToDetails">
@@ -106,7 +106,7 @@ export default {
      * 国辉
      * @return {[type]} [description]
      */
-    tables () {
+    rows () {
       var result = []
       this.subDevices.map((device) => {
         // var product = {}

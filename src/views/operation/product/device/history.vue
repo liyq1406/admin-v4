@@ -38,7 +38,7 @@
           </ul>
         </div>
         <div class="col-details">
-          <x-table :headers="columns" :tables="currSnapshotInfo" :bordered="false"></x-table>
+          <x-table :headers="columns" :rows="currSnapshotInfo" :bordered="false"></x-table>
         </div>
       </div>
       <pagination v-if="total" :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pagination>

@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <x-table :headers="headers" :tables="tables" @tbody-edit="editDataPoint">
+      <x-table :headers="headers" :rows="rows" @tbody-edit="editDataPoint">
 
       </x-table>
     </div>
@@ -88,7 +88,7 @@ export default {
      * 表格内容数据
      * @return {[type]} [description]
      */
-    tables () {
+    rows () {
       var result = []
       this.datapoints.forEach((item) => {
         let datapoint = {

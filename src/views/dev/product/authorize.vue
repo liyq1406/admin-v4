@@ -49,7 +49,7 @@
               </div>
             </div>
           </div>
-          <x-table :headers="columns" :tables="recordList" :page="page" :loading="loadingData" @tbody-operate="viewInfo"  @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <x-table :headers="columns" :rows="recordList" :page="page" :loading="loadingData" @tbody-operate="viewInfo"  @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
         </div>
       </div>
     </div>

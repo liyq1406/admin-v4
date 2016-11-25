@@ -9,7 +9,7 @@
           <chart :options="distributeOptions" :loading="loadingData" type="china-map" height="450px"></chart>
         </div>
         <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
-          <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
+          <percent-table :headers="headers" :rows="rows" @theader-percent="sort"></percent-table>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@ export default {
     }
   },
   computed: {
-    tables () {
+    rows () {
       var result = []
       this.dataPer.map((item) => {
         var distribute = {

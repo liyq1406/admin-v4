@@ -41,7 +41,7 @@
       </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange" @theader-create-date="sortBySomeKey" :selecting="selecting" @selected-change="selectChange">
+          <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange" @theader-create-date="sortBySomeKey" :selecting="selecting" @selected-change="selectChange">
             <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
               <label>{{ $t('operation.product.alert.sign') }}:</label>
               <button class="btn btn-ghost" @click="setDeal">{{ $t('operation.product.alert.processed') }}</button>
@@ -196,7 +196,7 @@ export default {
       return condition
     },
 
-    tables () {
+    rows () {
       var result = []
       this.records.map((item) => {
         var alert = {

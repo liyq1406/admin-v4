@@ -4,7 +4,7 @@
       <chart :options="ageOptions" :loading="loadingData" height="280px"></chart>
     </div>
     <div class="col-11 col-offset-1 data-table-wrap" style="min-height: 250px">
-      <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
+      <percent-table :headers="headers" :rows="rows" @theader-percent="sort"></percent-table>
     </div>
   </div>
 </template>
@@ -60,7 +60,7 @@ export default {
   },
 
   computed: {
-    tables () {
+    rows () {
       var result = [this.lt19, this.lt29, this.lt39, this.lt49, this.lt100]
       let total = 0
       result.map((item) => {

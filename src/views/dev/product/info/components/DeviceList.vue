@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="" @theader-is-online="" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @tbody-sn="onShowDeviceEditModal">
+    <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData" @theader-active-date="" @theader-is-online="" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @tbody-sn="onShowDeviceEditModal">
       <div class="filter-bar" slot="filter-bar">
         <div class="filter-group fr">
           <div class="filter-group-item">
@@ -142,7 +142,7 @@ export default {
     },
 
     // 设备列表
-    tables () {
+    rows () {
       var result = []
       this.devices.map((item) => {
         var device = {

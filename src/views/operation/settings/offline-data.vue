@@ -5,7 +5,7 @@
     </div>
     <div class="panel">
       <div class="panel-bd">
-        <x-table :headers="columns" :tables="taskList" :page="pageInfo" :loading="loadingData" @current-page-change="onCurrPageChage" @tbody-url="getUrl" :simple-page="true">
+        <x-table :headers="columns" :rows="taskList" :page="pageInfo" :loading="loadingData" @current-page-change="onCurrPageChage" @tbody-url="getUrl" :simple-page="true">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group">
               <x-select width="90px" size="small" :label="visibility.label">

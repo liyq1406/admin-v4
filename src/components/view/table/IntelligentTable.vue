@@ -10,15 +10,15 @@
         </tr>
       </thead>
       <tbody>
-        <template v-if="tables.length > 0">
-          <tr v-for="table in tables" track-by="$index">
+        <template v-if="rows.length > 0">
+          <tr v-for="(rowIndex, row) in rows" track-by="$index">
             <th v-show="selecting" class="tac">
-              <input type="checkbox" :checked="selectedTable.indexOf(table)>-1" @change="selectedTableChange(table)">
+              <input type="checkbox" :checked="selectedRows.indexOf(row)>-1" @change="selectedRowsChange(row)">
             </th>
-            <td v-for="tHeader in headers" :class="tHeader.class" @click="clickDown(tHeader, table)">{{{table[tHeader.key]}}}</td>
+            <td v-for="tHeader in headers" :class="tHeader.class" @click="clickDown(tHeader, row)">{{{row[tHeader.key]}}}</td>
           </tr>
         </template>
-        <tr v-if="tables.length === 0 && !loadingData">
+        <tr v-if="rows.length === 0 && !loadingData">
           <td :colspan="headers.length + 1" class="tac">
             <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
           </td>
@@ -33,9 +33,9 @@
     /** *************传入参数格式********************************/
       // headers：[
       //   {
-      //     key: 'id', // 与tables的key对应
+      //     key: 'id', // 与rows的key对应
       //     title: 'ID', // 标题的内容
-      //     functionName: 'test',  // 调用函数的名字  函数需要定义在父组件的methods中 会返回当前选中的表格的headers和table和lineIndex
+      //     functionName: 'test',  // 调用函数的名字  函数需要定义在父组件的methods中 会返回当前选中的表格的headers和row和lineIndex
       //     class: 'tac', // 传入className 自动加入整一列中
       //     sortable: false,
       //     tooltip: '提示'
@@ -49,7 +49,7 @@
       //     tooltip: '提示'
       //   }
       // ],
-      // tables: [
+      // rows: [
       //   {
       //     id: '<a href="">idididid</a>',
       //     creatTime: '123',
@@ -69,7 +69,7 @@
     /** *************组件对外暴露事件*************************/
       // 事件名称：
       // @selected-change
-      // 参数是当前的已经选择的table数组
+      // 参数是当前的已经选择的row数组
     /** **************************************/
     name: 'IntelligentTable',
 
@@ -87,13 +87,13 @@
         twoWay: false
       },
 
-      tables: {
+      rows: {
         type: Array,
         default: [],
         twoWay: false
       },
 
-      selectedTable: {
+      selectedRows: {
         type: Array,
         default: function () { return [] },
         twoWay: false
@@ -105,28 +105,28 @@
       }
     },
     watch: {
-      tables () {
+      rows () {
         this.initSelected() // 修正选择状态
       }
     },
     methods: {
       initSelected () {
         if (this.selecting) {
-          if (this.tables.length) {
-            var arr = this.selectedTable.concat()
+          if (this.rows.length) {
+            var arr = this.selectedRows.concat()
             arr.map((item) => {
-              if (this.tables.indexOf(item) === -1) {
-                this.selectedTable.$remove(item)
+              if (this.rows.indexOf(item) === -1) {
+                this.selectedRows.$remove(item)
               }
             })
-            this.selectedAll = this.tables.length === this.selectedTable.length
+            this.selectedAll = this.rows.length === this.selectedRows.length
           } else {
-            this.selectedTable = []
+            this.selectedRows = []
             this.selectedAll = false
           }
-          this.$emit('selected-change', this.selectedTable)
+          this.$emit('selected-change', this.selectedRows)
         } else {
-          this.selectedTable = []
+          this.selectedRows = []
           this.selectedAll = false
         }
       },
@@ -140,11 +140,11 @@
         if (this.selecting) {
           var selected = event.target.checked
           if (selected) {
-            this.selectedTable = [].concat(this.tables)
+            this.selectedRows = [].concat(this.rows)
           } else {
-            this.selectedTable = []
+            this.selectedRows = []
           }
-          this.$emit('selected-change', this.selectedTable)
+          this.$emit('selected-change', this.selectedRows)
           // alert('全选')
         }
       },
@@ -152,27 +152,27 @@
       /**
        * tbody被点击事件
        * @param  {[type]} tHeader [description]
-       * @param  {[type]} table   [description]
+       * @param  {[type]} row   [description]
        * @return {[type]}         [description]
        */
-      clickDown (tHeader, table) {
-        var lineIndex = this.tables.indexOf(table)
+      clickDown (tHeader, row) {
+        var lineIndex = this.rows.indexOf(row)
         if (this.$parent[tHeader.functionName]) {
-          this.$parent[tHeader.functionName](tHeader, table, lineIndex)
+          this.$parent[tHeader.functionName](tHeader, row, lineIndex)
         }
       },
 
       /**
        * checkbox点击事件
-       * @param  {[type]} table [description]
+       * @param  {[type]} row [description]
        * @return {[type]}       [description]
        */
-      selectedTableChange (table) {
+      selectedRowsChange (row) {
         if (this.selecting) {
-          if (this.selectedTable.indexOf(table) >= 0) {
-            this.selectedTable.$remove(table)
+          if (this.selectedRows.indexOf(row) >= 0) {
+            this.selectedRows.$remove(row)
           } else {
-            this.selectedTable.push(table)
+            this.selectedRows.push(row)
           }
           this.initSelected()
         }

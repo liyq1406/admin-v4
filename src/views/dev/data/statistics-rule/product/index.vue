@@ -7,7 +7,7 @@
             <a class="btn btn-primary" v-link="{path: '/dev/data/statistics-rule/product/add'}"><i class="fa fa-plus"></i>添加统计规则</a>
           </div>
         </div>
-        <x-table :headers="headers" :tables="tables" @tbody-id="editRule">
+        <x-table :headers="headers" :rows="rows" @tbody-id="editRule">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -109,7 +109,7 @@ export default {
       return params
     },
     // 下拉选项
-    tables () {
+    rows () {
       let res = []
       let tempRules = _.clone(this.statisticsRules)
       if (this.query) {

@@ -78,7 +78,7 @@
       <h3 slot="header">添加菜谱</h3>
       <div slot="body">
         <div class="form">
-          <x-table :headers="columns" :tables="recipeList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-operation="addRecipe" :simple-page="true">
+          <x-table :headers="columns" :rows="recipeList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-operation="addRecipe" :simple-page="true">
             <div class="filter-bar" slot="filter-bar">
               <div class="filter-group fr">
                 <div class="filter-group-item">

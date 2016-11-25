@@ -11,7 +11,7 @@
         <h2>类别列表</h2>
       </div>
       <div class="panel-bd">
-        <x-table :headers="columns" :tables="categoryList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" @tbody-operation="editCategory" :simple-page="true"></x-table>
+        <x-table :headers="columns" :rows="categoryList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" @tbody-operation="editCategory" :simple-page="true"></x-table>
       </div>
     </div>
 

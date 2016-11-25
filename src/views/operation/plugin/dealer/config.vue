@@ -130,14 +130,14 @@
             </tr>
           </thead>
           <tbody>
-            <template v-if="tables.length > 0">
-              <tr v-for="table in tables" track-by="$index">
+            <template v-if="rows.length > 0">
+              <tr v-for="table in rows" track-by="$index">
                 <td class="hl-red">{{ table.title }}</td>
                 <td>{{ table.description }}</td>
                 <td class="tac"><switch :value.sync="table.is_visible" size="small"></switch></td>
               </tr>
             </template>
-            <tr v-if="tables.length === 0 && !loadingData">
+            <tr v-if="rows.length === 0 && !loadingData">
               <td :colspan="3" class="tac">
                 <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
               </td>
@@ -168,7 +168,7 @@ export default {
 
   data () {
     return {
-      tables: [{
+      rows: [{
         title: '产品概览',
         type: 'summary',
         description: '查看产品概览，包括激活趋势、增长总数、产品热力分部等',
@@ -333,7 +333,7 @@ export default {
         })
         // 处理模块配置
         res.data.module.forEach((model) => {
-          this.tables.forEach((table) => {
+          this.rows.forEach((table) => {
             if (table.type === model.type) {
               table.is_visible = model.is_visible
             }
@@ -363,7 +363,7 @@ export default {
       let turnOff = true
       // 处理模块配置提交数据
       let modeType = []
-      this.tables.forEach((table) => {
+      this.rows.forEach((table) => {
         var obj = {
           type: table.type,
           is_visible: table.is_visible
@@ -384,7 +384,7 @@ export default {
       })
       // 处理logo图片数据
       this.model.logo_url = this.images[0]
-      if (limitType.length === this.allProducts.length && modeType.length === this.tables.length) {
+      if (limitType.length === this.allProducts.length && modeType.length === this.rows.length) {
         if (turnOff) {
           this.model.is_enable = false
         }

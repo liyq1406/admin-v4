@@ -1,7 +1,7 @@
 <template>
   <div class="panel device-users">
     <div class="panel-bd row">
-      <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData"></x-table>
+      <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData"></x-table>
       <div class="actions clearfix mt10">
         <button class="btn btn-primary fr hidden">{{ $t('operation.product.device.users.release_bind') }}</button>
       </div>
@@ -71,7 +71,7 @@ export default {
   },
 
   computed: {
-    tables () {
+    rows () {
       var result = []
       _.forEach(this.deviceUsers, (item) => {
         var user = {

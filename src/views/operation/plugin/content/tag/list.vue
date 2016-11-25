@@ -10,7 +10,7 @@
             <button @click="addTag" class="btn btn-primary"><i class="fa fa-plus"></i>添加标签</button>
           </div>
         </div>
-        <x-table :headers="columns" :tables="tagList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-operation="editTag" :simple-page="true">
+        <x-table :headers="columns" :rows="tagList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-operation="editTag" :simple-page="true">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">

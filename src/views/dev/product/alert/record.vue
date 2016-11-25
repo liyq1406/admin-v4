@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-bd">
-      <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy" @tbody-mac="jumpInfo">
+      <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy" @tbody-mac="jumpInfo">
         <div slot="filter-bar" class="filter-bar">
           <div class="filter-group fl">
             <div class="filter-group-item">
@@ -156,7 +156,7 @@
         }
         return result
       },
-      tables () {
+      rows () {
         var result = []
         this.alerts.forEach((item) => {
           var temp = {}

@@ -24,7 +24,7 @@
         </div>
         <x-table
         :headers="headers"
-        :tables="tables"
+        :rows="rows"
         :page="page"
         :loading="loadingData"
         @theader-is-active="sortBySomeKey"  @theader-active-date="sortBySomeKey"  @theader-is-online="sortBySomeKey" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"
@@ -135,7 +135,7 @@ export default {
      * 国辉
      * @return {[type]} [description]
      */
-    tables () {
+    rows () {
       var result = []
       this.devices.map((device) => {
         var table = {

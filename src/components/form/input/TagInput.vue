@@ -2,7 +2,7 @@
   <div class="tag-input">
     <div @click="editTag($event)" class="tag-input-container">
       <template v-if="value.length">
-        <div v-for="(tagIndex, tag) in tags" track-by="tagIndex" class="tag">
+        <div v-for="(tagIndex, tag) in tags" track-by="$index" class="tag">
           <span class="label">{{ tag }}</span>
           <i @click.stop="deleteTag(tag)" class="fa fa-times"></i>
         </div>

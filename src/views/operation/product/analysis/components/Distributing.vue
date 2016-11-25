@@ -12,7 +12,7 @@
           <chart :options="distributeOptions" :loading="loadingData" height="450px" type="china-map"></chart>
         </div>
         <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
-          <percent-table :headers="columns" :tables="distributeData" @theader-percent="sort"></percent-table>
+          <percent-table :headers="columns" :rows="distributeData" @theader-percent="sort"></percent-table>
         </div>
       </div>
     </div>
