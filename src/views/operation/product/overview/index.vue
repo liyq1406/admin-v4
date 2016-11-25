@@ -89,9 +89,9 @@ export default {
         3: NaN,
         4: NaN
       },
-      isShowTrend: true,
-      isShowActive: true,
-      isShowDistribution: true,
+      isShowTrend: false,
+      isShowActive: false,
+      isShowDistribution: false,
       // 统计
       statistic: {
         users: {
@@ -176,9 +176,9 @@ export default {
       for (let i in this.dpQuatasValues) {
         this.dpQuatasValues[i] = NaN
       }
-      this.isShowTrend = true
-      this.isShowActive = true
-      this.isShowDistribution = true
+      this.isShowTrend = false
+      this.isShowActive = false
+      this.isShowDistribution = false
       for (let i in this.statistic.users) {
         this.statistic.users[i].total = this.statistic.users[i].change = 0
         this.statistic.users[i].title = this.statistic.users[i].tooltip = ''
@@ -255,15 +255,25 @@ export default {
       let key = customConfig.genKey(this.$route.params.id)
       api.customization.getCorpCustomization(key).then((res) => {
         if (res.status === 200) {
-          if (res.data) {
+          if (res.data && res.data[key]) {
             this.parseConfig(JSON.parse(res.data[key]))
+          } else {
+            this.showDefaultRows()
           }
+        } else {
+          this.showDefaultRows()
         }
         this.configLoaded = true
       }).catch((res) => {
+        this.showDefaultRows()
         this.handleError(res)
         this.configLoaded = true
       })
+    },
+    showDefaultRows () {
+      this.isShowTrend = true
+      this.isShowActive = true
+      this.isShowDistribution = true
     },
     parseConfig (config) {
       this.isShowTrend = config.trend

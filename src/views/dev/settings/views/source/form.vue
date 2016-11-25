@@ -27,7 +27,8 @@
               </div>
             </div>
           </div>
-          <div class="form-row row">
+          <!-- 暂时隐藏 -->
+          <div v-if="false" class="form-row row">
             <label class="form-control col-3 col-offset-1">显示方式:</label>
             <div class="controls col-10">
               <div class="controls col-20">
@@ -47,10 +48,11 @@
                   <div class="fl mr15 pie icon" :class="{ select: chartType === 1 }" @click="chartTypeSelect(1)">
                     <i class="fa fa-pie-chart" aria-hidden="true"></i>
                   </div>
-                  <div class="fl mr15 bar icon" :class="{ select: chartType === 2 }" @click="chartTypeSelect(2)">
+                  <!-- 暂时隐藏 -->
+                  <div v-if="false" class="fl mr15 bar icon" :class="{ select: chartType === 2 }" @click="chartTypeSelect(2)">
                     <i class="fa fa-bar-chart" aria-hidden="true"></i>
                   </div>
-                  <div class="fl line icon" :class="{ select: chartType === 3 }" @click="chartTypeSelect(3)">
+                  <div v-if="false" class="fl line icon" :class="{ select: chartType === 3 }" @click="chartTypeSelect(3)">
                     <i class="fa fa-line-chart" aria-hidden="true"></i>
                   </div>
                 </div>
@@ -199,7 +201,7 @@
               </div>
             </div>
           </div>
-          <div v-if="!(selectedShowType.value === 2 && chartType >= 2 )" class="form-row row">
+          <div v-if="!(selectedShowType.value === 2 && chartType >= 2 || sourceType === 2)" class="form-row row">
             <div class="form-control col-3 col-offset-1">
               <label>计算周期:</label>
             </div>
@@ -294,7 +296,7 @@ export default {
         {name: '指标', value: 1},
         {name: '自定义图表', value: 2}
       ],
-      selectedShowType: {name: '指标', value: 1},
+      selectedShowType: {name: '自定义图表', value: 2},
       customTime: {
         start: 0,
         end: 0
@@ -677,7 +679,7 @@ export default {
         }
       }
 
-      if (!(model.show_type === 2 && this.chartType > 1)) {
+      if (!(model.show_type === 2 && this.chartType > 1 || this.sourceType === 2)) {
         model.period = this.period
         if (model.period === 5) {
           model.custom_time = {

@@ -50,6 +50,7 @@ export default {
 
   data () {
     return {
+      datapoints: [],
       inited: false,
       noNameCount: 0,
       dataSourceList: [],
@@ -57,14 +58,17 @@ export default {
       secondConfig: {},
       thirdConfig: {},
       firstData: {
+        dp_index: -1,
         title: '',
         data: []
       },
       secondData: {
+        dp_index: -1,
         title: '',
         data: []
       },
       thirdData: {
+        dp_index: -1,
         title: '',
         data: []
       }
@@ -72,6 +76,81 @@ export default {
   },
 
   computed: {
+    compFirstData () {
+      let res = {
+        title: this.firstData.title,
+        data: []
+      }
+      let dp = _.find(this.datapoints, (item) => {
+        return item.index === this.firstData.dp_index
+      })
+      let symbol = dp && dp.symbol || ''
+      this.firstData.data.forEach((item) => {
+        let temp = {}
+        temp.value = item.value
+        if (item.name.min) {
+          if (item.name.max) {
+            temp.name = `${item.name.min}${symbol}-${item.name.max}${symbol}`
+          } else {
+            temp.name = `>${item.name.min}${symbol}`
+          }
+        } else {
+          temp.name = `<${item.name.max}${symbol}`
+        }
+        res.data.push(temp)
+      })
+      return res
+    },
+    compSecondData () {
+      let res = {
+        title: this.secondData.title,
+        data: []
+      }
+      let dp = _.find(this.datapoints, (item) => {
+        return item.index === this.secondData.dp_index
+      })
+      let symbol = dp && dp.symbol || ''
+      this.secondData.data.forEach((item) => {
+        let temp = {}
+        temp.value = item.value
+        if (item.name.min) {
+          if (item.name.max) {
+            temp.name = `${item.name.min}${symbol}-${item.name.max}${symbol}`
+          } else {
+            temp.name = `>${item.name.min}${symbol}`
+          }
+        } else {
+          temp.name = `<${item.name.max}${symbol}`
+        }
+        res.data.push(temp)
+      })
+      return res
+    },
+    compThirdData () {
+      let res = {
+        title: this.thirdData.title,
+        data: []
+      }
+      let dp = _.find(this.datapoints, (item) => {
+        return item.index === this.thirdData.dp_index
+      })
+      let symbol = dp && dp.symbol || ''
+      this.thirdData.data.forEach((item) => {
+        let temp = {}
+        temp.value = item.value
+        if (item.name.min) {
+          if (item.name.max) {
+            temp.name = `${item.name.min}${symbol}-${item.name.max}${symbol}`
+          } else {
+            temp.name = `>${item.name.min}${symbol}`
+          }
+        } else {
+          temp.name = `<${item.name.max}${symbol}`
+        }
+        res.data.push(temp)
+      })
+      return res
+    },
     firstcol () {
       if (this.firstConfig.chart === 1) {
         return 'col-8'
@@ -111,27 +190,27 @@ export default {
     fisrtModelOptions () {
       let res = _.cloneDeep(echartOptions.pie)
       if (this.firstConfig.chart === 1) {
-        res.legend.data = _.map(this.firstData.data, 'name')
-        res.series[0].data = this.firstData.data
-        res.title.text = this.firstData.title
+        res.legend.data = _.map(this.compFirstData.data, 'name')
+        res.series[0].data = this.compFirstData.data
+        res.title.text = this.compFirstData.title
       }
       return res
     },
     secondModelOptions () {
       let res = _.cloneDeep(echartOptions.pie)
       if (this.secondConfig.chart === 1) {
-        res.legend.data = _.map(this.secondData.data, 'name')
-        res.series[0].data = this.secondData.data
-        res.title.text = this.secondData.title
+        res.legend.data = _.map(this.compSecondData.data, 'name')
+        res.series[0].data = this.compSecondData.data
+        res.title.text = this.compSecondData.title
       }
       return res
     },
     thirdModelOptions () {
       let res = _.cloneDeep(echartOptions.pie)
       if (this.thirdConfig.chart === 1) {
-        res.legend.data = _.map(this.thirdData.data, 'name')
-        res.series[0].data = this.thirdData.data
-        res.title.text = this.thirdData.title
+        res.legend.data = _.map(this.compThirdData.data, 'name')
+        res.series[0].data = this.compThirdData.data
+        res.title.text = this.compThirdData.title
       }
       return res
     }
@@ -146,6 +225,7 @@ export default {
   ready () {
     this.searchDataSourceConfig()
     this.getDataSourceList()
+    this.getDatapoints()
   },
 
   methods: {
@@ -222,30 +302,27 @@ export default {
     },
     dealResult (res, config, index) {
       let data = []
-      for (let i in res) {
+      for (let i in config.pie_classify) {
         let temp = {
-          name: '',
-          value: res[i]
-        }
-        if (config.pie_classify[i].min) {
-          if (config.pie_classify[i].max) {
-            temp.name = `${config.pie_classify[i].min}-${config.pie_classify[i].max}`
-          } else {
-            temp.name = `>${config.pie_classify[i].min}`
-          }
-        } else if (config.pie_classify[i].max) {
-          temp.name = `<${config.pie_classify[i].max}`
+          name: {
+            min: config.pie_classify[i].min,
+            max: config.pie_classify[i].max
+          },
+          value: res[i] || 0
         }
         data.push(temp)
       }
       if (index === 1) {
         this.firstData.data = data
+        this.firstData.dp_index = config.dp_index
         this.firstData.title = config.title
       } else if (index === 2) {
         this.secondData.data = data
+        this.secondData.dp_index = config.dp_index
         this.secondData.title = config.title
       } else {
         this.thirdData.title = config.title
+        this.thirdData.dp_index = config.dp_index
         this.thirdData.data = data
       }
     },
@@ -314,6 +391,20 @@ export default {
           break
       }
       return res
+    },
+    /**
+     * 获取数据端点
+     * @author shengzhi
+     */
+    getDatapoints () {
+      // 获取产品数据端点列表
+      api.product.getDatapoints(this.$route.params.id).then((res) => {
+        if (res.status === 200) {
+          this.datapoints = res.data
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
     }
   }
 }
