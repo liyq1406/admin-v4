@@ -94,12 +94,15 @@ export default {
     })
 
     return {
+      // 数据统计类型
       SNAPSHOT_STATISTICS_TYPES: {
         '1': 'max',
         '2': 'min',
         '3': 'avg',
         '4': 'sum'
       },
+
+      // 设备字段
       DEVICEFIELD: [
         'id',
         'mac',
@@ -122,6 +125,8 @@ export default {
         'heavy_buyer',
         'groups'
       ],
+
+      // 虚拟设备字段列表
       VDEVICEFIELD: [
         'cm_id',
         'ip',
@@ -130,11 +135,14 @@ export default {
         'last_logout',
         'last_update'
       ],
+
+      // 在线字段列表
       ONLINEFIELD: [
         'is_online',
         'last_login',
         'last_login_ip'
       ],
+
       // 基本字段
       base_fields: [
         {
@@ -186,68 +194,66 @@ export default {
           'sort': 8
         }
       ],
+      // 正在导出标志位
       exporting: false,
+      // 开始时间
       startDate: '',
+      // 结束时间
       endDate: '',
+      // 搜索条件
       query: '',
+      // 排序
       sortOrders: sortOrders,
+      // 当前排序字段
       sortKey: '',
+      // 正在搜索标志位
       searching: false,
+      // 筛选条件
       visibility: {
         label: this.$t('common.all'),
         value: 'all'
       },
+      // 筛选选项
       visibilityOptions: locales[Vue.config.lang].data.DEVICE_VISIBILITY_OPTIONS,
+      // 时间筛选条件
       rangeOption: {
         label: this.$t('common.any'),
         value: 'any'
       },
+      // 时间筛选条件选项
       timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
+      // 设备列表
       devices: [],
+      // 列表总数
       total: 0,
+      // 当前页码
       currentPage: 1,
+      // 页面数
       countPerPage: config.COUNT_PER_PAGE,
       // querying: false,
+      // 正在加载数据
       loadingData: false,
+      // 搜索选项
       queryTypeOptions: [
         { label: this.$t('operation.product.device.manager.mac'), value: 'mac' },
         { label: this.$t('operation.product.device.manager.device_id'), value: 'id' }
         // { label: this.$t('operation.product.device.manager.device_name'), value: 'name' }
       ],
+      // 搜索条件类型
       queryType: {
         label: 'MAC',
         value: 'mac'
       },
-      // headers: [
-      //   {
-      //     key: 'mac',
-      //     title: this.$t('operation.product.device.manager.mac')
-      //   },
-      //   {
-      //     key: 'id',
-      //     title: this.$t('operation.product.device.manager.device_id')
-      //   },
-      //   {
-      //     key: 'is_active',
-      //     title: this.$t('operation.product.device.manager.is_active.label'),
-      //     tooltip: this.$t('operation.product.device.manager.is_active.tooltip')
-      //   },
-      //   {
-      //     key: 'active_date',
-      //     title: this.$t('operation.product.device.manager.active_date'),
-      //     sortType: -1
-      //   },
-      //   {
-      //     key: 'is_online',
-      //     title: this.$t('operation.product.device.manager.is_online'),
-      //     sortType: -1
-      //   }
-      // ],
+      // 正在加载字段
       loadingDataField: false,
+      // 设备字段列表
       deviceFields: {},
+      // 正在加载数据端点标志位
       loadingDataPoint: false,
+      // 数据端点列表
       dataPoints: [],
-      snapshotShuffleData: null,
+      // 快照统计数据列表
+      // snapshotShuffleData: null,
       // 统计
       statistic: {
         // 用户总数
@@ -282,7 +288,9 @@ export default {
           }
         }
       },
+      // 开始时间
       startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+      // 结束时间
       endTime: new Date()
     }
   },
@@ -297,7 +305,7 @@ export default {
       }
       return result
     },
-
+    // 设备列表
     deviceList () {
       var result = []
       this.devices.forEach((item) => {
@@ -323,7 +331,7 @@ export default {
       })
       return result
     },
-
+    // 快照统计规则
     snapshotShuffle () {
       var result = []
       if (!this.deviceFields.snapshot_shuffle || !this.deviceFields.snapshot_shuffle.length) return []
@@ -417,6 +425,7 @@ export default {
       return result
     },
 
+    // 字段key列表
     fieldKeys () {
       var result = []
       this.fields.forEach((item) => {
@@ -426,6 +435,7 @@ export default {
       return result
     },
 
+    // 表格头部信息列表
     headers () {
       var result = []
       this.fields.forEach((item) => {
@@ -453,6 +463,7 @@ export default {
       return result
     },
 
+    // 用于发送请求的filter
     filter () {
       var result = {}
       var hasSnapshotShuffle = false
@@ -480,6 +491,7 @@ export default {
       return result
     },
 
+    // 用于发送请求的统计规则条件
     computedSnapshotShuffleQuery () {
       var results = []
       this.fields.forEach((item) => {
@@ -696,6 +708,11 @@ export default {
       this.getDevices()
     },
 
+    /**
+     * 获取统计规则的值
+     * field: 当前字段
+     * device: 当前设备数据
+     */
     getSnapshotShuffleValue (field, device) {
       var result = null
       if (!device.snapshot_shuffle.list.length) return result
@@ -719,6 +736,9 @@ export default {
       return result
     },
 
+    /**
+     * 重置字段key
+     */
     resetFieldKey (field) {
       var result = {
         field: field
@@ -775,7 +795,7 @@ export default {
       // api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
       api.device.getAggregateDevices(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
-        this.snapshotShuffleData = res.data.list.snapshot_shuffle || []
+        // this.snapshotShuffleData = res.data.list.snapshot_shuffle || []
         this.total = res.data.count
         this.loadingData = false
       }).catch((res) => {
@@ -811,6 +831,9 @@ export default {
       this.getDevices()
     },
 
+    /**
+     * 获取当前字段开始时间
+     */
     fieldStartTime (field) {
       var result = ''
       switch (field.fineness - 0) {
@@ -837,19 +860,8 @@ export default {
     },
 
     /**
-     * 求出规则方法
+     * 获取当前字段结束时间
      */
-    ruleMethod (ruleId) {
-      var result = ''
-      this.deviceFields.snapshot_shuffle.forEach((item) => {
-        if (item.snapshot === ruleId) {
-          result = this.SNAPSHOT_STATISTICS_TYPES[item.dp_mode]
-        }
-      })
-      return result
-    },
-
-    // TODO
     fieldEndTime (field) {
       var result = ''
       switch (field.fineness - 0) {
@@ -875,12 +887,18 @@ export default {
       return result
     },
 
+    /**
+     * 根据当前字段信息获取当前今天或者昨天的开始时间或者结束时间
+     */
     getFieldDay (field, isEnd) {
       var isPrev = field.selectTimeType - 0 === 2
       var result = formatDate(isPrev ? (new Date() - 1000 * 60 * 60 * 24) : (new Date()), isEnd ? 'yyyy-MM-ddT23:59:59.999Z' : 'yyyy-MM-ddT00:00:00.000Z', true)
       return result
     },
 
+    /**
+     * 根据当前字段信息获取本周或者上周的开始时间或者结束时间
+     */
     getFieldWeek (field, isEnd) {
       var isPrev = field.selectTimeType - 0 === 2
       var dWeekDay = new Date().getDay() - 1 + (isPrev ? 7 : 0)
@@ -892,7 +910,7 @@ export default {
     },
 
     /**
-     * 获取字段的月时间值
+     * 根据当前字段获取本月或者上个月的开始时间或者结束时间
      */
     getFieldMonth (field, isEnd) {
       var isPrev = field.selectTimeType - 0 === 2
@@ -908,7 +926,7 @@ export default {
     },
 
     /**
-     * 获取字段的年时间值
+     * 根据当前字段获取今年或者去年的开始时间或者结束时间
      */
     getFieldYear (field, isEnd) {
       var isPrev = field.selectTimeType - 0 === 2
