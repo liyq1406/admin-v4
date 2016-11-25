@@ -181,7 +181,7 @@ export const numToPercent = (arr, field) => {
 
   return arr.map((item) => {
     var temp = _.clone(item)
-    temp.percent = item[field] / total
+    temp.percent = item[field] / total || 0
     return temp
   })
 }
