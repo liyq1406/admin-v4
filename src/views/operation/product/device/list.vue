@@ -366,7 +366,7 @@ export default {
         device['device--mac'] = '<a class="hl-red">' + (item['device--mac'] || '-') + '</a>'
         device['device--is_active'] = item['device--is_active'] ? this.$t('common.yes') : this.$t('common.no')
         device['device--active_date'] = formatDate(item['device--active_date']) || '-'
-        device['online--is_online'] = item['device--is_online'] ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>'
+        device['online--is_online'] = item['online--is_online'] ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>'
         device['vdevice--online_count'] = item['vdevice--online_count'] - 0 >= 0 ? (item['vdevice--online_count'] - 0).toFixed(2) + '小时' : '-'
         device.prototype = item
 
