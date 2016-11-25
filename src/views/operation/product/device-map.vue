@@ -62,50 +62,6 @@ import Vue from 'vue'
 
 let icon1, icon2, infoWindow
 
-/**
- * 计算边界
- * @param  {Object} bounds 边界
- * @return {Object}        可视区域的尺寸
- */
-function getBoundsSize (bounds) {
-  let NE, SW, lat1, lat2, lng1, lng2, horizontalLatLng1, horizontalLatLng2, verticalLatLng1, verticalLatLng2, horizontal, vertical
-
-  // 获取东北角和西南角的经纬度坐标
-  NE = bounds.getNorthEast()
-  SW = bounds.getSouthWest()
-  lat1 = NE.lat()
-  lat2 = SW.lat()
-  lng1 = NE.lng()
-  lng2 = SW.lng()
-  // console.log('东北角纬度:' + lat1)
-  // console.log('东北角经度:' + lng1)
-  // console.log('西南角纬度:' + lat2)
-  // console.log('西南角经度:' + lng2)
-
-  // 计算横向和纵向的距离
-  horizontalLatLng1 = new google.maps.LatLng(lat1, lng1)
-  horizontalLatLng2 = new google.maps.LatLng(lat1, lng2)
-  verticalLatLng1 = new google.maps.LatLng(lat1, lng1)
-  verticalLatLng2 = new google.maps.LatLng(lat2, lng1)
-  horizontal = getDistance(horizontalLatLng1, horizontalLatLng2)
-  vertical = getDistance(verticalLatLng1, verticalLatLng2)
-
-  return {
-    horizontal: horizontal,
-    vertical: vertical
-  }
-}
-
-/**
- * 计算两点之间的距离
- * @param  {Object} point1 坐标点1
- * @param  {Object} point2 坐标点2
- * @return {Number}        两点之间的距离
- */
-function getDistance (point1, point2) {
-  return google.maps.geometry.spherical.computeDistanceBetween(point1, point2)
-}
-
 export default {
   name: 'DeviceMap',
 
@@ -118,7 +74,7 @@ export default {
       infoWindow: null,
       geocoder: null,
       zoomLevel: 4,
-      sizes: null,
+      bounds: null,
       currIndex: 0,
       hoverIndex: -1,
       mapCenter: [105.0293195608, 36.6847961226],
@@ -157,10 +113,10 @@ export default {
     radius () {
       let result = 0
 
-      if (this.sizes) {
+      if (this.bounds) {
         // 获取较短的距离作为半径
-        let horizontal = this.sizes.horizontal
-        let vertical = this.sizes.vertical
+        let horizontal = this.bounds.horizontal
+        let vertical = this.bounds.vertical
         result = horizontal > vertical ? vertical : horizontal
       }
 
@@ -169,12 +125,19 @@ export default {
 
     // 查询条件
     queryCondition () {
+      // 获取东北角和西南角的经纬度坐标
+      let NE = this.bounds.getNorthEast()
+      let SW = this.bounds.getSouthWest()
+      let lat1 = NE.lat()
+      let lat2 = SW.lat()
+      let lng1 = NE.lng()
+      let lng2 = SW.lng()
+
+      // 多边形搜索
       return {
-        offset: this.countPerPage * (this.currentPage - 1),
+        type: 'polygon',
+        coord: [[[lng2, lat1], [lng1, lat1], [lng1, lat2], [lng2, lat2], [lng2, lat1]]],
         limit: this.countPerPage,
-        spherical: true,
-        coord: this.mapCenter,
-        max_dist: this.radius,
         query: {}
       }
     },
@@ -291,12 +254,12 @@ export default {
 
       google.maps.event.addListener(this.map, 'bounds_changed', () => {
         let bounds = this.map.getBounds()
-        if (!this.sizes) {
-          this.sizes = getBoundsSize(bounds)
+        if (!this.bounds) {
+          this.bounds = bounds
           this.getGeographies(true)
           return
         }
-        this.sizes = getBoundsSize(bounds)
+        this.bounds = bounds
       })
 
       google.maps.event.addListener(this.map, 'dragend', () => {
