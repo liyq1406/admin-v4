@@ -773,7 +773,6 @@ export default {
      * @return {[type]}       [description]
      */
     linkToDetails (table) {
-      console.log(table.prototype)
       this.$route.router.go(`${this.$route.path}/${table.prototype['device--id']}`)
     },
 

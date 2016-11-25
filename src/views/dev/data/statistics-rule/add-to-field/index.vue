@@ -414,8 +414,6 @@ export default {
         item.statisticsType = ''
         return item
       })
-      console.log('datapoint')
-      console.log(_.cloneDeep(result))
       return result
     },
 
@@ -445,7 +443,6 @@ export default {
       }
 
       this.submitting = true
-      console.log(this.selectedSnapshotRule.productId)
       api.custom.field.getCustomFieldConfig(this.selectedSnapshotRule.product_id).then((data) => {
         var params = data || {}
         params.base_fields = params.base_fields || []
