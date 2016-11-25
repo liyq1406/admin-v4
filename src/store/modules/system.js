@@ -11,7 +11,8 @@ import {
   ADD_ALERT_BAR,
   REMOVE_ALERT_BAR,
   ADD_ALERT_MASK,
-  REMOVE_ALERT_MASK
+  REMOVE_ALERT_MASK,
+  SET_ECHARTS_STATUS
 } from '../mutation-types'
 
 // 状态初始化
@@ -26,7 +27,8 @@ var state = {
   notices: [],        // 通知信息
   plugins: [],        // 插件列表
   alertMsg: '',       // 警告栏信息
-  isShowMask: false   // 是否显示警示遮罩
+  isShowMask: false,   // 是否显示警示遮罩
+  echartsStatus: 0 // echarts script 加载状态 0未加载 1加载中 2已加载
 }
 
 // 状态变化
@@ -101,6 +103,11 @@ const mutations = {
   // 移除通知信息
   [REMOVE_ALERT_MASK] (state) {
     state.isShowMask = false
+  },
+
+  // 设置echarts script 标签当前状态 当前状态
+  [SET_ECHARTS_STATUS] (state, status) {
+    state.echartsStatus = status
   }
 }
 
