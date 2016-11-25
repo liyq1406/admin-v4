@@ -2,10 +2,10 @@
   <div class="x-flow">
     <div class="tab-s2">
       <ul>
-        <li v-for="item in steps" @click="handleClick($index)" class="tab-s2-item" :class="{'active':curr===$index+1, 'finished':curr>$index+1, 'unclickable':!clickable}">
+        <li v-for="(stepIndex, item) in steps" @click="handleClick(stepIndex)" class="tab-s2-item" :class="{'active':curr===stepIndex+1, 'finished':curr>stepIndex+1, 'unclickable':!clickable}">
           <span class="num">
-            <i class="fa fa-check" v-if="curr>$index+1"></i>
-            <i v-else>{{ $index+1 }}</i>
+            <i class="fa fa-check" v-if="curr>stepIndex+1"></i>
+            <i v-else>{{ stepIndex+1 }}</i>
           </span>{{ item }}
         </li>
       </ul>

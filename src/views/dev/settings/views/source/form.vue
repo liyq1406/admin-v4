@@ -357,9 +357,13 @@ export default {
       return this.selectedRule.dp_mode || []
     },
     finenessTypes () {
-      return this.selectedRule.fineness.sort((a, b) => {
-        return a - b
-      })
+      if (this.selectedRule.fineness && this.selectedRule.fineness.length) {
+        return this.selectedRule.fineness.sort((a, b) => {
+          return a - b
+        })
+      } else {
+        return []
+      }
     }
   },
 
@@ -389,7 +393,6 @@ export default {
           let origin = _.find(res, (item) => {
             return item.id === parseInt(this.$route.params.id)
           })
-          console.log(origin)
           this.originSelect = origin
           this.setDefaultSelect()
         }
@@ -649,6 +652,7 @@ export default {
       if (model.show_type === 1) { // 指标
         model.data_from = 1 // 指标只能使用统计规则
         model.rule_id = this.selectedRule.id
+        model.snapshot_id = this.selectedRule.snapshot_id
         model.dp_index = this.ruleSelectedDatapoint.index
         model.fineness = Math.max.apply(Math, this.selectedRule.fineness) || 0 // 取最大值
         model.rule_type = this.statisticType
@@ -660,6 +664,7 @@ export default {
         model.data_from = this.sourceType
         if (model.data_from === 1) { // 统计规则
           model.rule_id = this.selectedRule.id
+          model.snapshot_id = this.selectedRule.snapshot_id
           model.dp_index = this.ruleSelectedDatapoint.index
           model.rule_type = this.statisticType
           if (this.chartType !== 1) {

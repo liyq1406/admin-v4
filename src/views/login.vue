@@ -96,7 +96,8 @@
         } else if (userRole === 'dealer') {
           let dealerId = window.localStorage.getItem('dealerId')
           let corpId = window.localStorage.getItem('corpId')
-          // console.log(transition)
+          console.log(corpId)
+          console.log('1111')
           transition.redirect(`/dealer/${corpId}/${dealerId}`)
         }
 

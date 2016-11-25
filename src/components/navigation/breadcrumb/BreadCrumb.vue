@@ -1,10 +1,10 @@
 <template>
   <div class="x-breadcrumb">
     <a @click="LastLink" class="return"><i class="fa fa-arrow-circle-left"></i></a>
-    <template v-for="item in nav">
-      <a v-if="$index < nav.length - 1" v-link="item.link" class="pagelink">{{ item.label }}</a>
+    <template v-for="(navIndex, item) in nav">
+      <a v-if="navIndex < nav.length - 1" v-link="item.link" class="pagelink">{{ item.label }}</a>
       <span v-else>{{ item.label }}</span>
-      <i class="arrow" v-if="$index < nav.length - 1">&gt;</i>
+      <i class="arrow" v-if="navIndex < nav.length - 1">&gt;</i>
     </template>
   </div>
 </template>

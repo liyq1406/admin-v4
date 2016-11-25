@@ -384,7 +384,11 @@ export default {
         this.model.module = modeType
         console.log(this.model)
         api.dealer.setConfig(this.$route.params.dealer_id, this.model).then((res) => {
-          console.log(res)
+          // console.log(res)
+          this.showNotice({
+            type: 'success',
+            content: '配置成功！'
+          })
           this.init()
         }).catch((err) => {
           this.handleError(err)

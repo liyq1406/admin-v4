@@ -1,13 +1,13 @@
 <template>
   <div class="image-uploader">
-    <div class="image-uploader-item" v-for="image in images" track-by="$index">
+    <div class="image-uploader-item" v-for="(imageIndex, image) in images" track-by="imageIndex">
       <label>
         <img v-if="image.picture_url" :src="image.picture_url"/>
-        <input v-else type="file" @change.prevent="upload($event, $index)"/>
+        <input v-else type="file" @change.prevent="upload($event, imageIndex)"/>
         <i v-if="!image.picture_url" class="fa fa-plus"></i>
         <span v-if="!image.picture_url" class="txt">添加图片</span>
       </label>
-      <i v-if="image.picture_url" @click.stop.prevent="removeImage($index)" class="fa fa-times"></i>
+      <i v-if="image.picture_url" @click.stop.prevent="removeImage(imageIndex)" class="fa fa-times"></i>
     </div>
   </div>
 </template>

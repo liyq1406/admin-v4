@@ -62,6 +62,7 @@ let value = [{
   }, ...],
   data_from: 1, // 数据配置 见DATAFROMS
   rule_id: '', // 统计规则id
+  snapshot_id: '', // 快照规则
   dp_index: 0, // 数据端点index
   rule_type: 1, // 计算规则 见STATISTICS_TYPES
   fineness: 1, // 时间粒度 见统计规则粒度定义

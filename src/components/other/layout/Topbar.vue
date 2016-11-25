@@ -111,16 +111,23 @@ export default {
   data () {
     return {
       isDemo: IS_DEMO,
-      isShowUserNav: false
+      isShowUserNav: false,
+      config: window.localStorage.getItem('dealerConfig')
     }
   },
 
   computed: {
+    // 经销商独立配置信息
+    configInfo () {
+      return JSON.parse(this.config)
+    },
     logoStyle () {
       var result = {}
       if (this.userRole === 'heavy-buyer') {
         result.backgroundColor = '#FFF'
         result.backgroundImage = 'url(/static/images/topband_logo.png)'
+      } else if (this.userRole === 'dealer') {
+        result.backgroundImage = 'url(' + this.configInfo.logo_url + ')'
       }
       return result
     },
@@ -212,13 +219,16 @@ export default {
      * 移除保存在 window.localStorage中的 accessToken
      */
     quit () {
+      let userRole = window.localStorage.getItem('userRole')
       let temp = window.localStorage.getItem(`${this.corp.id}hideAlertMask`)
       if (temp) {
         window.localStorage.setItem(`${this.corp.id}hideAlertMask`, temp)
       }
       // window.localStorage.clear()
       window.localStorage.removeItem('memberId')
-      window.localStorage.removeItem('corpId')
+      if (userRole !== 'dealer') {
+        window.localStorage.removeItem('corpId')
+      }
       window.localStorage.removeItem('accessToken')
       window.localStorage.removeItem('refreshToken')
       window.localStorage.removeItem('expireIn')
