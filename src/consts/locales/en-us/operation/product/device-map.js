@@ -17,6 +17,7 @@ export default {
   detail: 'View Detail',
   no_device_find: 'The device not found.',
   input_keyword: 'Please input keyword',
+  init_map: 'Initializing the map...',
   targeting: 'Targeting your city...',
   searching: 'Searching devices...'
 }

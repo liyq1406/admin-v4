@@ -17,6 +17,7 @@ export default {
   detail: '查看详情',
   no_device_find: '未找到该设备',
   input_keyword: '请输入搜索参数',
+  init_map: '地图初始化...',
   targeting: '正在定位您所在的城市...',
   searching: '正在搜索设备...'
 }

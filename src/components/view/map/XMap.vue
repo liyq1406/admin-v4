@@ -21,11 +21,6 @@ export default {
       type: String,
       default: ''
     },
-    // IP
-    ip: {
-      type: String,
-      default: '123'
-    },
     // 缩放级别
     zoom: {
       type: Number,
@@ -40,10 +35,7 @@ export default {
 
   data () {
     return {
-      ready: false,
-      loading: true,
-      map: {},
-      marker: {},
+      map: null,
       mapStyle: {
         height: this.height
       }
@@ -52,112 +44,92 @@ export default {
 
   watch: {
     location () {
-      this.setCenter()
+      if (this.map) {
+        this.setMarker()
+      }
     }
   },
 
   ready () {
-    this.init()
+    window.initXMap = this.initMap
+    if (typeof google === 'undefined') {
+      var elem = document.createElement('script')
+      elem.async = true
+      elem.defer = 'defer'
+      elem.src = `https://maps.google.cn/maps/api/js?libraries=geometry&key=${config.GOOGLE_MAP_KEY}&callback=initXMap`
+      document.getElementsByTagName('body')[0].appendChild(elem)
+    } else {
+      this.initMap()
+    }
   },
 
   methods: {
     /**
-     * 总初始化
-     * @return {[type]} [description]
+     * 获取地理坐标
      */
-    init () {
-      if (!window.AMap) {
-        window.initMap = this.initMap
-        var mapApi = document.createElement('script')
-        let protocol = process.env.NODE_ENV !== 'production' ? 'https:' : window.location.protocol
-        mapApi.src = `${protocol}//webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=initMap`
-        document.getElementsByTagName('body')[0].appendChild(mapApi)
-      } else {
-        this.initMap()
+    getLocation () {
+      // 如果当前已经有location
+      if (this.location.length) {
+        this.setMarker()
+        return
+      }
+
+      // 如果传递了地址信息
+      if (this.addr) {
+        let geocoder = new google.maps.Geocoder()
+        geocoder.geocode({
+          address: this.addr
+        }, (results, status) => {
+          if (status === google.maps.GeocoderStatus.OK) {
+            let loc = results[0].geometry.location
+            this.location = [loc.lng(), loc.lat()]
+          } else {
+            // 错误处理
+            // console.log(results)
+          }
+        })
       }
     },
 
     /**
-     * 根据传入的参数重置location
+     * 设置地图标记
      */
-    resetLocation () {
-      // 如果当前已经有location
-      if (this.location.length) {
-        this.zoom = 15
-        this.setCenter()
-        return
-      }
-      AMap.service(['AMap.Geocoder', 'AMap.CitySearch'], () => { // 回调函数
-        if (this.addr) {
-          // 实例化Geocoder
-          this.geocoder = new AMap.Geocoder()
-          // 地理编码
-          this.geocoder.getLocation(this.addr, (status, res) => {
-            if (status === 'complete' && res.info === 'OK') {
-              var lng = res.geocodes[0].location.lng
-              var lat = res.geocodes[0].location.lat
-              this.location = [lng, lat]
-            } else {
-              // this.showNotice({
-              //   type: 'error',
-              //   content: '找不到' + this.addr
-              // })
-              console.log('找不到' + this.addr)
-            }
-          })
-        } else if (this.ip) {
-          // 实例化CitySearch
-          this.CitySearch = new AMap.CitySearch()
-          this.CitySearch.getCityByIp(this.ip, (status, res) => {
-            if (status === 'complete' && res.info === 'OK') {
-              this.addr = res.city
-              this.resetLocation()
-              this.zoom = 10
-            } else {
-              console.log('ip无效')
-            }
-          })
-        }
-      })
-    },
-    /**
-     * 设置坐标
-     */
-    setCenter (location) {
-      location = location || this.location
-      if (!this.ready || !location.length) return
-      this.map.setCenter(location)
-      this.marker = new AMap.Marker({
+    setMarker () {
+      let lat = this.location[1]
+      let lng = this.location[0]
+      let marker = new google.maps.Marker({
         map: this.map,
-        position: location,
-        icon: 'static/images/marker.png',
-        offset: {x: -11, y: -28}
+        position: {lat: lat, lng: lng},
+        icon: '/static/images/map/marker.png'
       })
-      console.log(this.marker)
+      this.map.setCenter(new google.maps.LatLng(lat, lng))
+
+      return marker
     },
+
     /**
      * 地图初始化
      * @author shengzhi
      */
     initMap () {
-      // 地图实例
-      this.ready = true
-      this.map = new AMap.Map('map', {
-        resizeEnable: true,
-        zoom: this.zoom
-      })
-      this.resetLocation()
+      // 地图初始化配置
+      let options = {
+        center: new google.maps.LatLng(36.6847961226, 105.0293195608),
+        zoom: this.zoom,
+        zoomControl: false,
+        streetViewControl: false,
+        mapTypeControl: false
+      }
+
+      // 初始化
+      this.map = new google.maps.Map(document.getElementById('map'), options)
+      this.getLocation()
     }
   }
 }
 </script>
 
 <style lang="stylus" scpoed>
-
-  .amap-copyright
-  .amap-logo
-    display none
-    visibility hidden
   .map-box
     width 100%
     height 100%
