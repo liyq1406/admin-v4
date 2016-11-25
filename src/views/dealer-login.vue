@@ -3,7 +3,7 @@
     <loginarea :config="config"></loginarea>
     <div class="auth-form login-form">
       <!-- 无权限时登录页面 -->
-      <div class="inner unableinner" v-if="!able">
+      <div class="inner unableinner" v-if="!ableLog">
         <p>该经销商暂无登录权限，</p>
         <p>请联系相关工作人员开启对应入口权限</p>
       </div>
@@ -80,6 +80,8 @@
     data () {
       return {
         able: false,
+        productAble: false,
+        moduleAble: false,
         config: {},
         currLang: window.localStorage.getItem('lang'),
         isShowOldEntrance: IS_SHOW_OLD_ENTRANCE,
@@ -119,6 +121,13 @@
       this.focus()
     },
 
+    computed: {
+      ableLog () {
+        var result = this.able && this.productAble && this.moduleAble
+        return result
+      }
+    },
+
     methods: {
       // 获取配置信息
       getConfig () {
@@ -133,7 +142,13 @@
             // 再判断是否有产品打开授权
             this.config.product.forEach((item) => {
               if (item.is_visible) {
-                this.able = true
+                this.productAble = true
+              }
+            })
+            // 最后判断是否有模块打开授权
+            this.config.module.forEach((item) => {
+              if (item.is_visible) {
+                this.moduleAble = true
               }
             })
             let value = JSON.stringify(res.data)
@@ -266,6 +281,30 @@
         if (ableStopProduct && ableStopModel) {
           this.$route.router.replace({path: `/operation/products/${firProductId}${routeArr[modePage]}`})
         }
+        // 产品相关模块没开启跑下面流程
+        api.plugin.all().then((res) => {
+          if (res.status === 200) {
+            console.log(res.data)
+            this.config.module.forEach((mode) => {
+              // 判断是否有维保开启
+              if (mode.type === 'warranty' && mode.is_visible) {
+                res.data.list.forEach((item) => {
+                  if (item.plugin === 'warranty') {
+                    this.$route.router.replace({path: '/operation/plugins/warranty/' + item.id + '/work-orders/repair'})
+                  }
+                })
+              } else if (mode.type === 'helpdesk' && mode.is_visible) {
+                res.data.list.forEach((item) => {
+                  if (item.plugin === 'helpdesk') {
+                    this.$route.router.replace({path: '/operation/plugins/helpdesk/' + item.id + '/overview'})
+                  }
+                })
+              }
+            })
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
         // api.product.all().then((res) => {
         //   this.$route.router.replace({path: `/operation/products/${res.data[0].id}/overview`})
         // })

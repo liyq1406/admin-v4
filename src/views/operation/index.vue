@@ -172,6 +172,7 @@ export default {
           result.subs.push({
             alias: 'helpdesk',  // 用户反馈
             icon: 'inbox',
+            unfold: true,
             subs: [{
               alias: 'overview',
               url: '/plugins/helpdesk/' + this.helpdeskId + '/overview'
@@ -187,6 +188,7 @@ export default {
           result.subs.push({
             alias: 'warranty',  // 智能维保
             icon: 'support',
+            unfold: true,
             subs: [{
               alias: 'repair',
               url: '/plugins/warranty/' + this.warrantyId + '/work-orders/repair'
