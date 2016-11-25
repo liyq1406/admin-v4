@@ -219,12 +219,10 @@ export default {
 
   watch: {
     currentProductId () {
-      // 监听当前产品 ID 的切换，每次切换都对地图重新初始化
-      // this.sizes = null
+      // 监听当前产品 ID 的切换，对数据重新初始化
       this.currIndex = 0
       this.query = ''
       this.getGeographies(true)
-      // this.initMap()
     },
 
     deviceList () {
@@ -310,7 +308,6 @@ export default {
 
     /**
      * 获取设备列表
-     * @return {[type]} [description]
      */
     getDevices () {
       let idList = _.map(this.geographies, 'id')
@@ -339,6 +336,7 @@ export default {
 
     /**
      * 生成地址
+     * @param {Object} geography 地址信息
      */
     genAddress (geography) {
       let address = []
@@ -456,19 +454,24 @@ export default {
           zIndex: index
         })
 
+        // 监听标记的点击事件，与设备列表的点击处理一致
         marker.addListener('click', () => {
           this.onDeviceClick(index)
         })
 
+        // 监听标记的鼠标滑过事件，与设备列表的鼠标滑过处理一致
         marker.addListener('mouseover', () => {
           this.onDeviceHover(index)
         })
 
+        // 监听标记的鼠标滑出事件，与设备列表的鼠标滑出处理一致
         marker.addListener('mouseout', () => {
           this.onDeviceOut(index)
         })
 
         this.markers.push(marker)
+
+        // 默认激活第一个标记，并设置其纵轴高度为列表长度(当前最高)
         this.activateMarker(this.markers[0], this.countPerPage)
       })
     },
@@ -544,6 +547,7 @@ export default {
         </div>
       </div>`
 
+      // 激活当前设备，显示信息浮窗
       this.currIndex = index
       this.deactivateAllMarkers()
       this.activateMarker(currMarker, this.countPerPage)
@@ -557,6 +561,7 @@ export default {
      */
     onDeviceHover (index) {
       if (index === this.currIndex) return
+
       this.activateMarker(this.markers[index], this.countPerPage + 1)
       this.hoverIndex = index
     },
@@ -630,7 +635,8 @@ export default {
           this.map.setZoom(10)
           this.getGeographies(true)
         } else {
-          console.log(results)
+          // 错误处理
+          // console.log(results)
         }
       })
     },
