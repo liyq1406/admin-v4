@@ -236,6 +236,7 @@ export default {
       if (!this.dataSource || !this.dataSource.length || !this.dataSourceList.length) {
         return
       }
+      console.log(this.dataSource)
       let length = this.dataSource.length
       for (let i = 0; i < length; i++) {
         let finded = _.find(this.dataSourceList, (ds) => {
@@ -269,9 +270,9 @@ export default {
     },
     getStatictisValue (config, index) {
       if (config.chart === 1) { // 饼图
-        if (config.data_from === 1) { // 数据统计
+        if (config.data_from === 2) { // 设备数据统计
           this.deviceStatisticAnalytics(config, index)
-        } else if (config.data_from === 2) { // 数据端点
+        } else if (config.data_from === 3) { // 数据端点
           this.deviceDatapointAnalytics(config, index)
         }
       }

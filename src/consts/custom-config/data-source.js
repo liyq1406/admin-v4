@@ -30,8 +30,9 @@ const PERIODS = {
 }
 
 const DATAFROMS = {
-  rule: 1, // 统计规则
-  datapoint: 2 // 数据端点
+  product_rule: 1, // 产品统计规则
+  device_rule: 2, // 设备统计规则
+  datapoint: 3 // 数据端点
 }
 
 const CHARTS = {

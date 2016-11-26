@@ -95,7 +95,7 @@
                 <div class="{{ arrowClass }}"></div>
                 <div class="arrow-cover"></div>
                 <div class="content">
-                  <template v-if="sourceType === 2">
+                  <template v-if="sourceType === 3">
                     <div class="form-row row">
                       <div class="form-control col-3">
                         <label>数据端点:</label>
@@ -109,7 +109,7 @@
                       </div>
                     </div>
                   </template>
-                  <template v-if="sourceType === 1">
+                  <template v-if="sourceType === 1 || sourceType === 2">
                     <div class="form-row row">
                       <div class="form-control col-3">
                         <label>统计规则:</label>
@@ -117,12 +117,12 @@
                       <div class="control col-6">
                         <x-select width="120px" :label="selectedRule.name">
                           <select v-model="selectedRule" @change="">
-                            <option v-for="option in statisticsRules" :value="option">{{ option.name }}</option>
+                            <option v-for="option in statisticsRulesOptions" :value="option">{{ option.name }}</option>
                           </select>
                         </x-select>
                       </div>
                     </div>
-                    <div v-if="selectedRule.fineness && selectedRule.fineness.length && chartType !== 1 && selectedShowType.value === 2" class="form-row row">
+                    <div v-if="selectedRule.fineness && selectedRule.fineness.length && selectedShowType.value === 2" class="form-row row">
                       <div class="form-control col-3">
                         <label>时间粒度:</label>
                       </div>
@@ -151,7 +151,7 @@
                             </template>
                             <template v-if="item===6">
                               <input v-model="finenessType" type="radio" :value="6" name="fineness-type"/>
-                              <label>至今</label>
+                              <label>全部</label>
                             </template>
                           </template>
                         </div>
@@ -201,7 +201,7 @@
               </div>
             </div>
           </div>
-          <div v-if="!(selectedShowType.value === 2 && chartType >= 2 || sourceType === 2)" class="form-row row">
+          <div v-if="!(selectedShowType.value === 2 && chartType >= 2 || sourceType === 3)" class="form-row row">
             <div class="form-control col-3 col-offset-1">
               <label>计算周期:</label>
             </div>
@@ -282,7 +282,7 @@ export default {
       period: 1,
       initStartTime: 0,
       initEndTime: 0,
-      sourceType: 1,
+      sourceType: 2,
       title: '',
       statisticType: 0,
       finenessType: 0,
@@ -309,17 +309,31 @@ export default {
   computed: {
     arrowClass () {
       let res = 'arrow arrow-left-'
-      return res + this.sourceType
+      if (this.sourceType === 3) {
+        res = res + 2
+      } else {
+        res = res + 1
+      }
+      return res
+    },
+    statisticsRulesOptions () {
+      let type = 2 // 产品下统计规则
+      if (this.selectedShowType.value === 2 && this.chartType === 1) { // 扇形图用设备统计规则
+        type = 1
+      }
+      return _.filter(this.statisticsRules, (item) => {
+        return item.type === type
+      })
     },
     sourceTypes () {
       if (this.selectedShowType.value === 1) {
         return [
-          { label: '统计规则', value: 1 }
+          { label: '产品统计规则', value: 1 }
         ]
       } else {
         return [
-          { label: '统计规则', value: 1 },
-          { label: '数据端点', value: 2 }
+          { label: '设备统计规则', value: 2 },
+          { label: '数据端点', value: 3 }
         ]
       }
     },
@@ -441,7 +455,7 @@ export default {
       }
     },
     setDefaultDatapoint () {
-      if (!this.datapoints.length || !this.originSelect.dp_index || this.originSelect.data_from === 1) {
+      if (!this.datapoints.length || !this.originSelect.dp_index || this.originSelect.data_from === 1 || this.originSelect.data_from === 2) {
         return
       }
       let finded = _.find(this.datapoints, (item) => {
@@ -466,7 +480,7 @@ export default {
       }
     },
     setDefaultRuleDatapoint () {
-      if (!this.ruleDatapoints.length || !this.originSelect.dp_index || this.originSelect.data_from !== 1) {
+      if (!this.ruleDatapoints.length || !this.originSelect.dp_index || this.originSelect.data_from === 3) {
         return
       }
       let finded = _.find(this.ruleDatapoints, (item) => {
@@ -477,7 +491,11 @@ export default {
       }
     },
     showTypeChange () {
-      this.sourceType = 1
+      if (this.selectedShowType.value === 1) {  // 指标
+        this.sourceType = 2
+      } else {
+        this.sourceType = 1
+      }
     },
     resetSelect () {
       this.selectedRule = {
@@ -502,8 +520,8 @@ export default {
       let params = {
         offset: 0,
         limit: 10000, // 取所有规则
-        product_id: [this.selectedProduct.id],
-        type: 2 // 产品规则
+        product_id: [this.selectedProduct.id]
+        // type: 2 // 产品规则
       }
       api.snapshot.getAllStatisticRules(params).then((res) => {
         if (res.status === 200 && res.data.list && res.data.list.length) {
@@ -587,7 +605,7 @@ export default {
           return false
         }
       } else { // 图表
-        if (this.sourceType === 1) { // 统计规则
+        if (this.sourceType === 1 || this.sourceType === 2) { // 统计规则
           if (!this.statisticCheck()) {
             return false
           }
@@ -664,22 +682,19 @@ export default {
           model.pie_classify = _.clone(this.classifty)
         }
         model.data_from = this.sourceType
-        if (model.data_from === 1) { // 统计规则
+        if (model.data_from === 1 || model.data_from === 2) { // 统计规则
           model.rule_id = this.selectedRule.id
           model.snapshot_id = this.selectedRule.snapshot_id
           model.dp_index = this.ruleSelectedDatapoint.index
           model.rule_type = this.statisticType
-          if (this.chartType !== 1) {
-            model.fineness = this.finenessType
-          } else {  // 饼图
-            model.fineness = Math.max.apply(Math, this.selectedRule.fineness) || 0 // 取最大值
-          }
+          model.fineness = this.finenessType
         } else { // 数据端点
           model.dp_index = this.selectedDatapoint.index
         }
+        console.log(model)
       }
 
-      if (!(model.show_type === 2 && this.chartType > 1 || this.sourceType === 2)) {
+      if (!(model.show_type === 2 && this.chartType > 1 || this.sourceType === 3)) {
         model.period = this.period
         if (model.period === 5) {
           model.custom_time = {
@@ -726,7 +741,7 @@ export default {
     color #1F9CDD
 .radio-button-wrap
   .btn
-    width 80px
+    width 100px
     text-align center
 .input-radio-wrap
   position relative
@@ -766,9 +781,9 @@ export default {
         height 15px
         background white
       .arrow-left-1
-        left 30px
+        left 40px
       .arrow-left-2
-        left 105px
+        left 138px
 .span-middle-center
   text-align center
   vertical-align middle

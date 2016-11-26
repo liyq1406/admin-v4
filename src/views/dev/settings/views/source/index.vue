@@ -64,11 +64,19 @@ export default {
         let product = _.find(this.products, (prod) => {
           return prod.id === item.product_id
         })
+        let dataType
+        if (item.data_from === 1) {
+          dataType = '产品统计规则'
+        } else if (item.data_from === 2) {
+          dataType = '设备统计规则'
+        } else {
+          dataType = '数据端点'
+        }
         res.push({
           title: '<a class="hl-red">' + (item.title || ' - ') + '</a>',
           product: product ? product.name : '',
           show_type: item.show_type === 1 ? '指标' : '图表',
-          data_type: item.data_from === 1 ? '统计规则' : '数据端点',
+          data_type: dataType,
           create_time: formatDate(item.id, true), // id 为时间戳
           id: item.id || 0
         })
