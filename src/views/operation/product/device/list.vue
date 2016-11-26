@@ -143,6 +143,16 @@ export default {
         'last_login_ip'
       ],
 
+      // 地理位置信息字段
+      GEOGRAPHY: [
+        'country',
+        'province',
+        'city',
+        'district',
+        'lng',
+        'lat'
+      ],
+
       // 基本字段
       base_fields: [
         {
@@ -317,6 +327,21 @@ export default {
                 obj[snapshot.key] = (snapshot.value === 0) ? '0' : snapshot.value
               }
             })
+          } else if (key1 === 'geography') {
+            var addr = ''
+            if (item[key1].country) {
+              addr += item[key1].country
+            }
+            if (item[key1].province) {
+              addr += item[key1].province
+            }
+            if (item[key1].city) {
+              addr += item[key1].city
+            }
+            if (item[key1].district) {
+              addr += item[key1].district
+            }
+            obj['geography--device_addr'] = addr
           } else {
             if (item.hasOwnProperty(key1)) {
               for (let key2 in item[key1]) {
@@ -467,14 +492,21 @@ export default {
     filter () {
       var result = {}
       var hasSnapshotShuffle = false
+      var hasDeviceAddr = false
       this.fieldKeys.forEach((item) => {
         var field = item.split('--')
         if (field[0] === 'snapshot_shuffle') {
           hasSnapshotShuffle = true
         }
+        if (field[0] === 'geography') {
+          hasDeviceAddr = true
+        }
         result[field[0]] = result[field[0]] || []
         result[field[0]].push(field[1])
       })
+      if (hasDeviceAddr) {
+        result.geography = this.GEOGRAPHY
+      }
       if (hasSnapshotShuffle) {
         result.snapshot_shuffle = [
           'statistic_rule_id',
@@ -749,6 +781,8 @@ export default {
         result.key = `online--${field.name}`
       } else if (field.category === 'base_fields' && this.VDEVICEFIELD.indexOf(field.name) >= 0) {
         result.key = `vdevice--${field.name}`
+      } else if (field.name === 'device_addr') {
+        result.key = `geography--${field.name}`
       } else if (field.category === 'datapoints') {
         result.key = `vdevice--${field.name}`
       } else {

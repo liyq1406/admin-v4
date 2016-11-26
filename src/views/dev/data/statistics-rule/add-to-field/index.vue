@@ -93,7 +93,7 @@
 
             <div class="form-row row">
               <label class="form-control col-3">统计维度:
-                <i class="fa fa-question-circle" v-tooltip="'根据数据端点，选择统计维度，可以统计求和、平均、最大、最小，可多选'"></i>
+                <i class="fa fa-question-circle" v-tooltip="'根据数据端点，选择统计维度，可以统计求和、平均、最大、最小，不可多选'"></i>
               </label>
               <div class="controls col-21">
                 <div class="control-text" v-if="!loadingData && !datapoints.length"><span class="hl-gray">暂无数据</span></div>

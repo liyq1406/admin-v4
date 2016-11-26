@@ -205,6 +205,12 @@
             'label': '固件版本号',
             'hidden': true,
             'sort': 8
+          },
+          {
+            'name': 'device_addr',
+            'label': '设备地址',
+            'hidden': true,
+            'sort': 9
           }
         ],
         // 正在加载字段数据标志位
