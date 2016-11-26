@@ -152,7 +152,7 @@ export default {
               let percentage = Math.round(data.percent * Math.pow(10, 4)) / Math.pow(10, 2)
               valStr = `${data.value} (${percentage}%)`
             }
-            return `${obj.seriesName} <br/>${data.name} : ${valStr}`
+            return `${obj.seriesName} <br/>${(data && data.name) || ''} : ${valStr}`
           }
         },
         toolbox: {
@@ -280,16 +280,10 @@ export default {
           prodRegions.push(cnData)
           prodRegions.push(cn2Data)
           for (var key in res.data) {
-            if (res.data.hasOwnProperty(key)) {
-              var chinakeys = ['china', '中国']
-              if (chinakeys.indexOf(key) >= 0) {
-                worldData = {
-                  'China': worldData[key]
-                }
-              }
-              worldData[key] = worldData[key] || {}
-              worldData[key].activated = worldData[key].activated || 0
-              worldData[key].activated += res.data[key].activated
+            if (worldData[key]) {
+              worldData[key] += res.data[key].activated
+            } else {
+              worldData[key] = res.data[key].activated || 0
             }
           }
           if (this.loaded === this.releasedProducts.length) {
@@ -309,7 +303,7 @@ export default {
         if (i !== 'china' && i !== 'unknown' && i !== '中国' && i !== 'China') {
           res.push({
             name: i,
-            value: data[i].activated
+            value: data[i]
           })
         }
       }
@@ -317,9 +311,9 @@ export default {
         name: 'China',
         value: 0
       }
-      data['China'] && data['China'].activated && (chinaDatas.value += data['China'].activated - 0)
-      data['china'] && data['china'].activated && (chinaDatas.value += data['china'].activated - 0)
-      data['中国'] && data['中国'].activated && (chinaDatas.value += data['中国'].activated - 0)
+      data['China'] && data['China'] && (chinaDatas.value += data['China'] - 0)
+      data['china'] && data['china'] && (chinaDatas.value += data['china'] - 0)
+      data['中国'] && data['中国'] && (chinaDatas.value += data['中国'] - 0)
       res.push(chinaDatas)
       res = numToPercent(res, 'value')
       let worldDataPer = _.clone(res)
