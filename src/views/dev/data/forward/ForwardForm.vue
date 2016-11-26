@@ -18,8 +18,8 @@
         <label class="form-control col-4">转发规则:</label>
         <div class="controls col-14">
           <div class="checkbox-group">
-            <label v-for="type in dataForwardType" class="checkbox">
-              <input type="checkbox" name="data_type" v-model="model.data_type" :value="$index+1"/>{{ type }}
+            <label v-for="(index, type) in dataForwardType" class="checkbox">
+              <input type="checkbox" name="data_type" v-model="model.data_type" :value="index+1"/>{{ type }}
             </label>
           </div>
         </div>
@@ -29,7 +29,7 @@
         <div class="controls col-14">
           <x-select :label="dataDestination[model.destination.type-1]" width="200px">
             <select v-model="model.destination.type" name="type" number>
-              <option v-for="type in dataDestination" :value="$index+1" :selected="$index===0">{{ type }}</option>
+              <option v-for="(index, type) in dataDestination" :value="index+1" :selected="index===0">{{ type }}</option>
             </select>
           </x-select>
         </div>

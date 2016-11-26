@@ -10,7 +10,7 @@
       </div>
     </div>
     <ul class="deepul" v-if="menu && menu.param && menu.param.length > 0">
-      <tree-item v-for="item in menu.param" :menu="item" :index="$index" @add-menu="handleAddMenu" @edit-menu="handleEditMenu" @add-code="handleAddCode" @edit-code="handleEditCode" @push-data="test" @push-code-data="setCode" @delete-menu="deleteMenu" @delete-code="deleteCode"></tree-item>
+      <tree-item v-for="(index, item) in menu.param" :menu="item" :index="index" @add-menu="handleAddMenu" @edit-menu="handleEditMenu" @add-code="handleAddCode" @edit-code="handleEditCode" @push-data="test" @push-code-data="setCode" @delete-menu="deleteMenu" @delete-code="deleteCode"></tree-item>
     </ul>
   </li>
   <!-- 餐单添加编辑 -->

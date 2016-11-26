@@ -5,19 +5,6 @@
         <h2>固件管理</h2>
       </div>
     </div>
-    <!-- <nav class="tab">
-      <ul>
-        <li v-for="item in tabItems">
-          <a @click="selectLevel($index)" :class="{'active':currIndex===$index}">{{ item }}</a>
-        </li>
-      </ul>
-    </nav>
-    <template v-if="!currIndex">
-      <message></message>
-    </template>
-    <template v-else>
-      <update></update>
-    </template> -->
     <tab :nav="secondaryNav"></tab>
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
   </div>

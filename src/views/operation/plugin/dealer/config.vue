@@ -130,8 +130,13 @@
             </tr>
           </thead>
           <tbody>
+<<<<<<< Updated upstream
             <template v-if="rows.length > 0">
               <tr v-for="table in rows" track-by="$index">
+=======
+            <template v-if="tables.length > 0">
+              <tr v-for="(index, table) in tables" track-by="index">
+>>>>>>> Stashed changes
                 <td class="hl-red">{{ table.title }}</td>
                 <td>{{ table.description }}</td>
                 <td class="tac"><switch :value.sync="table.is_visible" size="small"></switch></td>

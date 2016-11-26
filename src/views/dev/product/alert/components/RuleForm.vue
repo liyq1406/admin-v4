@@ -21,59 +21,6 @@
               </div>
               <div class="form-row row">
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.condition") }}:</label>
-                <!-- <div class="controls col-19">
-                  <div class="row">
-                    <div class="col-5">
-                      <x-select :label="locales.data.RULE_TYPES[model.type-1]">
-                        <select v-model="model.type" name="type" number @input="onTypeSelect">
-                          <option v-for="type in locales.data.RULE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                        </select>
-                      </x-select>
-                    </div>
-                    <div class="col-19" v-show="model.type === 1 && !datapoints.length">
-                      <a class="control-text ml20 hl-red">无数据端点，请点击添加</a>
-                    </div>
-                    <div class="col-8">
-                      <div v-show="model.type === 1 && datapoints.length" class="ml10">
-                        <div class="select">
-                          <x-select :label="datapointName">
-                            <select v-model="model.param" name="param">
-                              <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
-                            </select>
-                          </x-select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <div v-show="model.type === 1 && datapoints.length" class="ml10">
-                        <div class="select">
-                          <x-select :label="locales.data.RULE_COMPARE_TYPES[model.compare-1]">
-                            <select v-model="model.compare" name="compare" number>
-                              <option v-for="type in locales.data.RULE_COMPARE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                            </select>
-                          </x-select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-5">
-                      <div class="ml10">
-                        <div class="input-text-wrap" v-show="model.type === 1 && datapoints.length">
-                          <input v-model="value1" type="text"
-                         name="value" required lazy class="input-text"/>
-                        </div>
-                        <div class="select" v-show="model.type === 2">
-                          <x-select :label="$t('common.'+value2)">
-                            <select v-model="value2"
-                             name="value">
-                              <option value="online">{{ $t("common.online") }}</option>
-                              <option value="offline">{{ $t("common.offline") }}</option>
-                            </select>
-                          </x-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
                 <div class="controls col-19">
                   <div class="radio-button-wrap">
                     <radio-button-group :items="ruleTypes"
@@ -90,7 +37,7 @@
                         <div class="col-5">
                           <x-select :label="locales.data.RULE_TYPES[model.type-1]">
                             <select v-model="model.type" name="type" number @input="onTypeSelect">
-                              <option v-for="type in locales.data.RULE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                              <option v-for="(index, type) in locales.data.RULE_TYPES" :value="index+1" :selected="index===0">{{ type }}</option>
                             </select>
                           </x-select>
                         </div>
@@ -113,7 +60,7 @@
                             <div class="select">
                               <x-select :label="locales.data.RULE_COMPARE_TYPES[model.compare-1]">
                                 <select v-model="model.compare" name="compare" number>
-                                  <option v-for="type in locales.data.RULE_COMPARE_TYPES" :value="$index+1" >{{ type }}</option>
+                                  <option v-for="(index, type) in locales.data.RULE_COMPARE_TYPES" :value="index+1" >{{ type }}</option>
                                 </select>
                               </x-select>
                             </div>
@@ -183,7 +130,7 @@
                             <div class="select">
                               <x-select :label="locales.data.RULE_COMPARE_TYPES[model.compare-1]">
                                 <select v-model="model.compare" name="compare" number>
-                                  <option v-for="type in locales.data.RULE_COMPARE_TYPES" :value="$index+1">{{ type }}</option>
+                                  <option v-for="(index, type) in locales.data.RULE_COMPARE_TYPES" :value="index+1">{{ type }}</option>
                                 </select>
                               </x-select>
                             </div>
@@ -239,17 +186,17 @@
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.notify_type") }}:</label>
                 <div class="controls col-19">
                   <div class="checkbox-group">
-                    <template v-for="type in locales.data.RULE_NOTIFY_TYPES">
-                      <label v-if="$index < 3 && $index > 0" class="checkbox">
-                        <input type="checkbox" v-model="model.notify_target" name="notify_target" :value="$index+1" number v-validate:notify-target="['required']"/>{{ type }}
+                    <template v-for="(index, type) in locales.data.RULE_NOTIFY_TYPES">
+                      <label v-if="index < 3 && index > 0" class="checkbox">
+                        <input type="checkbox" v-model="model.notify_target" name="notify_target" :value="index+1" number v-validate:notify-target="['required']"/>{{ type }}
                       </label>
                     </template>
                   </div>
-                  <template v-for="type in locales.data.RULE_NOTIFY_TYPES">
-                    <div class="row" v-if="$index === 3">
+                  <template v-for="(index, type) in locales.data.RULE_NOTIFY_TYPES">
+                    <div class="row" v-if="index === 3">
                       <div class="checkbox-group col-6 mt10">
                         <label class="checkbox">
-                          <input type="checkbox" v-model="model.notify_target" name="notify_target" :value="$index+1" number v-validate:notify-target="['required']"/>{{ type }}
+                          <input type="checkbox" v-model="model.notify_target" name="notify_target" :value="index+1" number v-validate:notify-target="['required']"/>{{ type }}
                         </label>
                       </div>
                       <div class="col-18">
@@ -262,10 +209,10 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row" v-if="$index === 4">
+                    <div class="row" v-if="index === 4">
                       <div class="checkbox-group col-6 mt10">
                         <label class="checkbox">
-                          <input type="checkbox" v-model="model.notify_target" name="notify_target" :value="$index+1" number v-validate:notify-target="['required']"/>{{ type }}
+                          <input type="checkbox" v-model="model.notify_target" name="notify_target" :value="index+1" number v-validate:notify-target="['required']"/>{{ type }}
                         </label>
                       </div>
                       <div class="col-18">
@@ -288,8 +235,8 @@
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.scope") }}:</label>
                 <div class="controls col-19">
                   <div class="radio-group">
-                    <label v-for="type in locales.data.RULE_SCOPE_TYPES" class="radio">
-                      <input type="radio" v-model="model.scope" name="model.scope" :value="$index+1" number/>{{ type }}
+                    <label v-for="(index, type) in locales.data.RULE_SCOPE_TYPES" class="radio">
+                      <input type="radio" v-model="model.scope" name="model.scope" :value="index+1" number/>{{ type }}
                     </label>
                   </div>
                 </div>

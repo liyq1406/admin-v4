@@ -30,9 +30,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="operator in operators">
+              <tr v-for="(index, operator) in operators">
                 <td>
-                  {{$index + 1}}</td>
+                  {{index + 1}}</td>
                 <td>{{operator.name}}</td>
                 <td>{{operator.desc}}</td>
                 <td>

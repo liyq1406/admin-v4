@@ -11,8 +11,8 @@
         <form autocomplete="off" novalidate @submit.prevent="onRecipeSubmit">
           <div class="form-row panel mb20 bordered">
             <div class="panel-bd">
-              <div v-for="cooking_step in cooking_steps" class="thumb-info mt20 mb15 row">
-                <div class="col-3">第{{ $index+1 }}步:</div>
+              <div v-for="(index, cooking_step) in cooking_steps" class="thumb-info mt20 mb15 row">
+                <div class="col-3">第{{ index+1 }}步:</div>
                 <div class="col-21">
                   <div class="thumb">
                     <image-uploader :images="cooking_step.images" @modified="onModifiedImages(cooking_step.images)" class="mb0"></image-uploader>

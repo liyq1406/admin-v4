@@ -52,7 +52,7 @@
                       <div class="select">
                         <x-select :label="locales.data.DEVICE_TYPES[product.link_type-1]">
                           <select v-model="product.link_type" name="link_type">
-                            <option v-for="opt in locales.data.DEVICE_TYPES" :value="$index+1" :selected="$index===0">{{ opt }}</option>
+                            <option v-for="(index, opt) in locales.data.DEVICE_TYPES" :value="index+1" :selected="index===0">{{ opt }}</option>
                           </select>
                         </x-select>
                       </div>

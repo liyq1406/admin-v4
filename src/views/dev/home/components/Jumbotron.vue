@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <div class="content" v-for="introduce in introduces" :class="'content' + ($index+2)" v-show="selectedTabIndex===$index+1" transition="scale">
+      <div class="content" v-for="(index, introduce) in introduces" :class="'content' + (index+2)" v-show="selectedTabIndex===index+1" transition="scale">
         <div class="text-box">
           <div class="title">
             <span class="title1">{{introduce.title1}}</span>
@@ -42,7 +42,7 @@
 
     </div>
     <div class="tab-box clearfix">
-      <div class="tab fl" :class="{'selected': $index === selectedTabIndex}" v-for="tab in tabs" @click="selectedTabIndex=$index">
+      <div class="tab fl" :class="{'selected': index === selectedTabIndex}" v-for="(index, tab) in tabs" @click="selectedTabIndex=index">
         <span>{{tab.title}}</span>
       </div>
     </div>

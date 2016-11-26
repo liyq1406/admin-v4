@@ -33,7 +33,7 @@
           </thead>
           <tbody>
             <template v-if="fields.length > 0">
-              <tr v-for="field in fields">
+              <tr v-for="(index, field) in fields">
                 <td>
                   <span>{{field.name}}</span>
                 </td>
@@ -50,7 +50,7 @@
                   <span>{{ field.category === 'base_fields' ? '无' : (field.default_value) }}</span>
                 </td>
                 <td class="tac">
-                  <a class="hl-red" @click="onEdit(field, $index)">编辑</a>
+                  <a class="hl-red" @click="onEdit(field, index)">编辑</a>
                 </td>
               </tr>
             </template>

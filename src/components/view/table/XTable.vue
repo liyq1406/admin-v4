@@ -11,7 +11,7 @@
             <th v-show="selecting" class="tac w20">
               <input type="checkbox" v-model="selectedAll" @change="selectAllEvent($event)">
             </th>
-            <th v-for="tHeader in headers" class="theader" :class="headerClass(tHeader)" @click="theaderClick(tHeader, $index)">
+            <th v-for="(index, tHeader) in headers" class="theader" :class="headerClass(tHeader)" @click="theaderClick(tHeader, index)">
               <div class="theader-box">
                 <slot :name="'theader-' + hump2line(tHeader.key)">
                   {{{tHeader.title}}}

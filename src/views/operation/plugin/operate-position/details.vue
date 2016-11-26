@@ -31,7 +31,7 @@
               </tr>
             </thead>
             <tbody>
-              <template v-show="orderedContentList.length>0" v-for="content in orderedContentList">
+              <template v-show="orderedContentList.length>0" v-for="(index, content) in orderedContentList">
                 <tr>
                   <td>
                     <a class="hl-red" v-link="{path: 'edit/' + content.api + '/' + content._id, append: true}">
@@ -45,10 +45,10 @@
                   </td>
                   <td>
                     <div class="button-list">
-                      <div class="control-button button-up fl" :class="{'disabled': $index === 0 || ordering}" @click="moveUp($index)">
+                      <div class="control-button button-up fl" :class="{'disabled': index === 0 || ordering}" @click="moveUp(index)">
                         <i class="fa fa-long-arrow-up"></i>
                       </div>
-                      <div class="control-button button-down fr" :class="{'disabled': $index === orderedContentList.length - 1 || ordering}" @click="moveDown($index)">
+                      <div class="control-button button-down fr" :class="{'disabled': index === orderedContentList.length - 1 || ordering}" @click="moveDown(index)">
                         <i class="fa fa-long-arrow-down"></i>
                       </div>
                     </div>
@@ -267,7 +267,7 @@ export default {
 
     /**
      * 上移
-     * @param  {[type]} $index       [description]
+     * @param  {[type]} index       [description]
      * @return {[type]}              [description]
      */
     moveUp (index) {

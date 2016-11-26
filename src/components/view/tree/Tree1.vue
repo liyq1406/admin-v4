@@ -3,7 +3,7 @@
     <label>
       <!-- <input type="radio" class="hide-input" @blur="onBlur"> -->
       <div class="list"
-      v-for="list in lists"
+      v-for="(index, list) in lists"
       :class="{'selected': list.treeIndex === selectedTreeIndex}" :style="computedListStyle(list)" v-show="list.show">
         <div class="tree-content">
           <i :class="computedIconClass(list)" @click.stop="onChangeShowHide(list)"></i>
@@ -12,10 +12,10 @@
           <div
           class="line"
           :style="'width:' + (unitPadding - 15) + 'px;left: -' + (unitPadding - 5) + 'px'"
-          v-if="$index !== 0"
+          v-if="index !== 0"
           >
           </div>
-          <div class="vertical-line" :style="'height: ' + verticalLineHeight(list, $index) + 'px; left: -' + (unitPadding - 5) + 'px'"></div>
+          <div class="vertical-line" :style="'height: ' + verticalLineHeight(list, index) + 'px; left: -' + (unitPadding - 5) + 'px'"></div>
           <div class="selected-line"></div>
         </div>
       </div>

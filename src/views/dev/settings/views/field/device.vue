@@ -38,7 +38,7 @@
           </thead>
           <tbody>
             <template v-if="fields.length > 0">
-              <tr v-for="field in fields">
+              <tr v-for="(index, field) in fields">
                 <td>
                   <span>{{field.sort}}</span>
                 </td>
@@ -55,7 +55,7 @@
                   <switch :value="!field.hidden" @switch-toggle="toggleHidden(field)" size="small"></switch>
                 </td>
                 <td class="tac">
-                  <a class="hl-red" @click="onEdit(field, $index)">编辑</a>
+                  <a class="hl-red" @click="onEdit(field, index)">编辑</a>
                 </td>
               </tr>
             </template>

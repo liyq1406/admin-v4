@@ -15,7 +15,7 @@
     </info-card>
     <div class="tab-s2 mt20 mb5">
       <ul>
-        <li v-for="item in tabItems" class="tab-s2-item" @click="currIndex=$index" :class="{'active':currIndex===$index}">{{ item }}</li>
+        <li v-for="(index, item) in tabItems" class="tab-s2-item" @click="currIndex=index" :class="{'active':currIndex===index}">{{ item }}</li>
       </ul>
     </div>
     <div v-stretch="122">
@@ -35,8 +35,8 @@
           <div class="comment-desc">{{ item.content }}</div>
           <gallery :pics="item.image" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
             <div class="pic-grid">
-              <div class="pic" v-for="pic in item.image" track-by="$index">
-                <img :src="pic" alt="" @click="handleImgClick($index)">
+              <div class="pic" v-for="(index, pic) in item.image" track-by="index">
+                <img :src="pic" alt="" @click="handleImgClick(index)">
               </div>
             </div>
           </gallery>

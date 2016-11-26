@@ -23,8 +23,8 @@
                 <label class="form-control col-6">推送类型:</label>
                 <div class="controls col-18">
                   <div class="radio-group">
-                    <label v-for="type in types" class="radio">
-                      <input type="radio" v-model="model.type" name="type" :value="$index+1" number/>{{ type }}
+                    <label v-for="(index, type) in types" class="radio">
+                      <input type="radio" v-model="model.type" name="type" :value="index+1" number/>{{ type }}
                     </label>
                   </div>
                 </div>
@@ -57,8 +57,8 @@
                     <div class="col-4 control-text">标签</div>
                     <div class="col-20">
                       <div class="checkbox-group">
-                        <label v-for="type in tags" class="checkbox">
-                          <input type="checkbox" v-model="model.tags" name="tags" :value="$index+1" number/>{{ type }}
+                        <label v-for="(index, type) in tags" class="checkbox">
+                          <input type="checkbox" v-model="model.tags" name="tags" :value="index+1" number/>{{ type }}
                         </label>
                       </div>
                     </div>
@@ -69,8 +69,8 @@
                 <label class="form-control col-6">推送时间:</label>
                 <div class="controls col-18">
                   <div class="radio-group">
-                    <label v-for="type in startTypes" class="radio">
-                      <input type="radio" v-model="model.startType" name="startType" :value="$index+1" number/>{{ type }}
+                    <label v-for="(index, type) in startTypes" class="radio">
+                      <input type="radio" v-model="model.startType" name="startType" :value="index+1" number/>{{ type }}
                     </label>
                   </div>
                   <div class="row mt10" v-show="model.startType>1">
