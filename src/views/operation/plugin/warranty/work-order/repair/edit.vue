@@ -52,7 +52,7 @@
                   <label class="form-control col-5 alert-label">维修内容:</label>
                   <div class="controls col-19">
                     <div v-placeholder="'请输入维修内容'" class="input-text-wrap">
-                      <input v-length-tip="{max: 32, model:editModal.instructions }" v-model="editModal.instructions" type="text" v-form-ctrl name="instructions" v-validate:instructions="{required: true, maxlength: 32}" lazy required class="input-text"/>
+                      <input v-length-tip="{max: 32, model:editModal.instructions }" v-model="editModal.instructions" type="text" name="instructions" v-validate:instructions="{required: true, maxlength: 32}" lazy required class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.instructions.touched && $validation.instructions.required">请输入维修内容</span>
@@ -65,7 +65,7 @@
                   <label class="form-control col-5 alert-label">维修说明:</label>
                   <div class="controls col-19">
                     <div v-placeholder="'请输入维修说明'" class="input-text-wrap">
-                      <textarea v-length-tip="{max: 240, model:editModal.discription }" v-model="editModal.remark" type="text" v-form-ctrl name="remark" v-validate:remark="{required: true, maxlength: 240}" lazy required class="input-text"></textarea>
+                      <textarea v-length-tip="{max: 240, model:editModal.discription }" v-model="editModal.remark" type="text" name="remark" v-validate:remark="{required: true, maxlength: 240}" lazy required class="input-text"></textarea>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.remark.touched && $validation.remark.required">维修说明必填</span>
@@ -157,6 +157,7 @@
 
     data () {
       return {
+        dealerID: window.localStorage.getItem('dealerId'),
         token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
         editing: false,
         branchStaffs: [],
@@ -336,6 +337,9 @@
         this.editModal.product_id = this.selectedProduct.id
         this.editModal.label = this.selectedType
         this.editModal.images = this.images
+        if (this.dealerID) {
+          this.editModal.dealer_id = this.dealerID
+        }
         this.editModal.branch_id = this.selectedBranch._id
         this.editModal.assigned_id = this.selectedBranchStarff._id
         this.editModal.assigned_name = this.selectedBranchStarff.name

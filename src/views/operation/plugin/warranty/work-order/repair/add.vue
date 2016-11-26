@@ -155,6 +155,7 @@
 
     data () {
       return {
+        dealerID: window.localStorage.getItem('dealerId'),
         token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
         adding: false,
         branchStaffs: [],
@@ -268,8 +269,10 @@
           this.$validate(true)
           return
         }
-        this.addModal.dealer_id = ' '
-        this.addModal.heavy_buyer_id = ' '
+        if (this.dealerID) {
+          this.addModal.dealer_id = this.dealerID
+        }
+        this.addModal.heavy_buyer_id = '12312323'
         this.addModal.product_id = this.selectedProduct.id
         this.addModal.label = this.selectedType
         this.addModal.images = this.images
