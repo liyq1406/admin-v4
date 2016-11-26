@@ -80,7 +80,7 @@ export default {
   methods: {
     init () {
       var result = this.nav.subs
-      result.forEach((item, index) => {
+      result && result.forEach((item, index) => {
         var reg
         if (item.type === 'product') {
           reg = new RegExp(`${this.nav.url}/${item.alias}/${item.id}`, 'i')

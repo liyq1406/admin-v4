@@ -83,3 +83,8 @@ export const importEcharts = ({ dispatch }) => {
     dispatch(types.SET_ECHARTS_STATUS, 2) // 加载完成
   })
 }
+
+// 设置经销商信息
+export const setDealer = ({ dispatch }, info) => {
+  dispatch(types.SET_DEALER, info)
+}

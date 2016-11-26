@@ -384,8 +384,13 @@ export default {
       // console.log(status)
     },
     setConfig () {
+      let moduleAble = false
+      let productAble = false
       if (this.model.login_context === '') {
-        alert('登录页面文案不能为空！')
+        this.showNotice({
+          type: 'error',
+          content: '登录页面文案不能为空！'
+        })
         return
       }
       // 是否将总开关置为关闭
@@ -397,8 +402,22 @@ export default {
           type: table.type,
           is_visible: table.is_visible
         }
+        // 只要有一个开关开启
+        if (table.is_visible) {
+          moduleAble = true
+        }
         modeType.push(obj)
       })
+      if (modeType.length === this.tables.length) {
+        if (!moduleAble) {
+          // 每个模块都没开启
+          this.showNotice({
+            type: 'error',
+            content: '模块配置必须最少开启一项！'
+          })
+          return
+        }
+      }
       // 处理产品权限配置数据
       let limitType = []
       this.allProducts.forEach((product) => {
@@ -406,11 +425,26 @@ export default {
           product_id: product.id,
           is_visible: product.is_visible
         }
+        // 只要有一个开关开启
+        if (product.is_visible) {
+          productAble = true
+        }
         limitType.push(pobj)
         if (product.is_visible) {
           turnOff = false
         }
       })
+
+      if (limitType.length === this.allProducts.length) {
+        if (!productAble) {
+          // 每个模块都没开启
+          this.showNotice({
+            type: 'error',
+            content: '产品配置必须最少开启一项！'
+          })
+          return
+        }
+      }
       // 处理logo图片数据
       this.model.logo_url = this.images[0]
       if (limitType.length === this.allProducts.length && modeType.length === this.rows.length) {

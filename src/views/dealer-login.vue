@@ -71,6 +71,7 @@
       },
       actions: {
         setLoadingStatus
+        // setDealer
       }
     },
     components: {
@@ -97,7 +98,7 @@
     route: {
       deactivate () {
         // 清除插件的token
-        window.localStorage.removeItem('pluginsToken')
+        // window.localStorage.removeItem('pluginsToken')
         // this.setLoadingStatus(false)
         if (this.isLoginSuccess) {
           this.showNotice({
@@ -210,6 +211,15 @@
         if (this.$authValidation.valid) {
           this.setLoadingStatus(true)
           api.dealer.login(this.model).then((res) => {
+            // 如果登录账号与登录URL页面不符不允许登录
+            if (res.data.dealer_id !== this.$route.params.dealerId) {
+              this.showNotice({
+                type: 'error',
+                content: '该账号与入口不符，登录失败！'
+              })
+              this.setLoadingStatus(false)
+              return
+            }
             var today = new Date()
             // window.localStorage.clear()
             window.localStorage.removeItem('pluginsToken')
