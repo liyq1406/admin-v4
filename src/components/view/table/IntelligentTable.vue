@@ -11,7 +11,7 @@
       </thead>
       <tbody>
         <template v-if="rows.length > 0">
-          <tr v-for="(rowIndex, row) in rows" track-by="rowIndex">
+          <tr v-for="(rowIndex, row) in rows" track-by="$index">
             <th v-show="selecting" class="tac">
               <input type="checkbox" :checked="selectedRows.indexOf(row)>-1" @change="selectedRowsChange(row)">
             </th>

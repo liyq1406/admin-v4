@@ -131,7 +131,7 @@
           </thead>
           <tbody>
             <template v-if="rows.length > 0">
-              <tr v-for="(index, table) in rows" track-by="index">
+              <tr v-for="(index, table) in rows" track-by="$index">
                 <td class="hl-red">{{ table.title }}</td>
                 <td>{{ table.description }}</td>
                 <td class="tac"><switch :value.sync="table.is_visible" size="small"></switch></td>

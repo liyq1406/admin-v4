@@ -134,7 +134,7 @@
                     </div>
                   </div>
                   <div class="single" v-show="scopeType===3">
-                    <div class="form-row" v-for="(index, userId) in user" track-by="index">
+                    <div class="form-row" v-for="(index, userId) in user" track-by="$index">
                       <label class="form-control col-5">请输入用户ID</label>
                       <div class="controls col-19 clearfix">
                         <div class="input-text-wrap w200 fl">

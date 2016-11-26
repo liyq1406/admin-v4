@@ -279,7 +279,7 @@
             <div class="controls col-12">
               <x-select :label="delColumnModal.selectedColumn" :width="'150px'">
                 <select v-model="delColumnModal.selectedColumn">
-                  <option v-for="(index, addListKey) in addListKeys" track-by="index" :value="addListKey.key">{{ addListKey.key }}</option>
+                  <option v-for="(index, addListKey) in addListKeys" track-by="$index" :value="addListKey.key">{{ addListKey.key }}</option>
                 </select>
               </x-select>
             </div>

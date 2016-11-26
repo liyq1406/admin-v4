@@ -1,6 +1,6 @@
 <template>
   <div class="image-uploader">
-    <div class="image-uploader-item" v-for="(imageIndex, image) in images" track-by="imageIndex" :style="itemStyles">
+    <div class="image-uploader-item" v-for="(imageIndex, image) in images" track-by="$index" :style="itemStyles">
       <label>
         <img v-if="image.length" :src="image"/>
         <input type="file" @change.prevent="upload($event, imageIndex)"/>

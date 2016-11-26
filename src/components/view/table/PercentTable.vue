@@ -19,7 +19,7 @@
       </thead>
       <tbody>
         <template v-if="resetRows.length > 0">
-          <tr v-for="(rowIndex, row) in resetRows" track-by="rowIndex">
+          <tr v-for="(rowIndex, row) in resetRows" track-by="$index">
             <td v-for="tHeader in headers" :class="tHeader.class">
               <template v-if="tHeader.key === 'percent'">
                 <percentage-bar :percentage="row.percent" :color="row.color"></percentage-bar>

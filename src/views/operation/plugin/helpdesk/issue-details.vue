@@ -35,7 +35,7 @@
           <div class="comment-desc">{{ item.content }}</div>
           <gallery :pics="item.image" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
             <div class="pic-grid">
-              <div class="pic" v-for="(index, pic) in item.image" track-by="index">
+              <div class="pic" v-for="(index, pic) in item.image" track-by="$index">
                 <img :src="pic" alt="" @click="handleImgClick(index)">
               </div>
             </div>
