@@ -793,7 +793,7 @@ export default {
         })
         return
       }
-      arr.$remove(obj)
+      arr.splice(arr.indexOf(obj), 1)
     },
 
     // 关闭预览
