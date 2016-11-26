@@ -159,6 +159,7 @@
 import api from 'src/api'
 import formatDate from 'filters/format-date'
 import ClipBoard from 'clipboard'
+import { CUSTOM_ORIGIN } from 'consts/config'
 
 export default {
   name: 'config',
@@ -212,7 +213,7 @@ export default {
       }],
       model: {
         is_enable: false,
-        domain: 'http://test.admin.xlink.cn/#!/dealer/' + this.corp.id + '/' + this.$route.params.dealer_id,
+        domain: '',
         login_context: '',
         logo_url: ''
       },
@@ -296,6 +297,7 @@ export default {
 
     // 监听拷贝成功事件
     clipboard.on('success', this.onCopySuccess)
+
     this.init()
     // this.getConfig()
   },
@@ -344,9 +346,9 @@ export default {
     // 获取配置信息
     getConfig () {
       api.dealer.getConfig(this.$route.params.dealer_id, this.corp.id).then((res) => {
-        console.log(res)
         this.model = res.data
-        this.model.domain = 'http://test.admin.xlink.cn/#!/dealer/' + this.corp.id + '/' + this.$route.params.dealer_id
+        let origin = CUSTOM_ORIGIN || window.location.origin
+        this.model.domain = `${origin}/#!/dealer/${this.corp.id}/${this.$route.params.dealer_id}`
         if (this.model.logo_url) {
           this.images[0] = this.model.logo_url
         }

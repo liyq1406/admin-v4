@@ -68,6 +68,9 @@ export const API_SERVER = {
   operate: `${apiServer.plugin}/module/operatePosition`
 }
 
+// 独立入口域名，格式：http://domain:port
+export const CUSTOM_ORIGIN = ''
+
 // 是否显示旧版入口
 export const IS_SHOW_OLD_ENTRANCE = true
 
