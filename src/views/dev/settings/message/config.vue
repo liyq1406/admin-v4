@@ -66,7 +66,7 @@
                 </div>
               </div>
               <div class="form-actions">
-                <button @click.prevent="setMessageAcount" :disabled="loadingData || btnAble"  :class="{'disabled':loadingData || btnAble}" class="btn btn-primary btn-lg widbtn">保存</button>
+                <button @click.prevent="setMessageAcount" :disabled="loadingData || btnAble"  :class="{'disabled':loadingData || btnAble}" class="btn btn-primary btn-xlg widbtn">保存</button>
               </div>
             </form>
         </validator>

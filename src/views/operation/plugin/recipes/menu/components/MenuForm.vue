@@ -64,9 +64,9 @@
           </div>
           <div class="form-actions row">
             <div class="col-offset-4">
-              <button type="submit" :disabled="submitting" :class="{'disabled': submitting}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
-              <!-- <button @click.prevent.stop="showMask=true" class="btn btn-ghost btn-lg">预览</button> -->
-              <button @click.prevent="deleteMenu" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t("common.del") }}</button>
+              <button type="submit" :disabled="submitting" :class="{'disabled': submitting}" class="btn btn-primary btn-xlg">{{ $t("common.save") }}</button>
+              <!-- <button @click.prevent.stop="showMask=true" class="btn btn-ghost btn-xlg">预览</button> -->
+              <button @click.prevent="deleteMenu" class="btn btn-ghost btn-xlg" v-if="type==='edit'">{{ $t("common.del") }}</button>
             </div>
           </div>
         </form>

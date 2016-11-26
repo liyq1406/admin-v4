@@ -19,7 +19,7 @@
             </div>
             <div class="form-actions row">
               <div class="col-offset-6">
-                <button type="submit" :disabled="savingActivate || savingReset" :class="{'disabled': savingActivate || savingReset}" class="btn btn-primary btn-lg">{{ $t('common.save') }}</button>
+                <button type="submit" :disabled="savingActivate || savingReset" :class="{'disabled': savingActivate || savingReset}" class="btn btn-primary btn-xlg">{{ $t('common.save') }}</button>
               </div>
             </div>
           </form>
@@ -60,7 +60,7 @@
             </div>
             <div class="form-actions row">
               <div class="col-offset-6">
-                <button type="submit" :disabled="activateStatus === 0 || savingActivate" :class="{'disabled': activateStatus === 0 || savingActivate}" v-text="savingActivate ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+                <button type="submit" :disabled="activateStatus === 0 || savingActivate" :class="{'disabled': activateStatus === 0 || savingActivate}" v-text="savingActivate ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-xlg"></button>
               </div>
             </div>
           </form>
@@ -89,7 +89,7 @@
             </div>
             <div class="form-actions row">
               <div class="col-offset-6">
-                <button type="submit" :disabled="activateStatus2 === 0 || savingActivate" :class="{'disabled': activateStatus2 === 0 || savingActivate}" v-text="savingActivate ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+                <button type="submit" :disabled="activateStatus2 === 0 || savingActivate" :class="{'disabled': activateStatus2 === 0 || savingActivate}" v-text="savingActivate ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-xlg"></button>
               </div>
             </div>
           </form>
@@ -130,7 +130,7 @@
             </div>
             <div class="form-actions row">
               <div class="col-offset-6">
-                <button type="submit" :disabled="resetStatus === 0 || savingReset" :class="{'disabled': resetStatus === 0 || savingReset}" v-text="savingReset ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+                <button type="submit" :disabled="resetStatus === 0 || savingReset" :class="{'disabled': resetStatus === 0 || savingReset}" v-text="savingReset ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-xlg"></button>
               </div>
             </div>
           </form>
@@ -159,7 +159,7 @@
             </div>
             <div class="form-actions row">
               <div class="col-offset-6">
-                <button type="submit" :disabled="resetStatus2 === 0 || savingReset" :class="{'disabled': resetStatus2 === 0 || savingReset}" v-text="savingReset ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+                <button type="submit" :disabled="resetStatus2 === 0 || savingReset" :class="{'disabled': resetStatus2 === 0 || savingReset}" v-text="savingReset ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-xlg"></button>
               </div>
             </div>
           </form>

@@ -57,9 +57,9 @@
         </div>
         <div class="form-actions row">
           <div class="col-offset-4">
-            <button class="btn btn-primary btn-lg" :disabled="submitting || deleting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')"></button>
-            <button class="btn btn-ghost btn-lg" @click.prevent.stop="previewArticle">预览</button>
-            <button @click.stop.prevent="deleteArticle" class="btn btn-ghost btn-lg" :disabled="submitting || deleting" :class="{'disabled':deleting}" v-if="type==='edit'" v-text="deleting ? $t('common.handling') : $t('common.del')"></button>
+            <button class="btn btn-primary btn-xlg" :disabled="submitting || deleting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')"></button>
+            <button class="btn btn-ghost btn-xlg" @click.prevent.stop="previewArticle">预览</button>
+            <button @click.stop.prevent="deleteArticle" class="btn btn-ghost btn-xlg" :disabled="submitting || deleting" :class="{'disabled':deleting}" v-if="type==='edit'" v-text="deleting ? $t('common.handling') : $t('common.del')"></button>
           </div>
         </div>
       </form>

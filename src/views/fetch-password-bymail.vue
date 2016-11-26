@@ -20,7 +20,7 @@
                 <div v-if="sendSuccess" class="form-tips form-tips-success"><span><i class="fa fa-check-circle"></i>{{ $t("auth.by_mail_success_msg") }}</span></div>
               </div>
               <div class="form-actions">
-                <button @keyup.enter="onSubmit" :disabled="sending" :class="{'disabled':sending}" v-text="sending ? $t('common.handling') : $t('common.ok')" class="btn btn-primary btn-xlg btn-pill">{{ $t("common.ok") }}</button>
+                <button @keyup.enter="onSubmit" :disabled="sending" :class="{'disabled':sending}" v-text="sending ? $t('common.handling') : $t('common.ok')" class="btn btn-primary btn-xxlg btn-pill">{{ $t("common.ok") }}</button>
               </div>
               <div class="form-operations"><a v-link="{ path: '/fetch-password' }">{{ $t("auth.by_phone") }}</a></div>
             </form>

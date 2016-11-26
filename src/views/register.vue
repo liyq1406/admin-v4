@@ -111,7 +111,7 @@
                 </label>
               </div>
               <div class="form-actions">
-                <button class="btn btn-primary btn-xlg btn-pill" :disabled="submitting" :class="{'disabled':submitting}">{{ $t("auth.register_submit") }}</button>
+                <button class="btn btn-primary btn-xxlg btn-pill" :disabled="submitting" :class="{'disabled':submitting}">{{ $t("auth.register_submit") }}</button>
               </div>
               <div class="form-operations"><a v-link="{ path: '/login' }">{{ $t('auth.has_account') }}</a></div>
             </form>

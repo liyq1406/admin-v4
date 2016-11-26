@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="actions">
-      <button class="btn btn-primary btn-lg" @click="goCreation">立即创建产品</button>
+      <button class="btn btn-primary btn-xlg" @click="goCreation">立即创建产品</button>
     </div>
   </div>
 </template>

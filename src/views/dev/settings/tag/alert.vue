@@ -10,7 +10,7 @@
             </div>
           </div>
           <div class="form-action">
-            <button class="btn btn-primary btn-lg" :class="{'disabled': setting}" :disabled="setting" @click.prevent="setTags">保存</button>
+            <button class="btn btn-primary btn-xlg" :class="{'disabled': setting}" :disabled="setting" @click.prevent="setTags">保存</button>
           </div>
         </div>
       </div>

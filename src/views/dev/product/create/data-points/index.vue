@@ -176,7 +176,7 @@
       </div>
     </div>
     <div class="actions">
-      <button class="btn btn-primary btn-lg" @click="onBtnClick">配置完成，下一步</button>
+      <button class="btn btn-primary btn-xlg" @click="onBtnClick">配置完成，下一步</button>
     </div>
     <div>
       <data-model :show.sync="showModal"></data-model>

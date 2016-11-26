@@ -69,7 +69,7 @@
                 </div>
               </div>
               <div class="form-actions">
-                <button @keyup.enter="onSubmit" :disabled="sending" :class="{'disabled':sending}" v-text="sending ? $t('common.handling') : $t('common.ok')" class="btn btn-primary btn-xlg btn-pill">{{ $t("common.ok") }}</button>
+                <button @keyup.enter="onSubmit" :disabled="sending" :class="{'disabled':sending}" v-text="sending ? $t('common.handling') : $t('common.ok')" class="btn btn-primary btn-xxlg btn-pill">{{ $t("common.ok") }}</button>
               </div>
               <div class="form-operations"><a v-link="{ path: '/fetch-password-bymail' }">{{ $t("auth.by_mail") }}</a></div>
             </form>

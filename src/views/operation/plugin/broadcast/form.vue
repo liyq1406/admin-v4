@@ -292,7 +292,7 @@
                     </label>
                   </div>
                   <div class="col-19" :class="{'col-offset-5':type==='add'}">
-                    <button type="submit" class="btn btn-primary btn-lg">{{ $t("common.ok") }}</button>
+                    <button type="submit" class="btn btn-primary btn-xlg">{{ $t("common.ok") }}</button>
                   </div>
                 </div>
               </div>

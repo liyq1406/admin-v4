@@ -157,7 +157,7 @@
               </div>
               <div class="form-actions row">
                 <div class="col-offset-6">
-                  <button type="submit" class="btn btn-primary btn-lg">{{ $t("common.ok") }}</button>
+                  <button type="submit" class="btn btn-primary btn-xlg">{{ $t("common.ok") }}</button>
                 </div>
               </div>
             </div>

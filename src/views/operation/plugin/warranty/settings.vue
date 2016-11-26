@@ -13,7 +13,7 @@
             </div>
           </div>
           <div class="form-action">
-            <button class="btn btn-primary btn-lg" @click.prevent="updateTags">保存</button>
+            <button class="btn btn-primary btn-xlg" @click.prevent="updateTags">保存</button>
           </div>
         </div>
       </div>

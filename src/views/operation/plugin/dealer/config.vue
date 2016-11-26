@@ -14,15 +14,20 @@
         </div>
       </div>
     </div>
-    <div v-if="model.is_enable">
+    <div>
       <div class="panel-sub-hd bordered mb20">域名配置</div>
 
       <div class="part form">
         <div class="form-row row pl20">
           <label class="form-control col-4">域名:</label>
-          <div class="controls col-20">
+          <div class="controls col-16">
             <div class="input-text-wrap">
-              <input type="text" placeholder="域名" class="input-text" v-model="model.domain" name="model.domain" readonly="true">
+              <input type="text" placeholder="域名" class="input-text" v-model="model.domain" name="model.domain" readonly="true" id="domain">
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="ml10">
+              <button class="btn btn-ghost btn-lg btn-block" data-clipboard-target="#domain" id="btnCopy">复制</button>
             </div>
           </div>
         </div>
@@ -45,7 +50,7 @@
           <div class="controls col-20">
             <div class="thumb-info">
               <div class="thumb">
-                <image-uploader :images="images" @modified="onModifiedImages"></image-uploader>
+                <image-uploader :images="images" @modified="onModifiedImages" img-width="200px" img-height="55px"></image-uploader>
                 <div class="form-tips">图片规格：400*110</div>
               </div>
             </div>
@@ -55,7 +60,7 @@
 
       <div class="panel-sub-hd bordered mb20">权限配置</div>
 
-      <div class="panel-bd products-container clearfix">
+      <div class="panel-bd products-container mb30 clearfix">
         <!-- 应用列表  -->
         <div v-if="!allProducts.length" class="non">暂无产品</div>
         <div  v-if="allProducts.length" class="product-list-box fl">
@@ -146,13 +151,14 @@
         </table>
       </div>
     </div>
-    <button class="btn btn-primary btn-lg" @click.prevent.stop="setConfig">提交</button>
+    <button class="btn btn-primary btn-xlg" @click.prevent.stop="setConfig">提交</button>
   </div>
 </template>
 
 <script>
 import api from 'src/api'
 import formatDate from 'filters/format-date'
+import ClipBoard from 'clipboard'
 
 export default {
   name: 'config',
@@ -196,12 +202,12 @@ export default {
       }, {
         title: '智能维保',
         type: 'warranty',
-        description: '管理设备维修、延保等内容',
+        description: '管理设备维修、延保等内容（必须先在“开发平台-应用市场”中开启）',
         is_visible: false
       }, {
         title: '用户反馈',
         type: 'helpdesk',
-        description: '用户端可提交相关产品反馈至平台，可使用反馈分析等模块',
+        description: '用户端可提交相关产品反馈至平台，可使用反馈分析等模块（必须先在“开发平台-应用市场”中开启）',
         is_visible: false
       }],
       model: {
@@ -286,12 +292,20 @@ export default {
   },
 
   ready () {
+    let clipboard = new ClipBoard('#btnCopy')
+
+    // 监听拷贝成功事件
+    clipboard.on('success', this.onCopySuccess)
     this.init()
     // this.getConfig()
   },
 
   watch: {
     productList () {
+      this.init()
+    },
+
+    corp () {
       this.init()
     }
   },
@@ -300,7 +314,7 @@ export default {
      * 初始化
      */
     init () {
-      if (this.productList.length) {
+      if (this.productList.length && this.corp.hasOwnProperty('id')) {
         let products = _.cloneDeep(this.productList).map((product) => {
           product.is_visible = false
           return product
@@ -310,6 +324,19 @@ export default {
         this.getConfig()
       }
     },
+
+    /**
+     * 拷贝至剪贴板
+     * @params {HTML DOM Event} e 事件
+     */
+    onCopySuccess (e) {
+      // console.info('Action:', e.action)
+      // console.info('Text:', e.text)
+      // console.info('Trigger:', e.trigger)
+
+      e.clearSelection()
+    },
+
     selectProduct (product) {
       this.selectedProduct = product
       // this.selectProduct.is_visible = product.is_visible

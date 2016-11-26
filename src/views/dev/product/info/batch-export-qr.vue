@@ -76,7 +76,7 @@
             </div>
           </div>
           <div class="fr mr10 mt20">
-            <button class="btn btn-primary btn-lg"  @click="exportQrcode">批量导出</button>
+            <button class="btn btn-primary btn-xlg"  @click="exportQrcode">批量导出</button>
           </div>
         </div>
       </div>

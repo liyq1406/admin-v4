@@ -30,7 +30,7 @@
                 </label>
               </div>
               <div class="form-actions">
-                <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submitting') : $t('auth.login_submit')" class="btn btn-primary btn-xlg btn-pill focus-input">{{ $t("auth.login_submit") }}</button>
+                <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submitting') : $t('auth.login_submit')" class="btn btn-primary btn-xxlg btn-pill focus-input">{{ $t("auth.login_submit") }}</button>
               </div>
               <!-- <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a></div> -->
             </form>

@@ -4,8 +4,7 @@
       <label>
         <img v-if="image.length" :src="image"/>
         <input type="file" @change.prevent="upload($event, imageIndex)"/>
-        <i v-if="!image.length" class="fa fa-plus"></i>
-        <span v-if="!image.length" class="txt">添加图片</span>
+        <span class="upload-hint-text" v-if="!image.length"><i class="fa fa-plus"></i>添加图片</span>
       </label>
       <i v-if="image.length" @click.stop.prevent="removeImage(imageIndex)" class="fa fa-times"></i>
     </div>
@@ -172,17 +171,18 @@
       absolute top -50px
       opacity 0
 
-    .fa-plus
-    .txt
-      absolute left top 30px
+    .upload-hint-text
+      absolute top 50%
       width 100%
+      margin-top -13px
       text-align center
+      font-size 14px
+      height 30px
+      line-height 30px
 
-    .fa-plus
-      font-size 36px
-
-    .txt
-      top 80px
+      .fa-plus
+        font-size 20px
+        margin-right 5px
 
     .fa-times
       absolute right 5px top 5px

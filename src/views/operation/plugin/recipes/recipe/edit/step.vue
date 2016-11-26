@@ -58,9 +58,9 @@
                 </div> -->
                 <div class="form-actions mb40 row">
                   <div class="col-offset-4">
-                    <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
-                    <!-- <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-lg">预览</button> -->
-                    <!-- <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button> -->
+                    <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-xlg">{{ $t("common.save") }}</button>
+                    <!-- <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-xlg">预览</button> -->
+                    <!-- <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-xlg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button> -->
                   </div>
                 </div>
               </form>

@@ -24,7 +24,7 @@
           </div>
           <div class="form-actions row">
             <div class="col-offset-4">
-              <button class="btn btn-primary btn-lg" @click="onSubmit">提交</button>
+              <button class="btn btn-primary btn-xlg" @click="onSubmit">提交</button>
             </div>
           </div>
         </div>

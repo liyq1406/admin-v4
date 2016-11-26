@@ -22,7 +22,7 @@
       <template slot="body">
         <div class="error-msg">{{error.msg}}</div>
         <div class="modal-actions">
-          <button class="btn btn-primary btn-lg" @click.prevent.stop="hideError">{{ $t("common.ok") }}</button>
+          <button class="btn btn-primary btn-xlg" @click.prevent.stop="hideError">{{ $t("common.ok") }}</button>
         </div>
       </template>
     </modal>

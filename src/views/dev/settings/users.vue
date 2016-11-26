@@ -33,7 +33,7 @@
             </div>
             <div class="form-actions row">
               <div class="col-offset-5">
-                <button type="submit" class="btn btn-primary btn-lg">{{ '确定' }}</button>
+                <button type="submit" class="btn btn-primary btn-xlg">{{ '确定' }}</button>
               </div>
             </div>
           </form>

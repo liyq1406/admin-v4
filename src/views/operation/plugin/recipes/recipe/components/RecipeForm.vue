@@ -218,9 +218,9 @@
                 </div> -->
                 <!-- <div class="form-actions mb40 row">
                   <div class="col-offset-4">
-                    <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
-                    <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-lg">预览</button>
-                    <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button>
+                    <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-xlg">{{ $t("common.save") }}</button>
+                    <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-xlg">预览</button>
+                    <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-xlg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button>
                   </div>
                 </div> -->
               </form>
@@ -372,8 +372,8 @@
               </div>
               <!-- <div class="form-actions mb40 row">
                 <div class="col-offset-4">
-                  <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
-                  <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button>
+                  <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-xlg">{{ $t("common.save") }}</button>
+                  <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-xlg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button>
                 </div>
               </div> -->
             </form>
@@ -590,10 +590,10 @@
     </div>
     <div class="row border-top">
       <div class="col-21 col-offset-3">
-        <button v-if="!minPage" class="btn btn-primary btn-lg mlr10" @click.prevent="lastStep">上一步</button>
-        <button v-if="maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent.stop="onRecipeSubmit">提交</button>
-        <button v-if="!maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent="nextStep">下一步</button>
-        <button v-if="maxPage" class="btn btn-ghost btn-lg mlr10" @click.prevent.stop="isShowPreview=true">预览</button>
+        <button v-if="!minPage" class="btn btn-primary btn-xlg mlr10" @click.prevent="lastStep">上一步</button>
+        <button v-if="maxPage" class="btn btn-primary btn-xlg mlr10" @click.prevent.stop="onRecipeSubmit">提交</button>
+        <button v-if="!maxPage" class="btn btn-primary btn-xlg mlr10" @click.prevent="nextStep">下一步</button>
+        <button v-if="maxPage" class="btn btn-ghost btn-xlg mlr10" @click.prevent.stop="isShowPreview=true">预览</button>
       </div>
     </div>
   </div>

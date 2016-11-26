@@ -125,8 +125,8 @@
 
             <div class="form-actions row">
               <div class="col-offset-3">
-                <button type="submit" class="btn btn-primary btn-lg">{{ '提交' }}</button>
-                <button type="submit" v-if="!editModel.is_release" class="btn btn-ghost btn-lg" @click.prevent="deleteProduct">{{ '删除产品' }}</button>
+                <button type="submit" class="btn btn-primary btn-xlg">{{ '提交' }}</button>
+                <button type="submit" v-if="!editModel.is_release" class="btn btn-ghost btn-xlg" @click.prevent="deleteProduct">{{ '删除产品' }}</button>
               </div>
             </div>
           </form>

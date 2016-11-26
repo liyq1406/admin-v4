@@ -77,7 +77,7 @@
         </div>
       </div>
       <div class="actions">
-        <button class="btn btn-primary btn-lg" @click="onBtnClick" :class="{'disabled': adding}">下一步</button>
+        <button class="btn btn-primary btn-xlg" @click="onBtnClick" :class="{'disabled': adding}">下一步</button>
       </div>
     </validation>
   </div>
