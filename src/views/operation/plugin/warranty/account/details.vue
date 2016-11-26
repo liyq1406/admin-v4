@@ -48,7 +48,7 @@
                 <search-box :key.sync="key" :active="searching" :placeholder="'请输入关键字'" @cancel="getBranchStaffsList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getBranchStaffsList(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
-                      <option v-for="option in queryTypeOptions" :value="option" :selected="$index===0">{{ option.label }}</option>
+                      <option v-for="(index, option) in queryTypeOptions" :value="option" :selected="index===0">{{ option.label }}</option>
                     </select>
                   </x-select>
                   <button slot="search-button" class="btn" @click="getBranchStaffsList"><i class="fa fa-search"></i></button>

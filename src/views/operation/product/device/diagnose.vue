@@ -25,7 +25,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="datapoint in datapointList | orderBy 'index'">
+              <tr v-for="(index, datapoint) in datapointList | orderBy 'index'">
                 <td>{{ datapoint.index }}</td>
                 <td>{{ datapoint.name }}</td>
                 <td>{{ datapoint.description }}</td>
@@ -33,11 +33,11 @@
                   <div class="control-box">
                     <div class="radio-group" v-if="dataPointType(datapoint.type) === 'boolean'">
                       <label class="radio">
-                        <input type="radio" :name="'datapoint' + $index" :value="true" v-model="datapoint.value" @change="setDataEvent(datapoint)">
+                        <input type="radio" :name="'datapoint' + index" :value="true" v-model="datapoint.value" @change="setDataEvent(datapoint)">
                         <span>true</span>
                       </label>
                       <label class="radio ml15">
-                        <input type="radio" :name="'datapoint' + $index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)">
+                        <input type="radio" :name="'datapoint' + index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)">
                         <span>false</span>
                       </label>
                     </div>

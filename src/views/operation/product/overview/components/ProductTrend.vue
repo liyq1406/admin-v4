@@ -9,7 +9,7 @@
         <date-time-multiple-picker :periods="periods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
       </div>
       <ul>
-        <li v-for="item in locales.data.PRODUCT_FILTERS" class="tab-s2-item" @click="tabIndex = $index" :class="{'active': tabIndex === $index}">{{ item.label }}</li>
+        <li v-for="(index, item) in locales.data.PRODUCT_FILTERS" class="tab-s2-item" @click="tabIndex = index" :class="{'active': tabIndex === index}">{{ item.label }}</li>
       </ul>
     </div>
     <div class="row mt10">

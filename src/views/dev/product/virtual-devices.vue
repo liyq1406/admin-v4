@@ -45,7 +45,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="datapoint in datapointList">
+                  <tr v-for="(index, datapoint) in datapointList">
                     <td class="w50">{{ datapoint.index }}</td>
                     <td class="w80">{{ datapoint.name }}</td>
                     <td class="value-td">
@@ -55,10 +55,10 @@
                         </div>
                         <div class="range-box" v-show="dataPointType(datapoint.type) === 'boolean'">
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index" :value="true" v-model="datapoint.value" @change="setDataEvent(datapoint)"> true
+                            <input type="radio" :name="'value'+index" :value="true" v-model="datapoint.value" @change="setDataEvent(datapoint)"> true
                           </label>
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)"> false
+                            <input type="radio" :name="'value'+index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)"> false
                           </label>
                         </div>
                         <div class="number-box" v-show="dataPointType(datapoint.type) === 'string'">

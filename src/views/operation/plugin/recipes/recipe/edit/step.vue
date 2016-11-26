@@ -139,8 +139,8 @@
                   <h3>步骤：</h3>
                 </div>
                 <div class="preview-panel-bd">
-                  <p v-for="step in cooking_steps">
-                    {{$index+1}}、{{step.description}}
+                  <p v-for="(index, step) in cooking_steps">
+                    {{index+1}}、{{step.description}}
                   </p>
                 </div>
               </div>

@@ -41,8 +41,8 @@
             </thead>
             <tbody>
               <template v-if="accounts.length > 0">
-                <tr v-for="account in accounts">
-                  <td>{{ $index + 1 }}</td>
+                <tr v-for="(index, account) in accounts">
+                  <td>{{ index + 1 }}</td>
                   <td>{{ account.name }}</td>
                   <td>{{ account.director }}</td>
                   <td>{{ account.phone }}</td>

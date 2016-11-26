@@ -22,10 +22,10 @@
                       <textarea v-model="cooking_step.description" type="text" lazy placeholder="请填写步骤的描述" class="input-text"></textarea>
                     </div>
                     <div class="button-list">
-                      <div v-show="cooking_steps.length>1&&$index>0" @click="handleStepEvent('MOVE_UP', cooking_step, $index)" class="control-button button-up"><i class="icon fa fa-long-arrow-up"></i></div>
-                      <div v-show="cooking_steps.length>1&&$index<(cooking_steps.length-1)" @click="handleStepEvent('MOVE_DOWN', cooking_step, $index)" class="control-button button-down"><i class="icon fa fa-long-arrow-down"></i></div>
-                      <div @click="handleStepEvent('ADD', cooking_step, $index)" class="control-button button-add" v-if="cooking_steps.length<maxStepCount"><i class="icon fa fa-plus"></i></div>
-                      <div v-show="cooking_steps.length>1" @click="handleStepEvent('DEL', cooking_step, $index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
+                      <div v-show="cooking_steps.length>1&&index>0" @click="handleStepEvent('MOVE_UP', cooking_step, index)" class="control-button button-up"><i class="icon fa fa-long-arrow-up"></i></div>
+                      <div v-show="cooking_steps.length>1&&index<(cooking_steps.length-1)" @click="handleStepEvent('MOVE_DOWN', cooking_step, index)" class="control-button button-down"><i class="icon fa fa-long-arrow-down"></i></div>
+                      <div @click="handleStepEvent('ADD', cooking_step, index)" class="control-button button-add" v-if="cooking_steps.length<maxStepCount"><i class="icon fa fa-plus"></i></div>
+                      <div v-show="cooking_steps.length>1" @click="handleStepEvent('DEL', cooking_step, index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
                     </div>
                   </div>
                 </div>
@@ -98,8 +98,8 @@
                 <h3>步骤：</h3>
               </div>
               <div class="preview-panel-bd">
-                <p v-for="step in cooking_steps">
-                  {{$index+1}}、{{step.description}}
+                <p v-for="(index, step) in cooking_steps">
+                  {{index+1}}、{{step.description}}
                 </p>
               </div>
             </div>

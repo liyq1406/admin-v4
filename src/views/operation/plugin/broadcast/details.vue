@@ -55,11 +55,11 @@
               <ul>
                 <li v-if="taskInfo.apps && taskInfo.apps.length">
                   <div class="label">推送应用</div>
-                  <div class="cont"><span class="meta" v-for="app in taskInfo.apps" track-by="$index">{{ app.name }}</span></div>
+                  <div class="cont"><span class="meta" v-for="(index, app) in taskInfo.apps" track-by="index">{{ app.name }}</span></div>
                 </li>
                 <li v-if="taskInfo.products && taskInfo.products.length">
                   <div class="label">推送产品</div>
-                  <div class="cont"><span class="meta" v-for="product in taskInfo.products" track-by="$index">{{ product.name }}</span></div>
+                  <div class="cont"><span class="meta" v-for="(index, product) in taskInfo.products" track-by="index">{{ product.name }}</span></div>
                 </li>
                 <li>
                   <div class="label">推送人群</div>

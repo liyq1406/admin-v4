@@ -21,10 +21,10 @@
             </thead>
             <tbody>
               <template v-if="tags && tags.length > 0">
-                <tr v-for="tag in tags">
+                <tr v-for="(index, tag) in tags">
                   <td>{{ tag.label }}</td>
                   <td class="tac">
-                    <button class="btn btn-link btn-mini" @click="editTag(tag, $index)">编辑</button>
+                    <button class="btn btn-link btn-mini" @click="editTag(tag, index)">编辑</button>
                   </td>
                 </tr>
               </template>
