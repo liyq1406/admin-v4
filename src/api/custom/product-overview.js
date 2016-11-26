@@ -53,7 +53,15 @@ function getCustomOverviewConfig (productId) {
   })
 }
 
+/**
+ * 清楚缓存
+ */
+function empty () {
+  ProductConfigPool = {}
+}
+
 export default {
   setCustomOverviewConfig,
-  getCustomOverviewConfig
+  getCustomOverviewConfig,
+  empty
 }

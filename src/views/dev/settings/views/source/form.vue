@@ -609,7 +609,7 @@ export default {
           if (!this.statisticCheck()) {
             return false
           }
-          if (this.chartType !== 1 && !this.finenessType) {
+          if (!this.finenessType) {
             this.showNotice({
               type: 'error',
               content: '请选择时间粒度'

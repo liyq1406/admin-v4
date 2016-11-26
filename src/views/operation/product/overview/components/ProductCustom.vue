@@ -4,7 +4,7 @@
       <h2>{{ title }}</h2>
     </div>
     <div class="row mt20">
-      <div :class="[firstcol]">
+      <div v-if="firstConfig.id" :class="[firstcol]">
         <chart :options="fisrtModelOptions" :loading="fisrtLoading"></chart>
       </div>
       <div v-if="secondConfig.id" :class="[secondcol]">
@@ -185,10 +185,7 @@ export default {
       return 'col-8'
     },
     thirdcol () {
-      if (this.firstConfig.chart === 1 && this.secondConfig.chart === 1) {
-        return 'col-8'
-      }
-      return ''
+      return 'col-8'
     },
     fisrtModelOptions () {
       let res = _.cloneDeep(echartOptions.pie)

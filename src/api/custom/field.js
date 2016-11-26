@@ -62,8 +62,15 @@ function getCustomFieldConfig (productId) {
     }
   })
 }
+/**
+ * 清楚缓存
+ */
+function empty () {
+  ProductConfigPool = {}
+}
 
 export default {
   setCustomFieldConfig,
-  getCustomFieldConfig
+  getCustomFieldConfig,
+  empty
 }

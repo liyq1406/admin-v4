@@ -140,9 +140,20 @@ function get () {
   })
 }
 
+/**
+ * 清楚缓存
+ */
+function empty () {
+  pool = {
+    data: null,
+    expired: false
+  }
+}
+
 export default {
   add,
   get,
   put,
-  del
+  del,
+  empty
 }

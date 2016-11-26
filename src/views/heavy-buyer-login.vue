@@ -186,6 +186,7 @@
             }
             this.isLoginSuccess = true
             this.$emit('login-success')
+            api.custom.empty() // 清除api缓存
             api.product.all().then((res) => {
               this.$route.router.replace({path: `/operation/products/${res.data[0].id}/overview`})
             })

@@ -255,7 +255,6 @@
 
 <script>
 import api from 'api'
-import proxy from './proxy-api'
 import config from 'consts/custom-config'
 
 var QUOTAS = [
@@ -447,19 +446,28 @@ export default {
       }
       this.customCharts.forEach((item) => {
         if (item.data_source.first.id) {
-          item.data_source.first = _.find(this.dataSourceDefaultOptions, (ds) => {
+          let first = _.find(this.dataSourceDefaultOptions, (ds) => {
             return ds.id === item.data_source.first.id
           })
+          if (first) {
+            item.data_source.first = first
+          }
         }
         if (item.data_source.second.id) {
-          item.data_source.second = _.find(this.dataSourceDefaultOptions, (ds) => {
+          let second = _.find(this.dataSourceDefaultOptions, (ds) => {
             return ds.id === item.data_source.second.id
           })
+          if (second) {
+            item.data_source.second = second
+          }
         }
         if (item.data_source.third.id) {
-          item.data_source.third = _.find(this.dataSourceDefaultOptions, (ds) => {
+          let third = _.find(this.dataSourceDefaultOptions, (ds) => {
             return ds.id === item.data_source.third.id
           })
+          if (third) {
+            item.data_source.third = third
+          }
         }
       })
     },
@@ -480,7 +488,7 @@ export default {
       }
       // 设置默认
       this.initProductConfig(config.defaultValue)
-      proxy.getCustomOverviewConfig(this.selectProduct).then((res) => {
+      api.custom.productOverview.getCustomOverviewConfig(this.selectProduct).then((res) => {
         if (res) {
           // 配置服务器返回
           this.initProductConfig(res)
@@ -751,7 +759,7 @@ export default {
           params.custom_chart.push(temp)
         })
       }
-      proxy.setCustomOverviewConfig(this.selectProduct, params).then((res) => {
+      api.custom.productOverview.setCustomOverviewConfig(this.selectProduct, params).then((res) => {
         if (res.status === 200) {
           // 设置成功
           this.showNotice({

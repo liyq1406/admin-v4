@@ -200,6 +200,7 @@
             }
             this.isLoginSuccess = true
             this.$emit('login-success')
+            api.custom.empty() // 清除api缓存
             this.$route.router.replace({path: '/dashboard'})
           }).catch((res) => {
             this.setLoadingStatus(false)
