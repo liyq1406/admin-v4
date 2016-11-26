@@ -119,24 +119,24 @@
                     <div class="form-row row">
                       <label class="form-control col-3">主料:</label>
                       <div class="col-20 row">
-                        <div class="col-12 mb10" v-for="major in major_ingredients">
+                        <div class="col-12 mb10" v-for="(index, major) in major_ingredients">
                           <div class="row">
                             <div class="col-12">
                               <div class="input-text-wrap">
-                                <input placeholder="请填写材料" v-model="major.name" type="text" name="major.name" lazy class="input-text" :field="'majorname' + $index" v-validate="{required: true, maxlength: 20}"/>
+                                <input placeholder="请填写材料" v-model="major.name" type="text" name="major.name" lazy class="input-text" :field="'majorname' + index" v-validate="{required: true, maxlength: 20}"/>
                               </div>
                               <div class="form-tips form-tips-error">
-                                <span v-if="$validation['majorname' + $index].touched && $validation['majorname' + $index].required">主料名称不能为空</span>
-                                <span v-if="$validation['majorname' + $index].modified && $validation['majorname' + $index].maxlength">{{ $t('ui.validation.maxlength', ['主料名称', 20]) }}</span>
+                                <span v-if="$validation['majorname' + index].touched && $validation['majorname' + index].required">主料名称不能为空</span>
+                                <span v-if="$validation['majorname' + index].modified && $validation['majorname' + index].maxlength">{{ $t('ui.validation.maxlength', ['主料名称', 20]) }}</span>
                               </div>
                             </div>
                             <div class="col-8 col-offset-1">
                               <div class="input-text-wrap">
-                                <input placeholder="用量" v-model="major.unit" type="text" name="major.unit" lazy class="input-text" :field="'majorunit' + $index" v-validate="{required: true, maxlength: 10}"/>
+                                <input placeholder="用量" v-model="major.unit" type="text" name="major.unit" lazy class="input-text" :field="'majorunit' + index" v-validate="{required: true, maxlength: 10}"/>
                               </div>
                               <div class="form-tips form-tips-error">
-                                <span v-if="$validation['majorunit' + $index].touched && $validation['majorunit' + $index].required">主料用量不能为空</span>
-                                <span v-if="$validation['majorunit' + $index].modified && $validation['majorunit' + $index].maxlength">{{ $t('ui.validation.maxlength', ['主料用量', 10]) }}</span>
+                                <span v-if="$validation['majorunit' + index].touched && $validation['majorunit' + index].required">主料用量不能为空</span>
+                                <span v-if="$validation['majorunit' + index].modified && $validation['majorunit' + index].maxlength">{{ $t('ui.validation.maxlength', ['主料用量', 10]) }}</span>
                               </div>
                             </div>
                             <div class="col-3">
@@ -152,24 +152,24 @@
                     <div class="form-row row">
                       <label class="form-control col-3">辅料:</label>
                       <div class="col-20 row">
-                        <div class="col-12 mb10" v-for="minor in minor_ingredients">
+                        <div class="col-12 mb10" v-for="(index, minor) in minor_ingredients">
                           <div class="row">
                             <div class="col-12">
                               <div class="input-text-wrap">
-                                <input placeholder="请填写材料" v-model="minor.name" type="text" name="minor.name" lazy class="input-text" :field="'minorname' + $index" v-validate="{required: true, maxlength: 20}"/>
+                                <input placeholder="请填写材料" v-model="minor.name" type="text" name="minor.name" lazy class="input-text" :field="'minorname' + index" v-validate="{required: true, maxlength: 20}"/>
                               </div>
                               <div class="form-tips form-tips-error">
-                                <span v-if="$validation['minorname' + $index].touched && $validation['minorname' + $index].required">辅料名称不能为空</span>
-                                <span v-if="$validation['minorname' + $index].modified && $validation['minorname' + $index].maxlength">{{ $t('ui.validation.maxlength', ['辅料名称', 20]) }}</span>
+                                <span v-if="$validation['minorname' + index].touched && $validation['minorname' + index].required">辅料名称不能为空</span>
+                                <span v-if="$validation['minorname' + index].modified && $validation['minorname' + index].maxlength">{{ $t('ui.validation.maxlength', ['辅料名称', 20]) }}</span>
                               </div>
                             </div>
                             <div class="col-8 col-offset-1">
                               <div class="input-text-wrap">
-                                <input placeholder="用量" v-model="minor.unit" type="text" name="minor.unit" lazy class="input-text" :field="'minorunit' + $index" v-validate="{required: true, maxlength: 10}"/>
+                                <input placeholder="用量" v-model="minor.unit" type="text" name="minor.unit" lazy class="input-text" :field="'minorunit' + index" v-validate="{required: true, maxlength: 10}"/>
                               </div>
                               <div class="form-tips form-tips-error">
-                                <span v-if="$validation['minorunit' + $index].touched && $validation['minorunit' + $index].required">辅料用量不能为空</span>
-                                <span v-if="$validation['minorunit' + $index].modified && $validation['minorunit' + $index].maxlength">{{ $t('ui.validation.maxlength', ['辅料用量', 10]) }}</span>
+                                <span v-if="$validation['minorunit' + index].touched && $validation['minorunit' + index].required">辅料用量不能为空</span>
+                                <span v-if="$validation['minorunit' + index].modified && $validation['minorunit' + index].maxlength">{{ $t('ui.validation.maxlength', ['辅料用量', 10]) }}</span>
                               </div>
                             </div>
                             <div class="col-3">
@@ -283,8 +283,8 @@
                   <h3>步骤：</h3>
                 </div>
                 <div class="preview-panel-bd">
-                  <p v-for="step in cooking_steps">
-                    <span class="previewstep">第{{$index+1}}/{{cooking_steps.length}}步</span>
+                  <p v-for="(index, step) in cooking_steps">
+                    <span class="previewstep">第{{index+1}}/{{cooking_steps.length}}步</span>
                     <span>{{step.description}}</span>
                     <image class="previewpic" :src="step.images[0]"></image>
                   </p>

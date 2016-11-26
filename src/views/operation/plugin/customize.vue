@@ -87,18 +87,18 @@
             <div class="controls col-18">
               <div class="radio-group radio-group-v">
                 <!-- 功能完成后改成下面的代码 -->
-                <!-- <label v-for="type in appTypes" class="radio">
-                  <input type="radio" v-model="addModel.type" name="type" :value="$index+1" :disabled="($index > 3 && isAppExist($index+1)) || type.disabled"/>
-                  <span :class="{'hl-gray': ($index > 3 && isAppExist($index+1)) || type.disabled}">{{ type.label }}</span>
+                <!-- <label v-for="(index, type) in appTypes" class="radio">
+                  <input type="radio" v-model="addModel.type" name="type" :value="index+1" :disabled="(index > 3 && isAppExist(index+1)) || type.disabled"/>
+                  <span :class="{'hl-gray': (index > 3 && isAppExist(index+1)) || type.disabled}">{{ type.label }}</span>
                 </label> -->
-                <label v-for="type in appTypes" class="radio">
-                  <template v-if="$index<=3">
-                    <input type="radio" v-model="addModel.type" name="type" :value="$index+1" :disabled="type.disabled"/>
+                <label v-for="(index, type) in appTypes" class="radio">
+                  <template v-if="index<=3">
+                    <input type="radio" v-model="addModel.type" name="type" :value="index+1" :disabled="type.disabled"/>
                     <span :class="{'hl-gray': type.disabled}">{{ type.label }}</span>
                   </template>
-                  <template v-if="debug && $index>3">
-                    <input type="radio" v-model="addModel.type" name="type" :value="$index+1" :disabled="isAppExist($index+1) || type.disabled"/>
-                    <span :class="{'hl-gray': isAppExist($index+1) || type.disabled}">{{ type.label }}</span>
+                  <template v-if="debug && index>3">
+                    <input type="radio" v-model="addModel.type" name="type" :value="index+1" :disabled="isAppExist(index+1) || type.disabled"/>
+                    <span :class="{'hl-gray': isAppExist(index+1) || type.disabled}">{{ type.label }}</span>
                   </template>
                 </label>
               </div>

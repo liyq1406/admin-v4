@@ -35,7 +35,7 @@
               <div class="controls col-21">
                 <!-- <tree-item></tree-item> -->
                 <ul class="menu" v-if="menus && menus.length > 0">
-                  <tree-item  v-for="menu in menus" :menu="menu" :index="$index" @push-data="test" @push-code-data="setCode" @delete-menu="deleteMenu" @delete-code="deleteCode"></tree-item>
+                  <tree-item  v-for="(index, menu) in menus" :menu="menu" :index="index" @push-data="test" @push-code-data="setCode" @delete-menu="deleteMenu" @delete-code="deleteCode"></tree-item>
                 </ul>
               </div>
             </div>

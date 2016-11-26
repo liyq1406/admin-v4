@@ -14,25 +14,25 @@
               <form autocomplete="off" novalidate @submit.prevent="onRecipeSubmit">
                 <div class="form-row panel mb20">
                   <div class="panel-bd">
-                    <div v-for="cooking_step in cooking_steps" class="thumb-info mt20 mb15 row">
-                      <div class="col-3">第{{ $index+1 }}步:</div>
+                    <div v-for="(index, cooking_step) in cooking_steps" class="thumb-info mt20 mb15 row">
+                      <div class="col-3">第{{ index+1 }}步:</div>
                       <div class="col-21">
                         <div class="thumb">
                           <image-uploader :images="cooking_step.images" @modified="onModifiedImages(cooking_step.images)" class="mb0"></image-uploader>
                         </div>
                         <div class="info-text">
                           <div class="input-text-wrap">
-                            <textarea v-model="cooking_step.description"  name="cooking_step.description" lazy placeholder="请填写步骤的描述" class="input-text" :field="'step' + $index" v-validate="{required: true, maxlength: 100}"></textarea>
+                            <textarea v-model="cooking_step.description"  name="cooking_step.description" lazy placeholder="请填写步骤的描述" class="input-text" :field="'step' + index" v-validate="{required: true, maxlength: 100}"></textarea>
                           </div>
                           <div class="form-tips form-tips-error">
-                            <span v-if="$validation['step' + $index].touched && $validation['step' + $index].required">步骤描述不能为空</span>
-                            <span v-if="$validation['step' + $index].modified && $validation['step' + $index].maxlength">{{ $t('ui.validation.maxlength', ['步骤描述', 100]) }}</span>
+                            <span v-if="$validation['step' + index].touched && $validation['step' + index].required">步骤描述不能为空</span>
+                            <span v-if="$validation['step' + index].modified && $validation['step' + index].maxlength">{{ $t('ui.validation.maxlength', ['步骤描述', 100]) }}</span>
                           </div>
                           <div class="button-list">
-                            <div v-show="cooking_steps.length>1&&$index>0" @click="handleStepEvent('MOVE_UP', cooking_step, $index)" class="control-button button-up"><i class="icon fa fa-long-arrow-up"></i></div>
-                            <div v-show="cooking_steps.length>1&&$index<(cooking_steps.length-1)" @click="handleStepEvent('MOVE_DOWN', cooking_step, $index)" class="control-button button-down"><i class="icon fa fa-long-arrow-down"></i></div>
-                            <div @click="handleStepEvent('ADD', cooking_step, $index)" class="control-button button-add" v-if="cooking_steps.length<maxStepCount"><i class="icon fa fa-plus"></i></div>
-                            <div v-show="cooking_steps.length>1" @click="handleStepEvent('DEL', cooking_step, $index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
+                            <div v-show="cooking_steps.length>1&&index>0" @click="handleStepEvent('MOVE_UP', cooking_step, index)" class="control-button button-up"><i class="icon fa fa-long-arrow-up"></i></div>
+                            <div v-show="cooking_steps.length>1&&index<(cooking_steps.length-1)" @click="handleStepEvent('MOVE_DOWN', cooking_step, index)" class="control-button button-down"><i class="icon fa fa-long-arrow-down"></i></div>
+                            <div @click="handleStepEvent('ADD', cooking_step, index)" class="control-button button-add" v-if="cooking_steps.length<maxStepCount"><i class="icon fa fa-plus"></i></div>
+                            <div v-show="cooking_steps.length>1" @click="handleStepEvent('DEL', cooking_step, index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
                           </div>
                         </div>
                       </div>
@@ -42,8 +42,8 @@
                 <!-- <div class="bortop" v-if="this.$route.params.type_value === '2'">
                   <h2>添加设备烹饪提示</h2>
                   <div class="row">
-                    <div class="line32 mrb10" v-for="tip in cookTips">
-                      <div class="col-3">第{{ $index+1 }}步:</div>
+                    <div class="line32 mrb10" v-for="(index, tip) in cookTips">
+                      <div class="col-3">第{{ index+1 }}步:</div>
                       <div class="col-19">
                         <p class="cooktipp">{{tip.content}}</p>
                       </div>
