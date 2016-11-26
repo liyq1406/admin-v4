@@ -691,7 +691,6 @@ export default {
         } else { // 数据端点
           model.dp_index = this.selectedDatapoint.index
         }
-        console.log(model)
       }
 
       if (!(model.show_type === 2 && this.chartType > 1 || this.sourceType === 3)) {
