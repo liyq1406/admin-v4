@@ -1,7 +1,7 @@
 <template>
   <div class="date-time-mutiple-picker">
     <div class="radio-group-wrap">
-      <radio-button-group :items="periodsInfo" :value.sync="period" @select="periodSelect"><span slot="label" class="label"></span></radio-button-group>
+      <radio-button-group :items="periodsInfo" :value="period" @select="periodSelect"><span slot="label" class="label"></span></radio-button-group>
     </div>
     <div class="time-range-picker-wrap">
       <button @click='toggle' class="time-range-show" readonly="readonly">{{timeShowPanel}}
@@ -100,7 +100,7 @@ export default {
           } else {
             this.period = res[0].value
           }
-          this.periodSelect()
+          this.periodSelect(this.period)
         }
 
         this.periodsInfo = res
@@ -149,7 +149,8 @@ export default {
         this.endTime = new Date(this.endTime.getTime() - 3600 * 1000 * 24)
       }
     },
-    periodSelect () {
+    periodSelect (val) {
+      this.period = val
       this.adjustTime()
       this.$emit('timechange', this.startTime, this.endTime)
     }

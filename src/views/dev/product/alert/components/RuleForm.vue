@@ -23,11 +23,7 @@
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.condition") }}:</label>
                 <div class="controls col-19">
                   <div class="radio-button-wrap">
-                    <radio-button-group :items="ruleTypes"
-                                         color="red"
-                                   :value.sync="selectedType"
-                                       @select="">
-                    </radio-button-group>
+                    <radio-button-group :items="ruleTypes" color="red" :value="selectedType" @select="onSelectType"></radio-button-group>
                   </div>
                   <div class="quotas-detail mt30">
                     <div class="{{ arrowClass }}"></div>
@@ -434,6 +430,13 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
+    },
+
+    /**
+     * 处理类型选择
+     */
+    onSelectType (type) {
+      this.selectedType = type
     },
 
     /**

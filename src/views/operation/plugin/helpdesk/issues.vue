@@ -26,7 +26,7 @@
           <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="locales.data.AllPERIODS" :value.sync="period" @select="getIssues()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="locales.data.AllPERIODS" :value="period" @select="getIssues"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
     </div>
@@ -361,7 +361,11 @@ export default {
       this.getIssues()
     },
     // 获取问题列表
-    getIssues () {
+    getIssues (period) {
+      if (typeof period !== 'undefined') {
+        this.period = period
+      }
+
       this.loadingData = true
       if (typeof querying !== 'undefined') {
         this.currentPage = 1

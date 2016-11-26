@@ -32,7 +32,7 @@
         <div v-show="!loading && activateLang === 'en-us'" class="status">{{ $t('common.status') }}:<span v-if="activateStatus2 === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="activateStatus2 === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="activateStatus2 === 1 || activateStatus2 === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
         <h2>{{ $t('ui.mail_templates.activate_template') }}</h2>
         <div class="leftbox">
-          <radio-button-group :items="locales.data.MAIL_TEMPLATE_LANGUAGES" :value.sync="activateLang"></radio-button-group>
+          <radio-button-group :items="locales.data.MAIL_TEMPLATE_LANGUAGES" :value="activateLang" @select="onSelectActivateLang"></radio-button-group>
         </div>
       </div>
       <div class="panel-bd">
@@ -102,7 +102,7 @@
         <div v-show="!loading && resetLang === 'en-us'" class="status">{{ $t('common.status') }}:<span v-if="resetStatus2 === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="resetStatus2 === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="resetStatus2 === 1 || resetStatus2 === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
         <h2>{{ $t('ui.mail_templates.reset_template') }}</h2>
         <div class="leftbox">
-          <radio-button-group :items="locales.data.MAIL_TEMPLATE_LANGUAGES" :value.sync="resetLang"></radio-button-group>
+          <radio-button-group :items="locales.data.MAIL_TEMPLATE_LANGUAGES" :value="resetLang" @select="onSelectResetLang"></radio-button-group>
         </div>
       </div>
       <div class="panel-bd">
@@ -359,6 +359,20 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理激活模板语言选择
+     */
+    onSelectActivateLang (val) {
+      this.activateLang = val
+    },
+
+    /**
+     * 处理重置密码模板语言选择
+     */
+    onSelectResetLang (val) {
+      this.resetLang = val
+    },
+
     /**
      * 提交发件者
      */

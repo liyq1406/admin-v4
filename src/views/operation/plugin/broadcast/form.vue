@@ -15,7 +15,7 @@
                 <div class="form">
                   <div class="form-row row">
                     <div class="check-group-box tab-s2">
-                      <radio-button-group :items="pushOption" color="red" :value.sync="scopeType">
+                      <radio-button-group :items="pushOption" color="red" :value="scopeType" @select="onScopeTypeSelect">
                         <span slot="label" class="label col-5">请选择推送范围</span>
                       </radio-button-group>
                     </div>
@@ -577,6 +577,15 @@
       removeUser (u) {
         this.user.$remove(u)
       },
+
+      /**
+       * 处理推送范围选择
+       * @param {Number} type 推送范围类型
+       */
+      onScopeTypeSelect (type) {
+        this.scopeType = type
+      },
+
       /**
        * 获取详细推送的详情
        * @return {[type]} [description]

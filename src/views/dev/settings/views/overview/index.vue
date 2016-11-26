@@ -23,7 +23,7 @@
             </div>
             <div class="controls col-21">
               <div class="radio-button-wrap">
-                <radio-button-group :items="quotasInfo" color="red" :value.sync="selectedQuota" @select="quotaSelect"></radio-button-group>
+                <radio-button-group :items="quotasInfo" color="red" :value="selectedQuota" @select="quotaSelect"></radio-button-group>
               </div>
               <div class="quotas-detail mt30">
                 <div class="{{ arrowClass }}"></div>
@@ -34,7 +34,7 @@
                       <label>数据来源:</label>
                     </div>
                     <div class="controls col-21">
-                      <radio-button-group :items="dataFromInfo" :value.sync="curQuotaData.dataFrom" @select="dataFromSelect"></radio-button-group>
+                      <radio-button-group :items="dataFromInfo" :value="curQuotaData.dataFrom" @select="dataFromSelect"></radio-button-group>
                     </div>
                   </div>
                   <div class="form-row row">
@@ -686,6 +686,7 @@ export default {
     },
     // 指标切换
     quotaSelect (quata, oldQuata) {
+      this.selectedQuota = quata
       this.quotaData[oldQuata] = _.clone(this.curQuotaData)
       this.quotaData[oldQuata].selectedRule = _.clone(this.selectedRule)
       this.quotaData[oldQuata].selectedDatapoint = _.clone(this.selectedDatapoint)
@@ -700,7 +701,9 @@ export default {
       this.selectedDatapoint = _.clone(this.curQuotaData.selectedDatapoint) || {}
       this.$resetValidation()
     },
-    dataFromSelect () {},
+    dataFromSelect (val) {
+      this.curQuotaData.dataFrom = val
+    },
     onSubmit () {
       if (this.editing) {
         return

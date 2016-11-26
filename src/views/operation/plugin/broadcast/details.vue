@@ -31,7 +31,7 @@
             <date-time-range-picker></date-time-range-picker>
           </div> -->
           <div class="filter-group-item">
-            <radio-button-group :items="periods" :value.sync="period" @select="getReadTrend"></radio-button-group>
+            <radio-button-group :items="periods" :value="period" @select="getReadTrend"></radio-button-group>
           </div>
         </div>
         <h3>推送历史</h3>
@@ -379,7 +379,11 @@ export default {
     /**
      * 获取推送任务阅读数日趋势
      */
-    getReadTrend () {
+    getReadTrend (period) {
+      if (typeof period !== 'undefined') {
+        this.period = period
+      }
+
       this.loadingData = true
       api.statistics.getReadTrend(this.$route.params.id, this.startDate, this.endDate).then((res) => {
         if (res.status === 200) {

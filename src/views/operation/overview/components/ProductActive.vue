@@ -2,7 +2,6 @@
   <div class="panel mt20 mb20">
     <div class="panel-hd panel-hd-full bordered">
       <div class="actions">
-        <!-- <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group> -->
         <date-time-multiple-picker :periods="periods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
       </div>
       <h2>{{ $t('operation.overview.product_active.title') }}</h2>

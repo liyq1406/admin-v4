@@ -80,8 +80,7 @@
                         <button class="btn btn-primary" v-link="{path: '/dev/products/' + this.$route.params.product_id + '/devices/' + selectedDeviceData.id}">查看设备</button>
                       </div>
                       <div class="radio-group-periods">
-                        <radio-button-group :items="periods" :value.sync="period" @select="getSnapshot"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-                        <!-- <date-time-multiple-picker :periods="computedPeriods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker> -->
+                        <radio-button-group :items="periods" :value="period" @select="getSnapshot"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
                       </div>
                       <div class="radio-group-box">
                         <button class="btn btn-ghost mr10" @click="refresh">
@@ -421,7 +420,7 @@ export default {
     onTimeChange (start, end) {
       this.period = parseInt((end - start) / 1000 / 60 / 60 / 24) + 1
       this.beforeTime = parseInt((new Date() - end) / 1000 / 60 / 60 / 24)
-      this.getSnapshot()
+      this.getSnapshot(this.period)
     },
 
     canBeCounted (type) {
@@ -443,7 +442,11 @@ export default {
     /**
      * 获取快照数据
      */
-    getSnapshot () {
+    getSnapshot (period) {
+      if (typeof period !== 'undefined') {
+        this.period = period
+      }
+
       this.refreshing = true
       api.snapshot.getSnapshot(this.$route.params.product_id, this.selectedDeviceData.id, this.querySnapshotCondition).then((res) => {
         this.refreshing = false

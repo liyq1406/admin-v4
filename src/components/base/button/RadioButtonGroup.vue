@@ -13,7 +13,7 @@
 
     props: {
       value: {
-        twoWay: true
+        twoWay: false
       },
       items: {
         type: Array,

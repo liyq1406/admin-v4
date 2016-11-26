@@ -7,7 +7,7 @@
       <div class="filter-bar filter-bar-head filter-bar-full">
         <div class="filter-group">
           <div class="filter-group-item">
-            <radio-button-group :items="userCatList" :value.sync="userCat"><span slot="label" class="label"></span></radio-button-group>
+            <radio-button-group :items="userCatList" :value="userCat" @select="onUserCatSelect"></radio-button-group>
           </div>
           <div class="filter-group-item fr">
             <date-time-multiple-picker @timechange="timeFilter" :periods="periods" :default-period="defaultPeriod"></date-time-multiple-picker>
@@ -167,6 +167,14 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理用户统计类型选择
+     * @param {Number} 用户统计类型
+     */
+    onUserCatSelect (val) {
+      this.userCat = val
+    },
+
     getUserTrend (duration) {
       this.loadingData = true
       getTrend(duration).then((res) => {

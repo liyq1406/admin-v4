@@ -5,7 +5,6 @@
     </div>
     <div class="tab-s2 tab-s2-full mt10 mb5">
       <div class="actions">
-        <!-- <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group> -->
         <date-time-multiple-picker :periods="periods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
       </div>
       <ul>

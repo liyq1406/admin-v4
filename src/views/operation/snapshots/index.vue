@@ -14,7 +14,7 @@
           </x-select>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="dimensions" :value.sync="dimension" @select="setFineness"></radio-button-group>
+          <radio-button-group :items="dimensions" :value="dimension" @select="setFineness"></radio-button-group>
         </div>
         <div class="filter-group-item ml10">
           <x-select width="130px" :label="selectedDatapoint.label" size="small">
@@ -160,6 +160,11 @@
             label: this.$t('common.unit.time.year'),
             value: 5,
             timeOffset: 365
+          },
+          6: {
+            label: this.$t('common.all'),
+            value: 6,
+            timeOffset: 0
           }
         },
         loading: false,
@@ -404,9 +409,13 @@
 
     methods: {
       setTimeRange (offset) {
-        this.timePickerStartOffset = offset
         let curTime = new Date()
-        this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * this.FINENESS_TYPE[this.dimension].timeOffset)
+        if (!offset) {
+          // 计算当前距离1970年的天数
+          offset = (curTime.getTime() - (+new Date(0))) / (3600 * 24 * 1000)
+        }
+        this.timePickerStartOffset = offset
+        this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * offset)
         this.endTime = curTime
       },
       getDatapoints (productId) {
@@ -693,6 +702,7 @@
         this.stData = statistic
       },
       setFineness (value) {
+        this.dimension = value
         if (!this.timepickerModified) {
           this.setTimeRange(this.FINENESS_TYPE[value].timeOffset)
         }

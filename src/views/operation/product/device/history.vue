@@ -4,7 +4,7 @@
       <div class="filter-bar">
         <div class="filter-group fr">
           <div class="filter-group-item">
-            <radio-button-group :items="periods" :value.sync="period" @select="periodSelect"></radio-button-group>
+            <radio-button-group :items="periods" :value="period" @select="periodSelect"></radio-button-group>
           </div>
         </div>
         <div class="filter-group">
@@ -248,6 +248,7 @@ export default {
       this.getSnapshots(true)
     },
     periodSelect (period) {
+      this.period = period
       this.getSnapshots(true)
     },
     /**

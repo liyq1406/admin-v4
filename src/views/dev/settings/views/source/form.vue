@@ -89,7 +89,7 @@
             </div>
             <div class="controls col-20">
               <div class="radio-button-wrap mt5">
-                <radio-button-group :items="sourceTypes" color="red" :value.sync="sourceType" @select=""></radio-button-group>
+                <radio-button-group :items="sourceTypes" color="red" :value="sourceType" @select="onSourceTypeSelect"></radio-button-group>
               </div>
               <div class="quotas-detail mt20">
                 <div class="{{ arrowClass }}"></div>
@@ -403,6 +403,13 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理数据源类型选择
+     */
+    onSourceTypeSelect (type) {
+      this.sourceType = type
+    },
+
     getConfig () {
       api.custom.dataSource.get().then((res) => {
         if (Array.isArray(res)) {

@@ -13,7 +13,7 @@
       </div>
       <div class="filter-group">
         <div class="filter-group-item">
-          <radio-button-group :items="dimensions" :value.sync="dimension" color="red"></radio-button-group>
+          <radio-button-group :items="dimensions" :value="dimension" color="red" @select="onDimensionSelect"></radio-button-group>
         </div>
       </div>
     </div>
@@ -184,6 +184,14 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理统计维度选择
+     * @param {String} val 维度
+     */
+    onDimensionSelect (val) {
+      this.dimension = val
+    },
+
     /**
      * 处理时间选择
      * @author shengzhi
