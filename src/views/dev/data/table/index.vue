@@ -111,7 +111,7 @@
               <div class="select">
                 <x-select :label="locales.data.TABLE_TYPES[addModal.model.type-1]">
                   <select v-model="addModal.model.type" v-form-ctrl name="type" number>
-                    <option v-for="type in locales.data.TABLE_TYPES" :value="$index + 1" :selected="$index===0">{{ type }}</option>
+                    <option v-for="(index, type) in locales.data.TABLE_TYPES" :value="index + 1" :selected="index===0">{{ type }}</option>
                   </select>
                 </x-select>
               </div>
@@ -186,7 +186,7 @@
               <div class="select">
                 <x-select :label="locales.data.TABLE_TYPES[editModal.model.type-1]">
                   <select v-model="editModal.model.type" v-form-ctrl name="type" number>
-                    <option v-for="type in locales.data.TABLE_TYPES" :value="$index + 1" :selected="$index===0">{{ type }}</option>
+                    <option v-for="(index, type) in locales.data.TABLE_TYPES" :value="index + 1" :selected="index===0">{{ type }}</option>
                   </select>
                 </x-select>
               </div>
@@ -279,7 +279,7 @@
             <div class="controls col-12">
               <x-select :label="delColumnModal.selectedColumn" :width="'150px'">
                 <select v-model="delColumnModal.selectedColumn">
-                  <option v-for="addListKey in addListKeys" track-by="$index" :value="addListKey.key">{{ addListKey.key }}</option>
+                  <option v-for="(index, addListKey) in addListKeys" track-by="index" :value="addListKey.key">{{ addListKey.key }}</option>
                 </select>
               </x-select>
             </div>

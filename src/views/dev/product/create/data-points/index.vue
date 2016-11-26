@@ -23,9 +23,9 @@
                 <th width="12%" class="tac">操作</th>
               </tr>
             </thead>
-            <tbody v-for="datapoint in datapoints">
+            <tbody v-for="(index, datapoint) in datapoints">
                 <tr v-if="datapoint.editing">
-                  <td>{{ $index }}</td>
+                  <td>{{ index }}</td>
                   <td>
                     <div class="input-text-wrap">
                       <input type="text" class="input-text input-text-sm" maxlength="32" v-model="datapoint.name" :class="{'require-warnning': isNameError }">
@@ -82,7 +82,7 @@
                     </x-select>
                   </td>
                   <td class="tac">
-                    <button class="btn btn-link mr10" @click.prevent="save(datapoint)">保存</button><button class="btn btn-link" @click.prevent="cancel(datapoint, $index)">取消</button>
+                    <button class="btn btn-link mr10" @click.prevent="save(datapoint)">保存</button><button class="btn btn-link" @click.prevent="cancel(datapoint, index)">取消</button>
                   </td>
                 </tr>
                 <tr v-else>

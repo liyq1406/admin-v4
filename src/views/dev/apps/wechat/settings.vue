@@ -38,9 +38,9 @@
         <label class="form-control col-6">{{ $t("ui.app.fields.wechat_encrypt") }}:</label>
         <div class="controls col-18">
           <div class="radio-group radio-group-v">
-            <template v-for="type in encryptTypes">
+            <template v-for="(index, type) in encryptTypes">
               <label class="radio">
-                <input type="radio" v-model="model.config.wechat.encrypt" name="wechat_encrypt" :value="$index+1"/>{{ type.label }}
+                <input type="radio" v-model="model.config.wechat.encrypt" name="wechat_encrypt" :value="index+1"/>{{ type.label }}
               </label>
               <p>{{ type.info }}</p>
             </template>
