@@ -5,8 +5,8 @@
     </div>
     <div class="bd">
       <div class="row">
-        <div class="list col-12" v-for="guide in guides" :class="{'no-border': $index>=(guides.length-2)}">
-          <div class="icon" :class="'book' + ($index+1)">
+        <div class="list col-12" v-for="(index, guide) in guides" :class="{'no-border': index>=(guides.length-2)}">
+          <div class="icon" :class="'book' + (index+1)">
           </div>
           <div class="content">
             <div class="title">

@@ -27,20 +27,20 @@
                 <i class="fa fa-question-circle tips-icon" v-tooltip="tipLabel"></i>
               </div>
               <div class="col-18">
-                <div v-for="rule in customRules" class="row input-text-wrap" :class="[$index===0 ? 'padding-top-clear': '']">
+                <div v-for="(index, rule) in customRules" class="row input-text-wrap" :class="[index===0 ? 'padding-top-clear': '']">
                   <div class="col-4 key-input">
                     <input placeholder="key" v-model="rule.key" type="text" class="input-text"/>
                   </div>
                   <div class="col-14 value-input">
                     <input placeholder="value" v-model="rule.value" type="text" class="input-text"/>
                   </div>
-                  <div v-if="$index === customRules.length-1" class="col-2">
-                    <button class="btn btn-ghost add-btn" @click="addRule($index)">
+                  <div v-if="index === customRules.length-1" class="col-2">
+                    <button class="btn btn-ghost add-btn" @click="addRule(index)">
                       <i class="fa fa-plus"></i>
                     </button>
                   </div>
                   <div v-else class="col-1 del-icon">
-                    <i class="fa fa-times-circle" @click="delRule($index)"></i>
+                    <i class="fa fa-times-circle" @click="delRule(index)"></i>
                   </div>
                 </div>
               </div>

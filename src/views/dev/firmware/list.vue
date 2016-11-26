@@ -42,8 +42,8 @@
             </thead>
             <tbody>
               <template v-if="tasks.length > 0">
-                <tr v-for="task in tasks">
-                  <td>{{$index + 1}}</td>
+                <tr v-for="(index, task) in tasks">
+                  <td>{{index + 1}}</td>
                   <td>{{ task.description }}</td>
                   <td><span v-if="task.identify===0">-</span><span v-else>{{ task.identify }}</span></td>
                   <td>{{ task.from_version }}</td>

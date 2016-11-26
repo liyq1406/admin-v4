@@ -7,8 +7,8 @@
     </div>
     <nav class="tab">
       <ul>
-        <li v-for="item in tabItems">
-          <a @click="selectLevel($index)" :class="{'active':currIndex===$index}">{{ item }}</a>
+        <li v-for="(index, item) in tabItems">
+          <a @click="selectLevel(index)" :class="{'active':currIndex===index}">{{ item }}</a>
         </li>
       </ul>
     </nav>
