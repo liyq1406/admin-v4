@@ -249,7 +249,7 @@ export default {
      */
     toggleSelected (datapoint) {
       if (this.isSelected(datapoint)) {
-        this.selectedDatapoints.$remove(datapoint.index)
+        this.selectedDatapoints.splice(this.selectedDatapoints.indexOf(datapoint.index), 1)
       } else {
         this.selectedDatapoints.push(datapoint.index)
       }

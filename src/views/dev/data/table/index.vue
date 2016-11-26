@@ -1122,26 +1122,26 @@ export default {
           this.selectedLine.map((line) => {
             if (line.objectId) {
               api.dataTable.deleteAppData(this.selectedFirstClass.name, line.objectId).then(() => {
-                this.vTables.$remove(line)
+                this.vTables.replace(this.vTables.indexOf(line), 1)
               }).catch((res) => {
                 this.handleError(res)
                 this.loadingData = false
               })
             } else {
-              this.vTables.$remove(line)
+              this.vTables.splice(this.vTables.indexOf(line), 1)
             }
           })
         } else {
           this.selectedLine.map((line) => {
             if (line.objectId) {
               api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
-                this.vTables.$remove(line)
+                this.vTables.splice(this.vTables.indexOf(line), 1)
               }).catch((res) => {
                 this.handleError(res)
                 this.loadingData = false
               })
             } else {
-              this.vTables.$remove(line)
+              this.vTables.splice(this.vTables.indexOf(line), 1)
             }
           })
         }
@@ -1211,7 +1211,7 @@ export default {
           this.dataFirClassList[index].field = field
           this.vHeaders.map((item) => {
             if (item.key === this.delColumnModal.selectedColumn) {
-              this.vHeaders.$remove(item)
+              this.vHeaders.splice(this.vHeaders.indexOf(item), 1)
               return
             }
           })
@@ -1230,15 +1230,7 @@ export default {
     },
 
     showEditModal (header, table) {
-      // var obj =  {
-      //   field: {},
-      //   name: 123,
-      //   permission: [],
-      //   type: 1
-      // }
-      // this.editModal.
       this.editModal.show = true
-      // this.vTables.$remove(table)
     },
     /**
      * 智能表格组件暴露事件 已选择的table发生变化
