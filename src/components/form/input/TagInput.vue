@@ -4,7 +4,7 @@
       <template v-if="value.length">
         <div v-for="(tagIndex, tag) in tags" track-by="$index" class="tag">
           <span class="label">{{ tag }}</span>
-          <i @click.stop="deleteTag(tag)" class="fa fa-times"></i>
+          <i @click.stop="deleteTag(tagIndex)" class="fa fa-times"></i>
         </div>
       </template>
       <input type="text" v-model="newTag" v-if="!inputDisabled" @keydown.enter.prevent="addTag($event)" @keyup.8="deleteLastTag" @input="setInputWidth($event)" class="text-input"/>
@@ -105,8 +105,8 @@
     },
 
     methods: {
-      deleteTag (tag) {
-        this.tags.$remove(tag)
+      deleteTag (index) {
+        this.tags.splice(index, 1)
       },
 
       deleteLastTag () {

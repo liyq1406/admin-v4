@@ -285,50 +285,7 @@ export default {
       }
       api.helpdesk.getFeedbackRecordList(this.$route.params.app_id, condition).then((res) => {
         if (res.status === 200) {
-          // this.firstReply = res.data.list[0]
           this.recordList = res.data.list
-          // 去除第一个客服回复
-          // this.recordList.map((item) => {
-          //   if (this.recordList.indexOf(item) === 0) {
-          //     this.recordList.$remove(item)
-          //   }
-          // })
-          // 如果最后一个回复的是客户，打开输入框
-          // if (this.recordList.length % 2 === 0) {
-          //   this.inputAble = true
-          // } else {
-          //   this.inputAble = false
-          // }
-          // this.recordList = [
-          //   {_id: '记录ID',
-          //   user_id: '1223',
-          //   feedback_id: '123456',
-          //   reply_id: '12345678',
-          //   name: '客服',
-          //   content: '请致电售后',
-          //   image: ['2.jpg'],
-          //   creator: '小明',
-          //   create_time: '2016-05-17T01:03:27.453Z'},
-          //   {_id: '记录ID',
-          //   user_id: '1223',
-          //   feedback_id: '123456',
-          //   reply_id: '12345678',
-          //   name: '客服',
-          //   content: '请致电售后',
-          //   image: ['2.jpg'],
-          //   creator: '小明',
-          //   create_time: '2016-05-17T01:03:27.453Z'},
-          //   {_id: '记录ID',
-          //   user_id: '1223',
-          //   feedback_id: '123456',
-          //   reply_id: '12345678',
-          //   name: '客服',
-          //   content: '请致电售后',
-          //   image: ['2.jpg'],
-          //   creator: '小明',
-          //   create_time: '2016-05-17T01:03:27.453Z'}
-          // ]
-          // this.dealList(this.recordList)
         } else {
           this.recordList = []
         }

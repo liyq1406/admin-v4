@@ -29,7 +29,7 @@
           <template v-if="rows.length > 0">
             <tr v-for="(rowIndex, row) in rows" track-by="$index">
               <th v-show="selecting" class="tac">
-                <input type="checkbox" :checked="selectedRows.indexOf(row) > -1" @change="selectedRowsChange(row)">
+                <input type="checkbox" :checked="selectedRows.indexOf(row) > -1" @change="selectedRowsChange(row, rowIndex)">
               </th>
               <td v-for="tHeader in headers" :class="tHeader.class" @click.prevent="tbodyClick(tHeader, row, rowIndex, $event)">
                 {{{row[tHeader.key]}}}
@@ -249,9 +249,9 @@
         if (this.selecting) {
           if (this.rows.length) {
             var arr = this.selectedRows.concat()
-            arr.map((item) => {
+            arr.map((item, index) => {
               if (this.rows.indexOf(item) === -1) {
-                this.selectedRows.$remove(item)
+                this.selectedRows.splice(index, 1)
               }
             })
             this.selectedAll = this.rows.length === this.selectedRows.length
@@ -323,10 +323,10 @@
        * checkbox点击事件
        * @param  {Object} row 数据行
        */
-      selectedRowsChange (row) {
+      selectedRowsChange (row, index) {
         if (this.selecting) {
           if (this.selectedRows.indexOf(row) >= 0) {
-            this.selectedRows.$remove(row)
+            this.selectedRows.splice(index, 1)
           } else {
             this.selectedRows.push(row)
           }

@@ -1060,7 +1060,7 @@ export default {
           break
         case 'DEL':
           if (!window.confirm('您确定要删除该步骤？')) return
-          this.cooking_steps.$remove(step)
+          this.cooking_steps.splice(index, 1)
           break
         default:
           break
