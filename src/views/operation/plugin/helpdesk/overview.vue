@@ -222,7 +222,7 @@ export default {
     },
     groupQueryCondition () {
       var params = null
-      if (this.product && this.product.id !== '') {
+      if (this.product && this.product.id) {
         if (!params) {
           params = {}
           params.query = {}

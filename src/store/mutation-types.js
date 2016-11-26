@@ -87,3 +87,6 @@ export const SET_CURRENT_PLUGIN = 'SET_CURRENT_PLUGIN'
 
 // 设置echart script标签的加载状态
 export const SET_ECHARTS_STATUS = 'SET_ECHARTS_STATUS'
+
+// 设置经销商信息
+export const SET_DEALER = 'SET_DEALER'

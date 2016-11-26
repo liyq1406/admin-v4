@@ -193,9 +193,6 @@ export default {
               alias: 'repair',
               url: '/plugins/warranty/' + this.warrantyId + '/work-orders/repair'
             }, {
-              alias: 'extended_warranties',
-              url: '/plugins/warranty/' + this.warrantyId + '/work-orders/extended-warranties'
-            }, {
               alias: 'accounts',
               url: '/plugins/warranty/' + this.warrantyId + '/accounts'
             }, {

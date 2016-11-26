@@ -12,7 +12,8 @@ import {
   REMOVE_ALERT_BAR,
   ADD_ALERT_MASK,
   REMOVE_ALERT_MASK,
-  SET_ECHARTS_STATUS
+  SET_ECHARTS_STATUS,
+  SET_DEALER
 } from '../mutation-types'
 
 // 状态初始化
@@ -28,7 +29,8 @@ var state = {
   plugins: [],        // 插件列表
   alertMsg: '',       // 警告栏信息
   isShowMask: false,   // 是否显示警示遮罩
-  echartsStatus: 0 // echarts script 加载状态 0未加载 1加载中 2已加载
+  echartsStatus: 0, // echarts script 加载状态 0未加载 1加载中 2已加载
+  dealer: {}
 }
 
 // 状态变化
@@ -108,6 +110,11 @@ const mutations = {
   // 设置echarts script 标签当前状态 当前状态
   [SET_ECHARTS_STATUS] (state, status) {
     state.echartsStatus = status
+  },
+
+  // 设置经销商
+  [SET_DEALER] (state, dealer) {
+    state.dealer = dealer
   }
 }
 
