@@ -236,7 +236,6 @@ export default {
       if (!this.dataSource || !this.dataSource.length || !this.dataSourceList.length) {
         return
       }
-      console.log(this.dataSource)
       let length = this.dataSource.length
       for (let i = 0; i < length; i++) {
         let finded = _.find(this.dataSourceList, (ds) => {
