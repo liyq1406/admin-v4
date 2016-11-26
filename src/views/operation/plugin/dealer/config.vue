@@ -408,7 +408,7 @@ export default {
         }
         modeType.push(obj)
       })
-      if (modeType.length === this.tables.length) {
+      if (modeType.length === this.rows.length) {
         if (!moduleAble) {
           // 每个模块都没开启
           this.showNotice({
