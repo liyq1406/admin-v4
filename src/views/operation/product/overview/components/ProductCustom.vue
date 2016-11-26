@@ -349,7 +349,9 @@ export default {
         time.start = res.start || 0
         time.end = res.end || 0
       }
-      time.start = time.start + 8 * 3600 * 1000
+      if (config.period !== 4) {
+        time.start = time.start + 8 * 3600 * 1000
+      }
       time.end = time.end + 8 * 3600 * 1000
       let params = {
         datapoint: config.dp_index,

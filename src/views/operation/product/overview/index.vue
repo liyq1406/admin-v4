@@ -303,7 +303,9 @@ export default {
         time.end = res.end || 0
       }
       // 增加8小时
-      time.start = time.start + 8 * 3600 * 1000
+      if (datapoint.period !== 4) {
+        time.start = time.start + 8 * 3600 * 1000
+      }
       time.end = time.end + 8 * 3600 * 1000
       let params = {
         index: datapoint.datapoint_index,
