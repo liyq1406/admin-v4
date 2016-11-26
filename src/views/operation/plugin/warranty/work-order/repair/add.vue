@@ -74,7 +74,7 @@
                 <label class="form-control col-5 alert-label">网点选择:</label>
                 <div class="controls col-19">
                   <x-select v-if="branchs.length" :label="selectedBranch.name" :width="'120px'">
-                    <select v-model="selectedBranch">
+                    <select v-model="selectedBranch" @change="getBranchStaffsList">
                       <option v-for="branch in branchs" :value="branch">{{ branch.name }}</option>
                     </select>
                   </x-select>
