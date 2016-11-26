@@ -314,7 +314,7 @@ export default {
           if (key1 === 'snapshot_shuffle') {
             this.snapshotShuffle.forEach((snapshot) => {
               if (snapshot.deviceId === item.device.id) {
-                obj[snapshot.key] = snapshot.value
+                obj[snapshot.key] = (snapshot.value + '' === '0') ? '0' : snapshot.value
               }
             })
           } else {
