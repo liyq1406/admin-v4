@@ -13,8 +13,8 @@
                 <div class="form-row row">
                   <label class="form-control col-5 alert-label">设备SN:</label>
                   <div class="controls col-19">
-                    <div v-placeholder="'请输入设备序列号'" class="input-text-wrap">
-                      <input v-model="editModal.product_sn" type="text" name="product_sn" v-validate:productsn="{required: true, minlength: 2, maxlength: 32}" lazy required class="input-text"/>
+                    <div class="input-text-wrap">
+                      <input v-model="editModal.product_sn" type="text" name="product_sn" placeholder="请输入设备序列号" v-validate:productsn="{required: true, minlength: 2, maxlength: 32}" lazy required class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.productsn.touched && $validation.productsn.required">请输入设备SN</span>
@@ -51,8 +51,8 @@
                 <div class="form-row row">
                   <label class="form-control col-5 alert-label">维修内容:</label>
                   <div class="controls col-19">
-                    <div v-placeholder="'请输入维修内容'" class="input-text-wrap">
-                      <input v-length-tip="{max: 32, model:editModal.instructions }" v-model="editModal.instructions" type="text" name="instructions" v-validate:instructions="{required: true, maxlength: 32}" lazy required class="input-text"/>
+                    <div class="input-text-wrap">
+                      <input v-length-tip="{max: 32, model:editModal.instructions }" v-model="editModal.instructions" placeholder="请输入维修内容" type="text" name="instructions" v-validate:instructions="{required: true, maxlength: 32}" lazy required class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.instructions.touched && $validation.instructions.required">请输入维修内容</span>
@@ -64,8 +64,8 @@
                 <div class="form-row row">
                   <label class="form-control col-5 alert-label">维修说明:</label>
                   <div class="controls col-19">
-                    <div v-placeholder="'请输入维修说明'" class="input-text-wrap">
-                      <textarea v-length-tip="{max: 240, model:editModal.discription }" v-model="editModal.remark" type="text" name="remark" v-validate:remark="{required: true, maxlength: 240}" lazy required class="input-text"></textarea>
+                    <div class="input-text-wrap">
+                      <textarea v-length-tip="{max: 240, model:editModal.discription }" v-model="editModal.remark" type="text" placeholder="请输入维修说明" name="remark" v-validate:remark="{required: true, maxlength: 240}" lazy required class="input-text"></textarea>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.remark.touched && $validation.remark.required">维修说明必填</span>
