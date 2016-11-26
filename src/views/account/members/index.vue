@@ -112,7 +112,7 @@
                   <div class="select">
                     <x-select :label="locales.data.MEMBER_TYPES[addModel.type]">
                       <select v-model="addModel.type" name="addModel.type">
-                        <option v-for="(typeIndex, type) in locales.data.MEMBER_TYPES" :value="typeIndex + 1" :selected="typeIndex===0">{{ type }}</option>
+                        <option v-for="(typeIndex, type) in locales.data.MEMBER_TYPES" :value="$index + 1" :selected="$index===0">{{ type }}</option>
                       </select>
                     </x-select>
                   </div>
