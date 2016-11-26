@@ -59,8 +59,7 @@ export default {
         },
         {
           key: 'percent',
-          title: this.$t('operation.product.overview.distribution.percent'),
-          sortType: -1
+          title: this.$t('operation.product.overview.distribution.percent')
         }
       ]
     }
@@ -304,7 +303,7 @@ export default {
         })
       })
     },
-    genWorldData (data, chinaData) {
+    genWorldData (data) {
       let res = []
       for (let i in data) {
         if (i !== 'china' && i !== 'unknown' && i !== '中国' && i !== 'China') {
@@ -325,7 +324,7 @@ export default {
       res = numToPercent(res, 'value')
       let worldDataPer = _.clone(res)
       worldDataPer.sort((a, b) => {
-        return a.value - b.value
+        return b.value - a.value
       })
       this.worldDataPer = worldDataPer.slice(0, 10)
       // this.worldData = res
@@ -362,7 +361,7 @@ export default {
 
       // 由大到小排序
       mapDataArr.sort((a, b) => {
-        return a.value - b.value
+        return b.value - a.value
       })
 
       if (mapDataArr.length > 10) {

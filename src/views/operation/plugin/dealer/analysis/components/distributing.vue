@@ -48,8 +48,7 @@ export default {
         },
         {
           key: 'percent',
-          title: this.$t('operation.product.analysis.hot.percent'),
-          sortType: -1
+          title: this.$t('operation.product.analysis.hot.percent')
         }
       ]
     }

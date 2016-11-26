@@ -59,8 +59,7 @@ export default {
         },
         {
           key: 'percent',
-          title: this.$t('operation.product.overview.distribution.percent'),
-          sortType: -1
+          title: this.$t('operation.product.overview.distribution.percent')
         }
       ]
     }
@@ -280,7 +279,7 @@ export default {
         this.loadingData = false
       })
     },
-    genWorldData (data, chinaData) {
+    genWorldData (data) {
       let res = []
       for (let i in data) {
         if (i !== 'china' && i !== 'unknown' && i !== '中国' && i !== 'China') {
@@ -290,14 +289,18 @@ export default {
           })
         }
       }
-      res.push({
+      var chinaDatas = {
         name: 'China',
-        value: data['China'].activated + data['china'].activated + data['中国'].activated
-      })
+        value: 0
+      }
+      data['China'] && data['China'].activated && (chinaDatas.value += data['China'].activated - 0)
+      data['china'] && data['china'].activated && (chinaDatas.value += data['china'].activated - 0)
+      data['中国'] && data['中国'].activated && (chinaDatas.value += data['中国'].activated - 0)
+      res.push(chinaDatas)
       res = numToPercent(res, 'value')
       let worldDataPer = _.clone(res)
       worldDataPer.sort((a, b) => {
-        return a.value - b.value
+        return b.value - a.value
       })
       this.worldDataPer = worldDataPer.slice(0, 10)
       this.worldData = res
@@ -333,7 +336,7 @@ export default {
 
       // 由大到小排序
       mapDataArr.sort((a, b) => {
-        return a.value - b.value
+        return b.value - a.value
       })
 
       if (mapDataArr.length > 10) {
