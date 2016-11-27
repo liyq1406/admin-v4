@@ -39,7 +39,15 @@
         <div class="form-row row">
           <label class="form-control col-4">标签:</label>
           <div class="controls col-20">
-            <tag-input :value.sync="tag" :input-disabled="true" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true"></tag-input>
+            <tag-input
+              :value="tag"
+              :input-disabled="true"
+              :candidate="candidateTags"
+              :editing="editingTag"
+              @adding-tag="show=true"
+              @tag-change="onTagChange"
+              @edit-state-change="onTagEditStateChange"
+            ></tag-input>
           </div>
         </div>
         <div class="form-row row">
@@ -171,6 +179,20 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理标签改变
+     */
+    onTagChange (val) {
+      this.tag = val
+    },
+
+    /**
+     * 处理标签编辑状态改变
+     */
+    onTagEditStateChange (val) {
+      this.editingTag = val
+    },
+
     /**
      * 处理预览浮层关闭
      * @author shengzhi

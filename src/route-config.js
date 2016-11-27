@@ -8,7 +8,40 @@ import { IS_DEMO } from 'consts/config'
  * @return {Boolean}
  */
 let isAccessAuthPage = (path) => {
-  return ['/login', '/register', '/register-with-verifycode', '/fetch-password', '/fetch-password-bymail'].indexOf(path) >= 0 || path.indexOf('/heavy-buyer-login') >= 0 || path.indexOf('/dealer') >= 0 || path.indexOf('/member-activate') >= 0 || path.indexOf('/email-activate') >= 0 || path.indexOf('/password-reset') >= 0 || path.indexOf('/user-email-activate') >= 0 || path.indexOf('/user-password-reset') >= 0
+  let result = false
+  // 不带参数的路由
+  let authRoutes = [
+    '/login', // 登录
+    '/register', // 注册
+    '/register-with-verifycode', // 使用验证码注册
+    '/fetch-password', // 找回密码
+    '/fetch-password-bymail' // 邮箱找回密码
+  ]
+
+  // 带参数的路由
+  let authRoutesWithParams = [
+    '/heavy-buyer-login', // 大客户登录
+    '/dealer', // 经销商登录
+    '/member-activate', // 成员激活
+    '/email-activate', // 成员邮箱激活
+    '/password-reset', // 成员重置密码
+    '/user-email-activate', // 用户激活
+    '/user-password-reset' // 用户重置密码
+  ]
+
+  if (authRoutes.indexOf(path) >= 0) {
+    result = true
+  } else {
+    for (let i = 0, len = authRoutesWithParams.length; i < len; i++) {
+      // FIXME 这里路由匹配不是太正确，比如经销商登录
+      if (path.indexOf(authRoutesWithParams[i]) >= 0) {
+        result = true
+        return
+      }
+    }
+  }
+
+  return result
 }
 
 // function throttle (method) {
@@ -1683,14 +1716,6 @@ let configRouter = (router) => {
             }
           }
         },
-        // 规则设置
-        'alerts/settings': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/alert/settings'))
-            }, 'admin')
-          }
-        },
 
         // 告警分析
         'alerts/analysis': {
@@ -1700,7 +1725,6 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-
         // 告警分析详情
         'alerts/analysis/:id/:product_id': {
           component (resolve) {

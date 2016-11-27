@@ -131,7 +131,13 @@
                           </label>
                         </div>
                         <div class="fl row mt10 mb10" v-show="tag.type!==0">
-                          <tag-input :value.sync="tag.tag_list" :candidate="usersTags"></tag-input>
+                          <tag-input
+                            :value="tag.tag_list"
+                            :candidate="usersTags"
+                            :editing="editingTag"
+                            @tag-change="onTagChange"
+                            @edit-state-change="onTagEditStateChange"
+                          ></tag-input>
                           <div class="form-tips form-tips-error">
                             <span v-if="tag.type!==0 && !tag.tag_list.length && needVerification">请选择用户标签</span>
                           </div>
@@ -322,15 +328,13 @@
   import { createDayRange } from 'utils'
 
   export default {
-    name: 'AddBroadcast',
+    name: 'BroadcastForm',
+
     vuex: {
       getters: {
         products: ({ products }) => products.released,
         plugins: ({ plugins }) => plugins.all
       }
-    },
-
-    components: {
     },
 
     data () {
@@ -408,7 +412,8 @@
         // 用户总数
         usersTotal: 0,
         // 用户标签
-        usersTags: ['大客户', '金牌客户', '银牌客户']
+        usersTags: ['大客户', '金牌客户', '银牌客户'],
+        editingTag: false
         /* end**************************/
 
         // 表单验证器
@@ -582,6 +587,20 @@
       },
       removeUser (u) {
         this.user.$remove(u)
+      },
+
+      /**
+       * 处理用户标签改变
+       */
+      onTagChange (val) {
+        this.tag.tag_list = val
+      },
+
+      /**
+       * 处理标签编辑状态改变
+       */
+      onTagEditStateChange (val) {
+        this.editingTag = val
       },
 
       /**

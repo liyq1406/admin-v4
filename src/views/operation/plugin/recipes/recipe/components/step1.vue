@@ -173,7 +173,14 @@
               <div class="form-row row">
                 <label class="form-control col-3">标签:</label>
                 <div class="controls col-21">
-                  <tag-input :value.sync="tag" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true"></tag-input>
+                  <tag-input
+                    :value="tag"
+                    :candidate="candidateTags"
+                    :editing="editingTag"
+                    @adding-tag="show=true"
+                    @tag-change="onTagChange"
+                    @edit-state-change="onTagEditStateChange"
+                  ></tag-input>
                 </div>
               </div>
             </div>
@@ -332,6 +339,20 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理标签改变
+     */
+    onTagChange (val) {
+      this.tag = val
+    },
+
+    /**
+     * 处理标签编辑状态改变
+     */
+    onTagEditStateChange (val) {
+      this.editingTag = val
+    },
+
     /**
      * 处理图片上传
      * @param  {Array} images 图片路径数组

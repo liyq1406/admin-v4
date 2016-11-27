@@ -25,7 +25,7 @@
     props: {
       value: {
         type: String,
-        twoWay: true,
+        twoWay: false,
         default: ''
       },
       candidate: {
@@ -36,7 +36,7 @@
       },
       editing: {
         type: Boolean,
-        twoWay: true,
+        twoWay: false,
         default: false
       },
       limit: {
@@ -63,10 +63,10 @@
 
     ready () {
       this.$emit('tag-input-created', this)
-      // this.tags = this.value.length ? this.value.split(',') : []
       this._closeEvent = EventListener.listen(window, 'click', (e) => {
         if (!this.$el.contains(e.target)) {
           this.editing = false
+          this.$emit('edit-state-change', this.editing)
         }
       })
     },
@@ -94,6 +94,7 @@
     watch: {
       tags () {
         this.value = this.tags.join(',')
+        this.$emit('tag-change', this.value)
         this.$nextTick(() => {
           this.setCandidateTop()
         })
@@ -143,6 +144,7 @@
       editTag (evt) {
         var input = evt.target.getElementsByTagName('input')[0]
         this.editing = true
+        this.$emit('edit-state-change', this.editing)
         if (input !== undefined) {
           input.focus()
           this.$nextTick(() => {

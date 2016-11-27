@@ -160,12 +160,15 @@
               <div class="form-row row tag-row">
                 <label class="form-control col-5 alert-label">告警类型:</label>
                 <div class="controls col-19">
-                  <!-- <x-select width="120px" :label="model.tag">
-                    <select v-model="model.tag">
-                      <option v-for="opt in locales.data.RULE_CANDIDATE_TAGS" :value="opt">{{ opt }}</option>
-                    </select>
-                  </x-select> -->
-                  <tag-input :value.sync="model.tag" :candidate="tags" :limit=1 :input-disabled="true"></tag-input>
+                  <tag-input
+                    :value="model.tag"
+                    :candidate="tags"
+                    :limit="1"
+                    :input-disabled="true"
+                    :editing="editingTag"
+                    @tag-change="onTagChange"
+                    @edit-state-change="onTagEditStateChange"
+                  ></tag-input>
                 </div>
               </div>
               <div class="form-row row tag-row">
@@ -288,6 +291,7 @@ export default {
   data () {
     return {
       tags: [],
+      editingTag: false,
       interval: '',
       ruleTypes: [
         { label: '普通', value: 1 },
@@ -396,6 +400,20 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理告警类型改变
+     */
+    onTagChange (val) {
+      this.model.tag = val
+    },
+
+    /**
+     * 处理标签编辑状态改变
+     */
+    onTagEditStateChange (val) {
+      this.editingTag = val
+    },
+
     // 获取告警类型
     getTags () {
       api.alert.getAlertTags().then((res) => {
