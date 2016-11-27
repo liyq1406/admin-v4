@@ -27,7 +27,7 @@
       // 值
       value: {
         type: String,
-        twoWay: true
+        twoWay: false
       },
       width: {
         type: String,
@@ -58,6 +58,7 @@
         }
         this.hour = String(result)
         this.value = this.hour + ':' + this.minute + ':' + this.second
+        this.$emit('select-time', this.value)
       },
 
       minute () {
@@ -74,6 +75,7 @@
         }
         this.minute = String(result)
         this.value = this.hour + ':' + this.minute + ':' + this.second
+        this.$emit('select-time', this.value)
       },
 
       second () {
@@ -90,6 +92,7 @@
         }
         this.second = String(result)
         this.value = this.hour + ':' + this.minute + ':' + this.second
+        this.$emit('select-time', this.value)
       },
       value () {
         this.initTime()
@@ -109,6 +112,7 @@
           this.minute = '00'
           this.second = '00'
           this.value = '00:00:00'
+          this.$emit('select-time', this.value)
         }
       }
     }

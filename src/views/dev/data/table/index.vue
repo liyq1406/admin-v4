@@ -417,10 +417,9 @@
             </div>
             <!-- 日期 -->
             <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'date'">
-              <date-picker :value.sync="datePicker.date"></date-picker>
+              <date-picker :value="datePicker.date" @select-day="onDaySelect"></date-picker>
               <span class="time-picker" v-show="datePicker.date">
-                <time-picker2 :value.sync="datePicker.time"></time-picker2>
-                <!-- <input type="time" v-model="datePicker.time"> -->
+                <time-picker2 :value="datePicker.time" @select-time="onTimeSelect"></time-picker2>
               </span>
             </div>
           </div>
@@ -677,6 +676,20 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理日期改变
+     */
+    onDaySelect (val) {
+      this.datePicker.date = val
+    },
+
+    /**
+     * 处理时间改变
+     */
+    onTimeSelect (val) {
+      this.datePicker.time = val
+    },
+
     /**
      * 每页显示数据条数改变
      * @param  {[type]} count [description]

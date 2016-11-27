@@ -16,7 +16,7 @@
       // 值
       value: {
         type: String,
-        twoWay: true
+        twoWay: false
       },
 
       // 尺寸
@@ -51,7 +51,7 @@
 
     methods: {
       selectTime () {
-        this.$emit('select-time')
+        this.$emit('select-time', this.value)
       },
 
       timeValue (n) {

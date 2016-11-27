@@ -81,16 +81,16 @@
                     </label>
                   </div>
                   <div class="row mt10" v-show="model.startType>1">
-                    <date-picker :value.sync="startDate"></date-picker>
-                    <time-picker :value.sync="startTime"></time-picker>
+                    <date-picker :value="startDate" @select-day="onStartDateSelect"></date-picker>
+                    <time-picker :value.sync="startTime" @select-time="onStartTimeSelect"></time-picker>
                   </div>
                 </div>
               </div>
               <div class="form-row row">
                 <label class="form-control col-6">过期时间:</label>
                 <div class="controls col-18">
-                  <date-picker :value.sync="endDate"></date-picker>
-                  <time-picker :value.sync="endTime"></time-picker>
+                  <date-picker :value="endDate" @select-day="onEndDateSelect"></date-picker>
+                  <time-picker :value.sync="endTime" @select-time="onEndTimeSelect"></time-picker>
                 </div>
               </div>
             </div>
@@ -239,6 +239,34 @@
     },
 
     methods: {
+      /**
+       * 处理开始日期改变
+       */
+      onStartDateSelect (val) {
+        this.startDate = val
+      },
+
+      /**
+       * 处理结束日期改变
+       */
+      onEndDateSelect (val) {
+        this.endDate = val
+      },
+
+      /**
+       * 处理开始日期改变
+       */
+      onStartTimeSelect (val) {
+        this.startTime = val
+      },
+
+      /**
+       * 处理结束日期改变
+       */
+      onEndTimeSelect (val) {
+        this.endTime = val
+      },
+
       /**
        * 处理省改变
        */

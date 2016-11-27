@@ -50,7 +50,7 @@
       // 值
       value: {
         type: String,
-        twoWay: true
+        twoWay: false
       },
 
       // 格式
@@ -195,7 +195,7 @@
         this.currDate = date
         this.value = this.stringify(this.currDate)
         this.displayDayView = false
-        this.$emit('select-day')
+        this.$emit('select-day', this.value)
       },
 
       getYearMonth (year, month) {
