@@ -138,7 +138,14 @@
               <div class="controls col-18">
                 <div class="clearfix">
                   <div class="filter-group-item">
-                    <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
+                    <area-select
+                      :province="curProvince"
+                      :city="curCity"
+                      :district="curDistrict"
+                      @province-change="onProvinceChange"
+                      @city-change="onCityChange"
+                      @district-change="onDistrictChange"
+                    ></area-select>
                   </div>
                 </div>
               </div>
@@ -491,6 +498,30 @@ export default {
   ready () {
   },
   methods: {
+    /**
+     * 处理省改变
+     */
+    onProvinceChange (val) {
+      this.curProvince = val
+      this.getWarrantyList(true)
+    },
+
+    /**
+     * 处理市改变
+     */
+    onCityChange (val) {
+      this.curCity = val
+      this.getWarrantyList(true)
+    },
+
+    /**
+     * 处理区改变
+     */
+    onDistrictChange (val) {
+      this.curDistrict = val
+      this.getWarrantyList(true)
+    },
+
     /**
      * 处理导出 CSV 按钮点击
      */

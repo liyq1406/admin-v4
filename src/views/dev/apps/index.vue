@@ -25,7 +25,6 @@
             <i class="fa fa-plus"></i>
             添加应用
           </button>
-          <!-- <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker> -->
         </div>
       </div>
     </div>

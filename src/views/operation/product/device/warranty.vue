@@ -21,9 +21,6 @@
                 </select>
               </x-select>
             </div>
-            <!-- <div class="filter-group-item">
-              <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
-            </div> -->
           </div>
         </div>
         <x-table :headers="headers" :rows="rows"></x-table>

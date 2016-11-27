@@ -50,7 +50,14 @@
                   <div class="row mb10">
                     <div class="col-4 control-text">地域</div>
                     <div class="col-20">
-                      <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict"></area-select>
+                      <area-select
+                        :province="selectedProvince"
+                        :city="selectedCity"
+                        :district="selectedDistrict"
+                        @province-change="onProvinceChange"
+                        @city-change="onCityChange"
+                        @district-change="onDistrictChange"
+                      ></area-select>
                     </div>
                   </div>
                   <div class="row">
@@ -232,6 +239,27 @@
     },
 
     methods: {
+      /**
+       * 处理省改变
+       */
+      onProvinceChange (val) {
+        this.selectedProvince = val
+      },
+
+      /**
+       * 处理市改变
+       */
+      onCityChange (val) {
+        this.selectedCity = val
+      },
+
+      /**
+       * 处理区改变
+       */
+      onDistrictChange (val) {
+        this.selectedDistrict = val
+      },
+
       onSubmit () {
       }
     }

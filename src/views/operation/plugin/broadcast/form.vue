@@ -102,7 +102,13 @@
                             <input type="radio" :value="1" v-model="area.type"/>自定义
                           </label>
                           <div class="row col-19">
-                            <area-select :province.sync="area.province" :city.sync="area.city" :show-district="false" @province-change="area.type=1"></area-select>
+                            <area-select
+                              :province="area.province"
+                              :city="area.city"
+                              :show-district="false"
+                              @province-change="onProvinceChange"
+                              @city-change="onCityChange"
+                            ></area-select>
                             <div class="form-tips form-tips-error">
                               <span v-if="area.type === 1 && !area.province.name && needVerification">请选择推送地域</span>
                             </div>
@@ -576,6 +582,21 @@
       },
       removeUser (u) {
         this.user.$remove(u)
+      },
+
+      /**
+       * 处理省改变
+       */
+      onProvinceChange (val) {
+        this.area.province = val
+        this.area.type = 1
+      },
+
+      /**
+       * 处理市改变
+       */
+      onCityChange (val) {
+        this.area.city = val
       },
 
       /**

@@ -106,7 +106,6 @@
         <!-- End: 客服人员列表 -->
 
         <!-- Start: 分页信息 -->
-        <!-- <pagination :total="51" :current.sync="0" :count-per-page="10"></pagination> -->
         <pagination v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getBranchStaffsList"></pagination>
         <!-- End: 分页信息 -->
       </div>

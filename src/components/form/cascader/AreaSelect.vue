@@ -54,7 +54,7 @@ export default {
     province: {
       type: Object,
       required: true,
-      twoWay: true,
+      twoWay: false,
       default () {
         return {}
       }
@@ -64,7 +64,7 @@ export default {
     city: {
       type: Object,
       required: true,
-      twoWay: true,
+      twoWay: false,
       default () {
         return {}
       }
@@ -74,7 +74,7 @@ export default {
     district: {
       type: Object,
       required: false,
-      twoWay: true,
+      twoWay: false,
       default () {
         return {}
       }
@@ -182,7 +182,7 @@ export default {
       this.district = {}
 
       // 向父组件传递省份改变事件
-      this.$emit('province-change')
+      this.$emit('province-change', this.province)
     },
 
     /**
@@ -197,7 +197,7 @@ export default {
       this.district = {}
 
       // 向父组件传递市改变事件
-      this.$emit('city-change')
+      this.$emit('city-change', this.city)
     },
 
     /**
@@ -205,7 +205,7 @@ export default {
      */
     handleDistrictChange () {
       // 向父组件传递区改变事件
-      this.$emit('district-change')
+      this.$emit('district-change', this.district)
     }
   }
 }

@@ -18,7 +18,7 @@
         <button @click.prevent.stop='dispatchTime'>{{ $t('components.ensure')}}</button>
       </div>
     </div>
-    <date-time-picker :open.sync='showTimePicker' @timechange='timeChange' :value='defaultTime' :show-time='showTime'></date-time-picker>
+    <date-time-picker :open="showTimePicker" @timechange="timeChange" :value="defaultTime" :show-time="showTime" @toggle="onTimePickerToggle"></date-time-picker>
   </div>
 </template>
 
@@ -88,6 +88,9 @@ export default {
     }
   },
   methods: {
+    onTimePickerToggle (val) {
+      this.showTimePicker = val
+    },
     toggle () {
       this.showChoosePanel = !this.showChoosePanel
     },

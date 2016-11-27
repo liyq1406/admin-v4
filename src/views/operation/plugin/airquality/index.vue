@@ -22,7 +22,14 @@
                 <date-time-range-picker @timechange="timechange"></date-time-range-picker>
               </div>
               <div class="filter-group-item">
-                <area-select :province.sync="area.province" :city.sync="area.city" :show-district="false" @province-change="getList" @city-change="getList" select-size="small"></area-select>
+                <area-select
+                  :province="area.province"
+                  :city="area.city"
+                  :show-district="false"
+                  select-size="small"
+                  @province-change="onProvinceChange"
+                  @city-change="onCityChange"
+                ></area-select>
               </div>
             </div>
           </div>
@@ -428,6 +435,22 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理省改变
+     */
+    onProvinceChange (val) {
+      this.area.province = val
+      this.getList()
+    },
+
+    /**
+     * 处理市改变
+     */
+    onCityChange (val) {
+      this.area.city = val
+      this.getList()
+    },
+
     /**
      * 获取颜色
      */

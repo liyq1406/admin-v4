@@ -44,7 +44,6 @@
         </form>
       </div>
     </modal>
-    <!-- <batch-export-qr :show.sync="showExportQRCode"></batch-export-qr> -->
   </div>
 </template>
 

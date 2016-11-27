@@ -24,7 +24,16 @@
               </x-select>
             </div>
             <div class="filter-group-item">
-              <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
+              <area-select
+                :province="curProvince"
+                :city="curCity"
+                :district="curDistrict"
+                label="所在地区"
+                select-size="small"
+                @province-change="onProvinceChange"
+                @city-change="onCityChange"
+                @district-change="onDistrictChange"
+              ></area-select>
             </div>
           </div>
         </div>
@@ -117,6 +126,30 @@
       }, 2000)
     },
     methods: {
+      /**
+       * 处理省改变
+       */
+      onProvinceChange (val) {
+        this.curProvince = val
+        this.getWarrantyList(true)
+      },
+
+      /**
+       * 处理市改变
+       */
+      onCityChange (val) {
+        this.curCity = val
+        this.getWarrantyList(true)
+      },
+
+      /**
+       * 处理区改变
+       */
+      onDistrictChange (val) {
+        this.curDistrict = val
+        this.getWarrantyList(true)
+      },
+
       getWarrantyList () {
         console.log('搜索')
       }

@@ -4,7 +4,7 @@
       <button @click.prevent.stop='showTimePicker=!showTimePicker' class="time-range-show" readonly="readonly">{{label === '' ? timeShowPanel: label}}
         <span class="fa fa-sort-down ml10"></span>
       </button>
-      <date-time-picker :open.sync='showTimePicker' @timechange='timeChange' :value='time' :show-time='showTime'></date-time-picker>
+      <date-time-picker :open='showTimePicker' @timechange='timeChange' :value='time' :show-time='showTime' @toggle="onTimePickerToggle"></date-time-picker>
     </div>
   </div>
 </template>
@@ -58,6 +58,9 @@ export default {
   },
 
   methods: {
+    onTimePickerToggle (val) {
+      this.showTimePicker = val
+    },
     timeChange (microtime) {
       var date = new Date(microtime)
       this.startTime = date

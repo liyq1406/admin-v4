@@ -64,7 +64,7 @@
           <div class="col-20 data-table-border details-box">
             <div class="selected-first-class" v-show="selectedFirstClass.selected">
               <div class="details-table">
-                <intelligent-table :headers.sync="vHeaders" :rows.sync="vTables" :page="page" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></intelligent-table>
+                <intelligent-table :headers="vHeaders" :rows="vTables" :page="page" :selected-table="selectedLine" :selecting="true" @selected-change="selectedLineChange"></intelligent-table>
                 <pagination :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate"></pagination>
               </div>
             </div>
@@ -417,7 +417,6 @@
             </div>
             <!-- 日期 -->
             <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'date'">
-              <!-- <date-picker :value.sync="userEditColumnModal.value"></date-picker> -->
               <date-picker :value.sync="datePicker.date"></date-picker>
               <span class="time-picker" v-show="datePicker.date">
                 <time-picker2 :value.sync="datePicker.time"></time-picker2>

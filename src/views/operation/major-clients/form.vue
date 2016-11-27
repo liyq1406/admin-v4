@@ -67,7 +67,16 @@
           <div class="controls col-18">
             <div class="clearfix">
               <div class="filter-group-item">
-                <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" select-size="small" :default-value="areas"></area-select>
+                <area-select
+                  :province="curProvince"
+                  :city="curCity"
+                  :district="curDistrict"
+                  select-size="small"
+                  :default-value="areas"
+                  @province-change="onProvinceChange"
+                  @city-change="onCityChange"
+                  @district-change="onDistrictChange"
+                ></area-select>
               </div>
             </div>
           </div>
@@ -151,6 +160,27 @@ export default {
   ready () {},
 
   methods: {
+    /**
+     * 处理省改变
+     */
+    onProvinceChange (val) {
+      this.curProvince = val
+    },
+
+    /**
+     * 处理市改变
+     */
+    onCityChange (val) {
+      this.curCity = val
+    },
+
+    /**
+     * 处理区改变
+     */
+    onDistrictChange (val) {
+      this.curDistrict = val
+    },
+
     onSubmit () {
       if (this.submitting) return
 

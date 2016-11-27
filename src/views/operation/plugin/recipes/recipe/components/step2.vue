@@ -35,21 +35,6 @@
         </form>
       </validator>
     </div>
-    <!-- 预览 -->
-    <!-- <modal :show.sync="isShowPreview" width="300px">
-      <h3 slot="header">预览</h3>
-      <div slot="body" class="form">
-        <validator name="autoValidation">
-          <form autocomplete="off" novalidate >
-            <div class="form-row row">
-              <label class="form-control col-6">名称:</label>
-              <div class="controls col-18">
-              </div>
-            </div>
-          </form>
-        </validator>
-      </div>
-    </modal> -->
     <div v-show="isShowPreview" transition="modal" class="mask">
       <div class="preview-wrapper">
         <div :style="dialogStyle" class="preview-dialog">

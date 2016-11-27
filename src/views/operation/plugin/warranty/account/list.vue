@@ -24,7 +24,16 @@
             </div>
             <div class="filter-group">
               <div class="filter-group-item">
-                <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" @province-change="getBranchList" @city-change="getBranchList" @district-change="getBranchList" label="所在地区：" select-size="small"></area-select>
+                <area-select
+                  label="所在地区："
+                  select-size="small"
+                  :province="curProvince"
+                  :city="curCity"
+                  :district="curDistrict"
+                  @province-change="onCurProvinceChange"
+                  @city-change="onCurCityChange"
+                  @district-change="onCurDistrictChange"
+                ></area-select>
               </div>
             </div>
           </div>
@@ -117,7 +126,14 @@
                 <div class="form-row row">
                   <label class="form-control col-6">所在地区:</label>
                   <div class="controls col-18">
-                    <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict"></area-select>
+                    <area-select
+                      :province="selectedProvince"
+                      :city="selectedCity"
+                      :district="selectedDistrict"
+                      @province-change="onProvinceChange"
+                      @city-change="onCityChange"
+                      @district-change="onDistrictChange"
+                    ></area-select>
                   </div>
                 </div>
                 <div class="form-row row">
@@ -150,7 +166,7 @@
   import * as config from 'consts/config'
 
   export default {
-    // name: 'AccountList',
+    name: 'WarrantyAccounts',
 
     mixins: [warrantyMixins],
 
@@ -257,6 +273,51 @@
           this.handleError(err)
           this.loadingData = false
         })
+      },
+
+      /**
+       * 处理筛选条件中省改变
+       */
+      onCurProvinceChange (val) {
+        this.curProvince = val
+        this.getBranchList()
+      },
+
+      /**
+       * 处理筛选条件中市改变
+       */
+      onCurCityChange (val) {
+        this.curCity = val
+        this.getBranchList()
+      },
+
+      /**
+       * 处理筛选条件中区改变
+       */
+      onCurDistrictChange (val) {
+        this.curDistrict = val
+        this.getBranchList()
+      },
+
+      /**
+       * 处理添加表单中省改变
+       */
+      onProvinceChange (val) {
+        this.selectedProvince = val
+      },
+
+      /**
+       * 处理添加表单中市改变
+       */
+      onCityChange (val) {
+        this.selectedCity = val
+      },
+
+      /**
+       * 处理添加表单区改变
+       */
+      onDistrictChange (val) {
+        this.selectedDistrict = val
       },
 
       // 关闭添加浮层并净化添加表单

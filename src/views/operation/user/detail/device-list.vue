@@ -6,18 +6,6 @@
           <div class="filter-group fl">
             <span class="table-title">{{ $t('operation.user.details.devices.title') }}</span>
           </div>
-          <div class="filter-group fr">
-            <div class="filter-group-item">
-              <!-- <search-box :key.sync="query" :active="searching" placeholder="请输入搜索内容">
-                <x-select width="100px" :label="queryType.label" size="small">
-                  <select v-model="queryType">
-                    <option v-for="option in queryTypeOptions" :value="option">{{option.label}}</option>
-                  </select>
-                </x-select>
-                <button slot="search-button" @click="" class="btn"><i class="fa fa-search"></i></button>
-              </search-box> -->
-            </div>
-          </div>
         </div>
         <x-table
           :headers="headers"

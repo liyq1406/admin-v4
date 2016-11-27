@@ -22,7 +22,7 @@
           <button @click='chooseTimeRange'>{{ $t('components.ensure') }}</button>
         </div>
       </div>
-      <date-time-picker :open.sync='showTimePicker' @timechange='timeChange' :value='defaultTime' :show-time='false'></date-time-picker>
+      <date-time-picker :open='showTimePicker' @timechange='timeChange' :value='defaultTime' :show-time='false' @toggle="onTimePickerToggle"></date-time-picker>
     </div>
   </div>
 </template>
@@ -85,6 +85,9 @@ export default {
     }
   },
   methods: {
+    onTimePickerToggle (val) {
+      this.showTimePicker = val
+    },
     initPeriods () {
       if (this.periods.length > 0) {
         var res = []

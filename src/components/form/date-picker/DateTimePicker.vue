@@ -51,7 +51,7 @@ export default {
     },
     open: {
       type: Boolean,
-      twoWay: true,
+      twoWay: false,
       default: false
     },
     value: {
@@ -102,6 +102,7 @@ export default {
     },
     toggle () {
       this.open = !this.open
+      this.$emit('toggle', this.open)
     },
     toggleToDate () {
       this.dateShow = true

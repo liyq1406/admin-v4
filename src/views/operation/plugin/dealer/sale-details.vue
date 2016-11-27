@@ -74,12 +74,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="form-row row">
-          <label class="form-control col-5">所在地区:</label>
-          <div class="controls col-19">
-            <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict"></area-select>
-          </div>
-        </div> -->
         <div class="form-row row">
           <label class="form-control col-5">详细地址:</label>
           <div class="controls col-19">
