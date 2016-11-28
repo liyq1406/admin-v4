@@ -177,7 +177,7 @@ export default {
       var elem = document.createElement('script')
       elem.async = true
       elem.defer = 'defer'
-      elem.src = `https://maps.google.cn/maps/api/js?libraries=geometry&key=${config.GOOGLE_MAP_KEY}&callback=init`
+      elem.src = `http://maps.google.cn/maps/api/js?libraries=geometry&sensor=false&key=${config.GOOGLE_MAP_KEY}&callback=init`
       document.getElementsByTagName('body')[0].appendChild(elem)
     } else {
       this.initMap()

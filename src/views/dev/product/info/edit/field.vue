@@ -80,7 +80,7 @@
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.name.touched && $validation.name.required">请输入字段key</span>
                   <span v-if="$validation.name.touched && $validation.name.notInArr">字段key已存在</span>
-                  <span v-if="$validation.name.touched && $validation.name.format">字段key只能包含英文字母或者数字或者下划线,并且以英文字母开头</span>
+                  <span v-if="$validation.name.touched && $validation.name.format">字段key只能输入英文或者数字或者下划线,开头只能是英文字母</span>
                 </div>
               </div>
             </div>
