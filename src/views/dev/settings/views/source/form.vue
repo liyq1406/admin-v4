@@ -89,7 +89,7 @@
             </div>
             <div class="controls col-20">
               <div class="radio-button-wrap mt5">
-                <radio-button-group :items="sourceTypes" color="red" :value="sourceType" @select="onSourceTypeSelect" :width="'100px'"></radio-button-group>
+                <radio-button-group :items="sourceTypes" color="red" :value="sourceType" @select="onSourceTypeSelect" :label-width="'100px'"></radio-button-group>
               </div>
               <div class="quotas-detail mt20">
                 <div class="{{ arrowClass }}"></div>
@@ -116,7 +116,7 @@
                       </div>
                       <div class="control col-6">
                         <x-select width="120px" :label="selectedRule.name">
-                          <select v-model="selectedRule" @change="">
+                          <select v-model="selectedRule" @change="statisticsRuleSelect">
                             <option v-for="option in statisticsRulesOptions" :value="option">{{ option.name }}</option>
                           </select>
                         </x-select>
@@ -163,7 +163,7 @@
                       </div>
                       <div class="control col-6">
                         <x-select width="120px" :label="ruleSelectedDatapoint.name">
-                          <select v-model="ruleSelectedDatapoint" @change="">
+                          <select v-model="ruleSelectedDatapoint" @change="ruleDatapointSelect">
                             <option v-for="option in ruleDatapoints" :value="option">{{ option.name }}</option>
                           </select>
                         </x-select>
@@ -403,6 +403,16 @@ export default {
   },
 
   methods: {
+    statisticsRuleSelect () {
+      this.ruleSelectedDatapoint = {
+        name: '请选择数据端点'
+      }
+      this.statisticType = 0
+      this.finenessType = 0
+    },
+    ruleDatapointSelect () {
+      this.statisticType = 0
+    },
     /**
      * 处理数据源类型选择
      */
