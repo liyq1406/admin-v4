@@ -213,6 +213,22 @@
             'sort': 9
           }
         ],
+        DEALER: [
+          {
+            'name': 'name',
+            'label': '所属经销商',
+            'hidden': true,
+            'sort': 10
+          }
+        ],
+        HEAVY_BUYER: [
+          {
+            'name': 'name',
+            'label': '所属大客户',
+            'hidden': true,
+            'sort': 11
+          }
+        ],
         // 正在加载字段数据标志位
         loadingDataField: false,
         // 正在加载数据端点标志位
@@ -273,6 +289,26 @@
             }
           })
           result.push(dataPoint)
+        })
+
+        var dealer = this.DEALER
+        if (this.deviceFields.dealer && this.deviceFields.dealer.length > 0) {
+          dealer = this.deviceFields.dealer
+        }
+        dealer.forEach((item, index) => {
+          var field = _.clone(item)
+          field.category = 'dealer'
+          result.push(field)
+        })
+
+        var heavyBuyer = this.HEAVY_BUYER
+        if (this.deviceFields.heavy_buyer && this.deviceFields.heavy_buyer.length > 0) {
+          heavyBuyer = this.deviceFields.heavy_buyer
+        }
+        heavyBuyer.forEach((item, index) => {
+          var field = _.clone(item)
+          field.category = 'heavy_buyer'
+          result.push(field)
         })
 
         var snapshotShuffle = this.deviceFields.snapshot_shuffle || []
@@ -346,6 +382,7 @@
         }
       }
     },
+
     route: {
       data () {
         if (this.currProduct && this.currProduct.id) {
@@ -353,13 +390,19 @@
         }
       }
     },
+
     ready () {
       // setTimeout(() => {
       //   this.test()
       // }, 4000)
     },
+
     methods: {
       test () {
+        this.showNotice({
+          type: 'error',
+          content: '清除数据'
+        })
         this.updateData([])
       },
       /**
@@ -418,22 +461,9 @@
         fields.sort((a, b) => {
           return a.sort - b.sort
         })
-        var params = {
-          base_fields: [],
-          datapoints: [],
-          snapshot_shuffle: []
-        }
+        var params = {}
         fields.forEach((item, index) => {
-          if (item.category === 'base_fields') {
-            let field = {
-              'name': item.name,
-              'label': item.label,
-              'hidden': item.hidden,
-              'sort': index + 1,
-              'value_type': item.value_type
-            }
-            params.base_fields.push(field)
-          } else if (item.category === 'datapoints') {
+          if (item.category === 'datapoints') {
             let field = {
               'index': item.index,
               'name': item.name,
@@ -441,11 +471,13 @@
               'hidden': item.hidden,
               'sort': index + 1
             }
-            params.datapoints.push(field)
-          } else if (item.category === 'snapshot_shuffle') {
+            params[item.category] = params[item.category] || []
+            params[item.category].push(field)
+          } else {
             let field = _.clone(item)
             field.sort = index + 1
-            params.snapshot_shuffle.push(field)
+            params[item.category] = params[item.category] || []
+            params[item.category].push(field)
           }
         })
         api.custom.field.setCustomFieldConfig(this.currProduct.id, params).then((data) => {
@@ -582,6 +614,12 @@
             break
           case 'datapoints':
             result = '数据端点'
+            break
+          case 'heavy_buyer':
+            result = '大客户'
+            break
+          case 'dealer':
+            result = '经销商'
             break
           case 'snapshot_shuffle':
             result = '统计规则'
