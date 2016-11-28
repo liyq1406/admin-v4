@@ -89,7 +89,7 @@
             </div>
             <div class="controls col-20">
               <div class="radio-button-wrap mt5">
-                <radio-button-group :items="sourceTypes" color="red" :value="sourceType" @select="onSourceTypeSelect" :width="'100px'"></radio-button-group>
+                <radio-button-group :items="sourceTypes" color="red" :value="sourceType" @select="onSourceTypeSelect" :label-width="'100px'"></radio-button-group>
               </div>
               <div class="quotas-detail mt20">
                 <div class="{{ arrowClass }}"></div>

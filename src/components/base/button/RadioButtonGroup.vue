@@ -1,7 +1,7 @@
 <template>
   <div data-toggle="buttons" :class="classes">
     <slot name="label"></slot>
-    <label v-for="item in items" :class="{'active': item.value === value}" :style="{width: width}" class="btn">
+    <label v-for="item in items" :class="{'active': item.value === value}" :style="{width: labelWidth}" class="btn">
       <input type="radio" autocomplete="off" checked="{{ checked }}" @click="onSelect(item.value)"/>{{ item.label }}
     </label>
   </div>
@@ -30,7 +30,7 @@
         type: String,
         default: ''
       },
-      width: {
+      labelWidth: {
         type: String,
         default: ''
       }

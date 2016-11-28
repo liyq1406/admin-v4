@@ -23,7 +23,7 @@
             </div>
             <div class="controls col-21">
               <div class="radio-button-wrap">
-                <radio-button-group :items="quotasInfo" color="red" :value="selectedQuota" @select="quotaSelect" :width="'80px'"></radio-button-group>
+                <radio-button-group :items="quotasInfo" color="red" :value="selectedQuota" @select="quotaSelect" :label-width="'80px'"></radio-button-group>
               </div>
               <div class="quotas-detail mt30">
                 <div class="{{ arrowClass }}"></div>
