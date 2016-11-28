@@ -490,7 +490,6 @@ export default {
       this.initProductConfig(config.defaultValue)
       api.custom.productOverview.getCustomOverviewConfig(this.selectProduct).then((res) => {
         if (res) {
-          console.log(res)
           // 配置服务器返回
           this.initProductConfig(res)
           for (let i in res.quatas) {
