@@ -384,7 +384,7 @@ export default {
       return res || []
     },
     dpMode () {
-      return this.selectedRule.dp_mode || []
+      return this.selectedRule && this.selectedRule.dp_mode || []
     }
   },
   watch: {
@@ -723,6 +723,8 @@ export default {
       for (let i in this.quotaData) {
         params.quatas[i] = this.setParamsQuatasConfig(this.quotaData[i])
       }
+      this.curQuotaData.selectedRule = _.clone(this.selectedRule)
+      this.curQuotaData.selectedDatapoint = _.clone(this.selectedDatapoint)
       params.quatas[this.selectedQuota] = this.setParamsQuatasConfig(this.curQuotaData)
       params.trend = this.features.trend
       params.active = this.features.active
