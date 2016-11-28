@@ -75,12 +75,12 @@
               <label class="form-control col-6">字段key:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入字段key'" class="input-text-wrap">
-                  <input v-model="modal.name" type="text" name="modal.name" v-validate:name="{required: true, notInArr: repeatKeys(modal.oldName), format: 'englist'}" class="input-text"/>
+                  <input v-model="modal.name" type="text" name="modal.name" v-validate:name="{required: true, notInArr: repeatKeys(modal.oldName), format: 'account'}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.name.touched && $validation.name.required">请输入字段key</span>
                   <span v-if="$validation.name.touched && $validation.name.notInArr">字段key已存在</span>
-                  <span v-if="$validation.name.touched && $validation.name.format">字段key只能包含英文</span>
+                  <span v-if="$validation.name.touched && $validation.name.format">字段key只能包含英文字母或者数字或者下划线,并且以英文字母开头</span>
                 </div>
               </div>
             </div>
