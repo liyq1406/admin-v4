@@ -11,6 +11,33 @@
               <div class="icon-loading" v-show="loadingData">
                 <i class="fa fa-refresh fa-spin"></i>
               </div>
+              <div>准备步骤：</div>
+              <form autocomplete="off">
+                <div class="form-row panel mb20">
+                  <div class="panel-bd">
+                    <div v-for="(index, ready_step) in ready_steps" class="thumb-info mt20 mb15 row">
+                      <div class="col-3">第{{ index+1 }}步:</div>
+                      <div class="col-21">
+                        <div class="thumb">
+                          <image-uploader :images="ready_step.images" @modified="onModifiedImages(ready_step.images)" class="mb0"></image-uploader>
+                        </div>
+                        <div class="info-text">
+                          <div class="input-text-wrap">
+                            <textarea v-model="ready_step.description"  name="ready_step.description" lazy placeholder="请填写步骤的描述" class="input-text" :field="'step' + index"></textarea>
+                          </div>
+                          <div class="button-list">
+                            <div v-show="ready_steps.length>1&&index>0" @click="handleReadyStepEvent('MOVE_UP', ready_step, index)" class="control-button button-up"><i class="icon fa fa-long-arrow-up"></i></div>
+                            <div v-show="ready_steps.length>1&&index<(ready_steps.length-1)" @click="handleReadyStepEvent('MOVE_DOWN', ready_step, index)" class="control-button button-down"><i class="icon fa fa-long-arrow-down"></i></div>
+                            <div @click="handleReadyStepEvent('ADD', ready_step, index)" class="control-button button-add" v-if="ready_steps.length<maxStepCount"><i class="icon fa fa-plus"></i></div>
+                            <div v-show="ready_steps.length>1" @click="handleReadyStepEvent('DEL', ready_step, index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <div>制作步骤：</div>
               <form autocomplete="off" novalidate @submit.prevent="onRecipeSubmit">
                 <div class="form-row panel mb20">
                   <div class="panel-bd">
@@ -39,28 +66,9 @@
                     </div>
                   </div>
                 </div>
-                <!-- <div class="bortop" v-if="this.$route.params.type_value === '2'">
-                  <h2>添加设备烹饪提示</h2>
-                  <div class="row">
-                    <div class="line32 mrb10" v-for="(index, tip) in cookTips">
-                      <div class="col-3">第{{ index+1 }}步:</div>
-                      <div class="col-19">
-                        <p class="cooktipp">{{tip.content}}</p>
-                      </div>
-                      <div class="col-2">
-                        <a @click.prevent.stop="setCookTip(tip)">编辑</a>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <button @click.prevent.stop="addTips" class="col-offset-3 btn btn-ghost addCookTip"><i class="fa fa-plus">添加烹饪提示步骤</i></button>
-                    </div>
-                  </div>
-                </div> -->
                 <div class="form-actions mb40 row">
                   <div class="col-offset-4">
                     <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-xlg">{{ $t("common.save") }}</button>
-                    <!-- <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-xlg">预览</button> -->
-                    <!-- <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-xlg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button> -->
                   </div>
                 </div>
               </form>
@@ -200,6 +208,11 @@ export default {
       difficulty: '不限',
       instructions: '',
       cooking_steps: [],
+      ready_steps: [{
+        description: '',
+        time: '',
+        images: ['']
+      }],
       properties: {
         user_cooking_time: '',
         cooking_time: '5分钟',
@@ -328,6 +341,16 @@ export default {
           this.major_ingredients = data.major_ingredients
           this.minor_ingredients = data.minor_ingredients
           this.cooking_steps = data.cooking_steps
+          if (!data.ready_steps) {
+            this.ready_steps = [{
+              description: '',
+              time: '',
+              images: ['']
+            }]
+          } else {
+            this.ready_steps = data.ready_steps
+          }
+          // this.ready_steps = data.ready_steps
           this.tips = data.tips
           this.devices = data.devices
           this.status = data.status
@@ -568,6 +591,39 @@ export default {
           break
       }
     },
+    /**
+     * 准备菜谱步骤右边四个小操作按钮的事件
+     * @param  {[type]} step      当前操作的步骤对象
+     * @param  {[type]} index     当前操作的步骤index
+     * @param  {[type]} eventType 事件类型，用来区分四个按钮的四个事件
+     * @return {[type]}           无返回
+     */
+    handleReadyStepEvent (eventType, step, index) {
+      var newstep = {
+        description: '',
+        time: 0,
+        images: ['']
+      }
+      switch (eventType) {
+        case 'MOVE_UP':
+          this.ready_steps.splice(index, 1)
+          this.ready_steps.splice(index - 1, 0, step)
+          break
+        case 'MOVE_DOWN':
+          this.ready_steps.splice(index, 1)
+          this.ready_steps.splice(index + 1, 0, step)
+          break
+        case 'ADD':
+          this.ready_steps.splice(index + 1, 0, newstep)
+          break
+        case 'DEL':
+          if (!window.confirm('您确定要删除该步骤？')) return
+          this.ready_steps.$remove(step)
+          break
+        default:
+          break
+      }
+    },
 
     /**
      * 通用删除事件
@@ -638,6 +694,7 @@ export default {
         major_ingredients: major,
         minor_ingredients: minor,
         cooking_steps: this.cooking_steps,
+        ready_steps: this.ready_steps,
         tips: this.tips,
         status: this.status,
         creator: this.currentMember.name,

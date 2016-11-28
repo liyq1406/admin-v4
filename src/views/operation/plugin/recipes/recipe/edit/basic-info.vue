@@ -398,7 +398,35 @@
             </div>
           </template>
 
-          <!-- 菜谱步骤 -->
+          <!-- 菜谱准备步骤 -->
+          <template v-if="ready_steps.length">
+            <div class="block line-box">
+              <div class="line" type="2"></div>
+            </div>
+
+            <template v-for="(index, step) in ready_steps">
+
+              <div class="block modal-title-box">
+                <span>准备步骤 {{index + 1}}/{{ready_steps.length}}</span>
+              </div>
+
+              <div class="block step-box">
+                <div class="img">
+                  <img :src="step.images[0]" alt="" width="100%">
+                </div>
+                <div class="text">
+                  <span>{{step.description}}</span>
+                </div>
+              </div>
+
+              <div class="block line-box" v-if="index !== ready_steps.length - 1">
+                <div class="line"></div>
+              </div>
+
+            </template>
+          </template>
+
+          <!-- 制作菜谱步骤 -->
           <template v-if="filteredSteps.length">
             <div class="block line-box">
               <div class="line" type="2"></div>
@@ -407,7 +435,7 @@
             <template v-for="(index, step) in filteredSteps">
 
               <div class="block modal-title-box">
-                <span>步骤 {{index + 1}}/{{filteredSteps.length}}</span>
+                <span>制作步骤 {{index + 1}}/{{filteredSteps.length}}</span>
               </div>
 
               <div class="block step-box">
@@ -476,6 +504,11 @@ export default {
       difficulty: '不限',
       instructions: '',
       cooking_steps: [{
+        description: '',
+        time: '',
+        images: ['']
+      }],
+      ready_steps: [{
         description: '',
         time: '',
         images: ['']
@@ -618,6 +651,15 @@ export default {
         this.major_ingredients = data.major_ingredients
         this.minor_ingredients = data.minor_ingredients
         this.cooking_steps = data.cooking_steps
+        if (!data.ready_steps) {
+          this.ready_steps = [{
+            description: '',
+            time: '',
+            images: ['']
+          }]
+        } else {
+          this.ready_steps = data.ready_steps
+        }
         this.tips = data.tips
         this.devices = data.devices
         this.status = data.status

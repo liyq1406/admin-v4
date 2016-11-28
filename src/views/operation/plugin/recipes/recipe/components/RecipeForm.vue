@@ -248,6 +248,34 @@
               <div class="icon-loading" v-show="loadingData">
                 <i class="fa fa-refresh fa-spin"></i>
               </div>
+              <div>准备步骤：</div>
+              <form autocomplete="off">
+                <div class="form-row panel mb20">
+                  <div class="panel-bd">
+                    <div v-for="(index, ready_step) in ready_steps" class="thumb-info mt20 mb15 row">
+                      <div class="col-3">第{{ index+1 }}步:</div>
+                      <div class="col-21">
+                        <div class="thumb">
+                          <image-uploader :images="ready_step.images" @modified="onModifiedImages(ready_step.images)" class="mb0"></image-uploader>
+                        </div>
+                        <div class="info-text">
+                          <div class="input-text-wrap">
+                            <textarea v-model="ready_step.description" type="text" lazy placeholder="请填写步骤的描述" class="input-text" :field="'step' + index"></textarea>
+                          </div>
+
+                          <div class="button-list">
+                            <div v-show="ready_steps.length>1&&index>0" @click="handleReadyStepEvent('MOVE_UP', ready_step, index)" class="control-button button-up"><i class="icon fa fa-long-arrow-up"></i></div>
+                            <div v-show="ready_steps.length>1&&index<(ready_steps.length-1)" @click="handleReadyStepEvent('MOVE_DOWN', ready_step, index)" class="control-button button-down"><i class="icon fa fa-long-arrow-down"></i></div>
+                            <div @click="handleReadyStepEvent('ADD', ready_step, index)" class="control-button button-add" v-if="ready_steps.length<maxStepCount"><i class="icon fa fa-plus"></i></div>
+                            <div v-show="ready_steps.length>1" @click="handleReadyStepEvent('DEL', ready_step, index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <div>制作步骤：</div>
               <form autocomplete="off" novalidate @submit.prevent="onRecipeSubmit">
                 <div class="form-row panel mb20">
                   <div class="panel-bd">
@@ -277,23 +305,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- <div class="bortop" v-if="this.$route.params.type_value === '2'">
-                  <h2>添加设备烹饪提示</h2>
-                  <div class="row">
-                    <div class="line32 mrb10" v-for="(index, tip) in cookTips">
-                      <div class="col-3">第{{ index+1 }}步:</div>
-                      <div class="col-19">
-                        <p class="cooktipp">{{tip.content}}</p>
-                      </div>
-                      <div class="col-2">
-                        <a @click.prevent.stop="setCookTip(tip)">编辑</a>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <button @click.prevent.stop="addTips" class="col-offset-3 btn btn-ghost addCookTip"><i class="fa fa-plus">添加烹饪提示步骤</i></button>
-                    </div>
-                  </div>
-                </div> -->
               </form>
               <modal :show.sync="cookTipShow" width="480px">
                 <h3 slot="header">编辑烹饪提示信息</h3>
@@ -564,7 +575,19 @@
               </div>
               <div class="preview-panel">
                 <div class="preview-panel-hd">
-                  <h3>步骤：</h3>
+                  <h3>准备步骤：</h3>
+                </div>
+                <div class="preview-panel-bd">
+                  <p v-for="(index, step) in ready_steps">
+                    <span class="previewstep">第{{index+1}}/{{ready_steps.length}}步</span>
+                    <span>{{step.description}}</span>
+                    <image class="previewpic" :src="step.images[0]"></image>
+                  </p>
+                </div>
+              </div>
+              <div class="preview-panel">
+                <div class="preview-panel-hd">
+                  <h3>制作步骤：</h3>
                 </div>
                 <div class="preview-panel-bd">
                   <p v-for="(index, step) in cooking_steps">
@@ -678,6 +701,11 @@ export default {
       images: [''], // 成品图
       difficulty: '不限',
       instructions: '',
+      ready_steps: [{
+        description: '',
+        time: '',
+        images: ['']
+      }],
       cooking_steps: [{
         description: '',
         time: '',
@@ -1057,6 +1085,40 @@ export default {
     },
 
     /**
+     * 菜谱准备步骤右边四个小操作按钮的事件
+     * @param  {[type]} step      当前操作的步骤对象
+     * @param  {[type]} index     当前操作的步骤index
+     * @param  {[type]} eventType 事件类型，用来区分四个按钮的四个事件
+     * @return {[type]}           无返回
+     */
+    handleReadyStepEvent (eventType, step, index) {
+      var newstep = {
+        description: '',
+        time: 0,
+        images: ['']
+      }
+      switch (eventType) {
+        case 'MOVE_UP':
+          this.ready_steps.splice(index, 1)
+          this.ready_steps.splice(index - 1, 0, step)
+          break
+        case 'MOVE_DOWN':
+          this.ready_steps.splice(index, 1)
+          this.ready_steps.splice(index + 1, 0, step)
+          break
+        case 'ADD':
+          this.ready_steps.splice(index + 1, 0, newstep)
+          break
+        case 'DEL':
+          if (!window.confirm('您确定要删除该步骤？')) return
+          this.ready_steps.splice(index, 1)
+          break
+        default:
+          break
+      }
+    },
+
+    /**
      * 菜谱步骤右边四个小操作按钮的事件
      * @param  {[type]} step      当前操作的步骤对象
      * @param  {[type]} index     当前操作的步骤index
@@ -1182,6 +1244,7 @@ export default {
         major_ingredients: major,
         minor_ingredients: minor,
         cooking_steps: this.cooking_steps,
+        ready_steps: this.ready_steps,
         tips: this.tips,
         status: this.status,
         creator: this.currentMember.name,
