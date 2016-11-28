@@ -59,7 +59,7 @@
               <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
             </div>
           </div>
-          <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData" @theader-device--active-date="sortBy" @theader--online-is-online="sortBy" @tbody-device--mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData" @theader-device--active-date="sortBy" @theader-online--is-online="sortBy" @tbody-device--mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
 
           <!-- {{snapshotShuffle | json}} -->
       </div>
@@ -151,6 +151,23 @@ export default {
         'district',
         'lng',
         'lat'
+      ],
+
+      DEALER: [
+        {
+          'name': 'name',
+          'label': '所属经销商',
+          'hidden': true,
+          'sort': 10
+        }
+      ],
+      HEAVY_BUYER: [
+        {
+          'name': 'name',
+          'label': '所属大客户',
+          'hidden': true,
+          'sort': 11
+        }
       ],
 
       // 基本字段
@@ -245,14 +262,19 @@ export default {
       loadingData: false,
       // 搜索选项
       queryTypeOptions: [
-        { label: this.$t('operation.product.device.manager.mac'), value: 'mac' },
-        { label: this.$t('operation.product.device.manager.device_id'), value: 'id' }
+        { label: this.$t('operation.product.device.manager.mac'), value: 'device--mac' },
+        { label: this.$t('operation.product.device.manager.device_id'), value: 'device--id' },
+        { label: 'SN', value: 'device--sn' },
+        { label: '城市', value: 'geography--city' },
+        { label: '省份', value: 'geography--province' },
+        { label: '经销商', value: 'dealer--name' },
+        { label: '大客户', value: 'heavy_buyer--name' }
         // { label: this.$t('operation.product.device.manager.device_name'), value: 'name' }
       ],
       // 搜索条件类型
       queryType: {
         label: 'MAC',
-        value: 'mac'
+        value: 'device--mac'
       },
       // 正在加载字段
       loadingDataField: false,
@@ -433,6 +455,26 @@ export default {
         result.push(dataPoint)
       })
 
+      var dealer = this.DEALER
+      if (this.deviceFields.dealer && this.deviceFields.dealer.length > 0) {
+        dealer = this.deviceFields.dealer
+      }
+      dealer.forEach((item, index) => {
+        var field = _.clone(item)
+        field.category = 'dealer'
+        result.push(field)
+      })
+
+      var heavyBuyer = this.HEAVY_BUYER
+      if (this.deviceFields.heavy_buyer && this.deviceFields.heavy_buyer.length > 0) {
+        heavyBuyer = this.deviceFields.heavy_buyer
+      }
+      heavyBuyer.forEach((item, index) => {
+        var field = _.clone(item)
+        field.category = 'heavy_buyer'
+        result.push(field)
+      })
+
       var snapshotShuffle = this.deviceFields.snapshot_shuffle || []
       snapshotShuffle.forEach((item, index) => {
         var field = _.clone(item)
@@ -581,7 +623,13 @@ export default {
 
       if (this.query.length > 0) {
         this.currentPage = 1
-        condition.query.device[this.queryType.value] = this.queryType.value === 'id' ? { $eq: Number(this.query) } : { $like: this.query }
+        let group = this.queryType.value.split('--')[0]
+        let key = this.queryType.value.split('--')[1]
+        condition.query[group] = condition.query[group] || {}
+        condition.query[group][key] = { $like: this.query }
+        if (key === 'id') {
+          condition.query[group][key] = { $eq: Number(this.query) }
+        }
       }
 
       if (this.rangeOption.value === 'specified') {
