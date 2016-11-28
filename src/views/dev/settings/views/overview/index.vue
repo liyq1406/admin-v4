@@ -23,7 +23,7 @@
             </div>
             <div class="controls col-21">
               <div class="radio-button-wrap">
-                <radio-button-group :items="quotasInfo" color="red" :value="selectedQuota" @select="quotaSelect"></radio-button-group>
+                <radio-button-group :items="quotasInfo" color="red" :value="selectedQuota" @select="quotaSelect" :width="'80px'"></radio-button-group>
               </div>
               <div class="quotas-detail mt30">
                 <div class="{{ arrowClass }}"></div>
@@ -490,6 +490,7 @@ export default {
       this.initProductConfig(config.defaultValue)
       api.custom.productOverview.getCustomOverviewConfig(this.selectProduct).then((res) => {
         if (res) {
+          console.log(res)
           // 配置服务器返回
           this.initProductConfig(res)
           for (let i in res.quatas) {
@@ -582,6 +583,7 @@ export default {
     },
     setStatisticesConfig () {
       if (this.statisticsRulesOptions.length) {
+        let orginSelectRule = this.selectedRule
         for (let i in this.quotaData) {
           if (this.quotaData[i].statistics_rule_id) { // 设置数据规则
             let selectedRule = _.find(this.statisticsRulesOptions, (item) => {
@@ -594,6 +596,7 @@ export default {
             this.quotaData[i].selectedRule = _.clone(this.statisticsRulesOptions[0])
           }
           if (typeof this.quotaData[i].datapoint_index === 'number') { // 设置数据端点
+            this.selectedRule = this.quotaData[i].selectedRule
             let selectedDatapoint = _.find(this.datapointOptions, (item) => {
               return item.index === this.quotaData[i].datapoint_index
             })
@@ -604,6 +607,7 @@ export default {
             this.quotaData[i].selectedDatapoint = _.clone(this.datapointOptions[0])
           }
         }
+        this.selectedRule = orginSelectRule
         // 设置当前
         this.curQuotaData = _.clone(this.quotaData[1])
         if (this.curQuotaData.selectedRule) {
@@ -847,7 +851,6 @@ export default {
   font-size 13px
 .radio-button-wrap
   .btn
-    width 80px
     text-align center
 .quotas-detail
   border 1px solid #DA4E37

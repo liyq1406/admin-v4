@@ -89,7 +89,7 @@
             </div>
             <div class="controls col-20">
               <div class="radio-button-wrap mt5">
-                <radio-button-group :items="sourceTypes" color="red" :value="sourceType" @select="onSourceTypeSelect"></radio-button-group>
+                <radio-button-group :items="sourceTypes" color="red" :value="sourceType" @select="onSourceTypeSelect" :width="'100px'"></radio-button-group>
               </div>
               <div class="quotas-detail mt20">
                 <div class="{{ arrowClass }}"></div>
@@ -570,7 +570,9 @@ export default {
           let datapoints = res.data.sort((a, b) => {
             return a.index - b.index
           })
-          this.datapoints = datapoints
+          this.datapoints = _.filter(datapoints, (item) => {
+            return this.canBeCounted(item.type)
+          })
           this.setDefaultRuleDatapoint()
           this.setDefaultDatapoint()
         }
@@ -658,6 +660,9 @@ export default {
         return false
       }
       return true
+    },
+    canBeCounted (type) {
+      return (type >= 2 && type <= 5) || type === 8 || type === 9 // 可统计的数据端点类型
     },
     /**
      * 数据源提交
@@ -747,7 +752,6 @@ export default {
     color #1F9CDD
 .radio-button-wrap
   .btn
-    width 100px
     text-align center
 .input-radio-wrap
   position relative
