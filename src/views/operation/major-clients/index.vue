@@ -56,7 +56,7 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :rows="rows" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-username="goDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
+          <x-table :headers="headers" :rows="rows" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-name="goDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
           </x-table>
         </div>
       </div>
@@ -109,7 +109,7 @@ export default {
       majorClients: [],
       headers: [
         {
-          key: 'username',
+          key: 'name',
           title: this.$t('operation.user.major.columns.name')
         },
         {
@@ -184,7 +184,7 @@ export default {
       var result = []
       this.majorClients.map((item) => {
         var majorClient = {
-          username: '<a class="hl-red">' + (item.username || '-') + '</a>',
+          name: '<a class="hl-red">' + (item.name || '-') + '</a>',
           device_sum: item.device_sum,
           industry: item.industry,
           contacter: item.contacter,
@@ -202,7 +202,7 @@ export default {
       var condition = {
         filter: [
           'id',
-          'username',
+          'name',
           'industry',
           'location',
           'contacter',
