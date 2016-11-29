@@ -373,7 +373,7 @@ export default {
             if (item.hasOwnProperty(key1)) {
               for (let key2 in item[key1]) {
                 if (item[key1].hasOwnProperty(key2)) {
-                  obj[`${key1}--${key2}`] = item[key1][key2]
+                  obj[`${key1}--${key2}`] = item[key1][key2] === 0 ? '0' : item[key1][key2]
                 }
               }
             }
@@ -835,7 +835,7 @@ export default {
       } else if (field.name === 'device_addr') {
         result.key = `geography--${field.name}`
       } else if (field.category === 'datapoints') {
-        result.key = `vdevice--${field.name}`
+        result.key = `vdevice--${field.index}`
       } else {
         result.key = `${field.category}--${field.name}`
       }
@@ -863,7 +863,7 @@ export default {
 
     // 获取设备列表
     getDevices (reset) {
-      if (this.queryType.value === 'id') {
+      if (this.queryType.value === 'device--id') {
         if (this.query - 0 > 2100000000) {
           this.showNotice({
             type: 'error',
