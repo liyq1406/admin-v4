@@ -103,7 +103,7 @@
                   <input v-model="deviceEditModal.sn" type="text" name="deviceEditModal.sn" v-validate:sn="{format: 'sn', maxlength: 32}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.sn.modified && $validation.sn.format">序列号只能包含数字、英文字母和中划线，且不以中划线开头</span>
+                  <span v-if="$validation.sn.modified && $validation.sn.format">{{ $t('common.validation.sn') }}</span>
                   <span v-if="$validation.sn.touched && $validation.sn.modified && $validation.sn.maxlength">{{ $t('common.validation.maxlength', ['序列号', 32]) }}</span>
                 </div>
               </div>

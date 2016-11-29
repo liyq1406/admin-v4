@@ -59,7 +59,11 @@ export default {
   phone: 'Phone',
   create_time: 'Create Time',
   age: 'Age',
-  sex: 'Gender',
+  gender: 'Gender',
+  gender_types: {
+    male: 'Male',
+    female: 'Female'
+  },
   action_success: 'Success',
   action_fail: 'Failed',
   export_condition: 'Exporting Condition',
@@ -83,7 +87,9 @@ export default {
     maxlength: '{0} cannot be more than {1} characters',
     minlength: '{0} cannot be less than {1} characters',
     equal: '{0} must be equal to {1}',
-    account: '{field} must start with a letter'
+    account: '{field} must start with a letter',
+    trim: 'Blanks are not allowed at both ends of {field}',
+    sn: 'Serial numbers can only contain numbers, letters, and dashes, and do not begin with a dash'
   },
 
   // Upload Hints

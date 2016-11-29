@@ -4,6 +4,19 @@
  */
 
 export default {
+  edit_form: {
+    main_title: 'Edit Device',
+    del_device: 'Delete device',
+    del_confirm_info: 'Confirm to delete this device?'
+  },
+  fields: {
+    name: 'Name',
+    mac: 'MAC',
+    sn: 'SN',
+    location: 'Location',
+    address: 'Address',
+    mode: 'Model'
+  },
   manager: { // 设备管理列表页
     title: 'Device Management',
     sum: {

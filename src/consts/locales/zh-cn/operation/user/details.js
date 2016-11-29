@@ -29,6 +29,13 @@ export default {
   disabled: '已停用',
   confirm_info: '确认停用该用户吗?',
 
+  // 编辑用户信息
+  form: {
+    main_title: '编辑用户信息',
+    del_user: '删除用户',
+    del_confirm_info: '确认删除该用户吗?'
+  },
+
   // 设备列表
   devices: {
     title: '设备列表',

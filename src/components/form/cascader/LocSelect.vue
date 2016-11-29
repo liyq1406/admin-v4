@@ -141,7 +141,7 @@ export default {
       })
       if (findCity) {
         this.city = findCity
-        this.handleCityChange(findCity.code)
+        this.handleCityChange(findCity.code, true)
       }
     },
     setDefaultRegion () {
@@ -153,7 +153,7 @@ export default {
       })
       if (findRegion) {
         this.region = findRegion
-        this.handleRegionChange(findRegion.code)
+        this.handleRegionChange(findRegion.code, true)
       }
     },
     setDefaultState () {
@@ -165,7 +165,7 @@ export default {
       })
       if (findState) {
         this.state = findState
-        this.handlestateChange(findState.code)
+        this.handlestateChange(findState.code, true)
       }
     },
     setDefaultCountry () {
@@ -177,10 +177,10 @@ export default {
       })
       if (findCountry) {
         this.country = findCountry
-        this.handleCountryChange(findCountry.code)
+        this.handleCountryChange(findCountry.code, true)
       }
     },
-    handleCountryChange (countryCode) {
+    handleCountryChange (countryCode, init = false) {
       this.stateOptions = []
       this.regionOptions = []
       this.cityOptions = []
@@ -190,7 +190,9 @@ export default {
       this.noState = false
 
       // 向父组件传递省份改变事件
-      this.$emit('country-change', countryCode || '')
+      if (!init) {
+        this.$emit('country-change', countryCode || '')
+      }
 
       if (!countryCode) {
         return
@@ -230,14 +232,14 @@ export default {
     /**
      * 处理切换省
      */
-    handlestateChange (stateCode) {
+    handlestateChange (stateCode, init = false) {
       this.cityOptions = []
       this.regionOptions = []
       this.city = {}
       this.region = {}
 
       // 向父组件传递省份改变事件
-      if (stateCode !== -1) {
+      if (stateCode !== -1 && !init) {
         this.$emit('state-change', stateCode || '')
       }
 
@@ -272,12 +274,14 @@ export default {
     /**
      * 处理切换市
      */
-    handleCityChange (cityCode) {
+    handleCityChange (cityCode, init = false) {
       this.region = {}
       this.regionOptions = []
 
       // 向父组件传递市改变事件
-      this.$emit('city-change', cityCode || '')
+      if (!init) {
+        this.$emit('city-change', cityCode || '')
+      }
 
       if (!cityCode) {
         return
@@ -305,9 +309,11 @@ export default {
     /**
      * 处理切换区
      */
-    handleregionChange (regionCode) {
+    handleregionChange (regionCode, init = false) {
       // 向父组件传递区改变事件
-      this.$emit('region-change', regionCode || '')
+      if (!init) {
+        this.$emit('region-change', regionCode || '')
+      }
     }
   }
 }

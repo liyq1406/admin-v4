@@ -1044,6 +1044,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 设备编辑
+        'products/:product_id/devices/:device_id/edit': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/product/device/edit'))
+            }, 'admin')
+          }
+        },
         // 设备详情
         'products/:product_id/devices/:device_id': {
           component (resolve) {
@@ -1799,6 +1807,14 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/user/portrait/index'))
+            }, 'admin')
+          }
+        },
+        // 编辑用户
+        'users/:id/edit': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/user/form'))
             }, 'admin')
           }
         },

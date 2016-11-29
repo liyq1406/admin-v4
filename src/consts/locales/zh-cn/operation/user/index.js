@@ -14,5 +14,14 @@ export default {
   portrait,
   list,
   major,
-  details
+  details,
+  fields: {
+    nickname: '昵称',
+    email: '邮箱',
+    location: '地理位置',
+    address: '详细地址',
+    phone: '手机号',
+    gender: '性别',
+    id: '用户ID'
+  }
 }

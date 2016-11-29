@@ -14,5 +14,14 @@ export default {
   portrait,
   list,
   major,
-  details
+  details,
+  fields: {
+    nickname: 'Nickname',
+    email: 'Email',
+    location: 'Location',
+    address: 'Address',
+    phone: 'Phone',
+    gender: 'Gender',
+    id: 'ID'
+  }
 }

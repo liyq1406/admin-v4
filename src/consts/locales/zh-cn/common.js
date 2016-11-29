@@ -60,7 +60,11 @@ export default {
   phone: '手机',
   create_time: '创建时间',
   age: '年龄',
-  sex: '性别',
+  gender: '性别',
+  gender_types: {
+    male: '男',
+    female: '女'
+  },
   action_success: '操作成功',
   action_fail: '操作失败',
   export_condition: '条件筛选',
@@ -85,7 +89,9 @@ export default {
     minlength: '{0}不能少于{1}位',
     length: '必须是{field}位',
     equal: '{0}必须与{1}一致',
-    account: '{field}必须以字母开头'
+    account: '{field}必须以字母开头',
+    trim: '{field}前后不允许带空格',
+    sn: '序列号只能包含数字、英文字母和中划线，且不以中划线开头'
   },
 
   // 上传相关提示信息

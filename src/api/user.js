@@ -64,6 +64,24 @@ export default {
   },
 
   /**
+   * 修改用户信息
+   */
+  update (userId, params) {
+    return http.put(
+      `${API_SERVER.default}/v2/user/${userId}`, params
+    )
+  },
+
+  /**
+   * 删除用户
+   */
+  del (userId) {
+    return http.del(
+      `${API_SERVER.default}/v2/user/${userId}`
+    )
+  },
+
+  /**
    * 获取用户订阅的设备列表
    * @param  {Object} params 重置密码参数信息
    * @return {Promise}

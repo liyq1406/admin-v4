@@ -4,6 +4,19 @@
  */
 
 export default {
+  edit_form: {
+    main_title: '编辑设备信息',
+    del_device: '删除设备',
+    del_confirm_info: '确认删除该设备?'
+  },
+  fields: {
+    name: '设备名称',
+    mac: 'MAC',
+    sn: 'SN',
+    location: '地理位置',
+    address: '详细地址',
+    mode: ' 设备型号'
+  },
   manager: { // 设备管理列表页
     title: '设备管理',
     sum: {

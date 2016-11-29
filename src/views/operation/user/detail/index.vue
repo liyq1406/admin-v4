@@ -7,7 +7,12 @@
     <div class="panel mt15 no-split-line">
       <div class="panel-bd row">
         <div class="col-16">
-          <info-card :info="userSummary" :pic="user.avatar"></info-card>
+          <info-card :info="userSummary" :pic="user.avatar">
+            <h3>{{ user.nickname }} <a href="#" @click.prevent="editUser" class="fa fa-edit"></a></h3>
+            <div class="desc">
+              <span :class="{'on-line':userSummary.online, 'off-line':!userSummary.online}" v-text="userSummary.online ? $t('common.online') : $t('common.offline')"></span><span>{{ userSummary.time }}</span>
+            </div>
+          </info-card>
           <div class="account-type-box">
             <!-- <span>{{ user.status-0===1 ? '已启用' : '已停用' }}</span> -->
             <button :disabled="toggling" @click="toggleMember(user)" class="btn btn-ghost btn-sm"><i :class="{'fa-ban': (user.status - 0 === 1), 'fa-play': !(user.status - 0 === 1)}" class="fa"></i>{{ user.status-0===1 ? $t('operation.user.details.disable_account') : $t('operation.user.details.enable_account') }}</button>
@@ -19,11 +24,11 @@
         <div class="col-8 with-loading">
           <div class="ml30">
             <div class="position-map">
-              <x-map :addr="user.city" :zoom="10"></x-map>
+              <x-map :addr="userLocation" :zoom="10"></x-map>
             </div>
-          </div>
-          <div class="position-msg">
-            <span> {{ user.city }} </span>
+            <div class="position-msg">
+              <span>{{ userLocation }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -42,6 +47,8 @@
 <script>
   import api from 'api'
   import formatDate from 'filters/format-date'
+  import locationParser from 'utils/location-parser'
+
   export default {
     name: 'UserDetails',
     components: {
@@ -80,11 +87,28 @@
         }, {
           label: this.$t('operation.user.details.curr')
         }],
-        secondaryNav: []
+        secondaryNav: [],
+        userLocation: ''
       }
     },
 
     computed: {
+      // /**
+      //  * 用户地址
+      //  */
+      // userLocation () {
+      //   console.log(locationParser)
+      //   console.log(this.lang)
+      //   // if (this.user) return
+      //   let { country, province, city } = this.user
+      //   locationParser.parse(country, province, city, '', this.lang).then(data => {
+      //
+      //   })
+      //   // parseLocation().then(data => {
+      //   //   console.log(data)
+      //   // })
+      // },
+
       /**
        * 用户基本信息
        * @return {[type]} [description]
@@ -124,7 +148,7 @@
             value: this.user.age >= 0 ? this.user.age : '-'
           },
           gender: {
-            label: this.$t('common.sex'),
+            label: this.$t('common.gender'),
             value: this.computedGender(this.user.gender)
           },
           area: {
@@ -155,6 +179,13 @@
     },
 
     methods: {
+      /**
+       * 编辑用户
+       */
+      editUser () {
+        this.$route.router.go({path: `/operation/users/${this.$route.params.id}/edit`})
+      },
+
       /**
        * 获取用户在线状态
        * @param  {[type]} userId [description]
@@ -207,6 +238,16 @@
                 this.user[key] = res.data[key]
               }
             }
+            let { country, province, city } = this.user
+            locationParser.parse(country || '', province || '', city || '', '', this.lang).then(data => {
+              let loc = _.compact([data.country, data.state, data.city])
+              if (this.lang === 'en-us') {
+                loc = loc.reverse().join(', ')
+              } else {
+                loc = loc.join(' ')
+              }
+              this.userLocation = loc
+            })
           }
         }).catch((res) => {
           this.handleError(res)

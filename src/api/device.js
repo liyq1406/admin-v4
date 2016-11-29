@@ -59,6 +59,17 @@ export default {
   },
 
   /**
+   * 删除设备
+   * @param  {productId}
+   * @param  {deviceId}
+   */
+  del (productId, deviceId) {
+    return http.del(
+      `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}`
+    )
+  },
+
+  /**
    * 查询设备列表
    * @param  {productId}
    * @param  {Object} params

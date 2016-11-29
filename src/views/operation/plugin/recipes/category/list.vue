@@ -63,7 +63,7 @@ export default {
       addModel: {
         name: '',
         instructions: '',
-        parent_id: 0
+        parent_id: '0'
       },
       category: {},
       delChecked: false
@@ -118,7 +118,7 @@ export default {
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {
           parent_id: {
-            $in: [0]
+            $in: ['0']
           }
         }
       }

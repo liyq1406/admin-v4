@@ -7,7 +7,12 @@
     <div class="panel mt15 mb20 no-split-line">
       <div class="panel-bd row">
         <div class="col-16">
-          <info-card :info="deviceSummary" :pic="(currentProduct.pics && currentProduct.pics.length) ? currentProduct.pics[0] : ''"></info-card>
+          <info-card :info="deviceSummary" :pic="(currentProduct.pics && currentProduct.pics.length) ? currentProduct.pics[0] : ''">
+            <h3>{{ deviceSummary.title }} <a href="#" @click.prevent="editDevice" class="fa fa-edit"></a></h3>
+            <div class="desc">
+              <span :class="{'on-line':deviceSummary.online, 'off-line':!deviceSummary.online}" v-text="deviceSummary.online ? $t('common.online') : $t('common.offline')"></span><span>{{ deviceSummary.time }}</span>
+            </div>
+          </info-card>
           <div v-stretch="182">
             <info-list :info="deviceInfo">
               <a class="hl-red" slot="qrcode" @click.prevent="displayQrcode">{{ $t('operation.product.device.detail.view') }}</a>
@@ -184,7 +189,7 @@ export default {
         authority: 'R',
         custom_field: ['pid', 'sn'],
         format: {
-          encode: 'source' // [source|base64]
+          encode: 'base64'
         }
       }
 
@@ -220,6 +225,13 @@ export default {
   },
 
   methods: {
+    /**
+     * 编辑设备
+     */
+    editDevice () {
+      this.$route.router.go({path: 'edit'})
+    },
+
     /**
      * 查看二维码
      * @author shengzhi

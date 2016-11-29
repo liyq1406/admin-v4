@@ -29,6 +29,13 @@ export default {
   disabled: 'Disabled',
   confirm_info: 'Confirm to disable this user?',
 
+  // 编辑用户信息
+  form: {
+    main_title: 'Edit User',
+    del_user: 'Delete User',
+    del_confirm_info: 'Confirm to delete this user?'
+  },
+
   // 设备列表
   devices: {
     title: 'Device List',

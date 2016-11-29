@@ -66,7 +66,8 @@ function parse (country, state, city, region, lang) {
         reject()
       })
     } else {
-      reject()
+      // reject()
+      resolve('')
     }
   })
 }

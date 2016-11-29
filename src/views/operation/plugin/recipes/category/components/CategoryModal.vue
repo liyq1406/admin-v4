@@ -177,7 +177,7 @@ export default {
       if (this.isSub) { // 子类别
         params.parent_id = this.$route.params.parent_id
       } else {
-        params.parent_id = 0
+        params.parent_id = '0'
       }
 
       if (this.type === 'add') {
