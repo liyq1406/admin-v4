@@ -153,47 +153,16 @@ export default {
         'lat'
       ],
 
-      DEALER: [
-        {
-          'name': 'name',
-          'label': '所属经销商',
-          'hidden': true,
-          'sort': 10
-        }
-      ],
-      HEAVY_BUYER: [
-        {
-          'name': 'name',
-          'label': '所属大客户',
-          'hidden': true,
-          'sort': 11
-        }
-      ],
-
-      SUBSCRIBE: [
-        // {
-        //   'name': 'user_id',
-        //   'label': '订阅用户id',
-        //   'hidden': true,
-        //   'sort': 12
-        // },{
-        //   'name': 'user_name',
-        //   'label': '订阅用户id',
-        //   'hidden': true,
-        //   'sort': 13
-        // },
-        // {
-        //   'name': 'user_email',
-        //   'label': '订阅用户邮箱',
-        //   'hidden': true,
-        //   'sort': 14
-        // },
-        // {
-        //   'name': 'user_phone',
-        //   'label': '订阅用户手机',
-        //   'hidden': true,
-        //   'sort': 15
-        // }
+      SNAPSHOT_SHUFFLE: [
+        'statistic_rule_id',
+        'index',
+        'fineness',
+        'date_start',
+        'date_end',
+        'sum',
+        'max',
+        'min',
+        'avg'
       ],
 
       // 基本字段
@@ -390,6 +359,16 @@ export default {
               addr += item[key1].district
             }
             obj['geography--device_addr'] = addr
+          } else if (key1 === 'subscribe') {
+            item[key1].list && item[key1].list.forEach((subscribe) => {
+              if (subscribe.role - 0 === 0) {
+                for (let key2 in subscribe) {
+                  if (subscribe.hasOwnProperty(key2)) {
+                    obj[`${key1}--${key2}`] = subscribe[key2]
+                  }
+                }
+              }
+            })
           } else {
             if (item.hasOwnProperty(key1)) {
               for (let key2 in item[key1]) {
@@ -482,10 +461,7 @@ export default {
       })
 
       // 经销商
-      var dealer = this.DEALER
-      if (this.deviceFields.dealer && this.deviceFields.dealer.length > 0) {
-        dealer = this.deviceFields.dealer
-      }
+      var dealer = this.deviceFields.dealer || []
       dealer.forEach((item, index) => {
         var field = _.clone(item)
         field.category = 'dealer'
@@ -493,10 +469,7 @@ export default {
       })
 
       // 大客户
-      var heavyBuyer = this.HEAVY_BUYER
-      if (this.deviceFields.heavy_buyer && this.deviceFields.heavy_buyer.length > 0) {
-        heavyBuyer = this.deviceFields.heavy_buyer
-      }
+      var heavyBuyer = this.deviceFields.heavy_buyer || []
       heavyBuyer.forEach((item, index) => {
         var field = _.clone(item)
         field.category = 'heavy_buyer'
@@ -504,10 +477,7 @@ export default {
       })
 
       // 订阅用户
-      var subscribe = this.SUBSCRIBE
-      if (this.deviceFields.subscribe && this.deviceFields.subscribe.length > 0) {
-        subscribe = this.deviceFields.subscribe
-      }
+      var subscribe = this.deviceFields.subscribe || []
       subscribe.forEach((item, index) => {
         var field = _.clone(item)
         field.category = 'subscribe'
@@ -592,17 +562,7 @@ export default {
         result.geography = this.GEOGRAPHY
       }
       if (hasSnapshotShuffle) {
-        result.snapshot_shuffle = [
-          'statistic_rule_id',
-          'index',
-          'fineness',
-          'date_start',
-          'date_end',
-          'sum',
-          'max',
-          'min',
-          'avg'
-        ]
+        result.snapshot_shuffle = this.SNAPSHOT_SHUFFLE
       }
       return result
     },
@@ -918,7 +878,6 @@ export default {
       // api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
       api.device.getAggregateDevices(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
-        // this.snapshotShuffleData = res.data.list.snapshot_shuffle || []
         this.total = res.data.count
         this.loadingData = false
       }).catch((res) => {

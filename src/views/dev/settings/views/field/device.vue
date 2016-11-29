@@ -230,29 +230,24 @@
           }
         ],
         SUBSCRIBE: [
-          // {
-          //   'name': 'user_id',
-          //   'label': '订阅用户id',
-          //   'hidden': true,
-          //   'sort': 12
-          // },{
-          //   'name': 'user_name',
-          //   'label': '订阅用户id',
-          //   'hidden': true,
-          //   'sort': 13
-          // },
-          // {
-          //   'name': 'user_email',
-          //   'label': '订阅用户邮箱',
-          //   'hidden': true,
-          //   'sort': 14
-          // },
-          // {
-          //   'name': 'user_phone',
-          //   'label': '订阅用户手机',
-          //   'hidden': true,
-          //   'sort': 15
-          // }
+          {
+            'name': 'nickname',
+            'label': '用户昵称',
+            'hidden': true,
+            'sort': 12
+          },
+          {
+            'name': 'phone',
+            'label': '用户手机',
+            'hidden': true,
+            'sort': 13
+          },
+          {
+            'name': 'email',
+            'label': '用户邮箱',
+            'hidden': true,
+            'sort': 14
+          }
         ],
         // 正在加载字段数据标志位
         loadingDataField: false,
