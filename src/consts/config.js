@@ -267,15 +267,14 @@ export const MAIN_NAV = {
       //   alias: 'analysis',
       //   url: '/users/analysis'
       }]
-    // 暂时屏蔽
-    // }, {
-    //   alias: 'major_clients', // 大客户管理
-    //   icon: 'users',
-    //   unfold: true, // 展开子级菜单
-    //   subs: [{
-    //     alias: 'list',
-    //     url: '/major-clients'
-    //   }]
+    }, {
+      alias: 'major_clients', // 大客户管理
+      icon: 'users',
+      unfold: true, // 展开子级菜单
+      subs: [{
+        alias: 'list',
+        url: '/major-clients'
+      }]
     }, {
       alias: 'snapshots', // 快照分析
       icon: 'line-chart',

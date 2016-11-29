@@ -384,7 +384,7 @@ export default {
       return res || []
     },
     dpMode () {
-      return this.selectedRule.dp_mode || []
+      return this.selectedRule && this.selectedRule.dp_mode || []
     }
   },
   watch: {
@@ -721,9 +721,24 @@ export default {
       this.editing = true
       let params = _.clone(config.defaultValue)
       for (let i in this.quotaData) {
-        params.quatas[i] = this.setParamsQuatasConfig(this.quotaData[i])
+        let quatai = this.setParamsQuatasConfig(this.quotaData[i])
+        if (quatai) {
+          params.quatas[i] = quatai
+        } else {
+          this.editing = false
+          return
+        }
       }
-      params.quatas[this.selectedQuota] = this.setParamsQuatasConfig(this.curQuotaData)
+      this.curQuotaData.selectedRule = _.clone(this.selectedRule)
+      this.curQuotaData.selectedDatapoint = _.clone(this.selectedDatapoint)
+      let quatas = this.setParamsQuatasConfig(this.curQuotaData)
+      if (quatas) {
+        params.quatas[this.selectedQuota] = quatas
+      } else {
+        this.editing = false
+        return
+      }
+
       params.trend = this.features.trend
       params.active = this.features.active
       params.distribution = this.features.distribution
@@ -788,7 +803,11 @@ export default {
       } else if (res.dataFrom === config.DATAFROM.datapoint) { // 绑定数据规则
         if (!source.selectedRule || !source.selectedRule.id) {
           // 当前产品没有数据规则
-          return {}
+          this.showNotice({
+            type: 'error',
+            content: '请选择数据规则'
+          })
+          return false
         }
         res.datapoint = {
           statistics_rule_id: source.selectedRule.id,
