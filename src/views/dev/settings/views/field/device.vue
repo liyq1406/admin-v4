@@ -229,6 +229,31 @@
             'sort': 11
           }
         ],
+        SUBSCRIBE: [
+          // {
+          //   'name': 'user_id',
+          //   'label': '订阅用户id',
+          //   'hidden': true,
+          //   'sort': 12
+          // },{
+          //   'name': 'user_name',
+          //   'label': '订阅用户id',
+          //   'hidden': true,
+          //   'sort': 13
+          // },
+          // {
+          //   'name': 'user_email',
+          //   'label': '订阅用户邮箱',
+          //   'hidden': true,
+          //   'sort': 14
+          // },
+          // {
+          //   'name': 'user_phone',
+          //   'label': '订阅用户手机',
+          //   'hidden': true,
+          //   'sort': 15
+          // }
+        ],
         // 正在加载字段数据标志位
         loadingDataField: false,
         // 正在加载数据端点标志位
@@ -291,6 +316,7 @@
           result.push(dataPoint)
         })
 
+        // 经销商
         var dealer = this.DEALER
         if (this.deviceFields.dealer && this.deviceFields.dealer.length > 0) {
           dealer = this.deviceFields.dealer
@@ -301,6 +327,7 @@
           result.push(field)
         })
 
+        // 大客户
         var heavyBuyer = this.HEAVY_BUYER
         if (this.deviceFields.heavy_buyer && this.deviceFields.heavy_buyer.length > 0) {
           heavyBuyer = this.deviceFields.heavy_buyer
@@ -311,16 +338,30 @@
           result.push(field)
         })
 
+        // 订阅用户
+        var subscribe = this.SUBSCRIBE
+        if (this.deviceFields.subscribe && this.deviceFields.subscribe.length > 0) {
+          subscribe = this.deviceFields.subscribe
+        }
+        subscribe.forEach((item, index) => {
+          var field = _.clone(item)
+          field.category = 'subscribe'
+          result.push(field)
+        })
+
+        // 快照规则
         var snapshotShuffle = this.deviceFields.snapshot_shuffle || []
         snapshotShuffle.forEach((item, index) => {
           var field = _.clone(item)
           field.category = 'snapshot_shuffle'
           result.push(field)
         })
+
         // 所有字段排序
         result.sort((a, b) => {
           return a.sort - b.sort
         })
+
         // 所有字段重新计算索引
         result.forEach((item, index) => {
           item.sort = index + 1
@@ -608,26 +649,15 @@
        */
       computedCategory (type) {
         var result = ''
-        switch (type) {
-          case 'base_fields':
-            result = '基本字段'
-            break
-          case 'datapoints':
-            result = '数据端点'
-            break
-          case 'heavy_buyer':
-            result = '大客户'
-            break
-          case 'dealer':
-            result = '经销商'
-            break
-          case 'snapshot_shuffle':
-            result = '统计规则'
-            break
-          default:
-            result = '未知'
-            break
+        var group = {
+          'base_fields': '基本字段',
+          'datapoints': '数据端点',
+          'heavy_buyer': '大客户信息',
+          'dealer': '经销商信息',
+          'snapshot_shuffle': '统计规则',
+          'subscribe': '订阅用户信息'
         }
+        result = group[type] || '未知'
         return result
       },
 

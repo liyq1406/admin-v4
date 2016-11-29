@@ -170,6 +170,32 @@ export default {
         }
       ],
 
+      SUBSCRIBE: [
+        // {
+        //   'name': 'user_id',
+        //   'label': '订阅用户id',
+        //   'hidden': true,
+        //   'sort': 12
+        // },{
+        //   'name': 'user_name',
+        //   'label': '订阅用户id',
+        //   'hidden': true,
+        //   'sort': 13
+        // },
+        // {
+        //   'name': 'user_email',
+        //   'label': '订阅用户邮箱',
+        //   'hidden': true,
+        //   'sort': 14
+        // },
+        // {
+        //   'name': 'user_phone',
+        //   'label': '订阅用户手机',
+        //   'hidden': true,
+        //   'sort': 15
+        // }
+      ],
+
       // 基本字段
       base_fields: [
         {
@@ -455,6 +481,7 @@ export default {
         result.push(dataPoint)
       })
 
+      // 经销商
       var dealer = this.DEALER
       if (this.deviceFields.dealer && this.deviceFields.dealer.length > 0) {
         dealer = this.deviceFields.dealer
@@ -465,6 +492,7 @@ export default {
         result.push(field)
       })
 
+      // 大客户
       var heavyBuyer = this.HEAVY_BUYER
       if (this.deviceFields.heavy_buyer && this.deviceFields.heavy_buyer.length > 0) {
         heavyBuyer = this.deviceFields.heavy_buyer
@@ -475,16 +503,30 @@ export default {
         result.push(field)
       })
 
+      // 订阅用户
+      var subscribe = this.SUBSCRIBE
+      if (this.deviceFields.subscribe && this.deviceFields.subscribe.length > 0) {
+        subscribe = this.deviceFields.subscribe
+      }
+      subscribe.forEach((item, index) => {
+        var field = _.clone(item)
+        field.category = 'subscribe'
+        result.push(field)
+      })
+
+      // 快照规则
       var snapshotShuffle = this.deviceFields.snapshot_shuffle || []
       snapshotShuffle.forEach((item, index) => {
         var field = _.clone(item)
         field.category = 'snapshot_shuffle'
         result.push(field)
       })
+
       // 所有字段排序
       result.sort((a, b) => {
         return a.sort - b.sort
       })
+
       // 所有字段重新计算索引
       result.forEach((item, index) => {
         item.sort = index + 1
