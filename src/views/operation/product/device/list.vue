@@ -1,5 +1,5 @@
 <template>
-  <div class="main device-list">
+  <div class="main device-list-page">
     <div class="main-title">
       <h2>{{ $t('operation.product.device.manager.title') }}</h2>
     </div>
@@ -522,7 +522,8 @@ export default {
         var key = this.resetFieldKey(item).key
         var header = {
           key: key,
-          title: item.label
+          title: item.label,
+          class: 'mw'
         }
 
         if (header.key === 'device--is_active') {
@@ -1049,9 +1050,12 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import '../../../../assets/stylus/common'
 
-.statistic-group
-  border-top 1px solid default-border-color
+.device-list-page
+  .statistic-group
+    border-top 1px solid default-border-color
+  .mw
+    min-width 80px
 </style>
