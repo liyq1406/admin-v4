@@ -345,10 +345,13 @@ export default {
     },
     // 获取配置信息
     getConfig () {
-      api.dealer.getConfig(this.$route.params.dealer_id, this.corp.id).then((res) => {
-        this.model = res.data
+      api.heavyBuyer.getConfig(this.$route.params.id).then((res) => {
+        if (typeof res.data.is_enable === 'boolean') {
+          this.model.is_enable = res.data.is_enable
+        }
+        this.model.login_context = res.data.login_context
         let origin = CUSTOM_ORIGIN || window.location.origin
-        this.model.domain = `${origin}/#!/dealer/${this.corp.id}/${this.$route.params.dealer_id}`
+        this.model.domain = `${origin}/#!/heavybuyer/${this.corp.id}/${this.$route.params.id}`
         if (this.model.logo_url) {
           this.images[0] = this.model.logo_url
         }
@@ -384,6 +387,7 @@ export default {
       // console.log(status)
     },
     setConfig () {
+      console.log(this.model)
       let moduleAble = false
       let productAble = false
       if (this.model.login_context === '') {

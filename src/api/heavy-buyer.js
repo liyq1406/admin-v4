@@ -125,6 +125,11 @@ export default {
       `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/user${userId}`
     )
   },
+  getConfig (heavyBuyerId) {
+    return http.get(
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/entry_config`
+    )
+  },
   setConfig (heavyBuyerId, params) {
     return http.post(
       `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/entry_config`, params
