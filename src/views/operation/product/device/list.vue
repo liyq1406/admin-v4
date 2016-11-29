@@ -82,7 +82,7 @@ export default {
 
   data () {
     var sortOrders = {}
-    var descProperties = ['active_date', 'is_online']
+    var descProperties = ['device--active_date', 'online--is_online']
     var ascProperties = []
 
     descProperties.forEach((key) => {
@@ -531,11 +531,11 @@ export default {
         }
 
         if (header.key === 'device--active_date') {
-          header.sortType = this.sortOrders['active_date'] === 'asc' ? 1 : -1
+          header.sortType = this.sortOrders[header.key] === 'asc' ? 1 : -1
         }
 
         if (header.key === 'online--is_online') {
-          header.sortType = this.sortOrders['is_online'] === 'asc' ? 1 : -1
+          header.sortType = this.sortOrders[header.key] === 'asc' ? 1 : -1
         }
 
         result.push(header)
@@ -614,14 +614,10 @@ export default {
         }
       }
 
-      if (this.sortKey === 'is_online') {
-        condition.order.online = {
-          'is_online': this.sortOrders['is_online']
-        }
-      } else if (this.DEVICEFIELD.indexOf(this.sortKey) > -1) {
-        condition.order.device[this.sortKey] = this.sortOrders[this.sortKey]
-      } else if (this.VDEVICEFIELD.indexOf(this.sortKey) > -1) {
-        condition.order.vdevice[this.sortKey] = this.sortOrders[this.sortKey]
+      if (this.sortKey.length && this.sortKey.split('--')[1]) {
+        let group = this.sortKey.split('--')[0]
+        let key = this.sortKey.split('--')[1]
+        condition.order[group][key] = this.sortOrders[this.sortKey]
       }
 
       if (this.query.length > 0) {
@@ -899,6 +895,7 @@ export default {
       if (typeof key === 'object') {
         key = key.key
       }
+      console.log(key)
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] === 'asc' ? 'desc' : 'asc'
       this.getDevices()
