@@ -40,7 +40,7 @@
             </div>
           </div>
         </div>
-        <div class="form-row row">
+        <!-- <div class="form-row row">
           <label class="form-control col-3">{{ $t("account.members.fields.email") }}:</label>
           <div class="controls col-18">
             <div v-placeholder="$t('account.members.placeholders.email')" class="input-text-wrap">
@@ -51,7 +51,7 @@
               <span v-if="$validation.email.modified && $validation.email.format">{{ $t('common.validation.format', {field: $t('auth.fields.email')}) }}</span>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="form-row row">
           <label class="form-control col-3">{{ $t('operation.user.major.columns.industry') }}:</label>
           <div class="controls filter-group-item col-18">
@@ -67,16 +67,14 @@
           <div class="controls col-18">
             <div class="clearfix">
               <div class="filter-group-item">
-                <area-select
-                  :province="curProvince"
-                  :city="curCity"
-                  :district="curDistrict"
-                  select-size="small"
-                  :default-value="areas"
-                  @province-change="onProvinceChange"
-                  @city-change="onCityChange"
-                  @district-change="onDistrictChange"
-                ></area-select>
+                <loc-select :showregion="false"
+                            :default-country-code="defaultCountryCode"
+                            :default-state-code="defaultStateCode"
+                            :default-city-code="defaultCityCode"
+                            @country-change="handleCountryChange"
+                            @state-change="handleStateChange"
+                            @city-change="handleCityChange">
+                </loc-select>
               </div>
             </div>
           </div>
@@ -98,13 +96,13 @@
         <div class="form-row row" v-if="type==='edit'">
           <div class="col-21 col-offset-3">
             <label class="del-check">
-              <input type="checkbox" name="del" v-model="delChecked"/> {{ $t(common.del) }}
+              <input type="checkbox" name="del" v-model="delChecked"/> {{ $t('common.del') }}
             </label>
           </div>
         </div>
         <div class="form-actions row">
           <div class="col-21 col-offset-3">
-            <button :disabled="submitting || $validation.invalid" :class="{'disabled':submitting || $validation.invalid}" class="btn btn-primary" @click.prevent="onSubmit">{{ $t('common.ok') }}</button>
+            <button :disabled="(submitting || $validation.invalid) && !delChecked" :class="{'disabled':(submitting || $validation.invalid) && !delChecked}" class="btn btn-primary" @click.prevent="onSubmit">{{ $t('common.ok') }}</button>
           </div>
         </div>
       </form>
@@ -131,7 +129,6 @@ export default {
     return {
       model: {
         username: '',
-        email: '',
         contacter: '',
         phone: '',
         location: '',
@@ -140,9 +137,12 @@ export default {
       areas: '',
       delChecked: false,
       submitting: false,
-      curProvince: {},
-      curCity: {},
-      curDistrict: {},
+      cityCode: '',
+      countryCode: '',
+      stateCode: '',
+      defaultCountryCode: '',
+      defaultStateCode: '',
+      defaultCityCode: '',
       industrys: [
         this.$t('operation.user.major.industrys.web'),
         this.$t('operation.user.major.industrys.security'),
@@ -157,53 +157,83 @@ export default {
   computed: {
   },
 
-  ready () {},
+  ready () {
+    if (this.type === 'edit') {
+      this.getHeavyBuyerList()
+    }
+  },
 
   methods: {
-    /**
-     * 处理省改变
-     */
-    onProvinceChange (val) {
-      this.curProvince = val
+    getHeavyBuyerList () {
+      var condition = {
+        filter: [
+          'id',
+          'name',
+          'industry',
+          'location',
+          'contacter',
+          'contact_way',
+          'country',
+          'province',
+          'city'
+        ],
+        query: {
+          id: {$in: [this.$route.params.id]}
+        }
+      }
+      api.heavyBuyer.getHeavyBuyer(condition).then((res) => {
+        if (res.status === 200 && res.data.list.length) {
+          let vip = res.data.list[0]
+          this.model.username = vip.name
+          this.model.address = vip.location
+          this.model.contacter = vip.contacter
+          this.model.phone = vip.contact_way
+          this.model.industry = vip.industry
+          this.defaultCountryCode = vip.country
+          this.defaultStateCode = vip.province
+          this.defaultCityCode = vip.city
+        }
+      }).catch((err) => {
+        this.handleError(err)
+      })
     },
-
-    /**
-     * 处理市改变
-     */
-    onCityChange (val) {
-      this.curCity = val
+    handleCountryChange (countryCode) {
+      this.countryCode = countryCode
     },
-
-    /**
-     * 处理区改变
-     */
-    onDistrictChange (val) {
-      this.curDistrict = val
+    handleStateChange (stateCode) {
+      this.stateCode = stateCode
     },
-
+    handleCityChange (cityCode) {
+      this.cityCode = cityCode
+    },
     onSubmit () {
       if (this.submitting) return
 
-      if (this.$validation.invalid) {
-        console.log(this.$validation)
+      if (this.delChecked && !window.confirm(this.$t('operation.user.major.comfirm_del'))) {
+        return
+      }
+
+      if (this.$validation.invalid && !this.delChecked) {
         this.$validate(true)
         return
       }
 
-      if (this.delChecked && !window.confirm(this.$t('operation/user/major/comfirm_del'))) {
-        return
-      }
-
       let params = {
-        username: this.model.username,
+        name: this.model.username,
         contacter: this.model.contacter,
         contact_way: this.model.phone,
-        email: this.model.email,
         industry: this.model.industry,
-        provice: this.curProvince.name || '',
-        city: this.curCity.name || '',
-        district: this.curDistrict.name || '',
-        location: this.model.address
+        location: this.model.location
+      }
+
+      if (this.countryCode) { // 国家代码
+        params.country = this.countryCode
+      }
+      if (this.stateCode) { // 省份代码
+        params.province = this.stateCode
+      }
+      if (this.cityCode) { // 城市代码
+        params.city = this.cityCode
       }
 
       let process

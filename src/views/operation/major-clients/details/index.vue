@@ -9,7 +9,11 @@
         <div class="col-16">
           <div class="alert-record-summary">
             <div class="up">
-              <h1 class="mt10">{{ majorClient.name }}</h1>
+              <h1 class="mt10">{{ majorClient.name }}
+                <a v-link="'/operation/major-client/edit/' + $route.params.id">
+                  <i class="fa fa-edit"></i>
+                </a>
+              </h1>
             </div>
           </div>
           <div v-stretch="182">
