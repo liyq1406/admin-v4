@@ -8,12 +8,19 @@
       <div class="panel-bd row">
         <div class="col-16">
           <div class="alert-record-summary">
-            <div class="up">
+            <div class="fl">
               <h1 class="mt10">{{ majorClient.name }}
                 <a v-link="'/operation/major-client/edit/' + $route.params.id">
                   <i class="fa fa-edit"></i>
                 </a>
               </h1>
+            </div>
+            <div class="btnarea clearfix">
+              <button @click.prevent.stop="toggle" class="mt20">
+                <!-- <i class="fa fa-check"></i> -->
+                <span v-if="majorClient.status===0">已停用</span>
+                <span v-else>已启用</span>
+              </button>
             </div>
           </div>
           <div v-stretch="182">
@@ -22,31 +29,24 @@
         </div>
         <div class="col-8 with-loading">
           <div class="position-map ml30 mt10">
-            <x-map :addr="(majorClient.city || '') + majorClient.location" :zoom="majorClient.location?15:10" height="220px"></x-map>
+            <x-map :addr="area" :zoom="majorClient.location?15:10" height="220px"></x-map>
           </div>
           <div class="position-msg ml30">
-            <span v-show="majorClient.province"> {{ (majorClient.province + ' ' + (majorClient.city || '')) }} </span>
+            <span> {{ area }} </span>
           </div>
         </div>
       </div>
     </div>
     <tab :nav="secondaryNav"></tab>
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
-    <!-- <div class="panel">
-      <div class="panel-hd panel-hd-full">
-        <h2>帐号状态</h2>
-      </div>
-      <div class="panel-bd">
-        <span>{{ clientsInfo.status-0===1 ? '已启用' : '已停用' }}</span>
-        <button :class="{'btn-primary': clientsInfo.status-0===1, 'btn-success': clientsInfo.status-0===2, 'disabled': toggling}" :disabled="toggling" @click="toggleMember(clientsInfo)" class="btn btn-sm"><i :class="{'fa-stop': clientsInfo.status, 'fa-play': !clientsInfo.status}" class="fa"></i>{{ clientsInfo.status-0===1 ? '停用' : '启用' }}</button>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
 import api from 'api'
 import formatDate from 'filters/format-date'
+import locParser from 'utils/location-parser'
+
 export default {
   name: 'MajorClients',
   components: {
@@ -62,7 +62,8 @@ export default {
         link: '/operation/major-clients'
       }, {
         label: '客户信息'
-      }]
+      }],
+      area: ''
     }
   },
 
@@ -71,19 +72,15 @@ export default {
       var result = {
         name: {
           label: this.$t('operation.user.details.contacter'),
-          value: this.majorClient.name
+          value: this.majorClient.contacter
         },
         phone: {
           label: this.$t('common.phone'),
-          value: this.majorClient.phone
+          value: this.majorClient.contact_way
         },
         industry: {
           label: this.$t('operation.user.details.industry'),
           value: this.majorClient.industry
-        },
-        email: {
-          label: this.$t('common.email'),
-          value: this.majorClient.email
         },
         create_time: {
           label: this.$t('operation.user.details.create_date'),
@@ -91,7 +88,7 @@ export default {
         },
         area: {
           label: this.$t('operation.user.details.area'),
-          value: `${this.majorClient.country || ''}${this.majorClient.province || ''}${this.majorClient.city || ''}`
+          value: this.area
         },
         location: {
           label: this.$t('operation.user.details.address'),
@@ -126,6 +123,22 @@ export default {
   },
 
   methods: {
+    toggle () {
+      let status
+      if (this.majorClient.status === 0) {
+        status = 1
+      } else {
+        status = 0
+      }
+      api.heavyBuyer.setHeavyBuyerStatus(this.$route.params.id, status).then((res) => {
+        if (res.status === 200) {
+          // 设置成功
+          this.getMajorClient()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     getMajorClient () {
       this.loadingData = true
       var params = {
@@ -140,7 +153,8 @@ export default {
           'create_time',
           'country',
           'province',
-          'city'
+          'city',
+          'status'
         ],
         limit: 1,
         query: {
@@ -150,6 +164,23 @@ export default {
       api.heavyBuyer.getHeavyBuyer(params).then((res) => {
         this.loadingData = false
         this.majorClient = res.data.list[0]
+        locParser.parse(this.majorClient.country || '', this.majorClient.province || '', this.majorClient.city || '', '', this.lang).then((res) => {
+          if (res) {
+            let loc
+            if (res.country) {
+              loc = res.country + ' '
+            }
+            if (res.state) {
+              loc = loc + res.state + ' '
+            }
+            if (res.city) {
+              loc = loc + res.city
+            }
+            this.area = loc
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
         this.total = res.data.count
       }).catch((err) => {
         this.loadingData = false
@@ -160,9 +191,19 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+@import '../../../../assets/stylus/common'
   .position-map
     box-sizing border-box
   .position-msg
     padding-left 10px
     padding-top 5px
+  .btnarea
+    button
+      border 1px solid #bcbcbc
+      outline none
+      background-color #fafafa
+      color #323232
+      height 24px
+      float right
+      margin-right 20px
 </style>

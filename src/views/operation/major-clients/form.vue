@@ -185,7 +185,7 @@ export default {
         if (res.status === 200 && res.data.list.length) {
           let vip = res.data.list[0]
           this.model.username = vip.name
-          this.model.address = vip.location
+          this.model.location = vip.location
           this.model.contacter = vip.contacter
           this.model.phone = vip.contact_way
           this.model.industry = vip.industry

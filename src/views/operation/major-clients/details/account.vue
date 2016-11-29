@@ -8,7 +8,7 @@
           </a>
         </div>
       </div>
-      <x-table :headers="headers" :rows="rows" :loading="loadingData" :page="page">
+      <x-table :headers="headers" :rows="rows" :loading="loadingData" :page="page" @tbody-account="goEdit">
 
         <div class="filter-bar" slot="filter-bar">
           <div class="filter-group fl">
@@ -39,8 +39,8 @@
 
 <script>
   // import locales from 'consts/locales/index'
-  // import api from 'api'
-  // import formatDate from 'filters/format-date'
+  import api from 'api'
+  import formatDate from 'filters/format-date'
 
   export default {
     name: 'DealerList',
@@ -60,34 +60,26 @@
         searching: false,
 
         queryTypeOptions: [
-          // { label: '名称', value: 'name' },
-          // { label: '帐号', value: 'email' },
-          // { label: '联系人', value: 'contacter' }
+          { label: '账户名', value: 'username' },
+          { label: '联系人', value: 'contacter' },
+          { label: '联系方式', value: 'contact_way' }
         ],
 
         queryType: {
-          label: '名称',
-          value: 'name'
+          label: '账户名',
+          value: 'username'
         },
 
         total: 0,
         countPerPage: 10,
         currentPage: 1,
         key: '',
-
+        userList: [],
         organizationUsers: [],
         headers: [
           {
-            key: 'name',
-            title: '客户名称'
-          },
-          {
             key: 'account',
             title: '账户名'
-          },
-          {
-            key: 'password',
-            title: '密码'
           },
           {
             key: 'contacter',
@@ -102,24 +94,41 @@
             title: '所属组织'
           },
           {
-            key: 'organization_level',
-            title: '所属组织'
+            key: 'role',
+            title: '角色'
           },
           {
-            key: 'state',
-            title: '状态'
-          },
-          {
-            key: 'last_login',
-            title: '最后登陆'
+            key: 'create_time',
+            title: '创建时间'
           }
-        ]
+        ],
+        organizations: [],
+        majorClient: {}
       }
     },
 
     computed: {
       rows () {
         var result = []
+        this.userList.forEach((item) => {
+          let org
+          if (item.organization === '0') {
+            org = this.majorClient
+          } else {
+            org = _.find(this.organizations, (orgitem) => {
+              return orgitem.id === item.organization
+            })
+          }
+          result.push({
+            account: '<a class="hl-red">' + (item.username || '-') + '</a>',
+            organization: (org && org.name) || '-',
+            role: item.role === 1 ? '管理员' : '普通成员',
+            contacter: item.contacter || '-',
+            contact_way: item.contact_way || '-',
+            create_time: formatDate(item.create_time),
+            prototype: item
+          })
+        })
         return result
       },
       page () {
@@ -140,7 +149,7 @@
         }
 
         if (this.key.length > 0) {
-          condition.query[this.queryType.value] = {$in: [this.key]}
+          condition.query[this.queryType.value] = {$like: this.key}
         }
 
         return condition
@@ -160,6 +169,8 @@
     route: {
       data () {
         this.getData()
+        this.getOrganization()
+        this.getMajorClient()
       }
     },
     ready () {
@@ -173,7 +184,17 @@
         if (reset === true) {
           this.currentPage = 1
         }
-        console.log('获取列表')
+        this.userList = []
+        api.heavyBuyer.getOrganizationUsers(this.$route.params.id, this.queryCondition).then((res) => {
+          if (res.status === 200 && res.data.list && res.data.list.length) {
+            this.userList = res.data.list
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      goEdit (table) {
+        this.$route.router.go('/operation/major-clients/' + this.$route.params.id + '/account/edit/' + table.prototype.id)
       },
       /**
        * 处理导出 CSV 按钮点击
@@ -196,6 +217,33 @@
       pageCountChange (countPerPage) {
         this.countPerPage = countPerPage
         this.getData()
+      },
+      getOrganization () {
+        api.heavyBuyer.getOrganizationList(this.$route.params.id, {}).then((res) => {
+          if (res.status === 200) {
+            this.organizations = res.data.list
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      getMajorClient () {
+        var params = {
+          filter: [
+            'name'
+          ],
+          limit: 1,
+          query: {
+            'id': { $in: [this.$route.params.id] }
+          }
+        }
+        api.heavyBuyer.getHeavyBuyer(params).then((res) => {
+          if (res.status === 200) {
+            this.majorClient = res.data.list[0]
+          }
+        }).catch((err) => {
+          this.handleError(err)
+        })
       }
     }
   }

@@ -37,6 +37,13 @@ export default {
     )
   },
 
+  // 启用停用大客户
+  setHeavyBuyerStatus (id, status) {
+    return http.put(
+      `${API_SERVER.default}/v2/heavy_buyer/${id}/status/${status}`
+    )
+  },
+
   delHeavyBuyer (id) {
     return http.del(
       `${API_SERVER.default}/v2/heavy_buyer/${id}`
@@ -77,7 +84,7 @@ export default {
   },
 
   /**
-   * 批量修改组织
+   * 删除组织
    */
   deleteOrganization (heavyBuyerId, organizationId) {
     return http.del(
@@ -86,7 +93,7 @@ export default {
   },
 
   /**
-   * 批量修改组织
+   * 组织用户列表
    */
   getOrganizationUsers (heavyBuyerId, params) {
     return http.post(
@@ -99,7 +106,28 @@ export default {
    */
   createUser (heavyBuyerId, params) {
     return http.post(
-      `${API_SERVER.heavyBuyer}/v2/heavy_buyer/${heavyBuyerId}/user`, params
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/user`, params
+    )
+  },
+  /**
+   * 修改组织下用户
+   */
+  editUser (heavyBuyerId, userId, params) {
+    return http.put(
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/user/${userId}`, params
+    )
+  },
+  /**
+   * 删除组织下用户 未实现
+   */
+  delUser (heavyBuyerId, userId) {
+    return http.del(
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/user${userId}`
+    )
+  },
+  setConfig (heavyBuyerId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/entry_config`, params
     )
   }
 }

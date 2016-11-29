@@ -30,12 +30,18 @@
                     <label class="form-control col-5 organization-label">登录密码:</label>
                     <div class="controls col-19" v-if="type === 'add'">
                       <div v-placeholder="$t('ui.dealer.placeholders.password')" class="input-text-wrap">
-                        <input v-model="model.password" type="text" name="model.password" v-validate:password="{required: true, minlength: 6, maxlength: 16}" lazy class="input-text"/>
+                        <input v-model="model.password" type="text" lazy name="model.password" v-validate:password="{required: true, minlength: 6, maxlength: 16}" class="input-text"/>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.password.touched && $validation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
                         <span v-if="$validation.password.modified && $validation.password.minlength">{{ $t('common.validation.minlength', [$t('auth.fields.password'), 6]) }}</span>
                         <span v-if="$validation.password.modified && $validation.password.maxlength">{{ $t('common.validation.maxlength', [$t('auth.fields.password'), 16]) }}</span>
+                      </div>
+                    </div>
+                    <div class="controls col-19" v-else>
+                      <button class="btn btn-ghost" @click.prevent.stop="editPassword = !editPassword">修改密码</button>
+                      <div v-if="editPassword" v-placeholder="$t('ui.dealer.placeholders.password')" class="input-text-wrap mt10">
+                        <input v-model="model.password" type="text" name="model.password" minlength="8" maxlength="16" v-validate:password="{required: true, minlength: 6, maxlength: 16}" lazy class="input-text"/>
                       </div>
                     </div>
                   </div>
@@ -114,15 +120,21 @@
             <div class="panel-hd bordered mt20">
             </div>
             <div class="panel-bd">
+              <div class="form-row row" v-if="false && type==='edit'">
+                <div class="col-21 col-offset-1">
+                  <label class="del-check">
+                    <input type="checkbox" name="del" v-model="delChecked"/> {{ $t('common.del') }}
+                  </label>
+                </div>
+              </div>
               <div class="row">
                 <div class="part col-14 row max-width">
-                  <div class="form-actions offset-5 mt20">
-                    <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="ml20 btn btn-primary btn-xlg">提交</button>
+                  <div class="form-actions offset-5 mt10">
+                    <button type="submit" :disabled="(submitting || $validation.invalid) && !delChecked" :class="{'disabled':(submitting || $validation.invalid) && !delChecked}" class="ml20 btn btn-primary btn-xlg">提交</button>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
         </form>
       </div>
@@ -131,8 +143,7 @@
 </template>
 
 <script>
-  // import api from 'api'
-  // import formatDate from 'filters/format-date'
+  import api from 'api'
 
   export default {
 
@@ -143,37 +154,56 @@
 
     data () {
       return {
+        editPassword: false,
         selectedRole: {
-          label: '普通成员',
+          label: '管理员',
           value: 1
         },
         roleOptions: [
           {
-            label: '普通成员',
+            label: '管理员',
             value: 1
           },
           {
-            label: '管理员',
+            label: '普通成员',
             value: 2
           }
         ],
         selectedOrganization: {
-          label: '请选择组织',
-          value: 0
+          label: '请选择组织'
         },
-        organizationOptions: [],
+        organizations: [],
         model: {
           username: '',
           password: '',
-          role: 1,
           organization: '',
           contacter: '',
           contact_way: ''
-        }
+        },
+        majorClient: {},
+        submitting: false,
+        delChecked: false,
+        user: {}
       }
     },
 
     computed: {
+      organizationOptions () {
+        let res = []
+        if (this.majorClient.name) {
+          res.push({
+            id: '0',
+            label: this.majorClient.name
+          })
+        }
+        this.organizations.forEach((item) => {
+          res.push({
+            id: item.id,
+            label: item.name
+          })
+        })
+        return res
+      },
       type () {
         return this.$route.params.accountId ? 'edit' : 'add'
       },
@@ -196,20 +226,132 @@
     route: {
       data () {
         this.getOrganization()
+        this.getMajorClient()
+        if (this.type === 'edit') {
+          this.getUsers()
+        }
       }
     },
 
+    ready () {
+    },
+
     methods: {
-      getOrganization () {
-        this.organizationOptions = [
-          {
-            label: '请选择组织',
-            value: 0
+      getUsers (reset) {
+        let params = {
+          query: {
+            id: {'$in': [this.$route.params.accountId]}
           }
-        ]
+        }
+        api.heavyBuyer.getOrganizationUsers(this.$route.params.id, params).then((res) => {
+          if (res.status === 200 && res.data.list && res.data.list.length) {
+            let user = res.data.list[0]
+            this.model.username = user.username
+            this.model.contacter = user.contacter
+            this.model.contact_way = user.contact_way
+            let finded = _.find(this.roleOptions, (item) => {
+              return item.value === user.role
+            })
+            if (finded) {
+              this.selectedRole = finded
+            }
+            this.setDefaultOrg()
+            this.user = user
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      getOrganization () {
+        api.heavyBuyer.getOrganizationList(this.$route.params.id, {}).then((res) => {
+          if (res.status === 200) {
+            this.organizations = res.data.list
+            this.setDefaultOrg()
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      setDefaultOrg () {
+        let finded = _.find(this.organizationOptions, (item) => {
+          return item.id === this.user.organization
+        })
+        if (finded) {
+          this.selectedOrganization = finded
+        }
       },
       onSubmit () {
-        console.log('提交')
+        if (this.submitting) return
+
+        if (this.delChecked && !window.confirm(this.$t('operation.user.major.comfirm_del'))) {
+          return
+        }
+
+        if (this.$validation.invalid && !this.delChecked) {
+          this.$validate(true)
+          return
+        }
+
+        if (!typeof this.selectedOrganization.id === 'string') {
+          this.showNotice({
+            type: 'error',
+            content: '请选择组织'
+          })
+          return
+        }
+
+        let params = {
+          username: this.model.username,
+          contacter: this.model.contacter,
+          contact_way: this.model.contact_way,
+          role: this.selectedRole.value,
+          organization: this.selectedOrganization.id
+        }
+
+        if (this.model.password) {
+          params.password = this.model.password
+        }
+
+        let process
+
+        this.submitting = true
+        if (this.type === 'add') { // 添加
+          process = api.heavyBuyer.createUser(this.$route.params.id, params)
+        } else {
+          if (this.delChecked) { // 删除
+            process = api.heavyBuyer.delUser(this.$route.params.id, this.$route.params.accountId)
+          } else {
+            process = api.heavyBuyer.editUser(this.$route.params.id, this.$route.params.accountId, params)
+          }
+        }
+        process.then((res) => {
+          this.submitting = false
+          if (res.status === 200) {
+            this.$route.router.replace('/operation/major-clients/' + this.$route.params.id + '/account')
+          }
+        }).catch((res) => {
+          this.submitting = false
+          this.handleError(res)
+        })
+      },
+      getMajorClient () {
+        var params = {
+          filter: [
+            'name'
+          ],
+          limit: 1,
+          query: {
+            'id': { $in: [this.$route.params.id] }
+          }
+        }
+        api.heavyBuyer.getHeavyBuyer(params).then((res) => {
+          if (res.status === 200) {
+            this.majorClient = res.data.list[0]
+            this.setDefaultOrg()
+          }
+        }).catch((err) => {
+          this.handleError(err)
+        })
       }
     }
   }
@@ -219,7 +361,7 @@
 
   .x-major-clients-account-form
     .form
-      max-width none
+      max-width 800px
     .part
       margin-top 10px
       margin-bottom 20px
