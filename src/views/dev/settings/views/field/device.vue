@@ -291,25 +291,6 @@
           field.category = 'base_fields'
           result.push(field)
         })
-        // 计算当前产品数据端点 更新页面数据端点字段
-        this.dataPoints.forEach((item, index) => {
-          var dataPoint = {
-            'category': 'datapoints',
-            'index': item.index,
-            'name': item.name,
-            'label': item.name,
-            'hidden': true,
-            'sort': baseFields.length + this.dataPoints.length + index
-          }
-          this.deviceFields.datapoints && this.deviceFields.datapoints.forEach((item2) => {
-            if (item2.index === dataPoint.index && item2.name === dataPoint.name) {
-              dataPoint.label = item2.label
-              dataPoint.hidden = item2.hidden
-              dataPoint.sort = item2.sort
-            }
-          })
-          result.push(dataPoint)
-        })
 
         // 经销商
         var dealer = this.DEALER
@@ -350,6 +331,26 @@
           var field = _.clone(item)
           field.category = 'snapshot_shuffle'
           result.push(field)
+        })
+
+        // 计算当前产品数据端点 更新页面数据端点字段
+        this.dataPoints.forEach((item, index) => {
+          var dataPoint = {
+            'category': 'datapoints',
+            'index': item.index,
+            'name': item.name,
+            'label': item.name,
+            'hidden': true,
+            'sort': result.length + index
+          }
+          this.deviceFields.datapoints && this.deviceFields.datapoints.forEach((item2) => {
+            if (item2.index === dataPoint.index && item2.name === dataPoint.name) {
+              dataPoint.label = item2.label
+              dataPoint.hidden = item2.hidden
+              dataPoint.sort = item2.sort
+            }
+          })
+          result.push(dataPoint)
         })
 
         // 所有字段排序

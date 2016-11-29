@@ -30,7 +30,7 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <!-- <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button> -->
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
               </div>
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)" :max="(queryType.value === 'id'?2100000000: false)">
@@ -419,7 +419,7 @@ export default {
         device['device--is_active'] = item['device--is_active'] ? this.$t('common.yes') : this.$t('common.no')
         device['device--active_date'] = formatDate(item['device--active_date']) || '-'
         device['online--is_online'] = item['online--is_online'] ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>'
-        device['vdevice--online_count'] = item['vdevice--online_count'] - 0 >= 0 ? (item['vdevice--online_count'] - 0).toFixed(2) + '小时' : '-'
+        device['vdevice--online_count'] = (item['vdevice--online_count'] - 0) >= 0 ? ((item['vdevice--online_count'] - 0) / 60 / 60).toFixed(2) + '小时' : '-'
         device.prototype = item
 
         result.push(device)
