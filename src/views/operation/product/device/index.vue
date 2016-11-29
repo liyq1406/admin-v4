@@ -184,7 +184,7 @@ export default {
         authority: 'R',
         custom_field: ['pid', 'sn'],
         format: {
-          encode: 'base64'
+          encode: 'source' // [source|base64]
         }
       }
 
