@@ -548,6 +548,7 @@ export default {
       var result = {}
       var hasSnapshotShuffle = false
       var hasDeviceAddr = false
+      var hasSubscribe = false
       this.fieldKeys.forEach((item) => {
         var field = item.split('--')
         if (field[0] === 'snapshot_shuffle') {
@@ -555,6 +556,9 @@ export default {
         }
         if (field[0] === 'geography') {
           hasDeviceAddr = true
+        }
+        if (field[0] === 'subscribe') {
+          hasSubscribe = true
         }
         result[field[0]] = result[field[0]] || []
         result[field[0]].push(field[1])
@@ -564,6 +568,9 @@ export default {
       }
       if (hasSnapshotShuffle) {
         result.snapshot_shuffle = this.SNAPSHOT_SHUFFLE
+      }
+      if (hasSubscribe) {
+        result.subscribe.push('role')
       }
       return result
     },
