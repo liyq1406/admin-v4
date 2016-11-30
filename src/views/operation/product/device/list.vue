@@ -675,7 +675,7 @@ export default {
       return {
         name: '设备列表',
         describe: '设备列表',
-        type: 1,
+        type: 9,
         params: condition,
         extend: {
           product_id: this.$route.params.id

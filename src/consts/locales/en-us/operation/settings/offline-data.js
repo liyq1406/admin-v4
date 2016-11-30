@@ -26,7 +26,9 @@ export default {
     heavy_buyer: 'VIP',
     dealer: 'Dealer',
     warranty: 'Warranty',
-    device_session_log: 'Device Online-offline'
+    device_session_log: 'Device Online-offline',
+    wechat_auth_device: 'Wechat device List',
+    device_aggregate: 'Device aggregate'
   },
   get_url: 'Get URL',
   url: 'Download URL',

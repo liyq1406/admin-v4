@@ -203,7 +203,9 @@ export default {
         '4': this.$t(`${TYPE}.heavy_buyer`),
         '5': this.$t(`${TYPE}.dealer`),
         '6': this.$t(`${TYPE}.warranty`),
-        '7': this.$t(`${TYPE}.device_session_log`)
+        '7': this.$t(`${TYPE}.device_session_log`),
+        '8': this.$t(`${TYPE}.wechat_auth_device`),
+        '9': this.$t(`${TYPE}.device_aggregate`)
       })[type]
     },
 

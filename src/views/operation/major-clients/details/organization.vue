@@ -8,7 +8,8 @@
           :disabled="!btnCanUse.add"
           :class="{'disabled': !btnCanUse.add}"
           @click.stop="onAddBrother">
-            <!-- <i class="fa fa-share"></i> -->同
+            <i class="icon icon-add-brother" :class="{'disabled':!btnCanUse.add}"></i>
+            <!-- <i class="fa fa-share"></i> -->
           </button>
 
           <!-- 添加子节点 -->
@@ -16,7 +17,11 @@
           :disabled="!btnCanUse.addChild"
           :class="{'disabled': !btnCanUse.addChild}"
           @click.stop="onAddChild">
-            <!-- <i class="fa fa-share"></i> -->子
+          <i
+          class="icon icon-add-child"
+          :class="{'disabled':!btnCanUse.addChild}">
+          </i>
+            <!-- <i class="fa fa-share"></i> -->
           </button>
 
           <!-- 删除 -->
@@ -785,8 +790,24 @@
           width 35px
           height 32px
           box-sizing border-box
+          overflow hidden
           &:last-child
             border-right 0
+      .icon
+        display inline-block
+        background no-repeat center center / 100% auto
+        width 15px
+        height 15px
+        position relative
+        top 3px
+        &.icon-add-brother
+          background-image url(../../../../assets/images/icon-add-brother.png)
+        &.icon-add-brother.disabled
+          background-image url(../../../../assets/images/icon-add-brother-disabled.png)
+        &.icon-add-child
+          background-image url(../../../../assets/images/icon-add-child.png)
+        &.icon-add-child.disabled
+          background-image url(../../../../assets/images/icon-add-child-disabled.png)
     .detail-box
       width 100%
       height 100%

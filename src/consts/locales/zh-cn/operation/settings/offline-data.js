@@ -26,7 +26,9 @@ export default {
     heavy_buyer: '大客户列表',
     dealer: '经销商列表',
     warranty: '维保列表',
-    device_session_log: '设备上下线'
+    device_session_log: '设备上下线',
+    wechat_auth_device: '微信设备列表',
+    device_aggregate: '设备聚合列表'
   },
   get_url: '获取地址',
   url: '下载地址',
