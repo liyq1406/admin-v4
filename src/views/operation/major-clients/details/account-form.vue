@@ -255,8 +255,8 @@
             if (finded) {
               this.selectedRole = finded
             }
-            this.setDefaultOrg()
             this.user = user
+            this.setDefaultOrg()
           }
         }).catch((res) => {
           this.handleError(res)
