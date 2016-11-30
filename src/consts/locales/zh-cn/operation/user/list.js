@@ -17,7 +17,7 @@ export default {
     online: '在线状态'
   },
   total: '用户总数',
-  add_count: '用户总数',
+  add_count: '今日新增',
   online_count: '当前在线',
   active_count: '七日活跃用户'
 }
