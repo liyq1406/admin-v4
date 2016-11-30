@@ -447,46 +447,67 @@
                     <thead>
                       <tr>
                         <th colspan="2" class="wp30">烹饪曲线设备</th>
-                        <th class="w5 tac">操作</th>
+                        <!-- <th class="w5 tac">操作</th> -->
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
+                        <td class="w5">烹饪设备</td>
+                        <td><span class="hl-red">{{ device.name || '-' }}</span></td>
+                        <!-- <td class="w5 tac"><a class="hl-red" @click.prevent="editType(device)">编辑</a></td> -->
+                      </tr>
+                      <tr>
                         <td class="w5">指令类型</td>
                         <td><span class="hl-red">{{ device.autoexec.type || '-' }}</span></td>
-                        <td class="w5 tac"><a class="hl-red" @click.prevent="editType(device)">编辑</a></td>
+                        <!-- <td class="w5 tac"><a class="hl-red" @click.prevent="editType(device)">编辑</a></td> -->
                       </tr>
                       <tr>
                         <td class="w5">烹饪指令</td>
                         <td><span class="hl-red">{{ device.autoexec.value || '-' }}</span></td>
-                        <td class="w5 tac"><a class="hl-red" @click.prevent="editInstructions(device)">编辑</a></td>
+                        <!-- <td class="w5 tac"><a class="hl-red" @click.prevent="editInstructions(device)">编辑</a></td> -->
                       </tr>
                       <tr>
-                        <th colspan="3" class="">烹饪提示</th>
+                        <td class="w5"></td>
+                        <td><a class="hl-red" @click.prevent="editDevice(device)">编辑烹饪设置</a></td>
+                        <!-- <td class="w5 tac"><a class="hl-red" @click.prevent="editType(device)">编辑</a></td> -->
                       </tr>
-                      <tr v-for="(index, tip) in device.prompts">
+                      <!-- <tr>
+                        <th colspan="3" class="">烹饪提示</th>
+                      </tr> -->
+                      <!-- <tr v-for="(index, tip) in device.prompts">
                         <td class="w5">第{{ index + 1 }}步</td>
                         <td><span v-if="tip.prompt_text"  class="hl-red">{{ tip.prompt_text }}</span><span class="graytip" v-if="!tip.prompt_text">请输入提示内容,如:请将食物翻面</span></td>
                         <td class="w5 tac"><a class="hl-red" @click.prevent="addTips(device, 'edit', tip)">编辑</a></td>
-                      </tr>
-                      <tr>
+                      </tr> -->
+                      <!-- <tr>
                         <td class="w5"> </td>
                         <td><a class="hl-red" @click.prevent="addTips(device, 'add')">+添加烹饪提示步骤</a></td>
                         <td class="w5 tac"></td>
-                      </tr>
+                      </tr> -->
                     </tbody>
                   </table>
+                  <!-- 烹饪提示 -->
+                  <div v-if="steps.length">
+                    <div>烹饪提示：</div>
+                    <div v-for="(index, step) in steps" class="thumb-info mt20 mb15 row">
+                      <div class="col-3">第{{ index+1 }}步:</div>
+                      <div class="col-21 bggray mb20 panel">
+                        <device-tips :tip="step" :expend="index" @delete="deleteTip(index)" @changed="tipChange"></device-tips>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="actions">
-              <button class="btn btn-primary" @click="addDevice" :disabled="recipe.devices.length >= products.length" :class="{'disabled':recipe.devices.length >= products.length}"><i class="fa fa-plus"></i>添加烹饪设备</button>
+              <button class="btn btn-primary" @click="addDevice" :disabled="recipe.devices.length >= 1" :class="{'disabled':recipe.devices.length >= 1}"><i class="fa fa-plus"></i>添加烹饪设备</button>
+              <button class="btn btn-primary" @click="addTip" :disabled="recipe.devices.length === 0" :class="{'disabled':recipe.devices.length === 0}"><i class="fa fa-plus"></i>添加烹饪提示</button>
             </div>
 
             <modal :show.sync="modal.show" @close="onCancel" width="480px">
               <h3 slot="header">{{ modal.type === 'add' ? '添加' : '编辑' }}烹饪设备</h3>
               <div slot="body" class="form">
-                <device-form v-if="modal.show" :recipe="recipe" :name="name" :type="modal.type" @add="deviceSubmit" @close="modal.show = false"></device-form>
+                <device-form v-if="modal.show" :recipe="recipe" :name="name" :type="modal.type" @add="deviceSubmit" @edit="deviceEdit" @close="modal.show = false"></device-form>
               </div>
             </modal>
             <!-- 编辑类型begin -->
@@ -636,10 +657,11 @@ import api from 'api'
 import { pluginMixins } from '../../../mixins'
 import TreeItem from './TreeItem'
 import DeviceForm from './DeviceForm'
-import InstructionsForm from '../components/InstructionsForm'
 import TipsForm from '../components/TipsForm'
+import InstructionsForm from '../components/InstructionsForm'
 import MenuForm from './MenuForm'
 import CodeForm from '../components/CodeForm'
+import DeviceTips from '../components/DeviceTips'
 
 export default {
   name: 'Creation',
@@ -654,7 +676,8 @@ export default {
     'tree-item': TreeItem,
     DeviceForm,
     InstructionsForm,
-    TipsForm
+    TipsForm,
+    DeviceTips
   },
 
   vuex: {
@@ -672,6 +695,9 @@ export default {
 
   data () {
     return {
+      steps: [],
+      otherSteps: [],
+      able: true,
       addFirCodeShow: false,
       codeClone: {},
       codeType: 'add',
@@ -778,6 +804,16 @@ export default {
   computed: {
     productOptions () {
       return _.differenceBy(this.products, this.recipe.devices, 'id')
+    },
+    stepsDeal () {
+      var result = []
+      this.steps.forEach((step) => {
+        var obj = {}
+        obj = step
+        obj.index = this.steps.indexOf(step)
+        result.push(obj)
+      })
+      return result
     },
     // 判断当前是否第一页
     minPage () {
@@ -1230,6 +1266,9 @@ export default {
           sub: item.sub
         })
       })
+      if (this.recipe.devices.length) {
+        this.recipe.devices[0].cooking_prompts_info = this.steps
+      }
       let params = {
         name: this.name,
         images: images,
@@ -1290,6 +1329,10 @@ export default {
     },
     deviceSubmit (obj) {
       this.recipe.devices.push(obj)
+      this.modal.show = false
+    },
+    deviceEdit (obj) {
+      this.recipe.devices.$set(0, obj)
       this.modal.show = false
     },
 
@@ -1523,6 +1566,31 @@ export default {
       if (this.products && this.products.length > 0) {
         this.currentProduct = this.products[0]
       }
+    },
+    deleteTip (index) {
+      this.steps.splice(index, 1)
+    },
+    tipChange (val, index, able) {
+      this.steps.$set(index, val)
+      this.able = able
+      // this.otherSteps.$set(index, val)
+    },
+    addTip () {
+      var params = {
+        prompts: {},
+        process: {
+          images: [''],
+          process_text: '',
+          process_content: []
+        }
+      }
+      // 如果已有步骤
+      // if (this.recipe.devices[0].cooking_prompts_info) {
+      //   this.recipe.devices[0].cooking_prompts_info.push(params)
+      //   let obj = _.cloneDeep(this.recipe.devices[0])
+      //   this.recipe.devices.$set(0, obj)
+      // }
+      this.steps.push(params)
     }
   }
 }
@@ -1530,6 +1598,8 @@ export default {
 
 <style lang="stylus" scoped>
   @import '../../../../../../assets/stylus/common'
+  .bggray
+    background-color #f9f9f9!important
   .previewstep
     display block
     font-size 16px
