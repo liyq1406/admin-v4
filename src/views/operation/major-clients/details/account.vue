@@ -94,6 +94,10 @@
             title: '所属组织'
           },
           {
+            key: 'level',
+            title: '组织级别'
+          },
+          {
             key: 'role',
             title: '角色'
           },
@@ -126,6 +130,7 @@
             contacter: item.contacter || '-',
             contact_way: item.contact_way || '-',
             create_time: formatDate(item.create_time),
+            level: this.computedLevelText(item.level),
             prototype: item
           })
         })
@@ -187,7 +192,8 @@
         this.userList = []
         api.heavyBuyer.getOrganizationUsers(this.$route.params.id, this.queryCondition).then((res) => {
           if (res.status === 200 && res.data.list && res.data.list.length) {
-            this.userList = res.data.list
+            var lists = this.resetLevel(res.data.list)
+            this.userList = lists
           }
         }).catch((res) => {
           this.handleError(res)
@@ -196,6 +202,7 @@
       goEdit (table) {
         this.$route.router.go('/operation/major-clients/' + this.$route.params.id + '/account/edit/' + table.prototype.id)
       },
+
       /**
        * 处理导出 CSV 按钮点击
        */
@@ -244,6 +251,51 @@
         }).catch((err) => {
           this.handleError(err)
         })
+      },
+
+      computedLevelText (level) {
+        var result = ''
+        const TEXTS = '一二三四五六七八九十'
+        result = TEXTS.split('')[level - 1] + '级组织' || '十级以上'
+        return result
+      },
+
+      /**
+       * 算出等级
+       */
+      resetLevel (lists) {
+        if (!lists.length) return lists
+        var result = _.clone(lists)
+
+        var noLevelList = lists.filter((item) => !item.level)
+        if (!noLevelList.length) return result
+
+        var gain = false
+        noLevelList.forEach((item) => {
+          var parentId = item.organization
+          var parent = {}
+          if (parentId && parentId - 0 !== 0) {
+            result.forEach((item2) => {
+              if (item2.id === parentId) {
+                parent = item2
+              }
+            })
+          }
+          if (parent.level) {
+            item.level = parent.level + 1
+            gain = true
+          }
+          if (parentId - 0 === 0) {
+            item.level = 1
+            gain = true
+          }
+        })
+        if (gain) {
+          return this.resetLevel(result)
+        } else {
+          console.error('数据有问题, 有数据找不到爹!请检查服务器返回数据')
+          return []
+        }
       }
     }
   }
