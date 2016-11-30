@@ -16,9 +16,9 @@
           </div>
 
           <div class="filter-group fr">
-            <div class="filter-group-item">
+            <!-- <div class="filter-group-item">
               <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
-            </div>
+            </div> -->
             <div class="filter-group-item">
               <search-box :key.sync="key" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getData(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getData(true)">
                 <x-select width="100px" :label="queryType.label" size="small">
