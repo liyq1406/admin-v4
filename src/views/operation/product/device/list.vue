@@ -689,12 +689,14 @@ export default {
       this.query = ''
       this.originAddModel = _.clone(this.addModel)
       this.currentPage = 1
-      this.getDataPoint()
-      this.getField(() => {
-        this.getDevices()
+      // 获取数据端点
+      this.getDataPoint(() => {
+        // 获取完数据端点后获取字段
+        this.getField(() => {
+          // 获取字段后获取设备列表
+          this.getDevices()
+        })
       })
-
-      // getProductSummary 方法来自 productSummaryMixin
       this.getProductSummary()
     }
   },
@@ -721,12 +723,13 @@ export default {
      * 获取数据端点
      * @return {[type]} [description]
      */
-    getDataPoint () {
+    getDataPoint (fn) {
       this.loadingDataPoint = true
       api.product.getDatapoints(this.$route.params.id).then((res) => {
         if (res.status === 200) {
           this.dataPoints = res.data
           this.loadingDataPoint = false
+          fn && fn()
         }
       }).catch((res) => {
         this.handleError(res)
