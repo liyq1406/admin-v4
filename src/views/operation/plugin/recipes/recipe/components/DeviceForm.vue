@@ -1,7 +1,7 @@
 <template>
   <validator name="validation">
     <form autocomplete="off" novalidate @submit.prevent="onSubmit">
-      <div class="form-row row">
+      <div class="form-row row" v-if="type === 'add'">
         <label class="form-control col-6">烹饪菜谱:</label>
         <div class="controls col-18">
           <div class="control-text">{{ name }}</div>
@@ -9,29 +9,29 @@
       </div>
       <div class="form-row row">
         <label class="form-control col-6">工作设备:</label>
-        <div class="controls col-18">
+        <div class="controls col-18" v-if="type === 'add'">
           <x-select placeholder="请选择设备" :label="selectedProduct.name">
             <select v-model="selectedProduct" name="selectedProduct">
-              <option v-for="product in productOptions" :value="product">{{ product.name }}</option>
+              <option v-for="product in products" :value="product">{{ product.name }}</option>
             </select>
           </x-select>
         </div>
-        <!-- <div class="controls col-18" v-if="modal.type === 'edit'">
-          <div class="control-text">{{ model.name }}</div>
-        </div> -->
+        <div class="controls col-18" v-if="type === 'edit'">
+          <div class="control-text">{{ selectedProduct.name }}</div>
+        </div>
       </div>
       <div class="form-row row">
         <label class="form-control col-6">指令类型:</label>
-        <div class="controls col-18" v-if="type === 'add'">
+        <div class="controls col-18">
           <x-select placeholder="请选择指令类型" :label="selectedType">
             <select v-model="selectedType" name="selectedType">
               <option v-for="type in types" :value="type">{{ type }}</option>
             </select>
           </x-select>
         </div>
-        <div class="controls col-18" v-if="type === 'edit'">
+        <!-- <div class="controls col-18" v-if="type === 'edit'">
           <div class="control-text">{{ model.name }}</div>
-        </div>
+        </div> -->
       </div>
       <div class="form-row row">
         <label class="form-control col-6">设备指令:</label>
@@ -125,13 +125,30 @@ export default {
   ready () {
     // this.orignModel.type = this.menu.type
     this.$resetValidation()
-    // this.init()
+    this.init()
   },
 
   methods: {
     // 初始化
+    // init () {
+    //   this.cloneModal = _.clone(this.model)
+    // },
     init () {
-      this.cloneModal = _.clone(this.model)
+      if (this.type === 'edit') {
+        console.log(this.recipe.devices[0])
+        var device = this.recipe.devices[0]
+        this.products.forEach((product) => {
+          if (product.id === device.id) {
+            this.selectedProduct = product
+          }
+        })
+        this.model.autoexec.value = device.autoexec.value
+        this.types.forEach((type) => {
+          if (type === device.autoexec.type) {
+            this.selectedType = type
+          }
+        })
+      }
     },
     // handleSubmit (menu) {
     //   if (this.$validation.invalid) {
@@ -167,7 +184,11 @@ export default {
       this.model.id = this.selectedProduct.id
       this.model.autoexec.type = this.selectedType
       console.log(this.model)
-      this.$emit('add', this.model)
+      if (this.type === 'add') {
+        this.$emit('add', this.model)
+      } else if (this.type === 'edit') {
+        this.$emit('edit', this.model)
+      }
     },
     onCancel () {
       this.$emit('close')

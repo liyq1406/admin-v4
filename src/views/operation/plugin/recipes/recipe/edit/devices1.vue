@@ -15,55 +15,36 @@
             <thead>
               <tr>
                 <th colspan="2" class="wp30">烹饪曲线设备</th>
-                <!-- <th class="w5 tac">操作</th> -->
+                <th class="w5 tac">操作</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="w5">烹饪设备</td>
-                <td><span class="hl-red">{{ device.name || '-' }}</span></td>
-                <!-- <td class="w5 tac"><a class="hl-red" @click.prevent="editType(device)">编辑</a></td> -->
-              </tr>
-              <tr>
                 <td class="w5">指令类型</td>
                 <td><span class="hl-red">{{ device.autoexec.type || '-' }}</span></td>
-                <!-- <td class="w5 tac"><a class="hl-red" @click.prevent="editType(device)">编辑</a></td> -->
+                <td class="w5 tac"><a class="hl-red" @click.prevent="editType(device)">编辑</a></td>
               </tr>
               <tr>
                 <td class="w5">烹饪指令</td>
                 <td><span class="hl-red">{{ device.autoexec.value || '-' }}</span></td>
-                <!-- <td class="w5 tac"><a class="hl-red" @click.prevent="editInstructions(device)">编辑</a></td> -->
+                <td class="w5 tac"><a class="hl-red" @click.prevent="editInstructions(device)">编辑</a></td>
               </tr>
               <tr>
-                <td class="w5"></td>
-                <td><a class="hl-red" @click.prevent="editDevice(device)">编辑烹饪设置</a></td>
-                <!-- <td class="w5 tac"><a class="hl-red" @click.prevent="editType(device)">编辑</a></td> -->
-              </tr>
-              <!-- <tr>
                 <th colspan="3" class="">烹饪提示</th>
-              </tr> -->
-              <!-- <tr v-for="tip in device.prompts">
+              </tr>
+              <tr v-for="tip in device.prompts">
                 <td class="w5">第{{ $index + 1 }}步</td>
                 <td><span v-if="tip.prompt_text" class="hl-red">{{ tip.prompt_text }}</span><span class="graytip" v-if="!tip.prompt_text">请输入提示内容,如:请将食物翻面</span></td>
                 <td class="w5 tac"><a class="hl-red" @click.prevent="addTips(device, 'edit', tip)">编辑</a></td>
-              </tr> -->
-              <!-- <tr>
+              </tr>
+              <tr>
                 <td class="w5"> </td>
                 <td><a class="hl-red" @click.prevent="addTips(device, 'add')">+添加烹饪提示步骤</a></td>
                 <td class="w5 tac"></td>
-              </tr> -->
+              </tr>
             </tbody>
           </table>
-          <!-- 烹饪提示 -->
-          <div v-if="steps.length">
-            <div>烹饪提示：</div>
-            <div v-for="(index, step) in steps" class="thumb-info mt20 mb15 row">
-              <div class="col-3">第{{ index+1 }}步:</div>
-              <div class="col-21 bggray mb20 panel">
-                <device-tips :tip="step" :expend="index" @delete="deleteTip(index)" @changed="tipChange"></device-tips>
-              </div>
-            </div>
-          </div>
+        </div>
         <!-- <table class="table table-stripe table-bordered">
           <thead>
             <tr>
@@ -80,11 +61,8 @@
         </table> -->
       </div>
     </div>
-
-    <div class="actions mb20">
-      <!-- <button class="btn btn-primary" @click="addDevice" :disabled="recipe.devices.length >= products.length" :class="{'disabled':recipe.devices.length >= products.length}"><i class="fa fa-plus"></i>添加烹饪设备</button> -->
-      <button class="btn btn-primary" @click="addDevice" :disabled="recipe.devices.length >= 1" :class="{'disabled':recipe.devices.length >= 1}"><i class="fa fa-plus"></i>添加烹饪设备</button>
-      <button class="btn btn-primary" @click="addTip" :disabled="recipe.devices.length === 0" :class="{'disabled':recipe.devices.length === 0}"><i class="fa fa-plus"></i>添加烹饪提示</button>
+    <div class="actions">
+      <button class="btn btn-primary" @click="addDevice" :disabled="recipe.devices.length >= products.length" :class="{'disabled':recipe.devices.length >= products.length}"><i class="fa fa-plus"></i>添加烹饪设备</button>
     </div>
     <div class="form-actions mb40 row">
       <div class="col-offset-4">
@@ -99,7 +77,7 @@
       <div slot="body" class="form">
         <validator name="validation">
           <form autocomplete="off" novalidate @submit.prevent="onSubmit">
-            <div class="form-row row" v-if="modal.type === 'add'">
+            <div class="form-row row">
               <label class="form-control col-6">烹饪菜谱:</label>
               <div class="controls col-18">
                 <div class="control-text">{{ recipe.name }}</div>
@@ -128,13 +106,7 @@
                 </x-select>
               </div>
               <div class="controls col-18" v-if="modal.type === 'edit'">
-                <div class="controls col-18">
-                  <x-select placeholder="请选择指令类型" :label="typeModal.type">
-                    <select v-model="typeModal.type" name="selectedType">
-                      <option v-for="type in types" :value="type">{{ type }}</option>
-                    </select>
-                  </x-select>
-                </div>
+                <div class="control-text">{{ model.name }}</div>
               </div>
             </div>
             <div class="form-row row">
@@ -204,7 +176,6 @@
 import { pluginMixins } from '../../../mixins'
 import InstructionsForm from '../components/InstructionsForm'
 import TipsForm from '../components/TipsForm'
-import DeviceTips from '../components/DeviceTips'
 import api from 'api'
 
 export default {
@@ -216,8 +187,7 @@ export default {
 
   components: {
     InstructionsForm,
-    TipsForm,
-    DeviceTips
+    TipsForm
   },
 
   vuex: {
@@ -228,9 +198,6 @@ export default {
 
   data () {
     return {
-      steps: [],
-      otherSteps: [],
-      able: true,
       recipe: {
         name: '',
         devices: [
@@ -253,7 +220,6 @@ export default {
         show: false,
         type: 'add'
       },
-      editInfo: {},
       instructionsShow: false,
       instructionsModal: {},
       tipsShow: false,
@@ -280,16 +246,6 @@ export default {
   computed: {
     productOptions () {
       return _.differenceBy(this.products, this.recipe.devices, 'id')
-    },
-    stepsDeal () {
-      var result = []
-      this.steps.forEach((step) => {
-        var obj = {}
-        obj = step
-        obj.index = this.steps.indexOf(step)
-        result.push(obj)
-      })
-      return result
     }
   },
 
@@ -318,10 +274,9 @@ export default {
           this.loadingData = false
           let data = res.data.list[0] ? res.data.list[0] : null
           this.recipe.devices = data.devices
-          this.steps = data.devices[0].cooking_prompts_info
           this.recipe.devices.forEach((device) => {
             if (!device.hasOwnProperty('prompts')) {
-              device.cooking_prompts_info = []
+              device.prompts = []
             }
           })
           this.recipe.name = data.name
@@ -346,10 +301,6 @@ export default {
         id: device.id,
         name: device.name,
         autoexec: device.autoexec.value
-      }
-      this.typeModal = {
-        device: device,
-        type: device.autoexec.type
       }
     },
     editType (device) {
@@ -471,11 +422,11 @@ export default {
       }
 
       this.submitting = true
-      // let appId = this.$route.params.app_id
+      let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token
-      // let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
+      let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
 
-      // let devices = _.clone(this.recipe.devices)
+      let devices = _.clone(this.recipe.devices)
       let device
       if (this.modal.type === 'add') { // 添加
         device = {
@@ -486,56 +437,38 @@ export default {
             value: this.model.autoexec
           }
         }
-        this.recipe.devices.push(device)
+        devices.push(device)
       } else {
         if (this.delChecked) { // 删除
-          if (window.confirm('确认删除该设备烹饪设置?')) {
-            // _.remove(this.recipe.devices, (item) => {
-            //   return item.id === this.model.id
-            // })
-            this.recipe.devices.splice(0, 1)
-          } else {
-            // this.onCancel()
-            this.submitting = false
-            return
-          }
+          _.remove(devices, (item) => {
+            return item.id === this.model.id
+          })
         } else {
-          device = _.find(this.recipe.devices, (item) => {
+          device = _.find(devices, (item) => {
             return item.id === this.model.id
           })
           device.autoexec.value = this.model.autoexec
-          device.autoexec.type = this.typeModal.type
         }
       }
-      // let params = {
-      //   devices: devices,
-      //   type: devices.length ? 2 : 1
-      // }
-      // api.recipes.editRecipes(appId, this.$route.params.id, token, params).then((res) => {
-      //   if (res.status !== 200) return
-      //
-      //   this.submitting = false
-      //   this.onCancel()
-      //   this.getRecipes()
-      // })
-      this.submitting = false
-      this.onCancel()
+      let params = {
+        devices: devices,
+        type: devices.length ? 2 : 1
+      }
+      api.recipes.editRecipes(appId, this.$route.params.id, token, params).then((res) => {
+        if (res.status !== 200) return
+
+        this.submitting = false
+        this.onCancel()
+        this.getRecipes()
+      })
     },
     editOthers (type) {
-      // if (this.able) {
-      //   this.showNotice({
-      //     type: 'error',
-      //     content: '表单填写验证不通过！'
-      //   })
-      //   return
-      // }
       this.submitting = true
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
 
       let devices = _.clone(this.recipe.devices)
-      devices[0].cooking_prompts_info = this.steps
       let params = {
         devices: devices,
         type: devices.length ? 2 : 1
@@ -552,31 +485,6 @@ export default {
         })
         this.$route.router.go({path: '/operation/plugins/recipes/' + this.$route.params.app_id + '/recipes'})
       })
-    },
-    deleteTip (index) {
-      this.steps.splice(index, 1)
-    },
-    addTip () {
-      var params = {
-        prompts: {},
-        process: {
-          images: [''],
-          process_text: '',
-          process_content: []
-        }
-      }
-      // 如果已有步骤
-      // if (this.recipe.devices[0].cooking_prompts_info) {
-      //   this.recipe.devices[0].cooking_prompts_info.push(params)
-      //   let obj = _.cloneDeep(this.recipe.devices[0])
-      //   this.recipe.devices.$set(0, obj)
-      // }
-      this.steps.push(params)
-    },
-    tipChange (val, index, able) {
-      this.steps.$set(index, val)
-      this.able = able
-      // this.otherSteps.$set(index, val)
     }
     // addTip (arr, index) {
     //   arr.push({
@@ -590,13 +498,6 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../../../../../assets/stylus/common'
-.line39
-  display inline-block
-  line-height 39px
-.bordered
-  border-bottom 1px solid #d9d9d9
-.bggray
-  background-color #f9f9f9
 .graytip
   color #a9a9a9
 .actions
