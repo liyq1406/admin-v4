@@ -8,16 +8,17 @@
         </div>
         <div class="dealer-info-box">
           <div class="row">
-            <div class="label col-5">销售时间:</div>
-            <div class="info col-5">暂无信息</div>
+            <div class="label col-5">创建时间:</div>
+            <!-- <div class="info col-5">{{(dealer.create_time | formatDate) || '--'}}</div> -->
+            <div class="info col-5">{{dealer.create_time | formatDate}}</div>
           </div>
           <div class="row">
             <div class="label col-5">联系人:</div>
-            <div class="info col-5">{{dealer.name}}</div>
+            <div class="info col-5">{{dealer.contacter || '--'}}</div>
           </div>
           <div class="row">
             <div class="label col-5">手机号:</div>
-            <div class="info col-5">{{dealer.phone}}</div>
+            <div class="info col-5">{{dealer.phone || '--'}}</div>
           </div>
           <div class="row" v-if="isDealerExists(superior)">
             <div class="label col-5">从属于:</div>
@@ -25,7 +26,7 @@
           </div>
           <div class="row">
             <div class="label col-5">负责区域:</div>
-            <div class="info col-5">暂无信息</div>
+            <div class="info col-5">{{dealer.region || '--'}}</div>
           </div>
         </div>
       </div>

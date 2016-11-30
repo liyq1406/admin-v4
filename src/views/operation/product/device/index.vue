@@ -217,9 +217,9 @@ export default {
       // }, {
       //   label: this.$t('operation.product.device.detail.secondary.warranty'),
       //   link: { path: `${deviceDetailRoot}/warranty` }
-      // }, {
-      //   label: this.$t('operation.product.device.detail.secondary.dealers'),
-      //   link: { path: `${deviceDetailRoot}/dealers` }
+      }, {
+        label: this.$t('operation.product.device.detail.secondary.dealers'),
+        link: { path: `${deviceDetailRoot}/dealers` }
       }]
     }
   },
