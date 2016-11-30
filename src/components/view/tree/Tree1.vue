@@ -7,7 +7,7 @@
       :class="{'selected': list.treeIndex === selectedTreeIndex}" :style="computedListStyle(list)" v-show="list.show">
         <div class="tree-content">
           <i :class="computedIconClass(list)" @click.stop="onChangeShowHide(list)"></i>
-          <span @click.stop="selectedTreeIndex = list.treeIndex">{{list.label}}</span>
+          <span class="tree-content-label" @click.stop="selectedTreeIndex = list.treeIndex">{{list.label}}</span>
           <!-- <input type="text" class="edit-input" v-show="editing && list.treeIndex === selectedTreeIndex"> -->
           <div
           class="line"
@@ -291,7 +291,8 @@
 
   .x-tree-1
     width 100%
-    height auto
+    height 100%
+    overflow auto
     position relative
     .list
       height 32px
@@ -300,6 +301,8 @@
         position relative
         padding-left 20px
         box-sizing border-box
+        .tree-content-label
+          white-space nowrap
         span,i
           cursor pointer
         .edit-input

@@ -43,7 +43,7 @@
   import formatDate from 'filters/format-date'
 
   export default {
-    name: 'DealerList',
+    name: 'MajorClientsList',
 
     mixins: [],
 
@@ -94,7 +94,7 @@
             title: '所属组织'
           },
           {
-            key: 'level',
+            key: 'levelText',
             title: '组织级别'
           },
           {
@@ -130,12 +130,25 @@
             contacter: item.contacter || '-',
             contact_way: item.contact_way || '-',
             create_time: formatDate(item.create_time),
-            level: this.computedLevelText(item.level),
+            levelText: this.computedLevelText(this.organizationLevels[item.organization]),
             prototype: item
           })
         })
         return result
       },
+
+      // 组织等级列表
+      organizationLevels () {
+        var result = {
+          '0': 1
+        }
+        this.organizations.forEach((item) => {
+          result[item.id] = item.level
+        })
+        return result
+      },
+
+      // 分页信息
       page () {
         return {
           total: this.total,
@@ -192,8 +205,7 @@
         this.userList = []
         api.heavyBuyer.getOrganizationUsers(this.$route.params.id, this.queryCondition).then((res) => {
           if (res.status === 200 && res.data.list && res.data.list.length) {
-            var lists = this.resetLevel(res.data.list)
-            this.userList = lists
+            this.userList = res.data.list
           }
         }).catch((res) => {
           this.handleError(res)
@@ -228,7 +240,9 @@
       getOrganization () {
         api.heavyBuyer.getOrganizationList(this.$route.params.id, {}).then((res) => {
           if (res.status === 200) {
-            this.organizations = res.data.list
+            var organizations = this.resetLevel(res.data.list)
+            // var organizations = res.data.list
+            this.organizations = organizations
           }
         }).catch((res) => {
           this.handleError(res)
@@ -254,6 +268,7 @@
       },
 
       computedLevelText (level) {
+        if (!level) return '未知'
         var result = ''
         const TEXTS = '一二三四五六七八九十'
         result = TEXTS.split('')[level - 1] + '级组织' || '十级以上'
@@ -264,15 +279,16 @@
        * 算出等级
        */
       resetLevel (lists) {
+        console.log('----------')
         if (!lists.length) return lists
         var result = _.clone(lists)
 
         var noLevelList = lists.filter((item) => !item.level)
         if (!noLevelList.length) return result
-
+        console.log(JSON.stringify(noLevelList))
         var gain = false
         noLevelList.forEach((item) => {
-          var parentId = item.organization
+          var parentId = item.parent
           var parent = {}
           if (parentId && parentId - 0 !== 0) {
             result.forEach((item2) => {
@@ -286,7 +302,7 @@
             gain = true
           }
           if (parentId - 0 === 0) {
-            item.level = 1
+            item.level = 2
             gain = true
           }
         })

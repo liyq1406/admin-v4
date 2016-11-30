@@ -773,16 +773,19 @@
       position absolute
       left 0
       top 0
-      overflow auto
+      overflow hidden
       box-sizing border-box
+      padding-top 32px
       border-right 1px solid default-border-color
       .tree-container
         width 100%
-        height auto
+        height 100%
         box-sizing border-box
         padding 10px
       .btn-group-box
         font-size 0
+        position absolute
+        top 0
         .btn
           font-size 13px
           border-top 0
