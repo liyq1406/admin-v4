@@ -18,11 +18,13 @@
                     <label class="form-control col-5 organization-label">帐号:</label>
                     <div class="controls col-19">
                       <div v-placeholder="$t('operation.dealer.placeholders.account')" class="input-text-wrap">
-                        <input v-model="model.username" name="model.username" v-validate:username="{required: true, format: 'account'}" lazy class="input-text"/>
+                        <input v-model="model.username" name="model.username" v-validate:username="{required: true, format: 'account', minlength: 6, maxlength: 32}" lazy class="input-text"/>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.username.touched && $validation.username.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
                         <span v-if="$validation.username.modified && $validation.username.format">{{ $t('operation.dealer.placeholders.account') }}</span>
+                        <span v-if="$validation.username.modified && $validation.username.minlength">{{ $t('common.validation.minlength', ['账号', 6]) }}</span>
+                        <span v-if="$validation.username.modified && $validation.username.maxlength">{{ $t('common.validation.maxlength', ['账号', 32]) }}</span>
                       </div>
                     </div>
                   </div>
