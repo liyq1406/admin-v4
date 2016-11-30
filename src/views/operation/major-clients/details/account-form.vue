@@ -29,7 +29,7 @@
                   <div class="form-row row mt20">
                     <label class="form-control col-5 organization-label">登录密码:</label>
                     <div class="controls col-19" v-if="type === 'add'">
-                      <div v-placeholder="'密码长度6-16位, 包含数字和大小写字母'" class="input-text-wrap">
+                      <div v-placeholder="'请输入6-16位字符密码'" class="input-text-wrap">
                         <input v-model="model.password" type="text" lazy name="model.password" v-validate:password="{required: true, minlength: 6, maxlength: 16}" class="input-text"/>
                       </div>
                       <div class="form-tips form-tips-error">
