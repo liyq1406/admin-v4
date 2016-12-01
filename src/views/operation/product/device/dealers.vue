@@ -109,7 +109,6 @@ export default {
 
       // this.currDevice是从 store 取的值，这里要等它值取回来了才作下一步操作
       if (isEmpty(this.currDevice) || !this.currDevice.dealer_scope) {
-        this.loadingData = false
         return
       }
 
@@ -117,6 +116,7 @@ export default {
       let codes = this.currDevice.dealer_scope.split(DEALER_SCOPE_SEPERATOR)
 
       // 获取经销商
+      this.loadingData = true
       api.dealer.get(codes[codes.length - 1]).then((res) => {
         this.loadingData = false
         if (res.status === 200) {
