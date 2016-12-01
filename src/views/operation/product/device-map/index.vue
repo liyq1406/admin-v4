@@ -53,7 +53,7 @@
     </div>
 
     <!-- 演示地图 -->
-    <demo-map :show="showDemoMap" @dismiss="onDemoMapDismiss"></demo-map>
+    <demo-map v-if="showDemoMap" :show="showDemoMap" @dismiss="onDemoMapDismiss"></demo-map>
   </div>
 </template>
 
@@ -114,7 +114,7 @@ export default {
       geographies: [],
       infoMsg: '',
       loadingText: '',
-      showDemoMap: true
+      showDemoMap: false
     }
   },
 

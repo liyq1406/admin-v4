@@ -6,57 +6,57 @@
 export default {
   // 概览
   overview: {
-    'helpdesk': '用户反馈',
-    'product': '产品',
-    'trend': '趋势',
-    'distribution': '分布',
-    'title': '标题',
-    'unhandle': '未处理',
-    'handled': '已处理',
-    'all': '全部',
-    'feedbackCount': '反馈数',
-    'pendingHandle': '待处理',
-    'add7': '7天新增',
-    'add30': '30天新增',
-    'count': '数量'
+    'helpdesk': 'Feedback',
+    'product': 'Product',
+    'trend': 'Trend',
+    'distribution': 'Distribution',
+    'title': 'Title',
+    'unhandle': 'Unprocess',
+    'handled': 'Processed',
+    'all': 'All',
+    'feedbackCount': 'Count',
+    'pendingHandle': 'Pending',
+    'add7': '7 Days',
+    'add30': '30 Days',
+    'count': 'Count'
   },
   // 反馈列表
   issues: {
-    'helpdeskList': '反馈列表',
-    'show': '显示',
-    'noClassification': '暂无分类',
-    'noData': '暂无数据',
-    'allProblem': '全部问题',
-    'unhandle': '未处理',
-    'handled': '已处理',
-    'all': '全部',
-    'helpdeskMessage': '反馈信息',
-    'customerServiceReply': '客服回复',
-    'canNotReply': '暂时无法回复',
+    'helpdeskList': 'Feedback List',
+    'show': 'Show',
+    'noClassification': 'Uncategorized',
+    'noData': 'No Data',
+    'allProblem': 'All',
+    'unhandle': 'Unprocess',
+    'handled': 'Processed',
+    'all': 'All',
+    'helpdeskMessage': 'Message',
+    'customerServiceReply': 'Reply',
+    'canNotReply': 'Unable To Replay',
     'placeHolder': {
-      'replyContent': '请填写回复内容'
+      'replyContent': 'Please fill the reply content'
     },
-    'nickname': '昵称',
-    'submit_time': '提交时间',
-    'online_time': '累计在线时长',
-    'number': '序列号',
-    'type': '型号',
-    'device_message': '设备信息',
-    'system_version': '系统版本',
-    'language': '语言',
-    'resolution': '分辨率',
-    'user_message': '用户信息',
-    'app_message': 'APP信息',
-    'customer_service': '客服'
+    'nickname': 'Nickname',
+    'submit_time': 'Submit time',
+    'online_time': 'Online time',
+    'number': 'Number.',
+    'type': 'Type',
+    'device_message': 'Device Infomation',
+    'system_version': 'OS Version',
+    'language': 'Language',
+    'resolution': 'Resolution',
+    'user_message': 'User Infomation',
+    'app_message': 'App Message',
+    'customer_service': 'Customer Service'
   },
   // 设置页面
   setting: {
-    'set': '设置',
-    'tips': '提示：管理用户反馈的问题类别。备注：每行设定一个问题类型，输入框为空时即默认为全部问题类型。'
+    'set': 'Settings',
+    'tips': 'Tips：Manage the categories for Feedback. Note: Each line to set a problem categorie, the input box is empty which use all the problem categories.'
   },
 
   forbidden: {
-    'helpdesk': '用户反馈',
-    'noPermit': '未获得使用该插件的权限'
+    'helpdesk': 'Feedback',
+    'noPermit': 'Permission to use the plug-in is not available'
   }
 }

@@ -1,16 +1,31 @@
 <template>
-  <div v-show="show" class="demo-map" transition="demo-map">
+  <div class="demo-map" transition="demo-map">
     <chart :options="mapOptions" :loading="loadingData" type="bmap" height="100%"></chart>
     <div class="demo-map-sidebar">
       <div class="sidebar-mask"></div>
-      <div class="demo-map-cities">
-        <ul>
-          <li>
-            <div class="num">1</div>
-            <div class="name">北京</div>
-            <div class="percentage"></div>
-          </li>
-        </ul>
+      <div class="sidebar-tab">
+        <div class="sidebar-tab__item active">设备总量城市TOP10</div>
+        <div class="sidebar-tab__item">详细地理位置</div>
+      </div>
+      <div class="demo-map-cities-wrap">
+        <div class="demo-map-cities">
+          <ul>
+            <li class="top10" v-for="n in 50">
+              <div class="num"><span>1</span></div>
+              <div class="name">北京</div>
+              <div class="percentage">
+                <span class="progress" style="width: 80%"></span>
+              </div>
+            </li>
+            <li>
+              <div class="num"><span>2</span></div>
+              <div class="name">广州</div>
+              <div class="percentage">
+                <span class="progress" style="width: 30%"></span>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <button class="btn btn-sm btn-dismiss" @click.prevent.stop="dismiss"><i class="fa fa-compress"></i></button>
@@ -54,7 +69,7 @@ export default {
           }
         },
         bmap: {
-          center: [114.114129, 37.550339],
+          center: [115.114129, 37.550339],
           zoom: 5,
           roam: true,
           mapStyle: {
@@ -239,14 +254,6 @@ export default {
       this.geoCoordMap = geoCoordMap
     })
     this.getCityData()
-
-    this.intervalId = setInterval(() => {
-      this.getCityData()
-    }, 60000)
-  },
-
-  destroyed () {
-    clearInterval(this.intervalId)
   },
 
   methods: {
@@ -368,8 +375,42 @@ export default {
 
 .demo-map-sidebar
   absolute right top
-  size 280px 100%
+  size 320px 100%
   border-left 1px solid #1D1E1F
+  color #AEB6BC
+
+  .sidebar-tab
+    position relative
+    height 44px
+    clearfix()
+    z-index 1
+
+    .sidebar-tab__item
+      float left
+      width 160px
+      text-align center
+      font-size 14px
+      background #2B333B
+      height 44px
+      line-height 40px
+      border-left 1px solid #1D1E1F
+      border-right 1px solid #1D1E1F
+      border-top 3px solid #2B333B
+      box-sizing border-box
+
+      & + .sidebar-tab__item
+        border-left none
+
+      &:first-child
+        border-left none
+
+      &:last-child
+        border-right none
+
+      &.active
+        padding-top 4px
+        border-top-color #FFCE5B
+        background transparent
 
   .sidebar-mask
     absolute left top
@@ -377,16 +418,65 @@ export default {
     background #21262D
     opacity 0.7
 
-.demo-map-cities
-  pading 0 20px
-  absolute left top 30px right bottom
-  box-sizing border-box
+.demo-map-cities-wrap
+  absolute left top 50px right bottom 50px
+  overflow hidden
   z-index 1
-  color #FFF
+
+.demo-map-cities
+  size 350px 100%
+  overflow-y auto
+
+  ul
+    width 320px
+    padding 0 20px
+    box-sizing border-box
 
   li
     border-bottom 1px dashed #28333A
-    padding 10px 0
+    padding 15px 0
+    clearfix()
+
+    .num
+    .name
+    .percentage
+      float left
+
+    .num
+      width 40px
+
+      span
+        height 20px
+        display inline-block
+        padding 0 5px
+        color #FFF
+        background #737980
+
+    .name
+      size 90px 20px
+      line-height 20px
+
+    .percentage
+      size 150px 20px
+
+      .progress
+        display inline-block
+        height 5px
+        border-radius 0 3px 3px 0
+        background #FFCE5B
+        position relative
+
+        &:after
+          absolute left -11px top -3px
+          content ''
+          size 11px
+          border-radius 6px
+          background #FFCE5B
+
+  .top10
+    .num
+      span
+        background #E8AD37
 
 .anchorBL
   display none !important
