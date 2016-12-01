@@ -345,7 +345,9 @@ export default {
     },
     // 获取配置信息
     getConfig () {
-      api.heavyBuyer.getConfig(this.$route.params.id).then((res) => {
+      console.log(this.corp.id)
+      api.heavyBuyer.getConfig(this.$route.params.id, this.corp.id).then((res) => {
+        this.model = res.data
         if (typeof res.data.is_enable === 'boolean') {
           this.model.is_enable = res.data.is_enable
         }
@@ -353,7 +355,7 @@ export default {
         let origin = CUSTOM_ORIGIN || window.location.origin
         this.model.domain = `${origin}/#!/heavybuyer/${this.corp.id}/${this.$route.params.id}`
         if (this.model.logo_url) {
-          this.images[0] = this.model.logo_url
+          this.images.$set(0, this.model.logo_url)
         }
         // 处理产品配置
         res.data.product.forEach((product) => {

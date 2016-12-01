@@ -88,16 +88,14 @@
     route: {
       canActivate (transition) {
         let userRole = window.localStorage.getItem('userRole')
-
         if (userRole === 'heavy-buyer') {
           let heavyBuyerId = window.localStorage.getItem('heavyBuyerId')
+          let corpId = window.localStorage.getItem('corpId')
           // console.log(transition)
-          transition.redirect(`/heavy-buyer-login/${heavyBuyerId}`)
+          transition.redirect(`/heavy-buyer-login/${corpId}/${heavyBuyerId}`)
         } else if (userRole === 'dealer') {
           let dealerId = window.localStorage.getItem('dealerId')
           let corpId = window.localStorage.getItem('corpId')
-          console.log(corpId)
-          console.log('1111')
           transition.redirect(`/dealer/${corpId}/${dealerId}`)
         }
 

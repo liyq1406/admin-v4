@@ -19,7 +19,7 @@
       <!-- DEMO环境成员默认为已认证 -->
       <span class="user-name" v-if="isDemo"><i class="badge badge-authorized">{{ $t('layout.levels.authorized') }}</i>{{ currentMember.name }}</span>
       <!-- 正式环境成员认证状态动态读取 -->
-      <span class="user-name" v-else><span v-if="config">经销商</span><span v-else>{{ currentMember.name }} </span><i class="badge" :class="{'badge-authorized': corp.status===1, 'badge-vip': corp.status===2}" v-show="corp.status>=0">{{ levelLabel }}</i></span>
+      <span class="user-name" v-else><span v-if="config">经销商</span><span v-if="heavyConfig">大客户</span><span v-if="!config && !heavyConfig">{{ currentMember.name }} </span><i class="badge" :class="{'badge-authorized': corp.status===1, 'badge-vip': corp.status===2}" v-show="corp.status>=0">{{ levelLabel }}</i></span>
       <i class="arrow-down"></i>
       <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" v-show="isShowUserNav" class="sec-nav">
         <div class="user-info">
@@ -112,7 +112,8 @@ export default {
     return {
       isDemo: IS_DEMO,
       isShowUserNav: false,
-      config: window.localStorage.getItem('dealerConfig')
+      config: window.localStorage.getItem('dealerConfig'),
+      heavyConfig: window.localStorage.getItem('heavyBuyerConfig')
     }
   },
 
@@ -127,13 +128,20 @@ export default {
     },
     // 经销商独立配置信息
     configInfo () {
-      return JSON.parse(this.config)
+      // 经销商配置
+      if (this.userRole === 'dealer') {
+        return JSON.parse(this.config)
+      } else if (this.userRole === 'heavy-buyer') {
+        // 大客户配置
+        return JSON.parse(this.heavyConfig)
+      }
     },
     logoStyle () {
       var result = {}
       if (this.userRole === 'heavy-buyer') {
         result.backgroundColor = '#FFF'
-        result.backgroundImage = 'url(/static/images/topband_logo.png)'
+        // result.backgroundImage = 'url(/static/images/topband_logo.png)'
+        result.backgroundImage = 'url(' + this.configInfo.logo_url + ')'
       } else if (this.userRole === 'dealer') {
         result.backgroundImage = 'url(' + this.configInfo.logo_url + ')'
       }
@@ -234,7 +242,7 @@ export default {
       }
       // window.localStorage.clear()
       window.localStorage.removeItem('memberId')
-      if (userRole !== 'dealer') {
+      if (userRole === 'member') {
         window.localStorage.removeItem('corpId')
       }
       window.localStorage.removeItem('accessToken')

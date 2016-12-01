@@ -7,7 +7,7 @@ export default {
    */
   auth (params) {
     return http.post(
-      `${API_SERVER.heavyBuyer}/v2/heavy_buyer_auth`, params
+      `${API_SERVER.default}/v2/heavy_buyer_auth`, params
     )
   },
 
@@ -136,15 +136,6 @@ export default {
   },
 
   /**
-   * 获取大客户配置
-   */
-  getConfig (heavyBuyerId) {
-    return http.get(
-      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/entry_config`
-    )
-  },
-
-  /**
    * 设置大客户配置
    */
   setConfig (heavyBuyerId, params) {
@@ -159,6 +150,21 @@ export default {
   grantDevices (heavyBuyerId, productId, params) {
     return http.post(
       `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/grant_device?product_id=${productId}`, params
+    )
+  },
+  /**
+   * login获取大客户入口配置
+   * @param  {String}
+   * @return {Promise}
+   */
+  getConfig (heavyBuyerId, corpId) {
+    return http.get(
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/entry_config?corp_id=${corpId}`, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+          // 'Access-Token': '1111'
+        }
+      }
     )
   }
 }
