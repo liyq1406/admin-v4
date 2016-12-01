@@ -11,6 +11,7 @@ import snapshot from './snapshot'
 import settings from './settings'
 import dealer from './dealer'
 import warranty from './warranty'
+import helpdesk from './helpdesk'
 
 export default {
   product_management: '产品管理',
@@ -22,5 +23,6 @@ export default {
   snapshot,
   settings,
   dealer,
-  warranty
+  warranty,
+  helpdesk
 }
