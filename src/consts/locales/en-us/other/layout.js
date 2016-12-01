@@ -149,7 +149,7 @@ export default {
             overview: 'Overview',
             extended_warranties: 'Failure',
             repair: 'Repair List',
-            accounts: 'Net Management',
+            accounts: 'Branches',
             heat: 'Thermal Distribution',
             settings: 'Settings'
           }

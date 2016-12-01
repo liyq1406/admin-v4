@@ -31,5 +31,9 @@ export default {
     page: 'page.',
     item_range: 'Showing {start}-{end} of ',
     total_items: '{total} rows'
+  },
+
+  image_uploader: {
+    label: 'Select Photo'
   }
 }

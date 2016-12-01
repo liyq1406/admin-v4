@@ -1,13 +1,13 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>网点管理</h2>
+      <h2>{{ $t('operation.warranty.branch.main_title') }}</h2>
     </div>
     <div class="panel">
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>添加网点</button>
+            <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>{{ $t('operation.warranty.branch.add') }}</button>
           </div>
         </div>
         <div class="data-table with-loading">
@@ -24,19 +24,19 @@
             </div>
             <div class="filter-group">
               <div class="filter-group-item">
-                <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" @province-change="getBranchList" @city-change="getBranchList" @district-change="getBranchList" label="所在地区：" select-size="small"></area-select>
+                <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" @province-change="getBranchList" @city-change="getBranchList" @district-change="getBranchList" :label="$t('operation.warranty.branch.fields.location')" select-size="small"></area-select>
               </div>
             </div>
           </div>
           <table class="table table-stripe table-bordered wrongcodetable">
             <thead>
               <tr>
-                <th>序号</th>
-                <th>网点名称</th>
-                <th>负责人</th>
-                <th>联系方式</th>
-                <th>创建日期</th>
-                <th>操作</th>
+                <th>{{ $t('operation.warranty.branch.fields.order') }}</th>
+                <th>{{ $t('operation.warranty.branch.fields.name') }}</th>
+                <th>{{ $t('operation.warranty.branch.fields.director') }}</th>
+                <th>{{ $t('operation.warranty.branch.fields.phone') }}</th>
+                <th>{{ $t('operation.warranty.branch.fields.create_time') }}</th>
+                <th>{{ $t('common.action') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -48,7 +48,7 @@
                   <td>{{ account.phone }}</td>
                   <td>{{ account.create_time | formatDate}}</td>
                   <td>
-                    <a v-link="{path: '/operation/plugins/warranty/' + $route.params.app_id + '/accounts/'+account._id}" class="hl-red">查看详情</a>
+                    <a v-link="{path: '/operation/plugins/warranty/' + $route.params.app_id + '/accounts/'+account._id}" class="hl-red">{{ $t('operation.warranty.branch.details') }}</a>
                   </td>
                 </tr>
               </template>
@@ -64,70 +64,70 @@
 
         <!-- 添加增加网点浮层-->
         <modal :show.sync="showAddModal" width="600px">
-          <h3 slot="header">添加网点</h3>
+          <h3 slot="header">{{ $t('operation.warranty.branch.add') }}</h3>
           <div slot="body" class="form">
             <validator name="addValidation">
               <form autocomplete="off" novalidate @submit.prevent="onAddSubmit">
                 <div class="form-row row">
-                  <label class="form-control col-6">网点:</label>
+                  <label class="form-control col-6">{{ $t('operation.warranty.branch.fields.name') }}:</label>
                   <div class="controls col-18">
                     <div class="input-text-wrap">
                       <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$addValidation.name.touched && $addValidation.name.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.name')}) }}</span>
+                      <span v-if="$addValidation.name.touched && $addValidation.name.required">{{ $t('common.validation.required', {field: $t('operation.warranty.branch.fields.name')}) }}</span>
                     </div>
                   </div>
                 </div>
                 <div class="form-row row">
-                  <label class="form-control col-6">负责人:</label>
+                  <label class="form-control col-6">{{ $t('operation.warranty.branch.fields.director') }}:</label>
                   <div class="controls col-18">
                     <div class="input-text-wrap">
                       <input v-model="addModel.director" type="text" name="addModel.director" v-validate:director="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$addValidation.director.touched && $addValidation.director.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.director')}) }}</span>
+                      <span v-if="$addValidation.director.touched && $addValidation.director.required">{{ $t('common.validation.required', {field: $t('operation.warranty.branch.fields.director')}) }}</span>
                     </div>
                   </div>
                 </div>
                 <div class="form-row row">
-                  <label class="form-control col-6">联系号码:</label>
+                  <label class="form-control col-6">{{ $t('operation.warranty.branch.fields.phone') }}:</label>
                   <div class="controls col-18">
                     <div class="input-text-wrap">
                       <input v-model="addModel.phone" type="text" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$addValidation.phone.touched && $addValidation.phone.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.phone')}) }}</span>
+                      <span v-if="$addValidation.phone.touched && $addValidation.phone.required">{{ $t('common.validation.required', {field: $t('operation.warranty.branch.fields.phone')}) }}</span>
                       <span v-if="$addValidation.phone.modified && $addValidation.phone.format">{{ $t('common.validation.format', {field: $t('auth.fields.phone')}) }}</span>
                     </div>
                   </div>
                 </div>
                 <div class="form-row row">
-                  <label class="form-control col-6">邮箱地址:</label>
+                  <label class="form-control col-6">{{ $t('operation.warranty.branch.fields.email') }}:</label>
                   <div class="controls col-18">
                     <div class="input-text-wrap">
                       <input v-model="addModel.email" type="email" name="addModel.email" v-validate:email="{required: true, format: 'email'}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$addValidation.email.touched && $addValidation.email.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.email')}) }}</span>
+                      <span v-if="$addValidation.email.touched && $addValidation.email.required">{{ $t('common.validation.required', {field: $t('operation.warranty.branch.fields.email')}) }}</span>
                       <span v-if="$addValidation.email.modified && $addValidation.email.format">{{ $t('common.validation.format', {field: $t('auth.fields.email')}) }}</span>
                     </div>
                   </div>
                 </div>
                 <div class="form-row row">
-                  <label class="form-control col-6">所在地区:</label>
+                  <label class="form-control col-6">{{ $t('operation.warranty.branch.fields.location') }}:</label>
                   <div class="controls col-18">
                     <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict"></area-select>
                   </div>
                 </div>
                 <div class="form-row row">
-                  <label class="form-control col-6">详细地址:</label>
+                  <label class="form-control col-6">{{ $t('operation.warranty.branch.fields.address') }}:</label>
                   <div class="controls col-18">
                     <div class="input-text-wrap">
                       <input v-model="addModel.address" type="text" name="addModel.address" v-validate:address="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$addValidation.address.touched && $addValidation.address.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.address')}) }}</span>
+                      <span v-if="$addValidation.address.touched && $addValidation.address.required">{{ $t('common.validation.required', {field: $t('operation.warranty.branch.fields.address')}) }}</span>
                     </div>
                   </div>
                 </div>

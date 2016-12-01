@@ -1,13 +1,13 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>故障事件</h2>
+      <h2>{{ $t('operation.warranty.failure.main_title') }}</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
           <x-select :label="product.name" width='110px' size="small">
-            <span slot="label">产品</span>
+            <span slot="label">{{ $t('operation.warranty.product') }}</span>
             <select v-model="product">
               <option v-for="opt in productOptions" :value="opt">{{ opt.name }}</option>
             </select>
@@ -41,14 +41,14 @@
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
-                <x-select label="全部" width='110px' size="small">
-                  <span slot="label">显示</span>
+                <x-select :label="$t('common.all')" width='110px' size="small">
+                  <span slot="label">{{ $t('common.display') }}</span>
                 </x-select>
               </div>
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="'输入搜索内容'" @search-activate="" @search-deactivate="" @search="" @press-enter="">
+                <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="$t('common.placeholder.search')" @search-activate="" @search-deactivate="" @search="" @press-enter="">
                   <button slot="search-button" @click="" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -86,7 +86,7 @@
         product: {},
         name: '',
         status: {
-          label: '全部',
+          label: this.$t('common.all'),
           value: 0
         },
         key: '',
@@ -95,13 +95,13 @@
         curDistrict: {},
         workOrders: [],
         statusOptions: [{
-          label: '全部',
+          label: this.$t('common.all'),
           value: 0
         }, {
-          label: '未到期',
+          label: this.$t('operation.warranty.failure.unexpired'),
           value: 1
         }, {
-          label: '已到期',
+          label: this.$t('operation.warranty.failure.expired'),
           value: 2}],
 
         loadingData: false,
@@ -109,46 +109,31 @@
         countPerPage: config.COUNT_PER_PAGE,
         total: 0,
         trends: null,
-        period: 7,
-        periods: [
-          {
-            value: 1,
-            label: '24h'
-          },
-          {
-            value: 7,
-            label: '7天'
-          },
-          {
-            value: 30,
-            label: '30天'
-          }
-        ],
         headers: [
           {
             key: 'device_id',
-            title: '设备ID'
+            title: this.$t('operation.warranty.failure.columns.device_id')
           },
           {
             key: 'event_id',
-            title: '事件ID'
+            title: this.$t('operation.warranty.failure.columns.event_id')
           },
           {
             key: 'description',
-            title: '描述'
+            title: this.$t('operation.warranty.failure.columns.description')
           },
           {
             key: 'tag',
-            title: '标签'
+            title: this.$t('operation.warranty.failure.columns.tag')
           },
           {
             key: 'report_time',
-            title: '上报时间',
+            title: this.$t('operation.warranty.failure.columns.report_time'),
             sortType: -1
           },
           {
             key: 'state',
-            title: '状态',
+            title: this.$t('operation.warranty.failure.columns.state'),
             class: 'tac'
           }
         ],
@@ -156,21 +141,21 @@
           rest: {
             total: 0,
             change: 0,
-            title: '事件总数'
+            title: this.$t('operation.warranty.failure.summary.all')
           },
           unfinished: {
             total: 0,
-            title: '待处理数'
+            title: this.$t('operation.warranty.failure.summary.unfinished')
           },
           today: {
             total: 0,
             change: 0,
-            title: '今日事件'
+            title: this.$t('operation.warranty.failure.summary.today')
           },
           week: {
             total: 0,
             change: 0,
-            title: '近7天事件数'
+            title: this.$t('operation.warranty.failure.summary.week')
           }
         }
       }
@@ -208,11 +193,11 @@
         function resetState (state) {
           var result = [
             {
-              text: '待处理',
+              text: this.$t('operation.warranty.failure.pending'),
               color: '#6699CC'
             },
             {
-              text: '已延保',
+              text: this.$t('operation.warranty.failure.extended_warranty'),
               color: '#006633'
             }
           ]
@@ -263,7 +248,8 @@
 
     methods: {
       goDetails (table) {
-        this.$route.router.go(this.$route.path + '/' + table.prototype.id)
+        // 暂时隐藏
+        // this.$route.router.go(this.$route.path + '/' + table.prototype.id)
       },
       getWarrantyList (querying) {
         // token 不存在，无权限访问

@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>修改工单</h2>
+      <h2>{{ $t('operation.warranty.repair_form.edit_title') }}</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel">
@@ -11,103 +11,103 @@
             <validator name="validation">
               <form autocomplete="off" @submit.prevent="onEdit">
                 <div class="form-row row">
-                  <label class="form-control col-5 alert-label">设备SN:</label>
+                  <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.fields.sn') }}:</label>
                   <div class="controls col-19">
                     <div class="input-text-wrap">
-                      <input v-model="editModal.product_sn" type="text" name="product_sn" placeholder="请输入设备序列号" v-validate:productsn="{required: true, minlength: 2, maxlength: 32}" lazy required class="input-text"/>
+                      <input v-model="editModal.product_sn" type="text" name="product_sn" :placeholder="$t('operation.warranty.repair_form.placeholders.sn')" v-validate:productsn="{required: true, minlength: 2, maxlength: 32}" lazy required class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$validation.productsn.touched && $validation.productsn.required">请输入设备SN</span>
-                      <span v-if="$validation.productsn.touched && $validation.productsn.minlength">设备SN不能少于2位</span>
-                      <span v-if="$validation.productsn.touched && $validation.productsn.maxlength">设备SN不能大于32位</span>
+                      <span v-if="$validation.productsn.touched && $validation.productsn.required">{{ $t('common.validation.required', {field: $t('operation.warranty.repair_form.fields.sn')}) }}</span>
+                      <span v-if="$validation.productsn.touched && $validation.productsn.minlength">{{ $t('common.validation.minlength', [$t('operation.warranty.repair_form.fields.sn'), 2]) }}</span>
+                      <span v-if="$validation.productsn.touched && $validation.productsn.maxlength">{{ $t('common.validation.maxlength', [$t('operation.warranty.repair_form.fields.sn'), 32]) }}</span>
                     </div>
                   </div>
                 </div>
 
                 <div class="form-row row">
-                  <label class="form-control col-5 alert-label">选择产品:</label>
+                  <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.select_product') }}:</label>
                   <div class="controls col-19">
                     <x-select  v-if="products.length" :label="selectedProduct.name" :width="'120px'">
                       <select v-model="selectedProduct">
                         <option v-for="product in products" :value="product">{{ product.name }}</option>
                       </select>
                     </x-select>
-                    <div v-else class="non-tip">暂无产品，请先添加产品</div>
+                    <div v-else class="non-tip">{{ $t('operation.warranty.repair_form.no_product') }}</div>
                   </div>
                 </div>
 
                 <div class="form-row row">
-                  <label class="form-control col-5 alert-label">维修类型:</label>
+                  <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.fields.type') }}:</label>
                   <div class="controls col-19">
                     <x-select v-if="types.length" :label="selectedType" :width="'120px'">
                       <select v-model="selectedType">
                         <option v-for="type in types" :value="type">{{ type }}</option>
                       </select>
                     </x-select>
-                    <div v-else class="non-tip">暂无维修类型，请先添加标签</div>
+                    <div v-else class="non-tip">{{ $t('operation.warranty.repair_form.no_type') }}</div>
                   </div>
                 </div>
 
                 <div class="form-row row">
-                  <label class="form-control col-5 alert-label">维修内容:</label>
+                  <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.fields.instructions') }}:</label>
                   <div class="controls col-19">
                     <div class="input-text-wrap">
-                      <input v-length-tip="{max: 32, model:editModal.instructions }" v-model="editModal.instructions" placeholder="请输入维修内容" type="text" name="instructions" v-validate:instructions="{required: true, maxlength: 32}" lazy required class="input-text"/>
+                      <input v-length-tip="{max: 32, model:editModal.instructions }" v-model="editModal.instructions" :placeholder="$t('operation.warranty.repair_form.placeholders.instructions')" type="text" name="instructions" v-validate:instructions="{required: true, maxlength: 32}" lazy required class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$validation.instructions.touched && $validation.instructions.required">请输入维修内容</span>
-                      <span v-if="$validation.instructions.touched && $validation.instructions.maxlength">维修内容长度不能超过32位</span>
+                      <span v-if="$validation.instructions.touched && $validation.instructions.required">{{ $t('common.validation.required', {field: $t('operation.warranty.repair_form.fields.instructions')}) }}</span>
+                      <span v-if="$validation.instructions.touched && $validation.instructions.maxlength">{{ $t('common.validation.maxlength', [$t('operation.warranty.repair_form.fields.instructions'), 32]) }}</span>
                     </div>
                   </div>
                 </div>
 
                 <div class="form-row row">
-                  <label class="form-control col-5 alert-label">维修说明:</label>
+                  <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.fields.remark') }}:</label>
                   <div class="controls col-19">
                     <div class="input-text-wrap">
-                      <textarea v-length-tip="{max: 240, model:editModal.discription }" v-model="editModal.remark" type="text" placeholder="请输入维修说明" name="remark" v-validate:remark="{required: true, maxlength: 240}" lazy required class="input-text"></textarea>
+                      <textarea v-length-tip="{max: 240, model:editModal.discription }" v-model="editModal.remark" type="text" :placeholder="$t('operation.warranty.repair_form.placeholders.remark')" name="remark" v-validate:remark="{required: true, maxlength: 240}" lazy required class="input-text"></textarea>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$validation.remark.touched && $validation.remark.required">维修说明必填</span>
-                      <span v-if="$validation.remark.touched && $validation.remark.maxlength">维修说明不能超过240长度</span>
+                      <span v-if="$validation.remark.touched && $validation.remark.required">{{ $t('common.validation.required', {field: $t('operation.warranty.repair_form.fields.remark')}) }}</span>
+                      <span v-if="$validation.remark.touched && $validation.remark.maxlength">{{ $t('common.validation.maxlength', [$t('operation.warranty.repair_form.fields.remark'), 240]) }}</span>
                     </div>
                   </div>
                 </div>
 
                 <div class="form-row row">
-                  <label class="form-control col-5 alert-label">维修照片:</label>
+                  <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.fields.image') }}:</label>
                   <div class="controls col-19">
                     <image-uploader :images="images"></image-uploader>
                   </div>
                 </div>
 
                 <div class="form-row row">
-                  <label class="form-control col-5 alert-label">网点选择:</label>
+                  <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.branch_select') }}:</label>
                   <div class="controls col-19">
                     <x-select v-if="branchs.length" :label="selectedBranch.name" :width="'120px'">
                       <select v-model="selectedBranch" @change="getBranchStaffsList">
                         <option v-for="branch in branchs" :value="branch">{{ branch.name }}</option>
                       </select>
                     </x-select>
-                    <div v-else class="non-tip">暂无网点，请先添加网点</div>
+                    <div v-else class="non-tip">{{ $t('operation.warranty.repair_form.no_branch') }}</div>
                   </div>
                 </div>
 
                 <div class="form-row row">
-                  <label class="form-control col-5 alert-label">处理人员:</label>
+                  <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.staff') }}:</label>
                   <div class="controls col-19">
                     <x-select v-if="branchStaffs.length" :label="selectedBranchStarff.name" :width="'120px'">
                       <select v-model="selectedBranchStarff">
                         <option v-for="staff in branchStaffs" :value="staff">{{ staff.name }}</option>
                       </select>
                     </x-select>
-                    <div v-else class="non-tip">暂无客服，请先添加客服</div>
+                    <div v-else class="non-tip">{{ $t('operation.warranty.repair_form.no_staff') }}</div>
                   </div>
                 </div>
 
                 <div class="form-actions mt20 border-top row">
                   <div class="col-offset-5 col-19">
-                    <button type="submit" :disabled="editing" :class="{'disabled':editing}"  class="btn btn-primary mt5 ml20 submit-btn" @click.prevent.stop="onEdit">提交</button>
+                    <button type="submit" :disabled="editing" :class="{'disabled':editing}"  class="btn btn-primary mt5 ml20 submit-btn" @click.prevent.stop="onEdit">{{ $t('common.ok') }}</button>
                     <!-- <button @click.prevent.stop="delRepair" :disabled="editing" :class="{'disabled':editing}"  class="btn btn-default mt5 ml20 submit-btn">删除</button> -->
                   </div>
                 </div>
@@ -169,10 +169,10 @@
         selectedProduct: {},
         addValidation: {},
         breadcrumbNav: [{
-          label: '全部',
+          label: this.$t('common.all'),
           link: `/operation/plugins/warranty/${this.$route.params.app_id}/work-orders/repair/${this.$route.params.id}`
         }, {
-          label: '添加工单'
+          label: this.$t('operation.warranty.repair_form.edit_title')
         }],
         editModal: {
           product_sn: '',
@@ -302,7 +302,7 @@
           return
         }
 
-        var result = window.confirm('确认删除该维修工单吗?')
+        var result = window.confirm(this.$t('operation.warranty.repair_form.del_confirm'))
         if (result === true) {
           this.editing = true
           api.warranty.delRepairDetailList(this.$route.params.app_id, this.$route.params.id).then((res) => {
