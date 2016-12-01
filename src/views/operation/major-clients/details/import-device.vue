@@ -14,7 +14,7 @@
                 <x-select width="100px" :label="selectDealer.label" size="small">
                   <label slot="label">选择客户</label>
                   <select v-model="selectDealer" @change="getProductDevices(true)">
-                    <option v-for="option in dealersOptions" :value="option">{{ option.label }}</option>
+                    <option v-for="option in majorClientsOptions" :value="option">{{ option.label }}</option>
                   </select>
                 </x-select>
               </div>
@@ -57,7 +57,7 @@
 <script>
   // import { pluginMixins } from '../mixins'
   import api from 'api'
-  import formatDate from 'filters/format-date'
+  // import formatDate from 'filters/format-date'
 
   export default {
     name: 'AddBroadcast',
@@ -88,7 +88,7 @@
           label: '无',
           id: 0
         },
-        dealers: [],
+        majorClients: [],
         queryTypeOptions: [
           { label: 'MAC', value: 'mac' },
           { label: '序列号', value: 'sn' }
@@ -129,9 +129,6 @@
         }, {
           key: 'phone',
           title: '手机号'
-        }, {
-          key: 'dealer',
-          title: '所属经销商'
         }]
       }
     },
@@ -153,33 +150,33 @@
       },
       markDealersOptions () {
         let res = []
-        if (this.dealers.length) {
-          this.dealers.forEach((item) => {
-            res.push({
-              label: item.name,
-              id: item.id,
-              dealer_code: item.dealer_code,
-              upper_dealer_code: item.upper_dealer_code
-            })
-          })
-        }
+        // if (this.majorClients.length) {
+        //   this.majorClients.forEach((item) => {
+        //     res.push({
+        //       label: item.name,
+        //       id: item.id,
+        //       dealer_code: item.dealer_code,
+        //       upper_dealer_code: item.upper_dealer_code
+        //     })
+        //   })
+        // }
         res.unshift({
           label: '无',
           id: 0
         })
         return res
       },
-      dealersOptions () {
+      majorClientsOptions () {
         let res = []
-        if (this.dealers.length) {
-          this.dealers.forEach((item) => {
-            res.push({
-              label: item.name,
-              id: item.id,
-              dealer_code: item.dealer_code
-            })
-          })
-        }
+        // if (this.majorClients.length) {
+        //   this.majorClients.forEach((item) => {
+        //     res.push({
+        //       label: item.name,
+        //       id: item.id,
+        //       dealer_code: item.dealer_code
+        //     })
+        //   })
+        // }
         res.unshift({
           label: '全部',
           id: 0
@@ -197,34 +194,24 @@
       rows () {
         let res = []
         this.devices.forEach((item) => {
-          let userInfo = _.find(this.users, (user) => {
-            return user.device_id === item.id
-          })
-          let dealerInfo = null
-          if (item.dealer_scope) {
-            let curDealer = item.dealer_scope.split(',').slice(-1)[0]
-            dealerInfo = _.find(this.dealers, (dealer) => {
-              return dealer.dealer_code === curDealer
-            })
-          }
           res.push({
-            id: item.id,
-            mac: item.mac,
-            active_date: formatDate(item.active_date),
-            sn: item.sn || '--',
-            mode: this.selectProduct.mode,
-            user: userInfo ? userInfo.nickname || '--' : '--',
-            phone: userInfo ? userInfo.phone || '--' : '--',
-            dealer: dealerInfo ? dealerInfo.name || '--' : '--',
-            origin: item,
-            userInfo: userInfo
+            // id: item.id,
+            // mac: item.mac,
+            // active_date: formatDate(item.active_date),
+            // sn: item.sn || '--',
+            // mode: this.selectProduct.mode,
+            // user: userInfo ? userInfo.nickname || '--' : '--',
+            // phone: userInfo ? userInfo.phone || '--' : '--',
+            // dealer: dealerInfo ? dealerInfo.name || '--' : '--',
+            // origin: item,
+            // userInfo: userInfo
           })
         })
         return res
       },
-      dealerQueryCondition () {
+      majorClientQueryCondition () {
         var condition = {
-          filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time'],
+          filter: ['id', 'name', 'industry', 'location', 'contacter', 'contact_way', 'device_sum', 'status', 'country', 'province', 'city', 'create_time'],
           limit: 1000
         }
         return condition
@@ -238,19 +225,23 @@
           query: {}
         }
 
-        if (this.selectDealer.id) {
-          condition.query.dealer_scope = { $like: this.selectDealer.dealer_code }
-        }
-
-        if (this.key.length > 0) {
-          this.currentPage = 1
-          condition.query[this.queryType.value] = { $like: this.key }
-        }
+        // if (this.selectDealer.id) {
+        //   condition.query.dealer_scope = { $like: this.selectDealer.dealer_code }
+        // }
+        //
+        // if (this.key.length > 0) {
+        //   this.currentPage = 1
+        //   condition.query[this.queryType.value] = { $like: this.key }
+        // }
         return condition
       }
     },
+    route: {
+      data () {
+        // this.getMajorClients()
+      }
+    },
     ready () {
-      this.getDealer()
     },
     watch: {
       selectProduct () {
@@ -259,72 +250,42 @@
     },
     methods: {
       updateInfo () {
-        if (!this.selectMarkDealer.id || !this.selectDevices.length) {
-          return
-        }
-        // 添加销售信息
-        this.addClientInfo()
+        // if (!this.selectMarkDealer.id || !this.selectDevices.length) {
+        //   return
+        // }
+        // // 添加销售信息
+        // this.addClientInfo()
       },
       addClientInfo () {
-        let length = this.selectDevices.length
-        let count = 0
-        // 添加销售记录
-        this.selectDevices.forEach((item) => {
-          let params = {
-            name: item.userInfo ? item.userInfo.name : '',
-            phone: item.userInfo ? item.userInfo.phone : '',
-            sn: item.origin.sn,
-            // sale_time: item.origin.active_date,
-            client_type: 'common_buyer',
-            product_mod: item.mode,
-            mac: item.origin.mac,
-            product_id: this.selectProduct.id,
-            device_id: item.origin.id
-          }
-          api.dealer.addClientInfo(this.selectMarkDealer.id, params).then((res) => {
-            count++
-            if (res.status === 200) {
-              // 更新成功
-            }
-            if (count === length) {
-              // 批量更新完毕
-              this.getProductDevices()
-              this.selectMarkDealer = {
-                label: '无',
-                id: 0
-              }
-            }
-          }).catch((res) => {
-            this.handleError(res)
-          })
-        })
+        console.log('添加设备')
       },
 
-      selectChange (table) {
-        if (table.length > 0) {
+      selectChange (row) {
+        if (row.length > 0) {
           this.showBatchBtn = true
         } else {
           this.showBatchBtn = false
         }
-        this.selectDevices = table
+        this.selectDevices = row
       },
-      // 获取经销商列表
-      getDealer (reset) {
+      // 获取大客户列表
+      getMajorClients (reset) {
         if (reset === true) {
           this.currentPage = 1
         }
         this.loadingData = true
-        // api.dealer.list(this.dealerQueryCondition).then((res) => {
-        //   if (res.status === 200 && res.data.list && res.data.list.length) {
-        //     this.dealers = res.data.list
-        //   } else {
-        //     this.dealers = []
-        //   }
-        //   this.loadingData = false
-        // }).catch((res) => {
-        //   this.handleError(res)
-        //   this.loadingData = false
-        // })
+
+        api.heavyBuyer.getHeavyBuyer(this.majorClientQueryCondition).then((res) => {
+          if (res.status === 200 && res.data.list && res.data.list.length) {
+            this.majorClients = res.data.list
+          } else {
+            this.majorClients = []
+          }
+          this.loadingData = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
       },
       // 切换搜索
       toggleSearching () {
@@ -344,6 +305,10 @@
         this.currentPage = number
         this.getProductDevices()
       },
+
+      /**
+       * 获取设备列表
+       */
       getProductDevices (reset) {
         if (!this.selectProduct.id) {
           return
@@ -351,62 +316,20 @@
         if (reset === true) {
           this.currentPage = 1
         }
-        this.loadingData = true
-        api.device.getList(this.selectProduct.id, this.queryCondition).then((res) => {
-          if (res.status === 200 && res.data.list && res.data.list.length) {
-            this.devices = res.data.list
-            this.total = res.data.count
-            this.loadingData = false
-            this.users = []
-            res.data.list.forEach((item) => {
-              // 获取每个设备的用户信息
-              this.getUsers(item)
-            })
-          } else {
-            this.devices = []
-          }
-          this.loadingData = false
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
-        })
-      },
-      // 获取用户
-      getUsers (device) {
-        this.loadingData = true
-        api.product.getUsers(this.selectProduct.id, device.id).then((res) => {
-          // 根据获取回来的id去获取用户详情
-          if (res.status && res.data.list && res.data.list.length) {
-            res.data.list.forEach((item) => {
-              if (item.role === 0) {
-                this.getUsersInfo(item.user_id, device.id)
-              }
-            })
-          }
-          this.loadingData = false
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
-        })
-      },
-      getUsersInfo (userId, deviceId) {
-        var params = {
-          filter: ['id', 'nickname', 'email', 'phone'],
-          query: {
-            'id': {'$in': [userId]}
-          }
-        }
-        api.user.list(params).then((res) => {
-          if (res.status && res.data.list && res.data.list.length) {
-            let info = res.data.list[0]
-            info.device_id = deviceId
-            this.users.push(info)
-          }
-          this.loadingData = false
-        }).catch((res) => {
-          this.loadingData = false
-          this.handleError(res)
-        })
+        // this.loadingData = true
+        // api.device.getAggregateDevices(this.selectProduct.id, this.queryCondition).then((res) => {
+        //   if (res.status === 200 && res.data.list && res.data.list.length) {
+        //     this.devices = res.data.list
+        //     this.total = res.data.count
+        //     this.loadingData = false
+        //   } else {
+        //     this.devices = []
+        //   }
+        //   this.loadingData = false
+        // }).catch((res) => {
+        //   this.handleError(res)
+        //   this.loadingData = false
+        // })
       }
     }
   }

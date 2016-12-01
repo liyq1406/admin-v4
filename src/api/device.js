@@ -214,7 +214,7 @@ export default {
   },
 
   /**
-   * 获取设备地理信息
+   * 获取设备聚合列表
    * @param  {String} productId 产品 ID
    * @param  {String} deviceId   设备 ID
    */
