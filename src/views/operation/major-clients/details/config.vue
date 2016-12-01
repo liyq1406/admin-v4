@@ -352,7 +352,7 @@ export default {
         }
         this.model.login_context = res.data.login_context
         let origin = CUSTOM_ORIGIN || window.location.origin
-        this.model.domain = `${origin}/#!/heavybuyer/${this.corp.id}/${this.$route.params.id}`
+        this.model.domain = `${origin}/#!/heavy-buyer-login/${this.corp.id}/${this.$route.params.id}`
         if (res.data.logo_url) {
           this.images.$set(0, res.data.logo_url)
         }
