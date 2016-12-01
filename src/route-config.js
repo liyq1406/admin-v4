@@ -1204,6 +1204,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 大客户-手动导入设备
+        'major-clients/:id/import-device': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/major-clients/details/import-device'))
+            }, 'admin')
+          }
+        },
 
         // 快照分析
         'snapshots': {

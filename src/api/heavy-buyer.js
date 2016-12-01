@@ -31,6 +31,9 @@ export default {
     )
   },
 
+  /**
+   * 编辑大客户
+   */
   editHeavyBuyer (id, params) {
     return http.put(
       `${API_SERVER.default}/v2/heavy_buyer/${id}`, params
@@ -44,12 +47,18 @@ export default {
     )
   },
 
+  /**
+   * 删除大客户
+   */
   delHeavyBuyer (id) {
     return http.del(
       `${API_SERVER.default}/v2/heavy_buyer/${id}`
     )
   },
 
+  /**
+   * 获取大客户列表
+   */
   getHeavyBuyer (params) {
     return http.post(
       `${API_SERVER.default}/v2/heavy_buyer_list`, params
@@ -125,14 +134,31 @@ export default {
       `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/user${userId}`
     )
   },
+
+  /**
+   * 获取大客户配置
+   */
   getConfig (heavyBuyerId) {
     return http.get(
       `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/entry_config`
     )
   },
+
+  /**
+   * 设置大客户配置
+   */
   setConfig (heavyBuyerId, params) {
     return http.post(
       `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/entry_config`, params
+    )
+  },
+
+  /**
+   * 批量授权大客户设备
+   */
+  grantDevices (heavyBuyerId, productId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/heavy_buyer/${heavyBuyerId}/grant_device?product_id=${productId}`, params
     )
   }
 }
