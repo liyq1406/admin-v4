@@ -74,13 +74,13 @@
             <p class="hl-gray"><i class="fa fa-exclamation-triangle hl-orange"></i> 仅限csv格式文件,每次只能上传一个产品设备,切勿传错产品</p>
           </div>
           <!-- 功能按钮 -->
-          <div class="form-row row mt30 bordered" >
+          <!-- <div class="form-row row mt30 bordered" >
             <label>
               <button class="btn btn-ghost btn-upload" @click.prevent="goSelectDeviceView">
                 <i class="fa fa-reply-all"></i> 选择列表设备
               </button>
             </label>
-          </div>
+          </div> -->
 
           <div class="form-actions">
             <button @click.prevent.stop="batchImport" :disabled="importing" :class="{'disabled':importing}" v-text="importing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
