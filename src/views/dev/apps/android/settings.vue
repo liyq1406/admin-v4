@@ -131,9 +131,9 @@
             api.plugin.remove(this.app.id).then((res) => {
               if (res.status === 200) {
                 this.$emit('update-curr-app')
-                // this.removePlugin(this.model)
-                // this.$route.router.go('/plugins/customize')
+                this.removePlugin(this.model)
               }
+              this.editing = false
             }).catch((res) => {
               this.handleError(res)
               this.editing = false

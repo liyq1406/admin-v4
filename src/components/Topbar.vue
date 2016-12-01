@@ -230,7 +230,7 @@ export default {
 .logo
   float left
   size 200px 55px
-  background url("../assets/images/logo.png") no-repeat center
+  background #FCD9D1 url("../assets/images/logo.png") no-repeat center
 
 // 头部导航
 .nav-header

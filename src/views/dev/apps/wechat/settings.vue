@@ -171,7 +171,9 @@
             api.plugin.remove(this.app.id).then((res) => {
               if (res.status === 200) {
                 this.$emit('update-curr-app')
+                this.removePlugin(this.app)
               }
+              this.editing = false
             }).catch((res) => {
               this.handleError(res)
               this.editing = false

@@ -94,6 +94,16 @@ export default {
   },
 
   /**
+   * 获取单个告警规则
+   * @param  {String} 规则id
+   */
+  getRule (ruleId) {
+    return http.get(
+      `${API_SERVER.default}/v2/alert/rule/${ruleId}`
+    )
+  },
+
+  /**
    * 获取消息列表
    * @param  {Object} params 查询条件
    * @return {Promise} 告警消息列表

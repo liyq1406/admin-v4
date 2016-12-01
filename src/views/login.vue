@@ -30,7 +30,7 @@
             <div class="form-actions">
               <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('ui.auth.login_submitting') : $t('ui.auth.login_submit')" class="btn btn-primary btn-xlg btn-pill focus-input">{{ $t("ui.auth.login_submit") }}</button>
             </div>
-            <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("ui.auth.register") }}</a></div>
+            <!-- <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("ui.auth.register") }}</a></div> -->
           </form>
         </validator>
       </div>
@@ -191,6 +191,8 @@
   @import '../assets/stylus/common'
 
   .login-form
+    .form
+      padding-bottom 30px
     .row-check
       a
         float right

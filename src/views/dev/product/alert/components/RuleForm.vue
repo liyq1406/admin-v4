@@ -125,9 +125,9 @@
                         </label>
                       </div>
                       <div class="col-18">
-                        <div v-show="isShowApn" class="apn-list mt10">
+                        <div v-show="isShowApn && iOSApps.length" class="app-list mb10">
                           <div class="checkbox-group">
-                            <label v-for="app in apps" v-if="app.type===1" class="checkbox">
+                            <label v-for="app in iOSApps" class="checkbox">
                               <input type="checkbox" v-model="model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                             </label>
                           </div>
@@ -141,9 +141,9 @@
                         </label>
                       </div>
                       <div class="col-18">
-                        <div v-show="isShowGoogle" class="apn-list">
+                        <div v-show="isShowGoogle && androidApps.length" class="app-list">
                           <div class="checkbox-group">
-                            <label v-for="app in apps" v-if="app.type===2" class="checkbox">
+                            <label v-for="app in androidApps" class="checkbox">
                               <input type="checkbox" v-model="model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                             </label>
                           </div>
@@ -271,6 +271,27 @@ export default {
       return _.includes(this.model.notify_target, 5)
     },
 
+    // iOS 应用
+    iOSApps () {
+      return _.filter(this.apps, (item) => item.type === 1)
+    },
+
+    // Android 应用
+    androidApps () {
+      return _.filter(this.apps, (item) => item.type === 2)
+    },
+
+    /**
+     * 排除掉已删除应用的已选应用
+     */
+    selectedApps () {
+      let result = []
+
+      result = _.intersection(this.model.notify_apps, _.map(this.apps, 'id'))
+
+      return result
+    },
+
     /**
      * 数据端点名称
      * @author shengzhi
@@ -310,11 +331,9 @@ export default {
      * @author shengzhi
      */
     getRule () {
-      api.alert.getRules(this.$route.params.id).then((res) => {
-        if (res.status === 200 && res.data.length > 0) {
-          this.model = _.find(res.data, (item) => {
-            return item.id === this.$route.params.rule_id
-          })
+      api.alert.getRule(this.$route.params.rule_id).then((res) => {
+        if (res.status === 200) {
+          this.model = res.data
           this.model.notify_target.forEach((item) => {
             item = item - 0
           })
@@ -349,6 +368,7 @@ export default {
         if (this.type === 'add') { // 添加
           process = api.alert.addRule(this.model)
         } else { // 编辑
+          this.model.notify_apps = this.selectedApps
           process = api.alert.updateRule(this.model, this.$route.params.id)
         }
       }
@@ -416,7 +436,7 @@ export default {
   .submit-btn
     width 120px
 
-.apn-list
+.app-list
   border 1px solid #ddd
   padding 5px
 </style>

@@ -27,8 +27,8 @@ let apiServer = ({
     plugin: 'http://test.plugin.xlink.cn:3000'
   },
   bull: { // 公牛
-    api: `${protocol}//139.224.7.17`,
-    plugin: `${protocol}//test.plugin.xlink.cn:3002`
+    api: 'http://api.iotbull.com',
+    plugin: 'http://api.iotbull.com'
   },
   tianji: { // 天际
     api: `${protocol}//dev-man.360tj.com:8016`,
