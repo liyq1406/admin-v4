@@ -380,7 +380,7 @@ export default {
     },
 
     productToggle (val) {
-      console.log(val)
+      // console.log(val)
       this.selectedProduct.is_visible = val
       // console.log(status)
     },
@@ -454,7 +454,7 @@ export default {
         }
         this.model.product = limitType
         this.model.module = modeType
-        console.log(this.model)
+        // console.log(this.model)
         api.dealer.setConfig(this.$route.params.dealer_id, this.model).then((res) => {
           // console.log(res)
           this.showNotice({

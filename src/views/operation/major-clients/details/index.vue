@@ -179,7 +179,7 @@ export default {
             this.area = loc
           }
         }).catch((res) => {
-          this.handleError(res)
+          // console.log(res)
         })
         this.total = res.data.count
       }).catch((err) => {

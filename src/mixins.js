@@ -74,7 +74,7 @@ export var globalMixins = {
     },
 
     handleError (err) {
-      // console.log(err)
+      console.log(err)
       if (typeof err.data !== 'undefined' && typeof err.data.error !== 'undefined') {
         switch (err.data.error.code) {
           case 4031003:

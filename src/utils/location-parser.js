@@ -63,7 +63,7 @@ function parse (country, state, city, region, lang) {
         }
         resolve(parsedNames)
       }).catch((res) => {
-        reject()
+        reject(res)
       })
     } else {
       // reject()
