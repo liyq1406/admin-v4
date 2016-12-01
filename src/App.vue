@@ -151,10 +151,10 @@ export default {
         backgroundColor: '#C82433',
         backgroundImage: 'url(static/images/logo_auth.png)'
       }
-      if (this.$route && window.location.href.indexOf('heavy-buyer-login') >= 0) {
-        result.backgroundColor = '#FFF'
-        result.backgroundImage = 'url(/static/images/topband.png)'
-      }
+      // if (this.$route && window.location.href.indexOf('heavy-buyer-login') >= 0) {
+      //   result.backgroundColor = '#FFF'
+      //   result.backgroundImage = 'url(/static/images/topband.png)'
+      // }
       return result
     },
 
@@ -223,6 +223,18 @@ export default {
           this.config = res.data
           let value = JSON.stringify(res.data)
           window.localStorage.setItem('dealerConfig', value)
+          // if (this.model.logo_url) {
+          //   this.images[0] = this.model.logo_url
+          // }
+        }).catch((err) => {
+          this.handleError(err)
+        })
+      } else if (this.$route.params.heavyBuyerId && this.$route.params.corpId) {
+        api.heavyBuyer.getConfig(this.$route.params.heavyBuyerId, this.$route.params.corpId).then((res) => {
+          console.log(res)
+          this.config = res.data
+          let value = JSON.stringify(res.data)
+          window.localStorage.setItem('heavyBuyerConfig', value)
           // if (this.model.logo_url) {
           //   this.images[0] = this.model.logo_url
           // }

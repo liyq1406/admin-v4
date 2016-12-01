@@ -36,7 +36,7 @@ let isAccessAuthPage = (path) => {
       // FIXME 这里路由匹配不是太正确，比如经销商登录
       if (path.indexOf(authRoutesWithParams[i]) >= 0) {
         result = true
-        return
+        break
       }
     }
   }
@@ -126,7 +126,7 @@ let configRouter = (router) => {
     },
 
     // 大客户登录
-    '/heavy-buyer-login/:heavyBuyerId': {
+    '/heavy-buyer-login/:corpId/:heavyBuyerId': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/heavy-buyer-login'))

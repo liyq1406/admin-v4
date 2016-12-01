@@ -350,7 +350,8 @@ export default {
         let origin = CUSTOM_ORIGIN || window.location.origin
         this.model.domain = `${origin}/#!/dealer/${this.corp.id}/${this.$route.params.dealer_id}`
         if (this.model.logo_url) {
-          this.images[0] = this.model.logo_url
+          // this.images[0] = this.model.logo_url
+          this.images.$set(0, this.model.logo_url)
         }
         // 处理产品配置
         res.data.product.forEach((product) => {

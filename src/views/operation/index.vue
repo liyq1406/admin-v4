@@ -43,7 +43,8 @@ export default {
       showContent: false,
       nav: {},
       userRole: window.localStorage.getItem('userRole'),
-      config: window.localStorage.getItem('dealerConfig')
+      config: window.localStorage.getItem('dealerConfig'),
+      heavyConfig: window.localStorage.getItem('heavyBuyerConfig')
     }
   },
 
@@ -78,9 +79,15 @@ export default {
         return this.vipSecNav
       }
     },
-    // 经销商独立配置信息
+    // 独立配置信息
     configInfo () {
-      return JSON.parse(this.config)
+      // 经销商配置
+      if (this.userRole === 'dealer') {
+        return JSON.parse(this.config)
+      } else if (this.userRole === 'heavy-buyer') {
+        // 大客户配置
+        return JSON.parse(this.heavyConfig)
+      }
     },
     // 是否不再显示警告遮罩
     isHideMaskForever () {
@@ -247,7 +254,25 @@ export default {
 
       // 产品导航
       const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
-      this.releasedProducts.forEach((item, index) => {
+      var openArr = []
+      var hashMap = {
+        'overview': 'summary',
+        'devices': 'device_list',
+        'alerts': 'alert',
+        'device-map': 'device_map',
+        'analysis': 'analyse'
+      }
+      PRO_SUBS.forEach((type) => {
+        this.configInfo.module.forEach((mode) => {
+          if (mode.is_visible) {
+            if (hashMap[type] === mode.type) {
+              openArr.push(type)
+            }
+          }
+        })
+      })
+      console.log(openArr)
+      this.dealerProducts.forEach((item, index) => {
         result.subs.push({
           name: item.name,
           type: 'product',
@@ -255,7 +280,7 @@ export default {
           icon: 'link',
           unfold: index === 0,
           id: item.id,
-          subs: PRO_SUBS.map((sub) => {
+          subs: openArr.map((sub) => {
             return {
               alias: sub,
               url: `/products/${item.id}/${sub}`
@@ -264,11 +289,11 @@ export default {
         })
       })
 
-      result.subs.push({
-        alias: 'settings',
-        icon: 'cog',
-        url: 'heavy-buyer-settings'
-      })
+      // result.subs.push({
+      //   alias: 'settings',
+      //   icon: 'cog',
+      //   url: 'heavy-buyer-settings'
+      // })
 
       return result
     },
