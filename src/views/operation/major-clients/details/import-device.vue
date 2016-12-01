@@ -41,10 +41,10 @@
             </div>
           </div>
           <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
-            <x-select width="100px" :label="selectMarkDealer.label" size="small">
+            <x-select width="100px" :label="selectMarkMajorClient.label" size="small">
               <label slot="label">标记为:</label>
-              <select v-model="selectMarkDealer" @change="updateInfo">
-                <option v-for="option in markDealersOptions" :value="option">{{ option.label }}</option>
+              <select v-model="selectMarkMajorClient" @change="updateInfo">
+                <option v-for="option in markMajorClientOptions" :value="option">{{ option.label }}</option>
               </select>
             </x-select>
           </div>
@@ -57,7 +57,7 @@
 <script>
   // import { pluginMixins } from '../mixins'
   import api from 'api'
-  // import formatDate from 'filters/format-date'
+  import formatDate from 'filters/format-date'
 
   export default {
     name: 'AddBroadcast',
@@ -84,13 +84,14 @@
           label: '全部',
           id: 0
         },
-        selectMarkDealer: {
+        selectMarkMajorClient: {
           label: '无',
           id: 0
         },
         majorClients: [],
         queryTypeOptions: [
           { label: 'MAC', value: 'mac' },
+          { label: '设备ID', value: 'id' },
           { label: '序列号', value: 'sn' }
         ],
         queryType: {
@@ -112,23 +113,20 @@
           label: '添加设备'
         }],
         headers: [{
-          key: 'mac',
+          key: 'device--mac',
           title: 'MAC'
         }, {
-          key: 'active_date',
+          key: 'device--id',
+          title: '设备ID'
+        }, {
+          key: 'device--active_date',
           title: '激活时间'
         }, {
-          key: 'mode',
-          title: '产品型号'
-        }, {
-          key: 'sn',
+          key: 'device--sn',
           title: '序列号'
         }, {
-          key: 'user',
+          key: 'heavy_buyer--name',
           title: '客户名称'
-        }, {
-          key: 'phone',
-          title: '手机号'
         }]
       }
     },
@@ -148,18 +146,18 @@
         }
         return res
       },
-      markDealersOptions () {
+      markMajorClientOptions () {
         let res = []
-        // if (this.majorClients.length) {
-        //   this.majorClients.forEach((item) => {
-        //     res.push({
-        //       label: item.name,
-        //       id: item.id,
-        //       dealer_code: item.dealer_code,
-        //       upper_dealer_code: item.upper_dealer_code
-        //     })
-        //   })
-        // }
+        if (this.majorClients.length) {
+          this.majorClients.forEach((item) => {
+            res.push({
+              label: item.name,
+              id: item.id,
+              dealer_code: item.dealer_code,
+              upper_dealer_code: item.upper_dealer_code
+            })
+          })
+        }
         res.unshift({
           label: '无',
           id: 0
@@ -168,15 +166,14 @@
       },
       majorClientsOptions () {
         let res = []
-        // if (this.majorClients.length) {
-        //   this.majorClients.forEach((item) => {
-        //     res.push({
-        //       label: item.name,
-        //       id: item.id,
-        //       dealer_code: item.dealer_code
-        //     })
-        //   })
-        // }
+        if (this.majorClients.length) {
+          this.majorClients.forEach((item) => {
+            res.push({
+              label: item.name,
+              id: item.id
+            })
+          })
+        }
         res.unshift({
           label: '全部',
           id: 0
@@ -195,16 +192,11 @@
         let res = []
         this.devices.forEach((item) => {
           res.push({
-            // id: item.id,
-            // mac: item.mac,
-            // active_date: formatDate(item.active_date),
-            // sn: item.sn || '--',
-            // mode: this.selectProduct.mode,
-            // user: userInfo ? userInfo.nickname || '--' : '--',
-            // phone: userInfo ? userInfo.phone || '--' : '--',
-            // dealer: dealerInfo ? dealerInfo.name || '--' : '--',
-            // origin: item,
-            // userInfo: userInfo
+            'device--id': item.device.id,
+            'device--mac': item.device.mac,
+            'device--active_date': formatDate(item.device.active_date),
+            'device--sn': item.device.sn || '-',
+            'heavy_buyer--name': item.heavy_buyer.name || '-'
           })
         })
         return res
@@ -218,27 +210,35 @@
       },
       queryCondition () {
         let condition = {
-          filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'firmware', 'last_login', 'dealer_scope'],
+          filter: {
+            device: ['id', 'mac', 'is_active', 'active_date', 'sn'],
+            online: ['is_online'],
+            heavy_buyer: ['id', 'name']
+          },
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           order: {},
-          query: {}
+          query: {
+            '$logical': 'AND',
+            device: {},
+            heavy_buyer: {}
+          }
         }
 
-        // if (this.selectDealer.id) {
-        //   condition.query.dealer_scope = { $like: this.selectDealer.dealer_code }
-        // }
-        //
-        // if (this.key.length > 0) {
-        //   this.currentPage = 1
-        //   condition.query[this.queryType.value] = { $like: this.key }
-        // }
+        if (this.selectDealer.id) {
+          condition.query.heavy_buyer.id = { $like: this.selectDealer.id }
+        }
+
+        if (this.key.length > 0) {
+          this.currentPage = 1
+          condition.query.device[this.queryType.value] = { $like: this.key }
+        }
         return condition
       }
     },
     route: {
       data () {
-        // this.getMajorClients()
+        this.getMajorClients()
       }
     },
     ready () {
@@ -250,14 +250,33 @@
     },
     methods: {
       updateInfo () {
-        // if (!this.selectMarkDealer.id || !this.selectDevices.length) {
-        //   return
-        // }
+        if (!this.selectMarkMajorClient.id || !this.selectDevices.length) {
+          return
+        }
         // // 添加销售信息
-        // this.addClientInfo()
+        this.addClientInfo()
       },
       addClientInfo () {
-        console.log('添加设备')
+        var devices = []
+        this.selectDevices.forEach((item) => {
+          var device = {
+            mac: item['device--mac']
+          }
+          devices.push(device)
+        })
+        api.heavyBuyer.grantDevices(this.selectMarkMajorClient.id, this.selectProduct.id, devices).then((res) => {
+          if (res.status === 200) {
+            this.showNotice({
+              type: 'success',
+              content: '添加成功'
+            })
+            this.getProductDevices()
+          }
+          this.importing = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.importing = false
+        })
       },
 
       selectChange (row) {
@@ -316,20 +335,20 @@
         if (reset === true) {
           this.currentPage = 1
         }
-        // this.loadingData = true
-        // api.device.getAggregateDevices(this.selectProduct.id, this.queryCondition).then((res) => {
-        //   if (res.status === 200 && res.data.list && res.data.list.length) {
-        //     this.devices = res.data.list
-        //     this.total = res.data.count
-        //     this.loadingData = false
-        //   } else {
-        //     this.devices = []
-        //   }
-        //   this.loadingData = false
-        // }).catch((res) => {
-        //   this.handleError(res)
-        //   this.loadingData = false
-        // })
+        this.loadingData = true
+        api.device.getAggregateDevices(this.selectProduct.id, this.queryCondition).then((res) => {
+          if (res.status === 200 && res.data.list && res.data.list.length) {
+            this.devices = res.data.list
+            this.total = res.data.count
+            this.loadingData = false
+          } else {
+            this.devices = []
+          }
+          this.loadingData = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
       }
     }
   }
