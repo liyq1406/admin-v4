@@ -267,17 +267,6 @@ export default {
       // querying: false,
       // 正在加载数据
       loadingData: false,
-      // 搜索选项
-      queryTypeOptions: [
-        { label: this.$t('operation.product.device.manager.mac'), value: 'device--mac' },
-        { label: this.$t('operation.product.device.manager.device_id'), value: 'device--id' },
-        { label: 'SN', value: 'device--sn' },
-        { label: '城市', value: 'geography--city' },
-        { label: '省份', value: 'geography--province' },
-        { label: '经销商', value: 'dealer--name' },
-        { label: '大客户', value: 'heavy_buyer--name' }
-        // { label: this.$t('operation.product.device.manager.device_name'), value: 'name' }
-      ],
       // 搜索条件类型
       queryType: {
         label: 'MAC',
@@ -344,6 +333,23 @@ export default {
       }
       return result
     },
+
+    // 搜索选项
+    queryTypeOptions () {
+      var result = [
+        { label: this.$t('operation.product.device.manager.mac'), value: 'device--mac' },
+        { label: this.$t('operation.product.device.manager.device_id'), value: 'device--id' },
+        { label: 'SN', value: 'device--sn' },
+        { label: '城市', value: 'geography--city' },
+        { label: '省份', value: 'geography--province' },
+        { label: '经销商', value: 'dealer--name' },
+        { label: '大客户', value: 'heavy_buyer--name' }
+        // { label: this.$t('operation.product.device.manager.device_name'), value: 'name' }
+      ]
+      // 这里要把数据端点里面那些东西加进来
+      return result
+    },
+
     // 设备列表
     deviceList () {
       var result = []
