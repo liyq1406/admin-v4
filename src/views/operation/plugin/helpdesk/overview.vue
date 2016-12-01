@@ -1,13 +1,13 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>用户反馈</h2>
+      <h2>{{ $t('operation.helpdesk.overview.helpdesk') }}</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
           <x-select :label="product.label" width="110px" size="small">
-            <span slot="label">产品</span>
+            <span slot="label">{{ $t('operation.helpdesk.overview.product') }}</span>
             <select v-model="product" @change="productSelect">
               <option v-for="selectProduct in selectOptions" :value="selectProduct">{{ selectProduct.label }}</option>
             </select>
@@ -22,7 +22,7 @@
     </div>
     <div class="panel mt20">
       <div class="panel-hd panel-hd-full bordered">
-        <h2>趋势</h2>
+        <h2>{{ $t('operation.helpdesk.overview.trend') }}</h2>
       </div>
       <div class="panel-bd">
         <chart :options="trendOptions" :loading="loadingData"></chart>
@@ -44,7 +44,7 @@
     </div>
     <div class="panel">
       <div class="panel-hd panel-hd-full bordered">
-        <h2>分布</h2>
+        <h2>{{ $t('operation.helpdesk.overview.distribution') }}</h2>
       </div>
       <div class="panel-bd">
         <div class="row">
@@ -56,10 +56,10 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th>标题</th>
-                    <th>未处理</th>
-                    <th>已处理</th>
-                    <th>全部</th>
+                    <th>{{ $t('operation.helpdesk.overview.title') }}</th>
+                    <th>{{ $t('operation.helpdesk.overview.unhandle') }}</th>
+                    <th>{{ $t('operation.helpdesk.overview.handled') }}</th>
+                    <th>{{ $t('operation.helpdesk.overview.all') }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -106,26 +106,26 @@ export default {
   data () {
     return {
       product: {
-        label: '全部'
+        label: this.$t('operation.helpdesk.overview.all')
       },
       defaultPeriod: 30,
       feedbacks: [],
       summary: {
         all: {
           total: 0,
-          title: '反馈数'
+          title: this.$t('operation.helpdesk.overview.feedbackCount')
         },
         untreatedTotal: {
           total: 0,
-          title: '待处理'
+          title: this.$t('operation.helpdesk.overview.pendingHandle')
         },
         weekAdded: {
           total: 0,
-          title: '7天新增'
+          title: this.$t('operation.helpdesk.overview.add7')
         },
         monthAdded: {
           total: 0,
-          title: '30天新增'
+          title: this.$t('operation.helpdesk.overview.add30')
         }
       },
       // 时间间隔
@@ -186,7 +186,7 @@ export default {
           data: _.map(this.distData, 'name')
         },
         series: [{
-          name: '数量',
+          name: this.$t('operation.helpdesk.overview.count'),
           type: 'pie',
           radius: '55%',
           center: ['50%', '60%'],
@@ -206,7 +206,7 @@ export default {
       if (this.products.length > 0) {
         var res = [{
           id: '',
-          label: '全部'
+          label: this.$t('operation.helpdesk.overview.all')
         }]
         this.products.forEach((item) => {
           let temp = {
@@ -282,7 +282,7 @@ export default {
           return {
             day: item.day,
             value: item.Count,
-            name: !item.label || item.label === '' ? '用户反馈' : item.label
+            name: !item.label || item.label === '' ? this.$t('operation.helpdesk.overview.helpdesk') : item.label
           }
         })
         let series = []
