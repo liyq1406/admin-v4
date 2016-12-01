@@ -43,7 +43,7 @@
             </li>
           </ul>
           <!-- <div class="view-more tac"><a href="#">更多内容&gt;&gt;</a></div> -->
-          <pagination v-if="total > countPerPage" :total="total" :simple="true" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getIssues"></pagination>
+          <pagination v-if="total > countPerPage" :total="total" :simple="true" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="onPageUpdate"></pagination>
         </div>
         <div class="col-18" v-if="issues.length > 0">
           <router-view transition="view" transition-mode="out-in" class="view"></router-view>
@@ -303,8 +303,12 @@ export default {
       this.endTimePick = end
       this.getIssues()
     },
+    onPageUpdate (curr) {
+      this.getIssues()
+    },
     // 获取问题列表
     getIssues (period) {
+      console.log(period)
       if (typeof period !== 'undefined') {
         this.period = period
       }
