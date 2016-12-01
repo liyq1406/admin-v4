@@ -375,12 +375,12 @@
         position absolute
         right 0
         top 0
-        width 30px
+        width 10px
         height 18px
         text-align right
         .fa
           display block
-          width 30px
+          width 10px
           height 9px
           line-height 9px
           margin 0
@@ -388,4 +388,7 @@
           color #636363
           &.gray
             color #bbbbbb
+      .fa-question-circle
+        z-index 10
+        margin-left 3px
 </style>

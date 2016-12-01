@@ -59,7 +59,17 @@
               <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="true"></date-time-range-picker>
             </div>
           </div>
-          <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData" @theader-device--active-date="sortBy" @theader-online--is-online="sortBy" @tbody-device--mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <x-table
+          :headers="headers"
+          :rows="rows"
+          :page="page"
+          :loading="loadingData"
+          @theader-device--is-active="sortBy"
+          @theader-device--active-date="sortBy"
+          @theader-online--is-online="sortBy"
+          @tbody-device--mac="linkToDetails"
+          @page-count-update="onPageCountUpdate"
+          @current-page-change="onCurrPageChage"></x-table>
 
           <!-- {{snapshotShuffle | json}} -->
       </div>
@@ -82,15 +92,14 @@ export default {
 
   data () {
     var sortOrders = {}
-    var descProperties = ['device--active_date', 'online--is_online']
-    var ascProperties = []
+    var descProperties = [
+      'device--is_active',
+      'device--active_date',
+      'online--is_online'
+    ]
 
     descProperties.forEach((key) => {
       sortOrders[key] = 'desc'
-    })
-
-    ascProperties.forEach((key) => {
-      sortOrders[key] = 'asc'
     })
 
     return {
@@ -101,6 +110,9 @@ export default {
         '3': 'avg',
         '4': 'sum'
       },
+
+      // 需要排序的字段
+      SORTKEYS: descProperties,
 
       // 设备字段
       DEVICEFIELD: [
@@ -526,16 +538,18 @@ export default {
           class: 'mw'
         }
 
+        let inSortKeysIndex = this.SORTKEYS.indexOf(header.key)
+        if (inSortKeysIndex >= 0) {
+          header.sortType = this.sortOrders[header.key] === 'asc' ? 1 : -1
+        }
+
         if (header.key === 'device--is_active') {
           header.tooltip = this.$t('operation.product.device.manager.is_active.tooltip')
+          header.class = 'header-is-active'
         }
 
         if (header.key === 'device--active_date') {
-          header.sortType = this.sortOrders[header.key] === 'asc' ? 1 : -1
-        }
-
-        if (header.key === 'online--is_online') {
-          header.sortType = this.sortOrders[header.key] === 'asc' ? 1 : -1
+          header.class = 'header-active-date'
         }
 
         result.push(header)
@@ -905,7 +919,6 @@ export default {
       if (typeof key === 'object') {
         key = key.key
       }
-      console.log(key)
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] === 'asc' ? 'desc' : 'asc'
       this.getDevices()
@@ -1065,4 +1078,8 @@ export default {
     border-top 1px solid default-border-color
   .mw
     min-width 80px
+  .header-is-active
+    min-width 80px
+  .header-active-date
+    min-width 150px
 </style>
