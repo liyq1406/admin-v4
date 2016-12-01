@@ -1,13 +1,13 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>维保记录</h2>
+      <h2>{{ $t('operation.warranty.repair.main_title') }}</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
           <x-select :label="selectedProduct.name" @change="getOrderWorkList" width="110px" size="small">
-            <span slot="label">产品</span>
+            <span slot="label">{{ $t('operation.warranty.product') }}</span>
             <select v-model="selectedProduct">
               <option :value="opt" v-for="opt in products">{{ opt.name }}</option>
             </select>
@@ -37,14 +37,14 @@
     <div class="panel mt10">
       <div class="panel-bd">
         <div class="action-bar">
-          <button class="btn btn-primary" @click="onAddBtnClick"><i class="fa fa-plus"></i>添加工单</button>
+          <button class="btn btn-primary" @click="onAddBtnClick"><i class="fa fa-plus"></i>{{ $t('operation.warranty.repair.add') }}</button>
         </div>
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
                 <x-select :label="queryType.label" width='110px' size="small">
-                  <span slot="label">状态</span>
+                  <span slot="label">{{ $t('common.status') }}</span>
                   <select v-model="queryType" @change="getOrderWorkList(true)">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                   </select>
@@ -65,7 +65,7 @@
                 <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="getOrderWorkList(true)" :placeholder="'输入工单编号'" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="" @press-enter="getOrderWorkList(true)">
+                <search-box :key.sync="query" :active="searching" @cancel="getOrderWorkList(true)" :placeholder="$t('operation.warranty.repair.search_placeholder')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="" @press-enter="getOrderWorkList(true)">
                   <button slot="search-button" @click="getOrderWorkList(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -116,24 +116,24 @@ export default {
       startDate: '',
       endDate: '',
       status: {
-        label: '全部',
+        label: this.$t('common.all'),
         value: 0
       },
       searching: false,
       statusOptions: [{
-        label: '全部',
+        label: this.$t('common.all'),
         value: 0
       }, {
-        label: '已接单',
+        label: this.$t('operation.warranty.repair.status_options.received'),
         value: 1
       }, {
-        label: '处理中',
+        label: this.$t('operation.warranty.repair.status_options.processing'),
         value: 2
       }, {
-        label: '处理失败',
+        label: this.$t('operation.warranty.repair.status_options.failed'),
         value: 3
       }, {
-        label: '完成',
+        label: this.$t('operation.warranty.repair.status_options.finished'),
         value: 4
       }],
       workOrders: [],
@@ -142,13 +142,13 @@ export default {
       countPerPage: config.COUNT_PER_PAGE,
       total: 0,
       queryTypeOptions: [
-        { label: '全部', value: 'all' },
-        { label: '待处理', value: 0 },
-        { label: '维修中', value: 1 },
-        { label: '维修完成', value: 2 }
+        { label: this.$t('common.all'), value: 'all' },
+        { label: this.$t('operation.warranty.repair.query_types.pending'), value: 0 },
+        { label: this.$t('operation.warranty.repair.query_types.processing'), value: 1 },
+        { label: this.$t('operation.warranty.repair.query_types.finished'), value: 2 }
       ],
       queryType: {
-        label: '全部',
+        label: this.$t('common.all'),
         value: 'all'
       },
       query: '',
@@ -156,21 +156,21 @@ export default {
       repairSummary: {
         unrepair: {
           total: 0,
-          title: '待维修数'
+          title: this.$t('operation.warranty.repair.summary.all')
         },
         repairing: {
           total: 0,
-          title: '正在维修中'
+          title: this.$t('operation.warranty.repair.summary.processing')
         },
         today: {
           total: 0,
           change: 0,
-          title: '今日维修数'
+          title: this.$t('operation.warranty.repair.summary.today')
         },
         week: {
           total: 0,
           change: 0,
-          title: '7日维修数'
+          title: this.$t('operation.warranty.repair.summary.week')
         }
       },
       rangeOption: {
@@ -183,19 +183,19 @@ export default {
       headers: [
         {
           key: 'id',
-          title: '工单编号'
+          title: this.$t('operation.warranty.repair.columns.id')
         },
         {
           key: 'create_date',
-          title: '创建时间'
+          title: this.$t('operation.warranty.repair.columns.create_date')
         },
         {
           key: 'person',
-          title: '维修人员'
+          title: this.$t('operation.warranty.repair.columns.person')
         },
         {
           key: 'content',
-          title: '维修内容',
+          title: this.$t('operation.warranty.repair.columns.content'),
           class: 'w200'
         },
         // {
@@ -209,7 +209,7 @@ export default {
         // },
         {
           key: 'state',
-          title: '状态',
+          title: this.$t('operation.warranty.repair.columns.state'),
           class: 'tac'
         }
       ]
@@ -226,6 +226,25 @@ export default {
     },
     rows () {
       var result = []
+      let resetState = (state) => {
+        var result = [
+          {
+            text: this.$t('operation.warranty.repair.query_types.pending'),
+            color: '#6699CC'
+          },
+          {
+            text: this.$t('operation.warranty.repair.query_types.processing'),
+            color: '#CC6600'
+          },
+          {
+            text: this.$t('operation.warranty.repair.query_types.finished'),
+            color: '#090'
+          }
+        ]
+        var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
+        return html
+      }
+
       this.workOrders.map((item) => {
         var workOrder = {
           id: '<a class="hl-red">' + item._id + '</a>',
@@ -242,24 +261,6 @@ export default {
         result.push(workOrder)
       })
       return result
-      function resetState (state) {
-        var result = [
-          {
-            text: '待处理',
-            color: '#6699CC'
-          },
-          {
-            text: '维修中',
-            color: '#CC6600'
-          },
-          {
-            text: '维修完成',
-            color: '#090'
-          }
-        ]
-        var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
-        return html
-      }
       // function resetLevel (state) {
       //   var result = [
       //     {

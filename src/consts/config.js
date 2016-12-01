@@ -255,10 +255,9 @@ export const MAIN_NAV = {
       }, {
         alias: 'list',
         url: '/users/list'
-      // 暂时屏蔽
-      // }, {
-      //   alias: 'major_clients',
-      //   url: '/users/major-clients'
+      }, {
+        alias: 'major_clients',
+        url: '/users/major-clients'
       }, {
         alias: 'portrait',
         url: '/users/portrait'

@@ -1,11 +1,11 @@
 <template>
   <div class="main">
     <div class="main-title bordered">
-      <h2>设置</h2>
+      <h2>{{ $t('operation.helpdesk.setting.set') }}</h2>
     </div>
     <div class="panel mt20">
       <div class="panel-bd">
-        <div class="x-intro">提示：管理用户反馈的问题类别。备注：每行设定一个问题类型，输入框为空时即默认为全部问题类型。</div>
+        <div class="x-intro">{{ $t('operation.helpdesk.setting.tips') }}</div>
         <div class="form">
           <div class="form-row">
             <div class="input-text-wrap">
@@ -13,7 +13,7 @@
             </div>
           </div>
           <div class="form-action">
-            <button class="btn btn-primary btn-xlg" @click.prevent="updateTags">保存</button>
+            <button class="btn btn-primary btn-xlg" @click.prevent="updateTags">{{ $t('common.save') }}</button>
           </div>
         </div>
       </div>
@@ -62,13 +62,13 @@ export default {
         console.log(res)
         this.showNotice({
           type: 'info',
-          content: '已成功修改标签'
+          content: this.$t('common.action_success')
         })
         this.getTags()
       }).catch((res) => {
         this.showNotice({
           type: 'error',
-          content: '修改标签失败'
+          content: this.$t('common.action_fail')
         })
         this.handleError(res)
       })

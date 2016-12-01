@@ -2,11 +2,11 @@
   <div class="main">
     <div class="panel">
       <div class="panel-hd">
-        <h2>用户反馈</h2>
+        <h2>{{ $t('operation.helpdesk.forbidden.helpdesk') }}</h2>
       </div>
       <div class="panel-bd">
         <alert :cols="7">
-          <p>未获得使用该插件的权限</p>
+          <p>{{ $t('operation.helpdesk.forbidden.noPermit') }}</p>
         </alert>
       </div>
     </div>

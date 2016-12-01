@@ -10,6 +10,8 @@ import user from './user'
 import snapshot from './snapshot'
 import settings from './settings'
 import dealer from './dealer'
+import warranty from './warranty'
+import helpdesk from './helpdesk'
 
 export default {
   product_management: 'Product  Management',
@@ -20,5 +22,7 @@ export default {
   user,
   snapshot,
   settings,
-  dealer
+  dealer,
+  warranty,
+  helpdesk
 }

@@ -64,9 +64,11 @@ export default {
     male: 'Male',
     female: 'Female'
   },
-  action_success: 'Success',
-  action_fail: 'Failed',
+  action_success: 'Submitted successfully',
+  action_fail: 'Submission failed',
   export_condition: 'Exporting Condition',
+  hours: 'h',
+  minutes: 'm',
   unit: {
     time: {
       hour: 'Hour',

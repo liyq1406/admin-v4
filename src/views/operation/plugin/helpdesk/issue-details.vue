@@ -7,8 +7,8 @@
       </div>
       <div class="issue-metas">
         <!-- <span v-if="issue.status === 0" class="issue-status pending"><i class="fa fa-check-square-o"></i>未处理</span> -->
-        <button v-if="issue.status === 0" class="issue-status pending btn btn-primary" @click.prevent.stop="setDeal">未处理</button>
-        <button v-else class="issue-status pending btn btn-success"  @click.prevent.stop="setUndeal">已处理</button>
+        <button v-if="issue.status === 0" class="issue-status pending btn btn-primary" @click.prevent.stop="setDeal">{{ $t('operation.helpdesk.issues.unhandle') }}</button>
+        <button v-else class="issue-status pending btn btn-success"  @click.prevent.stop="setUndeal">{{ $t('operation.helpdesk.issues.handled') }}</button>
         <!-- <span v-else class="issue-status handled"><i class="fa fa-check-square-o"></i>已处理</span> -->
         <span class="issue-id">ID:{{ issue.product_id }}</span>
       </div>
@@ -24,7 +24,7 @@
       <info-list :info="appInfo" v-show="currIndex===2"></info-list>
     </div>
     <!-- Start: 反馈信息 -->
-    <div class="panel-sub-hd bordered mt20">反馈信息</div>
+    <div class="panel-sub-hd bordered mt20">{{ $t('operation.helpdesk.issues.helpdeskMessage') }}</div>
     <div class="comment-list">
       <div v-for="item in recordList" class="comment-list-item">
         <!-- 客户回复 -->
@@ -53,17 +53,17 @@
       </div>
     </div>
     <div class="reply-form mt20">
-      <div class="panel-sub-hd">客服回复</div>
+      <div class="panel-sub-hd">{{ $t('operation.helpdesk.issues.customerServiceReply') }}</div>
       <div class="form">
         <div v-if="false">
-          暂时无法回复
+          {{ $t('operation.helpdesk.issues.canNotReply') }}
         </div>
         <div v-else>
-          <div class="input-text-wrap" v-placeholder="'请填写回复内容'">
+          <div class="input-text-wrap" v-placeholder="$t('operation.helpdesk.issues.placeHolder.replyContent')">
             <textarea class="input-text" v-model="dealRecord"></textarea>
           </div>
           <div class="form-actions mt10">
-            <button class="btn btn-primary" @click="submitRecord">提交</button>
+            <button class="btn btn-primary" @click="submitRecord">{{ $t('common.ok') }}</button>
           </div>
         </div>
       </div>
@@ -100,19 +100,19 @@ export default {
       // }],
       userInfo: {
         nickname: {
-          label: '昵称',
+          label: this.$t('operation.helpdesk.issues.nickname'),
           value: ' '
         },
         create_time: {
-          label: '提交时间',
+          label: this.$t('operation.helpdesk.issues.submit_time'),
           value: ' '
         },
         email: {
-          label: '邮箱',
+          label: this.$t('common.email'),
           value: ' '
         },
         phone: {
-          label: '手机',
+          label: this.$t('common.phone'),
           value: ' '
         }
       },
@@ -122,37 +122,41 @@ export default {
           value: '-'
         },
         onlineLong: {
-          label: '累计在线时长',
+          label: this.$t('operation.helpdesk.issues.online_time'),
           value: '-'
         },
         sn: {
-          label: '序列号',
+          label: this.$t('operation.helpdesk.issues.number'),
           value: '-'
         },
         model: {
-          label: '型号',
+          label: this.$t('operation.helpdesk.issues.type'),
           value: '-'
         }
       },
       appInfo: {
         device: {
-          label: '设备信息',
+          label: this.$t('operation.helpdesk.issues.device_message'),
           value: ' '
         },
         os: {
-          label: '系统版本',
+          label: this.$t('operation.helpdesk.issues.system_version'),
           value: ' '
         },
         lang: {
-          label: '语言',
+          label: this.$t('operation.helpdesk.issues.language'),
           value: ' '
         },
         resolution: {
-          label: '分辨率',
+          label: this.$t('operation.helpdesk.issues.resolution'),
           value: ' '
         }
       },
-      tabItems: ['用户信息', '设备信息', 'APP信息'],
+      tabItems: [
+        this.$t('operation.helpdesk.issues.user_message'),
+        this.$t('operation.helpdesk.issues.device_message'),
+        this.$t('operation.helpdesk.issues.app_message')
+      ],
       currIndex: 0,
       pics: [],
       currPicIndex: 0,
@@ -333,7 +337,7 @@ export default {
         var i = this.recordList.length - 1
         var params = {
           feedback_id: this.$route.params.id,
-          name: '客服',
+          name: this.$t('operation.helpdesk.issues.customer_service'),
           content: this.dealRecord,
           create_time: new Date(),
           reply_id: this.recordList[i]._id
@@ -377,12 +381,14 @@ export default {
           if (params.status === 0) {
             this.showNotice({
               type: 'success',
-              content: '已设置为未处理！'
+              content: this.$t('common.action_success')
+              // content: '已设置为未处理！'
             })
           } else {
             this.showNotice({
               type: 'success',
-              content: '已设置为已处理！'
+              content: this.$t('common.action_success')
+              // content: '已设置为已处理！'
             })
           }
           this.getIssue()

@@ -46,6 +46,7 @@
                 <td>{{ sale.name || '--' }}</td>
                 <td>{{ sale.phone || '--' }}</td>
                 <td class="tac">
+                  <button class="btn btn-link btn-mini" @click.prevent="deleteDevice(sale)">{{ $t("common.del") }}</button>
                   <button v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/edit/' + sale.id" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
                 </td>
               </tr>
@@ -209,6 +210,26 @@ export default {
   },
 
   methods: {
+    deleteDevice (sale) {
+      if (window.confirm('确定要删除当前销售记录吗?')) {
+        this.delDealer(sale)
+      }
+    },
+    delDealer (sale) {
+      console.log('删除当前销售记录')
+      api.dealer.delClientInfo(sale.id).then((res) => {
+        if (res.status === 200) {
+          // 删除成功
+          this.showNotice({
+            type: 'success',
+            content: '删除成功'
+          })
+          this.getSales()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     // 获取经销商对应销售信息列表
     getSales () {
       if (typeof querying !== 'undefined') {

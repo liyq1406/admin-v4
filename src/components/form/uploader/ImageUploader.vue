@@ -4,7 +4,7 @@
       <label>
         <img v-if="image.length" :src="image"/>
         <input type="file" @change.prevent="upload($event, imageIndex)"/>
-        <span class="upload-hint-text" v-if="!image.length"><i class="fa fa-plus"></i>添加图片</span>
+        <span class="upload-hint-text" v-if="!image.length"><i class="fa fa-plus"></i>{{ $t('components.image_uploader.label') }}</span>
       </label>
       <i v-if="image.length" @click.stop.prevent="removeImage(imageIndex)" class="fa fa-times"></i>
     </div>
