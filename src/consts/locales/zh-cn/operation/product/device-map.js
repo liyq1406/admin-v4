@@ -5,6 +5,7 @@
 
 export default {
   title: '设备地图',
+  demo: '演示',
   map: '地图',
   online: '在线',
   offline: '离线',

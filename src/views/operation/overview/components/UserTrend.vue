@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import Chart from 'components/Chart/index'
+import Chart from 'components/chart/index'
 import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
 // import truncate from 'filters/truncate'

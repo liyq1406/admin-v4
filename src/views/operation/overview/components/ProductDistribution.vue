@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Chart from 'components/Chart/index'
+import Chart from 'components/chart/index'
 import {numToPercent} from 'utils'
 import { toPercentage } from 'filters/format-date'
 import PROVINCE_MAP from 'consts/mapping/provinces'

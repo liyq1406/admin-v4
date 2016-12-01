@@ -41,10 +41,9 @@
 
 <script>
 import * as config from 'consts/config'
-import Chart from 'components/Chart/index'
-import 'echarts/extension/bmap/bmap'
+import Chart from 'components/chart/index'
+// import 'echarts/extension/bmap/bmap'
 import formatDate from 'filters/format-date'
-
 import api from 'api'
 
 export default {
@@ -420,6 +419,7 @@ export default {
         })
         this.geoCoordMap = geoCoordMap
       })
+
       this.getCityData()
       this.getList()
 

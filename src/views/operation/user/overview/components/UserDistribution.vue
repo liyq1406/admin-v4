@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Chart from 'components/Chart/index'
+import Chart from 'components/chart/index'
 import {getUserRegion} from '../api-user'
 import {numToPercent} from 'utils'
 

@@ -6,6 +6,7 @@
 import EventListener from 'utils/event-listener'
 import { CHART_COLORS } from 'consts/config'
 import { importEcharts } from 'store/actions/system'
+import { loadScript } from 'utils'
 
 export default {
   name: 'Chart',
@@ -115,7 +116,7 @@ export default {
 
   methods: {
     init () {
-      if (this.type === 'china-map' || this.type === 'bmap') {
+      if (this.type === 'china-map') {
         this.$http.get('/static/data/map/china.json').then((res) => {
           window.echarts.registerMap('china', res.data)
           this.initEchart()
@@ -124,6 +125,14 @@ export default {
         this.$http.get('/static/data/map/world.json').then((res) => {
           window.echarts.registerMap('world', res.data)
           this.initEchart()
+        })
+      } else if (this.type === 'bmap') {
+        let timestamp = new Date().getTime()
+        loadScript(`http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.js?_v_=${timestamp}`, () => {
+          this.$http.get('/static/data/map/china.json').then((res) => {
+            window.echarts.registerMap('china', res.data)
+            this.initEchart()
+          })
         })
       } else {
         this.initEchart()

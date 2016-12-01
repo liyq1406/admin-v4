@@ -83,7 +83,7 @@
 // import Vue from 'vue'
 // import locales from 'consts/locales/index'
 import api from 'api'
-import Chart from 'components/Chart/index'
+import Chart from 'components/chart/index'
 import formatDate from 'filters/format-date'
 import { pluginMixins } from '../mixins'
 import { getLastYearDate, patchLostDates } from 'utils'

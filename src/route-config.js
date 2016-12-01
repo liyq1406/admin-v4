@@ -1032,7 +1032,7 @@ let configRouter = (router) => {
         'products/:id/device-map': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/product/device-map'))
+              resolve(require('./views/operation/product/device-map/index'))
             }, 'admin')
           }
         },

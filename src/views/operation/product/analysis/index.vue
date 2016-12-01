@@ -35,7 +35,7 @@
 <script>
 import api from 'api'
 import { setCurrProductMixin } from '../mixins'
-import Chart from 'components/Chart/index'
+import Chart from 'components/chart/index'
 import formatDate from 'filters/format-date'
 import Distributing from './components/Distributing'
 

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Chart from 'components/Chart/index'
+import Chart from 'components/chart/index'
 import echartOptions from './echart-options'
 import api from 'api'
 

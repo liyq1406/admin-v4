@@ -107,7 +107,7 @@
 import api from 'api'
 import * as config from 'consts/config'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'
-import Chart from 'components/Chart/index'
+import Chart from 'components/chart/index'
 
 export default {
   name: 'DeviceList',

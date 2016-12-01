@@ -116,7 +116,7 @@
 <script>
 import api from 'api'
 import * as config from 'consts/config'
-import Chart from 'components/Chart/index'
+import Chart from 'components/chart/index'
 import convertData from 'components/chart/convert-data'
 import formatDate from 'filters/format-date'
 import {numToPercent} from 'utils'

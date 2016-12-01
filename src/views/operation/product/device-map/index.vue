@@ -16,7 +16,8 @@
           </search-box>
         </div>
       </div>
-      <h3>{{ $t('operation.product.devicemap.map') }}</h3>
+      <!-- <h3>{{ $t('operation.product.devicemap.map') }}</h3> -->
+      <h3><button class="btn btn-ghost btn-sm" @click.prevent.stop="onDemoBtnClick"><i class="fa fa-expand"></i> {{ $t('operation.product.devicemap.demo') }} </button></h3>
     </div>
 
     <!-- 设备地图 -->
@@ -50,14 +51,18 @@
     <div class="device-loading" v-show="loadingData">
       <spinner :text="loadingText"></spinner>
     </div>
+
+    <!-- 演示地图 -->
+    <demo-map :show="showDemoMap" @dismiss="onDemoMapDismiss"></demo-map>
   </div>
 </template>
 
 <script>
-import { setCurrProductMixin } from './mixins'
+import { setCurrProductMixin } from '../mixins'
 import api from 'api'
 import * as config from 'consts/config'
 import formatDate from 'filters/format-date'
+import DemoMap from './components/DemoMap'
 import Vue from 'vue'
 
 let icon1, icon2, infoWindow
@@ -66,6 +71,10 @@ export default {
   name: 'DeviceMap',
 
   mixins: [setCurrProductMixin],
+
+  components: {
+    DemoMap
+  },
 
   data () {
     return {
@@ -104,7 +113,8 @@ export default {
       vDevices: [],
       geographies: [],
       infoMsg: '',
-      loadingText: ''
+      loadingText: '',
+      showDemoMap: true
     }
   },
 
@@ -272,6 +282,20 @@ export default {
       google.maps.event.addListener(this.map, 'zoom_changed', () => {
         this.getGeographies(true)
       })
+    },
+
+    /**
+     * 显示演示地图
+     */
+    onDemoBtnClick () {
+      this.showDemoMap = true
+    },
+
+    /**
+     * 处理演示地图消失
+     */
+    onDemoMapDismiss (val) {
+      this.showDemoMap = val
     },
 
     /**
@@ -686,7 +710,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../../../assets/stylus/common'
+@import '../../../../assets/stylus/common'
 
 .device-map-page
   absolute left right top bottom
@@ -747,7 +771,7 @@ export default {
       font-family tahoma
       font-size 12px
       font-weight bold
-      background url("../../../assets/images/marker.png") no-repeat 0 -254px
+      background url("../../../../assets/images/marker.png") no-repeat 0 0
 
     .status
       absolute right 8px top 12px
@@ -758,33 +782,10 @@ export default {
       background #F3F3F3
 
       .icon-num
-        background-position 0 -284px
+        background-position 0 -30px
 
   .device-map
     absolute left 10px top 110px right 328px bottom 10px
-
-.device-map
-  .map-marker
-    absolute left top
-    display inline-block
-    size 33px 43px
-    z-index 3
-    color #FFF
-    line-height 32px
-    font-size 16px
-    font-weight bold
-    font-family tahoma
-    text-align center
-    background url("../../../assets/images/marker.png") no-repeat
-
-    &:hover
-    &.map-marker-active
-    &.map-marker-hover
-      background-position 0 -45px
-
-    &:hover
-    &.map-marker-hover
-      z-index 10000
 
 .info-window-content
   min-width 260px

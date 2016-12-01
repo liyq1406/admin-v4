@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Chart from 'components/Chart/index'
+import Chart from 'components/chart/index'
 import {getTrend} from '../api-user'
 import formatDate from 'filters/format-date'
 import {getLastYearDate} from 'utils'

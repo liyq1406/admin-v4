@@ -5,6 +5,7 @@
 
 export default {
   title: 'Device Map',
+  demo: 'Demonstration',
   map: 'Map',
   online: 'Online',
   offline: 'Offline',

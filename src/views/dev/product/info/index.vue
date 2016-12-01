@@ -124,7 +124,7 @@ import api from 'api'
 import { setCurrProductMixin } from '../mixins'
 import { removeProduct, updateProduct } from 'store/actions/products'
 import * as config from 'consts/config'
-import Chart from 'components/Chart/index'
+import Chart from 'components/chart/index'
 import formatDate from 'filters/format-date'
 // import BatchExportQr from './batch-export-qr'
 

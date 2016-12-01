@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import Chart from 'components/Chart/index'
+import Chart from 'components/chart/index'
 import api from 'api'
 import { patchLostDates } from 'utils'
 import formatDate from 'filters/format-date'
