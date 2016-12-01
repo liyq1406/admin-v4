@@ -31,5 +31,9 @@ export default {
     page: '页',
     item_range: '第{start}-{end}项，',
     total_items: '共{total}项'
+  },
+
+  image_uploader: {
+    label: '添加图片'
   }
 }

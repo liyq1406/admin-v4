@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>客服详情</h2>
+      <h2>{{ $t('operation.warranty.staff_details.main_title') }}</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt15 mb20 no-split-line">
@@ -10,7 +10,7 @@
           <div class="account-info ml10">
             <info-card :thumb-hidden="true">
               <h3>{{ detail.name }} <a href="#" @click.prevent="editAccount" class="fa fa-edit"></a></h3>
-              <div class="desc"><span :class="{'on-line':detail.status=== 1, 'off-line':detail.status!==1}" v-text="detail.status=== 1?'启用':'停用'"></span><span>创建时间：{{ detail.create_time | formatDate }}</span>
+              <div class="desc"><span :class="{'on-line':detail.status=== 1, 'off-line':detail.status!==1}" v-text="detail.status=== 1? $t('common.enable') : $t('common.outage')"></span><span>{{ $t('common.create_time') }}：{{ detail.create_time | formatDate }}</span>
               </div>
             </info-card>
           </div>
@@ -22,61 +22,61 @@
     </div>
     <!-- start 编辑客服 -->
     <modal :show.sync="showEditModal" width="600px">
-      <h3 slot="header">编辑客服</h3>
+      <h3 slot="header">{{ $t('operation.warranty.staff_details.edit') }}</h3>
       <div slot="body" class="form">
         <form autocomplete="off" v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editStaffHook">
           <div class="form-row row">
-            <label class="form-control col-6">姓名:</label>
+            <label class="form-control col-6">{{ $t('operation.warranty.staff.fields.name') }}:</label>
             <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="editModal.name" type="text" v-form-ctrl name="name" required lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">*必须</span></div>
-              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">*必须</span></div>
+              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('operation.warranty.staff.fields.name')}) }}</span></div>
+              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('operation.warranty.staff.fields.name')}) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">邮箱地址:</label>
+            <label class="form-control col-6">{{ $t('common.email') }}:</label>
             <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="editModal.email" type="email" v-form-ctrl name="email" required lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.email.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.email.$error.required">*必须</span></div>
-              <div v-if="editValidation.email.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.email.$error.required">*必须</span></div>
+              <div v-if="editValidation.$submitted && editValidation.email.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.email.$error.required">{{ $t('common.validation.required', {field: $t('common.email')}) }}</span></div>
+              <div v-if="editValidation.email.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.email.$error.required">{{ $t('common.validation.required', {field: $t('common.email')}) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">联系号码:</label>
+            <label class="form-control col-6">{{ $t('common.phone') }}:</label>
             <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="editModal.phone" type="text" :pattern="patterns.PHONE" v-form-ctrl name="phone" required lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">*必须</span></div>
-              <div v-if="editValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">*必须</span></div>
+              <div v-if="editValidation.$submitted && editValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('common.validation.required', {field: $t('common.phone')}) }}</span></div>
+              <div v-if="editValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('common.validation.required', {field: $t('common.phone')}) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">登陆密码:</label>
+            <label class="form-control col-6">{{ $t('common.password') }}:</label>
             <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="editModal.password" type="text" v-form-ctrl name="password" required lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.password.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.password.$error.required">*必须</span></div>
-              <div v-if="editValidation.password.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.password.$error.required">*必须</span></div>
+              <div v-if="editValidation.$submitted && editValidation.password.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.password.$error.required">{{ $t('common.validation.required', {field: $t('common.password')}) }}</span></div>
+              <div v-if="editValidation.password.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.password.$error.required">{{ $t('common.validation.required', {field: $t('common.password')}) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
             <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox">
-                  <input type="checkbox" v-model="editModal.status">启用
+                  <input type="checkbox" v-model="editModal.status">{{ $t('common.enable') }}
                 </label>
               </div>
             </div>
           </div>
           <div class="form-actions">
             <label class="del-check">
-              <input type="checkbox" name="del" v-model="delChecked"/>删除客服
+              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t('operation.warranty.staff_details.del') }}
             </label>
             <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
@@ -105,10 +105,10 @@ export default {
       editModal: false,
       editValidation: '',
       editCustomOptions: [{
-        label: '启用',
+        label: this.$t('common.enable'),
         value: 0
       }, {
-        label: '停用',
+        label: this.$t('common.outage'),
         value: 1}
       ],
       editStaff: {
@@ -117,7 +117,7 @@ export default {
         tel: '',
         email: '',
         status: {
-          label: '启用',
+          label: this.$t('common.enable'),
           value: 0
         }
       },
@@ -128,13 +128,13 @@ export default {
       detail: {},
       editing: false,
       breadcrumbNav: [{
-        label: '网点管理',
+        label: this.$t('operation.warranty.branch.main_title'),
         link: `/operation/plugins/warranty/${this.$route.params.app_id}/accounts`
       }, {
-        label: '网点详情',
+        label: this.$t('operation.warranty.branch_details.main_title'),
         link: `/operation/plugins/warranty/${this.$route.params.app_id}/accounts/${this.$route.params.account_id}`
       }, {
-        label: '客服详情'
+        label: this.$t('operation.warranty.staff_details.main_title')
       }]
     }
   },
@@ -146,15 +146,15 @@ export default {
     accountInfo () {
       return {
         email: {
-          label: '邮箱地址',
+          label: this.$t('common.email'),
           value: this.detail.email
         },
         phone: {
-          label: '联系电话',
+          label: this.$t('common.phone'),
           value: this.detail.phone
         },
         password: {
-          label: '登陆密码',
+          label: this.$t('common.password'),
           value: this.detail.password
         }
       }

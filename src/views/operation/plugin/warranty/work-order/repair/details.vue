@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>维修详情</h2>
+      <h2>{{ $t('operation.warranty.repair_details.main_title') }}</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt15 mb20 no-split-line">
@@ -36,19 +36,19 @@
               </div>
             </div>
           </info-card>
-          <div v-stretch="185">
+          <div v-stretch="182">
             <div class="x-info-list-wrap">
               <div class="x-info-list">
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">维修设备</div>
+                    <div class="x-label">{{ $t('operation.warranty.repair_details.device') }}</div>
                     <div class="x-val">{{repairOrder.product_sn || '-'}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">持续时长</div>
-                    <div class="x-val">{{lasting || '正在计算……'}}</div>
+                    <div class="x-label">{{ $t('operation.warranty.repair_details.lasting') }}</div>
+                    <div class="x-val">{{lasting || '-'}}</div>
                   </div>
                 </div>
                 <!-- <div class="x-info-list-item threeDepart">
@@ -64,31 +64,31 @@
                 </div> -->
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">维修人员</div>
+                    <div class="x-label">{{ $t('operation.warranty.repair_form.staff') }}</div>
                     <div class="x-val">{{repairOrder.assigned_name || '-'}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">处理时间</div>
+                    <div class="x-label">{{ $t('operation.warranty.repair_details.manage_time') }}</div>
                     <div class="x-val">{{repairOrder.manage_time | formatDate}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">维修费用</div>
+                    <div class="x-label">{{ $t('operation.warranty.repair_details.fees') }}</div>
                     <div class="x-val">{{repairOrder.fees || '-'}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">用户帐号</div>
+                    <div class="x-label">{{ $t('operation.warranty.repair_details.account') }}</div>
                     <div class="x-val">{{repairOrder.account || '-'}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item oneDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">用户评价</div>
+                    <div class="x-label">{{ $t('operation.warranty.repair_details.comment') }}</div>
                     <div class="x-val">-</div>
                   </div>
                 </div>
@@ -96,14 +96,14 @@
             </div>
             <div class="x-info-list-item wholeDepart">
               <div class="x-info-list-item-in">
-                <div class="x-label">现象说明</div>
+                <div class="x-label">{{ $t('operation.warranty.repair_form.fields.remark') }}</div>
                 <div class="x-val textoverflow">{{repairOrder.remark || '-'}}</div>
               </div>
             </div>
             <div class="x-info-list-item oneDepart">
               <div class="x-info-list-item-in">
-                <div class="x-label">维修图片</div>
-                <div v-if="repairOrder.images && !repairOrder.images[0]" class="x-val">暂无图片</div>
+                <div class="x-label">{{ $t('operation.warranty.repair_form.fields.image') }}</div>
+                <div v-if="repairOrder.images && !repairOrder.images[0]" class="x-val">{{ $t('operation.warranty.repair_details.no_image') }}</div>
                 <div v-else class="pic-ul">
                   <div v-for="pic in repairOrder.images" class="pic">
                     <image :src="pic"></image>
@@ -123,7 +123,7 @@
     </div>
     <div class="panel mt10">
       <div class="panel-hd">
-        <h3>维修历史</h3>
+        <h2>{{ $t('operation.warranty.repair_details.history') }}</h2>
       </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
@@ -131,7 +131,7 @@
             <div class="filter-group fl">
               <div class="filter-group-item">
                 <x-select :label="queryType.label" width='110px' size="small">
-                  <span slot="label">状态</span>
+                  <span slot="label">{{ $t('common.status') }}</span>
                   <select v-model="queryType" @change="getHistory(true)">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                   </select>
@@ -143,7 +143,7 @@
                 <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
               </div> -->
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="getHistory(true)" :placeholder="'输入工单编号'" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="" @press-enter="getHistory(true)">
+                <search-box :key.sync="query" :active="searching" @cancel="getHistory(true)" :placeholder="$t('operation.warranty.repair.search_placeholder')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="" @press-enter="getHistory(true)">
                   <button slot="search-button" @click="getHistory(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -180,43 +180,43 @@ export default {
       countPerPage: config.COUNT_PER_PAGE,
       total: 0,
       statusOptions: [{
-        label: '未处理',
+        label: this.$t('operation.warranty.repair.query_types.pending'),
         value: 0
       }, {
-        label: '维修中',
+        label: this.$t('operation.warranty.repair.query_types.processing'),
         value: 1
       }, {
-        label: '维修完成',
+        label: this.$t('operation.warranty.repair.query_types.finished'),
         value: 2
       }],
       status: {
-        label: '未处理',
+        label: this.$t('operation.warranty.repair.query_types.pending'),
         value: 0
       },
       repairOrder: {},
       repairDetails: {},
       breadcrumbNav: [{
-        label: '全部',
+        label: this.$t('common.all'),
         link: `/operation/plugins/warranty/${this.$route.params.app_id}/work-orders/repair`
       }, {
-        label: '工单详情'
+        label: this.$t('operation.warranty.repair_details.main_title')
       }],
       historys: [],
       queryTypeOptions: [
-        { label: '全部', value: 'all' },
-        { label: '待处理', value: 0 },
-        { label: '维修中', value: 1 },
-        { label: '维修完成', value: 2 }
+        { label: this.$t('common.all'), value: 'all' },
+        { label: this.$t('operation.warranty.repair.query_types.pending'), value: 0 },
+        { label: this.$t('operation.warranty.repair.query_types.processing'), value: 1 },
+        { label: this.$t('operation.warranty.repair.query_types.finished'), value: 2 }
       ],
       queryType: {
-        label: '全部',
+        label: this.$t('common.all'),
         value: 'all'
       },
       searching: false,
       headers: [
         {
           key: 'id',
-          title: '工单编号'
+          title: this.$t('operation.warranty.repair.columns.id')
         },
         // {
         //   key: 'mac',
@@ -224,15 +224,15 @@ export default {
         // },
         {
           key: 'create_date',
-          title: '创建时间'
+          title: this.$t('operation.warranty.repair.columns.create_date')
         },
         {
           key: 'person',
-          title: '维修人员'
+          title: this.$t('operation.warranty.repair.columns.person')
         },
         {
           key: 'content',
-          title: '维修内容',
+          title: this.$t('operation.warranty.repair.columns.content'),
           class: 'tac w200'
         },
         // {
@@ -246,7 +246,7 @@ export default {
         // },
         {
           key: 'state',
-          title: '状态',
+          title: this.$t('operation.warranty.repair.columns.state'),
           class: 'tac'
         }
       ]
@@ -267,6 +267,24 @@ export default {
     },
     rows () {
       var result = []
+      let resetState = (state) => {
+        var result = [
+          {
+            text: this.$t('operation.warranty.repair.query_types.pending'),
+            color: '#6699CC'
+          },
+          {
+            text: this.$t('operation.warranty.repair.query_types.processing'),
+            color: '#CC6600'
+          },
+          {
+            text: this.$t('operation.warranty.repair.query_types.finished'),
+            color: '#090'
+          }
+        ]
+        var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
+        return html
+      }
       this.historys.map((item) => {
         var history = {
           id: '<a class="hl-red">' + item._id + '</a>',
@@ -280,24 +298,6 @@ export default {
         result.push(history)
       })
       return result
-      function resetState (state) {
-        var result = [
-          {
-            text: '待处理',
-            color: '#6699CC'
-          },
-          {
-            text: '维修中',
-            color: '#CC6600'
-          },
-          {
-            text: '维修完成',
-            color: '#090'
-          }
-        ]
-        var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
-        return html
-      }
       // function resetLevel (state) {
       //   var resutl = [
       //     {
@@ -401,9 +401,9 @@ export default {
     prettyDuration (n) {
       let hours = (n / 3600000).toFixed(1)
       if (hours > 1) {
-        return `${hours}小时`
+        return `${hours}${this.$t('common.hours')}`
       } else {
-        return `${Math.floor(n / 60000)}分钟`
+        return `${Math.floor(n / 60000)}${this.$t('common.minutes')}`
       }
     },
     // 计算持续时间
@@ -449,17 +449,17 @@ export default {
         this.repairOrder = res.data.list[0] || {}
         if (this.repairOrder.status === 0) {
           this.status = {
-            label: '未处理',
+            label: this.$t('operation.warranty.repair.query_types.pending'),
             value: 0
           }
         } else if (this.repairOrder.status === 1) {
           this.status = {
-            label: '维修中',
+            label: this.$t('operation.warranty.repair.query_types.processing'),
             value: 1
           }
         } else if (this.repairOrder.status === 2) {
           this.status = {
-            label: '维修完成',
+            label: this.$t('operation.warranty.repair.query_types.finished'),
             value: 2
           }
         }
@@ -526,7 +526,7 @@ export default {
         this.getRepairOrder()
         this.showNotice({
           type: 'info',
-          content: '修改状态成功！'
+          content: this.$t('common.action_success')
         })
       }).catch((err) => {
         this.handleError(err)

@@ -1,13 +1,13 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>反馈列表 </h2>
+      <h2>{{ $t('operation.helpdesk.issues.helpdeskList') }}</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item" v-if="products.length">
           <x-select :label="selectedProduct.label" @change="getIssues" width="110px" size="small">
-            <span slot="label">显示</span>
+            <span slot="label">{{ $t('operation.helpdesk.issues.show') }}</span>
             <select v-model="selectedProduct">
               <option :value="opt" v-for="opt in selectOptions">{{ opt.label }}</option>
             </select>
@@ -38,7 +38,7 @@
               <a v-link="{path: '/operation/plugins/helpdesk/' + $route.params.app_id + '/issues/' + issue._id}">
                 <i class="fa fa-check-square-o"></i>
                 <span class="info overhid">{{ issue.content }}</span>
-                <span class="metas"><span v-if="issue.label">[{{ issue.label[0] }}]</span><span v-else>[暂无分类]</span><span>{{ issue.create_time | formatDate}}</span></span>
+                <span class="metas"><span v-if="issue.label">[{{ issue.label[0] }}]</span><span v-else>[{{ $t('operation.helpdesk.issues.noClassification') }}]</span><span>{{ issue.create_time | formatDate}}</span></span>
               </a>
             </li>
           </ul>
@@ -49,7 +49,7 @@
           <router-view transition="view" transition-mode="out-in" class="view"></router-view>
         </div>
       </div>
-      <div v-else style="height:500px;line-height:500px;text-align:center">暂无数据</div>
+      <div v-else style="height:500px;line-height:500px;text-align:center">{{ $t('operation.helpdesk.issues.noData') }}</div>
     </div>
   </div>
 </template>
@@ -146,41 +146,14 @@ export default {
       //   create_time: '2016-6-1 19:21:32'
       // }],
       issueTypeOptions: [
-        { label: '全部问题', value: 'all' },
-        { label: '未处理', value: 0 },
-        { label: '已处理', value: 1 }
+        { label: this.$t('operation.helpdesk.issues.allProblem'), value: 'all' },
+        { label: this.$t('operation.helpdesk.issues.unhandle'), value: 0 },
+        { label: this.$t('operation.helpdesk.issues.handled'), value: 1 }
       ],
       issueType: {
-        label: '全部问题',
+        label: this.$t('operation.helpdesk.issues.allProblem'),
         value: 'all'
       }
-      // periodOptions: [
-      //   { label: '不限', value: 'any' },
-      //   { label: '最近24小时', value: 24 },
-      //   { label: '最近3天', value: 72 },
-      //   { label: '最近7天', value: 168 }
-      // ],
-      // period: {
-      //   label: '不限',
-      //   value: 'any'
-      // },
-      // statusOptions: [
-      //   { label: '不限', value: 'any' },
-      //   { label: '未处理', value: 0 },
-      //   { label: '已处理', value: 1 }
-      // ],
-      // status: {
-      //   label: '不限',
-      //   value: 'any'
-      // },
-      // queryTypeOptions: [
-      //   { label: '联系方式', value: 'phone' },
-      //   { label: '姓名', value: 'user_name' }
-      // ],
-      // queryType: {
-      //   label: '联系方式',
-      //   value: 'phone'
-      // }
     }
   },
 
@@ -188,7 +161,7 @@ export default {
     selectOptions () {
       if (this.products.length > 0) {
         var res = [{
-          label: '全部'
+          label: this.$t('operation.helpdesk.issues.all')
         }]
         this.products.forEach((item) => {
           let temp = {
@@ -218,7 +191,7 @@ export default {
         }
       }
       if (this.period === '') {
-        if (this.selectedProduct.label === '全部') {
+        if (this.selectedProduct.label === this.$t('operation.helpdesk.issues.all')) {
           condition.query = {
             create_time: {
               $gte: {'@date': this.startTimePick},
@@ -237,7 +210,7 @@ export default {
           }
         }
       } else if (this.period === 'all') {
-        if (this.selectedProduct.label === '全部') {
+        if (this.selectedProduct.label === this.$t('operation.helpdesk.issues.all')) {
 
         } else {
           condition.query = {
@@ -247,7 +220,7 @@ export default {
           }
         }
       } else {
-        if (this.selectedProduct.label === '全部') {
+        if (this.selectedProduct.label === this.$t('operation.helpdesk.issues.all')) {
           condition.query = {
             create_time: {
               $lte: {'@date': this.endTime + 'T00:00:00.000Z'},
@@ -267,44 +240,14 @@ export default {
         }
       }
       switch (this.issueType.label) {
-        case '未处理':
+        case this.$t('operation.helpdesk.issues.unhandle'):
           condition.query['status'] = { $in: [0] }
           break
-        case '已处理':
+        case this.$t('operation.helpdesk.issues.handled'):
           condition.query['status'] = { $in: [1] }
           break
         default:
       }
-      // const SECONDS_PER_HOUR = 3600
-      //
-      // // 添加问题类型查询条件
-      // if (this.issueType.value !== 'all') {
-      //   condition.query['label'] = { $in: [this.issueType.label] }
-      // }
-      //
-      // // 添加开始和结束时间的查询条件
-      // if (this.period.value !== 'any') {
-      //   let endTime = new Date()
-      //   let startTime = new Date(endTime.getTime() - SECONDS_PER_HOUR * 1000 * this.period.value)
-      //   condition.query.create_time = {
-      //     '$gte': {
-      //       '@date': new Date(startTime)
-      //     },
-      //     '$lte': {
-      //       '@date': new Date(endTime)
-      //     }
-      //   }
-      // }
-      //
-      // // 添加反馈状态查询条件
-      // if (this.status.value !== 'any') {
-      //   condition.query['status'] = { $in: [this.status.value] }
-      // }
-      //
-      // // 添加查询字段内容
-      // if (this.query.length > 0) {
-      //   condition.query[this.queryType.value] = {$regex: this.query, $options: 'i'}
-      // }
 
       return condition
     },
