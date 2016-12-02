@@ -93,7 +93,8 @@ export default {
             users: 'User',
             email: 'Email',
             message: 'SMS',
-            views: 'Customize'
+            views: 'Customize',
+            tag: 'Tags'
           }
         }
       }
