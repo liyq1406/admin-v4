@@ -362,7 +362,7 @@
     overflow hidden
     .table-content
       overflow-x auto
-      overflow-y hidden
+      overflow-y visible
     .pointer
       cursor pointer
     .theader

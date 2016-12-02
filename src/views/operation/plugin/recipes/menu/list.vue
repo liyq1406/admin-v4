@@ -19,7 +19,21 @@
                 </search-box>
               </div>
             </div>
-            <h3>菜单列表</h3>
+
+            <div class="filter-group fl">
+
+              <span class="mr20">菜单列表</span>
+
+              <span class="">{{ $t('operation.product.device.alert.time') }}: </span>
+              <x-select width="98px" size="small" :label="rangeOption.label">
+                <select v-model="rangeOption" @change="onRangeOptionChange">
+                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </x-select>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
+
+            </div>
+
           </div>
         </x-table>
       </div>
@@ -28,10 +42,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import locales from 'consts/locales/index'
+import formatDate from 'filters/format-date'
 import api from 'api'
 // import * as config from 'consts/config'
 import { pluginMixins } from '../../mixins'
-import formatDate from 'filters/format-date'
 
 export default {
   name: 'MenuList',
@@ -76,7 +92,14 @@ export default {
       countPerPage: 10,
       currentPage: 1,
       query: '',
-      searching: false
+      searching: false,
+      rangeOption: {
+        label: this.$t('common.any'),
+        value: 'any'
+      },
+      timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
+      startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+      endTime: new Date()
     }
   },
 
@@ -116,6 +139,13 @@ export default {
         query: {},
         order: {
           create_time: -1
+        }
+      }
+
+      if (this.rangeOption.value === 'specified') {
+        condition.query['create_time'] = {
+          '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+          '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
         }
       }
 
@@ -231,6 +261,27 @@ export default {
      */
     cancelSearching () {
       this.getMenus()
+    },
+
+    /**
+     * 处理时间区段改变
+     */
+    onRangeOptionChange () {
+      if (this.rangeOption.value === 'any') {
+        this.getMenus(true)
+      }
+    },
+
+    /**
+     * 时间范围改变
+     * @param  {[type]} startDate [description]
+     * @param  {[type]} endDate   [description]
+     * @return {[type]}           [description]
+     */
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getMenus(true)
     }
   }
 }
