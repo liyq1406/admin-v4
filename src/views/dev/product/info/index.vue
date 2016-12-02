@@ -54,6 +54,9 @@
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm" @click="showBatchModal">
+                <i class="fa fa-reply-all"></i>
+                批量导入数据端点</button>
                 <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" :max="(queryType.value === 'id'?2100000000: false)" @search="handleSearch" @press-enter="getDevices(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
@@ -97,6 +100,27 @@
       <h3 slot="header">二维码</h3>
       <div slot="body" class="qrcode">{{ currentProduct.qrcode || 'XQR:T:P;V:1;PID:'+$route.params.id+';;' }}</div>
     </modal>
+    <!-- 批量导入浮层 -->
+    <modal :show.sync="isShowBatchModal" @close="onBatchCancel">
+      <h3 slot="header">批量修改数据端点</h3>
+      <div slot="body" class="form">
+        <form autocomplete="off" @submit.prevent="">
+          <div class="form-row row">
+            <!-- <label class="form-control col-6">导入:</label> -->
+            <p>您可以通过标准文件批量导入数据端点，<a href="/static/files/import_datapoint.csv" class="hl-red">查看示例</a></p>
+            <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
+              <input type="file" v-el:mac-file name="macFile" @change.prevent="selectFile"/><i class="fa fa-reply-all"></i> 批量导入数据端点
+            </label>
+            <span class="file-name">{{ file.name }}</span>
+            <p class="hl-gray">* 仅限csv格式文件</p>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="batchImport" :disabled="importing" :class="{'disabled':importing}" v-text="importing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onBatchCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+          </div>
+        </form>
+      </div>
+    </modal>
 
     <!-- 编辑设备浮层 -->
     <modal :show.sync="showDeviceEditModal">
@@ -122,6 +146,37 @@
             </div>
           </form>
         </validator>
+      </div>
+    </modal>
+
+    <!-- 提示浮层 -->
+    <modal :show.sync="isShowTipsModal" @close="onTipsCancel">
+      <h3 slot="header">提示</h3>
+      <div slot="body">
+        <alert type="success" title="" :cols="22" v-if="tips.type==='import-success'">
+          <p>设备导入成功</p>
+        </alert>
+        <alert type="warning" title="" :cols="22" v-else>
+          <p>{{ tips.msg }}</p>
+        </alert>
+        <div class="row" v-if="tips.deviceArr || tips.datapointArr">
+          <div class="col-11">
+            <div class="tips-tit">不正确的设备</div>
+            <div class="tips-box">
+              <div class="tips-box-item" v-for="item in tips.deviceArr">{{ item.trim() }}</div>
+            </div>
+          </div>
+          <div class="col-11 col-offset-2">
+            <div class="tips-tit">不正确的数据端点</div>
+            <div class="tips-box">
+              <div class="tips-box-item" v-for="item in tips.datapointArr">{{ item.trim() }}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div slot="footer" class="modal-footer">
+        <button @click.prevent.stop="onTipsCancel" class="btn btn-primary">{{ $t("common.ok") }}</button>
       </div>
     </modal>
   </div>
@@ -168,6 +223,11 @@ export default {
     })
 
     return {
+      isShowBatchModal: false,
+      isShowTipsModal: false,
+      file: {},
+      tips: {},
+      importing: false,
       // showExportQRCode: false,
       firstRequest: true,
       showQrcodeModal: false,
@@ -553,6 +613,191 @@ export default {
 
   methods: {
     /**
+     * 选择文件
+     */
+    selectFile () {
+      this.file = this.$els.macFile.files[0]
+    },
+    /**
+     * 关闭批量导入浮层
+     */
+    onBatchCancel () {
+      this.$els.macFile.value = ''
+      this.file = {}
+      this.importing = false
+      this.isShowBatchModal = false
+    },
+
+    /**
+     * 显示批量浮层
+     * @return {[type]} [description]
+     */
+    showBatchModal () {
+      this.isShowBatchModal = true
+    },
+    /**
+     * 批量导入
+     */
+    batchImport () {
+      if (window.File && window.FileReader && window.FileList && window.Blob) {
+        var reader = new window.FileReader()
+
+        // 没选择文件
+        if (!this.file.name) {
+          this.showNotice({
+            type: 'error',
+            content: '请上传导入设备文件'
+          })
+          return false
+        }
+
+        // 导入文件类型不合法
+        if (!/\.csv$/.test(this.file.name)) {
+          this.showNotice({
+            type: 'error',
+            content: this.file.name + this.$t('common.upload.type_tips')
+          })
+          return false
+        }
+
+        reader.onerror = (evt) => {
+          this.showNotice({
+            type: 'error',
+            content: this.$t('common.upload.read_err')
+          })
+        }
+        this.importing = true
+        // 读取完成
+        reader.onloadend = (evt) => {
+          if (evt.target.readyState === window.FileReader.DONE) {
+            var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n')
+            macArr = _.compact(macArr)
+            // console.log(macArr.slice(1))
+            // 获取数据端点的index
+            let keyObj = []
+            macArr.slice(0, 1).map((key) => {
+              keyObj = key.split(',')
+              keyObj = keyObj.slice(1)
+            })
+            macArr = macArr.slice(1).map((item) => {
+              let macObj = item.split(',')
+              let result = {
+                mac: macObj[0] ? macObj[0].trim() : '',
+                datapoints: []
+              }
+              macObj = macObj.slice(1)
+              for (let i = 0; i < macObj.length; i++) {
+                if (macObj[i] && macObj[i].trim()) {
+                  var obj = {}
+                  obj.index = keyObj[i]
+                  obj.value = macObj[i]
+                  result.datapoints.push(obj)
+                }
+              }
+              // if (macObj[1] && macObj[1].trim()) result.sn = macObj[1].trim()
+              // if (macObj[2] && macObj[2].trim()) result.name = macObj[2].trim()
+              return result
+            })
+            api.product.editDatapoint(this.$route.params.id, macArr).then((res) => {
+              if (res.status === 200) {
+                // this.showNotice({
+                //   type: 'success',
+                //   content: this.$t('common.upload.success_msg')
+                // })
+                this.onBatchCancel()
+                this.isShowTipsModal = true
+                this.tips = {
+                  type: 'import-success',
+                  recordId: res.data.import_record_id
+                }
+              }
+              this.importing = false
+            }).catch((res) => {
+              this.onBatchCancel()
+              this.handleImportError(res)
+              this.importing = false
+            })
+          }
+        }
+        reader.readAsText(this.file)
+      } else {
+        this.showNotice({
+          type: 'error',
+          content: this.$t('common.upload.compatiblity')
+        })
+      }
+    },
+
+    /**
+     * 处理导入错误
+     * @author shengzhi
+     * @params {Object} res 响应信息
+     */
+    handleImportError (res) {
+      let code = res.data.error.code
+      const ERRORS = {
+        '4001001': {
+          type: 'error',
+          msg: '请求字段缺少'
+        },
+        '4041007': {
+          type: 'error',
+          msg: '数据端点不存在 '
+        },
+        '4001183': {
+          type: 'error-duplicated-data',
+          msg: '数据端点不是应用类型'
+        },
+        '4041008': {
+          type: 'error-duplicated-items',
+          msg: '设备不存在'
+        }
+      }
+
+      if (ERRORS.hasOwnProperty(code)) {
+        this.isShowTipsModal = true
+        let tips = ERRORS[code]
+        // let msg = res.data.error.msg.split('],[')
+        let msg = res.data.error.msg
+
+        if (code === 4041008) {
+          let begin = msg.indexOf('[')
+          let end = msg.indexOf(']')
+          let arr = msg.substr(begin + 1, end - begin - 1)
+          arr = arr.split(', ')
+          // console.log(arr)
+          tips.deviceArr = arr
+          // tips.deviceArr = msg.replace('[', '').split(',')
+          // tips.datapointArr = msg.replace(']', '').split(',')
+        } else if (code === 4001183) {
+          let begin = msg.indexOf('index[')
+          let end = msg.indexOf('] source')
+          let arr = msg.substr(begin + 6, end - begin - 6)
+          arr = arr.split(', ')
+          // console.log(arr)
+          tips.datapointArr = arr
+        } else if (code === 4041007) {
+          let begin = msg.indexOf('datapoint[')
+          let end = msg.indexOf('] index')
+          let arr = msg.substr(begin + 10, end - begin - 10)
+          arr = arr.split(', ')
+          console.log(arr)
+          tips.datapointArr = arr
+        }
+        this.tips = tips
+      } else {
+        this.handleError(res)
+      }
+    },
+
+    /**
+     * 关闭提示浮层
+     */
+    onTipsCancel () {
+      this.isShowTipsModal = false
+      this.tips = {}
+    },
+    /**
      * 向服务器获取数据
      * @return {[type]} [description]
      */
@@ -866,4 +1111,13 @@ export default {
 .qrcode
   font-size 16px
   word-wrap break-word
+.tips-box
+  border 1px solid light-border-color
+  font-size 11px
+  height 125px
+  overflow-y auto
+
+  .tips-box-item
+    line-height 20px
+    padding 2px 5px
 </style>
