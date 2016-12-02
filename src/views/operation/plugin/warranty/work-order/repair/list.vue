@@ -289,10 +289,8 @@ export default {
         query: {}
       }
 
-      condition.query = {
-        product_id: {
-          $in: [this.selectedProduct.id]
-        }
+      condition.query.product_id = {
+        $in: [this.selectedProduct.id]
       }
 
       if (this.rangeOption.value === 'specified') {
@@ -306,11 +304,9 @@ export default {
         condition.query.status = this.queryType.value
       }
       if (this.useTime === true) {
-        condition.query = {
-          create_time: {
-            $gte: {'@date': this.startTimePick},
-            $lte: {'@date': this.endTimePick}
-          }
+        condition.query.create_time = {
+          $gte: {'@date': this.startTimePick},
+          $lte: {'@date': this.endTimePick}
         }
       }
 
