@@ -33,6 +33,15 @@
                   </select>
                 </x-select>
               </div>
+
+              <span class="ml10">创建时间: </span>
+              <x-select width="98px" size="small" :label="rangeOption.label">
+                <select v-model="rangeOption" @change="onRangeOptionChange">
+                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </x-select>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
+
             </div>
           </div>
         </x-table>
@@ -42,6 +51,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import locales from 'consts/locales/index'
 import formatDate from 'filters/format-date'
 import api from 'api'
 
@@ -97,7 +108,14 @@ export default {
       currentPage: 1,
       query: '',
       searching: false,
-      loadingData: false
+      loadingData: false,
+      rangeOption: {
+        label: this.$t('common.any'),
+        value: 'any'
+      },
+      timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
+      startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+      endTime: new Date()
     }
   },
 
@@ -140,6 +158,13 @@ export default {
 
       if (this.query !== '') {
         condition.query[this.searchType.value] = {$regex: this.query, $options: 'i'}
+      }
+
+      if (this.rangeOption.value === 'specified') {
+        condition.query['create_time'] = {
+          '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+          '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
+        }
       }
 
       if (this.queryType.value === 1) {
@@ -251,6 +276,26 @@ export default {
     // 取消搜索
     cancelSearching () {
       this.getArticleList()
+    },
+    /**
+     * 处理时间区段改变
+     */
+    onRangeOptionChange () {
+      if (this.rangeOption.value === 'any') {
+        this.getArticleList(true)
+      }
+    },
+
+    /**
+     * 时间范围改变
+     * @param  {[type]} startDate [description]
+     * @param  {[type]} endDate   [description]
+     * @return {[type]}           [description]
+     */
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getArticleList(true)
     }
   }
 }
