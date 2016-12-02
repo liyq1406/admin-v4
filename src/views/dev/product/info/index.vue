@@ -71,6 +71,14 @@
                   <option v-for="option in locales.data.DEVICE_VISIBILITY_OPTIONS" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
+
+              <span class="">激活时间: </span>
+              <x-select width="98px" size="small" :label="rangeOption.label">
+                <select v-model="rangeOption" @change="onRangeOptionChange">
+                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </x-select>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
             </div>
           </div>
           <button v-link="{path: 'online-offline-records', append: true}" class="btn btn-ghost mt10" slot="left-foot"><i class="fa fa-list"></i>查看上下线历史记录</button>
@@ -120,6 +128,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import locales from 'consts/locales/index'
 import api from 'api'
 import { setCurrProductMixin } from '../mixins'
 import { removeProduct, updateProduct } from 'store/actions/products'
@@ -279,7 +289,14 @@ export default {
         sortType: -1,
         class: 'wp10'
       }],
-      productFields: {}
+      productFields: {},
+      rangeOption: {
+        label: this.$t('common.any'),
+        value: 'any'
+      },
+      timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
+      startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+      endTime: new Date()
     }
   },
 
@@ -407,6 +424,13 @@ export default {
       if (this.query.length > 0) {
         this.currentPage = 1
         condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+      }
+
+      if (this.rangeOption.value === 'specified') {
+        condition.query['active_date'] = {
+          '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+          '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
+        }
       }
 
       switch (this.visibility.value) {
@@ -750,6 +774,27 @@ export default {
      */
     editProduct () {
       this.$route.router.go({path: 'edit', append: true})
+    },
+
+    /**
+     * 处理时间区段改变
+     */
+    onRangeOptionChange () {
+      if (this.rangeOption.value === 'any') {
+        this.getDevices(true)
+      }
+    },
+
+    /**
+     * 时间范围改变
+     * @param  {[type]} startDate [description]
+     * @param  {[type]} endDate   [description]
+     * @return {[type]}           [description]
+     */
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getDevices(true)
     }
   }
 }
