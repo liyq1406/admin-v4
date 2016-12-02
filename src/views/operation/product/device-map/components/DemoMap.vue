@@ -5,23 +5,16 @@
       <div class="sidebar-mask"></div>
       <div class="sidebar-tab">
         <div class="sidebar-tab__item active">设备总量城市TOP10</div>
-        <div class="sidebar-tab__item">详细地理位置</div>
+        <!-- <div class="sidebar-tab__item">详细地理位置</div> -->
       </div>
       <div class="demo-map-cities-wrap">
         <div class="demo-map-cities">
           <ul>
-            <li class="top10" v-for="n in 50">
-              <div class="num"><span>1</span></div>
-              <div class="name">北京</div>
+            <li v-for="(cityIndex, city) in cityData" :class="{'top10': cityIndex < 10}">
+              <div class="num"><span>{{ cityIndex + 1 }}</span></div>
+              <div class="name">{{ city.name }}</div>
               <div class="percentage">
-                <span class="progress" style="width: 80%"></span>
-              </div>
-            </li>
-            <li>
-              <div class="num"><span>2</span></div>
-              <div class="name">广州</div>
-              <div class="percentage">
-                <span class="progress" style="width: 30%"></span>
+                <span class="progress" :style="progressStyle(city.value)"></span>
               </div>
             </li>
           </ul>
@@ -36,10 +29,16 @@
 import Chart from 'components/chart/index'
 // import 'echarts/extension/bmap/bmap'
 // import formatDate from 'filters/format-date'
-// import api from 'api'
+import MAP_STYLE from './map-style'
+import api from 'api'
+import * as http from 'src/http'
+import Promise from 'promise'
+
+let MAX_SYMBOL_SIZE = 50
+let MIN_SYMBOL_SIZE = 8
 
 export default {
-  name: 'DeviceMap',
+  name: 'DemoMap',
 
   props: {
     show: {
@@ -60,7 +59,20 @@ export default {
   },
 
   computed: {
+    // 总量
+    total () {
+      let result = 0
+
+      if (this.cityData.length) {
+        result = _.sumBy(this.cityData, 'value')
+      }
+
+      return result
+    },
+
+    // 地图配置
     mapOptions () {
+      let self = this
       return {
         tooltip: {
           trigger: 'item',
@@ -73,120 +85,30 @@ export default {
           zoom: 5,
           roam: true,
           mapStyle: {
-            styleJson: [{
-              'featureType': 'water',
-              'elementType': 'all',
-              'stylers': {
-                'color': '#222931'
-              }
-            }, {
-              'featureType': 'land',
-              'elementType': 'all',
-              'stylers': {
-                'color': '#2F3844'
-              }
-            }, {
-              'featureType': 'railway',
-              'elementType': 'all',
-              'stylers': {
-                'visibility': 'off'
-              }
-            }, {
-              'featureType': 'highway',
-              'elementType': 'all',
-              'stylers': {
-                'visibility': 'off'
-              }
-            }, {
-              'featureType': 'highway',
-              'elementType': 'labels',
-              'stylers': {
-                'visibility': 'off'
-              }
-            }, {
-              'featureType': 'arterial',
-              'elementType': 'geometry',
-              'stylers': {
-                'visibility': 'off'
-                // 'color': '#586B7E'
-              }
-            }, {
-              'featureType': 'arterial',
-              'elementType': 'geometry.fill',
-              'stylers': {
-                'visibility': 'off'
-                // 'color': '#586B7E'
-              }
-            }, {
-              'featureType': 'poi',
-              'elementType': 'all',
-              'stylers': {
-                'visibility': 'off'
-              }
-            }, {
-              'featureType': 'green',
-              'elementType': 'all',
-              'stylers': {
-                'visibility': 'off'
-              }
-            }, {
-              'featureType': 'subway',
-              'elementType': 'all',
-              'stylers': {
-                'visibility': 'off'
-              }
-            }, {
-              'featureType': 'manmade',
-              'elementType': 'all',
-              'stylers': {
-                'visibility': 'off'
-              }
-            }, {
-              'featureType': 'local',
-              'elementType': 'all',
-              'stylers': {
-                'visibility': 'off'
-                // 'color': '#d1d1d1'
-              }
-            }, {
-              'featureType': 'arterial',
-              'elementType': 'labels',
-              'stylers': {
-                'visibility': 'off'
-              }
-            }, {
-              'featureType': 'boundary',
-              'elementType': 'geometry',
-              'stylers': {
-                'color': '#586B7E',
-                'weight': '1',
-                'lightness': -20
-              }
-            }, {
-              'featureType': 'building',
-              'elementType': 'all',
-              'stylers': {
-                'visibility': 'off'
-                // 'color': '#d1d1d1'
-              }
-            }, {
-              'featureType': 'label',
-              'elementType': 'labels.text.fill',
-              'stylers': {
-                'visibility': 'off'
-                // 'color': '#999999'
-              }
-            }]
+            styleJson: MAP_STYLE
           }
         },
         series: [{
-          name: 'pm2.5',
+          name: '设备数量',
           type: 'scatter',
           coordinateSystem: 'bmap',
-          data: this._convertData(this.cityData),
-          symbolSize: function (val) {
-            return Math.sqrt(val[2]) * 1.8
+          data: this._convertData(this.cityData.sort(function (a, b) {
+            return b.value - a.value
+          }).slice(10)),
+          symbolSize (val) {
+            let result
+
+            if (self.total) {
+              result = MAX_SYMBOL_SIZE * val[2] / self.total
+            }
+
+            if (result < MIN_SYMBOL_SIZE) {
+              result = MIN_SYMBOL_SIZE
+            }
+
+            return result
           },
+          hoverAnimation: true,
           label: {
             normal: {
               formatter: '{b}',
@@ -199,18 +121,29 @@ export default {
           },
           itemStyle: {
             normal: {
-              color: this._getColor()
+              color: '#C0C3C7'
             }
           }
         }, {
-          name: 'Top 5',
+          name: 'Top10',
           type: 'effectScatter',
+          // type: 'scatter',
           coordinateSystem: 'bmap',
           data: this._convertData(this.cityData.sort(function (a, b) {
             return b.value - a.value
-          }).slice(0, 7)),
-          symbolSize: function (val) {
-            return Math.sqrt(val[2]) * 1.8
+          }).slice(0, 10)),
+          symbolSize (val) {
+            let result
+
+            if (self.total) {
+              result = MAX_SYMBOL_SIZE * val[2] / self.total
+            }
+
+            if (result < MIN_SYMBOL_SIZE) {
+              result = MIN_SYMBOL_SIZE
+            }
+
+            return result
           },
           showEffectOn: 'render',
           rippleEffect: {
@@ -226,7 +159,7 @@ export default {
           },
           itemStyle: {
             normal: {
-              color: this._getColor(),
+              color: 'rgba(255, 206, 91, .7)',
               shadowBlur: 10,
               shadowColor: '#F37F58'
             }
@@ -238,7 +171,7 @@ export default {
   },
 
   ready () {
-    this.$http.get('/static/data/map/coordinates.json').then((res) => {
+    http.get('/static/data/map/coordinates.json').then((res) => {
       let geoCoordMap = {}
       let cities = res.data.municipalities
 
@@ -258,37 +191,70 @@ export default {
 
   methods: {
     /**
+     * 获取城市数据
+     */
+    getCityData () {
+      let getMapping = http.get('/static/data/map/cities.json')
+      let getRegion = api.statistics.getProductRegion(this.$route.params.id)
+      Promise.all([getMapping, getRegion]).then(values => {
+        let mapping = values[0].data
+        let regionData = values[1].data
+        let cnKeys = ['中国', 'China', 'china']
+        let cnData = {}
+        let result = []
+
+        // 获取城市数据
+        cnKeys.forEach((key) => {
+          if (regionData.hasOwnProperty(key)) {
+            let contury = regionData[key]
+            for (let provinceName in contury) {
+              let cities = contury[provinceName]
+              if (typeof cities === 'number') {
+                continue
+              }
+
+              for (let cityName in cities) {
+                let city = cities[cityName]
+                if (typeof city === 'number' || !city.activated) {
+                  continue
+                }
+
+                if (cnData[cityName]) {
+                  cnData[cityName] += city.activated
+                } else {
+                  cnData[cityName] = city.activated
+                }
+              }
+            }
+          }
+        })
+
+        // 遍历映射表，生成城市数据
+        mapping.forEach((city) => {
+          let val1 = cnData[city.name] || 0
+          let val2 = cnData[city.pinyin] || 0
+          let val = val1 + val2
+          if (val) {
+            result.push({
+              name: city.name,
+              value: val1 + val2
+            })
+          }
+        })
+
+        return result
+      }).then((data) => {
+        // 排序
+        this.cityData = _.reverse(_.sortBy(data, 'value'))
+      })
+    },
+
+    /**
      * 关闭演示地图
      */
     dismiss () {
       this.show = false
       this.$emit('dismiss', this.show)
-    },
-
-    /**
-     * 获取颜色
-     */
-    _getColor () {
-      return function (params) {
-        // let colors = ['#B3C24F', '#F3D55E', '#FFB15A', '#EF8050', '#DE5753', '#8C3348']
-        let colors = ['#B3C24F', '#FDCD46', '#FFB15A', '#EF8050', '#DE5753', '#C6202E']
-        let val = params.value[2]
-        let level = 0
-
-        if (val >= 35 && val < 70) {
-          level = 1
-        } else if (val >= 70 && val < 100) {
-          level = 2
-        } else if (val >= 100 && val < 150) {
-          level = 3
-        } else if (val >= 150 && val < 200) {
-          level = 4
-        } else if (val >= 200) {
-          level = 5
-        }
-
-        return colors[level]
-      }
     },
 
     /**
@@ -309,38 +275,19 @@ export default {
     },
 
     /**
-     * 获取城市 pm2.5 数据
+     * 计算占比
      */
-    getCityData () {
-      // 往前推20分钟才能查出最近的一个记录
-      // let date = new Date().getTime() - 20 * 60 * 1000
-      // let condition = {
-      //   filter: ['location', 'pm25'],
-      //   limit: 1000,
-      //   // offset: (this.currentPage - 1) * this.countPerPage,
-      //   order: {},
-      //   query: {
-      //     'update_time': {
-      //       $gte: {
-      //         '@date': formatDate(date, 'yyyy-MM-dd hh:mm:ss.SSS', true) + 'Z'
-      //       }
-      //     }
-      //   }
-      // }
-      // this.loadingCityData = true
-      // api.airquality.getAirQualitys(this.$route.params.app_id, condition).then((res) => {
-      //   console.log(res.data)
-      //   this.cityData = _.map(res.data.list, (item) => {
-      //     return {
-      //       name: item.location.name,
-      //       value: item.pm25 - 0
-      //     }
-      //   })
-      //   this.loadingCityData = false
-      // }).catch((res) => {
-      //   this.loadingCityData = false
-      //   // this.handleError(res)
-      // })
+    progressStyle (val) {
+      let percentage = 0
+
+      if (this.total) {
+        percentage = val / this.total * 100
+        percentage = percentage.toFixed(2)
+      }
+
+      return {
+        width: `${percentage}%`
+      }
     }
   }
 }
@@ -384,13 +331,13 @@ export default {
     height 44px
     clearfix()
     z-index 1
+    background #2B333B
 
     .sidebar-tab__item
       float left
       width 160px
       text-align center
       font-size 14px
-      background #2B333B
       height 44px
       line-height 40px
       border-left 1px solid #1D1E1F
@@ -410,13 +357,13 @@ export default {
       &.active
         padding-top 4px
         border-top-color #FFCE5B
-        background transparent
+        background #1F262D
 
   .sidebar-mask
     absolute left top
     size 100%
-    background #21262D
-    opacity 0.7
+    background #20262D
+    /*opacity 0.7*/
 
 .demo-map-cities-wrap
   absolute left top 50px right bottom 50px
