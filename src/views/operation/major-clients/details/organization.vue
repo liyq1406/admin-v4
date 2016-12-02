@@ -820,9 +820,16 @@
       .title-box
         height 50px
         line-height 50px
+        vertical-align baseline
         .title
+          max-width 400px
+          display inline-block
+          word-wrap normal
+          white-space nowrap
+          text-overflow ellipsis
           font-size 30px
         .level
+          vertical-align text-bottom
           background #ff6600
           color #FFF
           padding 3px
