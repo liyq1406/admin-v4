@@ -153,7 +153,7 @@
           },
           area: {
             label: this.$t('operation.user.details.area'),
-            value: this.user.province + this.user.city || '-'
+            value: this.userLocation || '-'
           },
           address: {
             label: this.$t('operation.user.details.address'),
