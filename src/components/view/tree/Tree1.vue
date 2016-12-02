@@ -8,7 +8,6 @@
         <div class="tree-content">
           <i :class="computedIconClass(list)" @click.stop="onChangeShowHide(list)"></i>
           <span class="tree-content-label" @click.stop="selectedTreeIndex = list.treeIndex">{{list.label}}</span>
-          <!-- <input type="text" class="edit-input" v-show="editing && list.treeIndex === selectedTreeIndex"> -->
           <div
           class="line"
           :style="'width:' + (unitPadding - 15) + 'px;left: -' + (unitPadding - 5) + 'px'"
@@ -24,34 +23,45 @@
 </template>
 
 <script>
+  /**
+   * data = [
+   *   {
+   *     treeIndex: '0-2-3', // 树状索引 最顶层是'0' 只有一个 第二层第一个是 0-0 第二层第二个是 0-1 最后一位标志当前分支在 "同父分支" 中的位置, 最后一位以外的索引值是其 "父分支" 的树状索引 以此类推
+   *     label: 'abc', // 当前分支显示的文案
+   *     open: 'true', 当前分支是否展开 即是否收起其子分支
+   *   }
+   * ]
+   */
   export default {
     name: 'Tree',
 
     props: {
+      // 列表数据  格式如上
       data: {
         type: Array,
         default: function () {
           return []
         }
       },
+      // 已选择的分支索引 默认为空
       selectedTreeIndex: {
         type: String,
         default: ''
       },
-      editing: {
-        type: Boolean,
-        default: false
+      // 左侧缩进 不同级别单位缩进像素
+      unitPadding: {
+        type: Number,
+        default: 35
+      },
+      // 行高
+      unitLineHeight: {
+        type: Number,
+        default: 32
       }
     },
 
     data () {
       return {
-        // 左侧缩进
-        unitPadding: '35',
-        // 行高
-        unitLineHeight: 32,
-        // 对外暴露数据
-        emitData: []
       }
     },
 
@@ -261,6 +271,9 @@
         var result = 0
         if (!index) return result
         for (let i = index - 1; i >= 0; i--) {
+          if (!this.lists[i].show) {
+            continue
+          }
           result += this.unitLineHeight
           if (this.lists[i].level <= list.level) {
             break

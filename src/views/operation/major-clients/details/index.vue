@@ -9,8 +9,9 @@
         <div class="col-16">
           <div class="alert-record-summary">
             <div class="fl">
-              <h1 class="mt10">{{ majorClient.name }}
-                <a v-link="'/operation/major-client/edit/' + $route.params.id">
+              <h1 class="mt10">
+                <span class="major-client-name">{{ majorClient.name }}</span>
+                <a class="icon-edit-major-client" v-link="'/operation/major-client/edit/' + $route.params.id">
                   <i class="fa fa-edit"></i>
                 </a>
               </h1>
@@ -197,6 +198,14 @@ export default {
   .position-msg
     padding-left 10px
     padding-top 5px
+  .major-client-name
+    display inline-block
+    max-width 300px
+    word-wrap normal
+    white-space nowrap
+    text-overflow ellipsis
+  .icon-edit-major-client
+    vertical-align text-bottom
   .btnarea
     button
       border 1px solid #bcbcbc

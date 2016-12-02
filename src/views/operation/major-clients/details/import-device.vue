@@ -105,10 +105,10 @@
         key: '',
         breadcrumbNav: [{
           label: '全部',
-          link: 'operation/major-clients'
+          link: '/operation/major-clients'
         }, {
           label: '大客户信息',
-          link: `operation/major-clients/${this.$route.params.id}/device`
+          link: `/operation/major-clients/${this.$route.params.id}/device`
         }, {
           label: '添加设备'
         }],
