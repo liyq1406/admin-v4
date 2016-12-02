@@ -10,7 +10,14 @@
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fl">
-              <h3>消息记录</h3>
+              <!-- <h3>消息记录</h3> -->
+              <span class="">{{ $t('operation.product.device.alert.time') }}: </span>
+              <x-select width="98px" size="small" :label="rangeOption.label">
+                <select v-model="rangeOption" @change="onRangeOptionChange">
+                  <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </x-select>
+              <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -37,6 +44,8 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import locales from 'consts/locales/index'
   import * as config from 'consts/config'
   import api from 'api'
   import formatDate from 'filters/format-date'
@@ -103,7 +112,14 @@
             class: 'tac'
           }
         ],
-        sortKey: ''
+        sortKey: '',
+        rangeOption: {
+          label: this.$t('common.any'),
+          value: 'any'
+        },
+        timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
+        startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+        endTime: new Date()
       }
     },
 
@@ -141,6 +157,13 @@
           query: {},
           order: {
             time: 'desc'
+          }
+        }
+
+        if (this.rangeOption.value === 'specified') {
+          condition.query['time'] = {
+            '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+            '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
           }
         }
 
@@ -303,6 +326,27 @@
         }
         this.headers.$set(index, header)
         this.getTasks()
+      },
+
+      /**
+       * 处理时间区段改变
+       */
+      onRangeOptionChange () {
+        if (this.rangeOption.value === 'any') {
+          this.getTasks(true)
+        }
+      },
+
+      /**
+       * 时间范围改变
+       * @param  {[type]} startDate [description]
+       * @param  {[type]} endDate   [description]
+       * @return {[type]}           [description]
+       */
+      onTimeChange (start, end) {
+        this.startTime = start
+        this.endTime = end
+        this.getTasks(true)
       }
     }
   }
