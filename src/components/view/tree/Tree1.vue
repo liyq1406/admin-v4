@@ -261,11 +261,15 @@
         var result = 0
         if (!index) return result
         for (let i = index - 1; i >= 0; i--) {
+          if (!this.lists[i].show) {
+            continue
+          }
           result += this.unitLineHeight
           if (this.lists[i].level <= list.level) {
             break
           }
         }
+        console.log(result)
         return result
       },
 
