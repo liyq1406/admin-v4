@@ -70,8 +70,6 @@
           @tbody-device--mac="linkToDetails"
           @page-count-update="onPageCountUpdate"
           @current-page-change="onCurrPageChage"></x-table>
-
-          <!-- {{snapshotShuffle | json}} -->
       </div>
     </div>
   </div>
@@ -697,7 +695,6 @@ export default {
     // 导出CSV条件参数
     exportParams () {
       let condition = _.cloneDeep(this.baseCondition)
-      // condition.filter = ['id', 'name', 'mac', 'sn', 'is_active', 'active_date', 'is_online', 'last_login', 'mcu_mod', 'mcu_version', 'firmware_mod', 'firmware_version', 'corp_id', 'product_id', 'region_id', 'create_time']
 
       return {
         name: '设备列表',
@@ -736,8 +733,6 @@ export default {
       this.loadingDataField = true
       api.custom.field.getCustomFieldConfig(this.$route.params.id).then((data) => {
         this.deviceFields = data || {}
-        // if (data.base_fields && data.base_fields.length) {
-        // }
         this.loadingDataField = false
         fn && fn()
       }).catch((res) => {
