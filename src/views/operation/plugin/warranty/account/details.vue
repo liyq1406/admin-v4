@@ -554,7 +554,8 @@ export default {
         })
       } else if (this.editValidation.$valid && !this.editing) { // 更新
         this.editing = true
-        api.warranty.UpdateBranch(this.$route.params.app_id, this.editthis.$route.params.id).then((res) => {
+        console.log(this.$route.params)
+        api.warranty.UpdateBranch(this.$route.params.app_id, this.$route.params.id).then((res) => {
           if (res.status === 200) {
             this.resetEdit()
             this.getBranchList()
