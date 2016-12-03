@@ -890,6 +890,14 @@ export default {
     // 获取设备列表
     getDevices (reset) {
       if (this.queryType.value === 'device--id') {
+        if (!(this.query - 0)) {
+          return this.showNotice({
+            type: 'error',
+            content: this.$t('common.validation.format', {
+              field: this.$t('operation.product.device.manager.device_id')
+            })
+          })
+        }
         if (this.query - 0 > 2100000000) {
           this.showNotice({
             type: 'error',
