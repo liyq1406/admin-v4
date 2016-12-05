@@ -56,7 +56,7 @@
               <div class="filter-group-item">
                 <button class="btn btn-ghost btn-sm" @click="showBatchModal">
                 <i class="fa fa-reply-all"></i>
-                批量导入数据端点</button>
+                批量修改数据端点</button>
                 <search-box
                   :key="query"
                   :active="searching"
@@ -118,7 +118,7 @@
             <!-- <label class="form-control col-6">导入:</label> -->
             <p>您可以通过标准文件批量导入数据端点，<a href="/static/files/import_datapoint.csv" class="hl-red">查看示例</a></p>
             <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
-              <input type="file" v-el:mac-file name="macFile" @change.prevent="selectFile"/><i class="fa fa-reply-all"></i> 批量导入数据端点
+              <input type="file" v-el:mac-file name="macFile" @change.prevent="selectFile"/><i class="fa fa-reply-all"></i> 批量修改数据端点
             </label>
             <span class="file-name">{{ file.name }}</span>
             <p class="hl-gray">* 仅限csv格式文件</p>
