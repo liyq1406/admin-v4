@@ -45,7 +45,15 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :active="searching" :placeholder="'请输入关键字'" @cancel="getBranchStaffsList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getBranchStaffsList(true)">
+                <search-box
+                  :key="key"
+                  :active="searching"
+                  :placeholder="'请输入关键字'"
+                  @cancel="getBranchStaffsList(true)"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getBranchStaffsList(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="(index, option) in queryTypeOptions" :value="option" :selected="index===0">{{ option.label }}</option>
@@ -479,8 +487,9 @@ export default {
       this.searching = !this.searching
     },
     // 搜索
-    handleSearch () {
-      if (this.query.length === 0) {
+    handleSearch (val) {
+      this.key = val
+      if (this.key.length === 0) {
         this.getBranchStaffsList()
       }
     },

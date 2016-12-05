@@ -15,7 +15,15 @@
             <div class="panel-bd layout-left">
               <div class="device-list-box">
                 <div class="action-bar">
-                  <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
+                  <search-box
+                    :key="query"
+                    :active="searching"
+                    :placeholder="$t('common.placeholder.search')"
+                    @cancel="getDevices(true)"
+                    @search-activate="toggleSearching"
+                    @search-deactivate="toggleSearching"
+                    @search="handleSearch"
+                    @press-enter="getDevices(true)">
                     <x-select width="100px" :label="queryType.label" size="small">
                       <select v-model="queryType">
                         <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -472,7 +480,8 @@ export default {
       })
     },
     // 搜索
-    handleSearch () {
+    handleSearch (val) {
+      this.query = val
       if (this.query.length === 0) {
         this.getDevices(true)
       }

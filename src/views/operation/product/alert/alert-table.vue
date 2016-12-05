@@ -28,7 +28,14 @@
               <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
             </div>
             <div class="filter-group-item">
-              <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="getAlerts(true)" @search-activate="searching=!searching"  @press-enter="getAlerts(true)">
+              <search-box
+                :key="key"
+                :placeholder="$t('common.placeholder.search')"
+                :active="searching"
+                @cancel="getAlerts(true)"
+                @search-activate="searching=!searching"
+                @search="handleSearch"
+                @press-enter="getAlerts(true)">
                 <x-select width="90px" :label="queryType.label" size="small">
                   <select v-model="queryType">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -441,6 +448,10 @@ export default {
     getInfo (table, header, index) {
       this.$route.router.go('/operation/alerts/detail/' + table.prototype.id)
       // this.$route.router.go('/operation/alerts/record')
+    },
+
+    handleSearch (val) {
+      this.key = val
     }
   }
 }

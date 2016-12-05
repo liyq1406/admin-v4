@@ -106,7 +106,15 @@
                 <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="'输入搜索内容'" @search-activate="" @search-deactivate="" @search="" @press-enter="">
+                <search-box
+                  :key="query"
+                  :active="searching"
+                  @cancel=""
+                  :placeholder="'输入搜索内容'"
+                  @search-activate=""
+                  @search-deactivate=""
+                  @search="handleSearch"
+                  @press-enter="">
                   <button slot="search-button" @click="" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -236,6 +244,10 @@ export default {
   },
 
   methods: {
+    handleSearch (val) {
+      this.query = val
+    },
+
     goDetails (table) {
       this.$route.router.go(this.$route.path + '/' + table.prototype.id)
     },

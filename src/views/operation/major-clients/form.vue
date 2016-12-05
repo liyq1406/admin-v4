@@ -75,8 +75,8 @@
                   :default-value="areas"
                   @province-change="onProvinceChange"
                   @city-change="onCityChange"
-                  @district-change="onDistrictChange"
-                ></area-select>
+                  @district-change="onDistrictChange">
+                </area-select>
               </div>
             </div>
           </div>

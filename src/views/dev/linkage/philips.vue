@@ -13,7 +13,6 @@
         </div>
         <div class="tal mt20" style="padding-left: 126px">
           <span class="mr5">开启philips hue联动服务</span>
-          <!-- <switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></x-switch> -->
           <switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></x-switch>
         </div>
       </div>

@@ -14,7 +14,14 @@
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :placeholder="'请输入' + searchType.label" @cancel="getArticleList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getArticleList(true)">
+                <search-box
+                  :key="query"
+                  :placeholder="'请输入' + searchType.label"
+                  @cancel="getArticleList(true)"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getArticleList(true)">
                   <x-select width="80px" :label="searchType.label" size="small">
                     <select v-model="searchType">
                       <option v-for="option in searchTypeOptions" :value="option">{{ option.label }}</option>
@@ -237,7 +244,8 @@ export default {
     },
 
     // 搜索
-    handleSearch () {
+    handleSearch (val) {
+      this.query = val
       if (this.query.length === 0) {
         this.getArticleList()
       }

@@ -11,7 +11,15 @@
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="">
+                <search-box
+                  :key="query"
+                  :active="searching"
+                  :placeholder="$t('common.placeholder.search')"
+                  @cancel=""
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="">
                   <button slot="search-button" @click="getMembers(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -157,7 +165,8 @@ export default {
       this.query = query
     },
 
-    handleSearch () {
+    handleSearch (val) {
+      this.query = val
       if (this.query.length === 0) {
       }
     },

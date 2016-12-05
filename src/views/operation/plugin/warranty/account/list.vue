@@ -17,7 +17,12 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :active="searching" :placeholder="$t('common.placeholder.search')" style="float:right">
+                <search-box
+                  :key="key"
+                  :active="searching"
+                  :placeholder="$t('common.placeholder.search')"
+                  @search="handleSearch"
+                  style="float:right">
                   <button slot="search-button" @click="getBranchList" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -32,8 +37,8 @@
                   :district="curDistrict"
                   @province-change="onCurProvinceChange"
                   @city-change="onCurCityChange"
-                  @district-change="onCurDistrictChange"
-                ></area-select>
+                  @district-change="onCurDistrictChange">
+                </area-select>
               </div>
             </div>
           </div>
@@ -132,8 +137,8 @@
                       :district="selectedDistrict"
                       @province-change="onProvinceChange"
                       @city-change="onCityChange"
-                      @district-change="onDistrictChange"
-                    ></area-select>
+                      @district-change="onDistrictChange">
+                    </area-select>
                   </div>
                 </div>
                 <div class="form-row row">
@@ -318,6 +323,10 @@
        */
       onDistrictChange (val) {
         this.selectedDistrict = val
+      },
+
+      handleSearch (val) {
+        this.key = val
       },
 
       // 关闭添加浮层并净化添加表单

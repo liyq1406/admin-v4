@@ -38,7 +38,14 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :placeholder="'请输入添加人'" :active="searching" @cancel="getRecords(true)" @search-activate="searching=!searching"  @press-enter="getRecords(true)">
+                <search-box
+                  :key="query"
+                  :placeholder="'请输入添加人'"
+                  :active="searching"
+                  @cancel="getRecords(true)"
+                  @search-activate="searching=!searching"
+                  @search="handleSearch"
+                  @press-enter="getRecords(true)">
                   <!-- <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -442,6 +449,10 @@ export default {
     onCurrPageChage (number) {
       this.currentPage = number
       this.getRecords()
+    },
+
+    handleSearch (val) {
+      this.query = val
     },
 
     /**
