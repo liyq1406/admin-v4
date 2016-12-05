@@ -14,7 +14,6 @@
         </div>
         <div class="col-8 tar">
           <span class="mr5">开启nest服务</span>
-          <!-- <switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></x-switch> -->
           <switch size="small" :disabled="loading || true" :value.sync="plugins[0].enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch>
         </div>
       </div>

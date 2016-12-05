@@ -8,7 +8,11 @@
         <div class="filter-bar">
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入工单编号'" @press-enter="getWarrantyList(true)">
+              <search-box class="work-order-search-box"
+                :key="key"
+                :placeholder="'请输入工单编号'"
+                @search="handleSearch"
+                @press-enter="getWarrantyList(true)">
                 <button slot="search-button" class="btn" @click="getWarrantyList(true)"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
@@ -32,8 +36,8 @@
                 select-size="small"
                 @province-change="onProvinceChange"
                 @city-change="onCityChange"
-                @district-change="onDistrictChange"
-              ></area-select>
+                @district-change="onDistrictChange">
+              </area-select>
             </div>
           </div>
         </div>
@@ -148,6 +152,10 @@
       onDistrictChange (val) {
         this.curDistrict = val
         this.getWarrantyList(true)
+      },
+
+      handleSearch (val) {
+        this.key = val
       },
 
       getWarrantyList () {

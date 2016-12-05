@@ -202,8 +202,8 @@
                           :editing="editingTag"
                           @adding-tag="show=true"
                           @tag-change="onTagChange"
-                          @edit-state-change="onTagEditStateChange"
-                        ></tag-input>
+                          @edit-state-change="onTagEditStateChange">
+                        </tag-input>
                       </div>
                     </div>
                   </div>

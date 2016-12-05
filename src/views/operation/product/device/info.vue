@@ -9,7 +9,14 @@
               <button class="btn btn-ghost btn-sm" @click="getVDevice"><i class="fa fa-refresh" :class="{'fa-spin':refreshing}"></i></button>
             </div>
             <div class="filter-group-item">
-              <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
+              <search-box
+                :key="query"
+                :active="searching"
+                :placeholder="$t('common.placeholder.search')"
+                @search="handleSearch"
+                @search-activate="searching=!searching"
+                @search-deactivate="searching=!searching">
+              </search-box>
             </div>
           </div>
           <h3>{{ $t('operation.product.device.info.title') }}</h3>
@@ -156,6 +163,10 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
+    },
+
+    handleSearch (val) {
+      this.query = val
     },
 
     /**

@@ -14,7 +14,15 @@
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.ingredient.placeholders.search_condi')" @cancel="getRecipes(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getRecipes(true)">
+                <search-box
+                  :key="query"
+                  :active="searching"
+                  :placeholder="$t('ui.ingredient.placeholders.search_condi')"
+                  @cancel="getRecipes(true)"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getRecipes(true)">
                   <button slot="search-button" @click="getRecipes(true)" class="btn">{{ $t('common.search') }}</button>
                 </search-box>
               </div>
@@ -370,7 +378,8 @@ export default {
     },
 
     // 搜索
-    handleSearch () {
+    handleSearch (val) {
+      this.query = val
       if (this.query.length === 0) {
         this.getRecipes()
       }

@@ -29,7 +29,15 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getProductDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getProductDevices(true)">
+                <search-box
+                  :key="key"
+                  :active="searching"
+                  :placeholder="$t('ui.overview.addForm.search_condi')"
+                  @cancel="getProductDevices(true)"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getProductDevices(true)">
                   <x-select width="100px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -330,7 +338,8 @@
         this.searching = !this.searching
       },
       // 搜索
-      handleSearch () {
+      handleSearch (val) {
+        this.key = val
         if (this.key.length === 0) {
           this.getProductDevices(true)
         }

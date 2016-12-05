@@ -45,18 +45,6 @@
       </div>
       <div class="data-table with-loading">
         <div class="filter-bar">
-          <!-- <div class="filter-group fr">
-            <div class="filter-group-item">
-              <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="" @search-activate="" @search-deactivate="" @search="" @press-enter="">
-                <x-select width="90px" :label="queryType.label" size="small">
-                  <select v-model="queryType">
-                    <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-                  </select>
-                </x-select>
-                <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
-              </search-box>
-            </div>
-          </div> -->
           <div class="filter-group">
             <span>明细</span>
 

@@ -24,7 +24,7 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="key">
+              <search-box :key="key" @search="handleSearch">
                 <button slot="search-button" @click="" class="btn"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
@@ -215,6 +215,11 @@
         this.countPerPage = count
         this.getRules(true)
       },
+
+      handleSearch (val) {
+        this.key = val
+      },
+
       tagStyle (tag) {
         switch (tag) {
           case locales[Vue.config.lang].data.ALERT_LEVELS.orange:
