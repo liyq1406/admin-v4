@@ -25,7 +25,11 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')"></search-box>
+                <search-box
+                  :key="key"
+                  :placeholder="$t('common.placeholder.search')"
+                  @search="handleSearch">
+                </search-box>
               </div>
             </div>
           </div>
@@ -159,6 +163,13 @@ export default {
         this.handleError(res)
         this.loadingData = false
       })
+    },
+
+    /**
+     * 处理搜索
+     */
+    handleSearch (val) {
+      this.key = val
     },
 
     /**

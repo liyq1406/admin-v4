@@ -27,7 +27,15 @@
             <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
           </div>
           <div class="filter-group-item">
-            <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="getList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getList(true)">
+            <search-box
+              :key="key"
+              :placeholder="$t('common.placeholder.search')"
+              :active="searching"
+              @cancel="getList(true)"
+              @search="handleSearch"
+              @search-activate="toggleSearching"
+              @search-deactivate="toggleSearching"
+              @press-enter="getList(true)">
               <x-select width="90px" :label="queryType.label" size="small">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -265,6 +273,9 @@ export default {
     pageCountUpdate (count) {
       this.countPerPage = count
       this.getList(true)
+    },
+    handleSearch (val) {
+      this.key = val
     },
     // 切换搜索
     toggleSearching () {

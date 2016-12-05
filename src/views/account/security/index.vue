@@ -3,7 +3,15 @@
     <div class="panel mt20 mb30">
       <div class="panel-hd ml20 mr20">
         <div class="actions">
-          <search-box :key.sync="query" :active="searching" :placeholder="$t('account.security.placeholder.id')" @cancel="getLogs(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getLogs(true)">
+          <search-box
+            :key="query"
+            :active="searching"
+            :placeholder="$t('account.security.placeholder.id')"
+            @cancel="getLogs(true)"
+            @search-activate="toggleSearching"
+            @search-deactivate="toggleSearching"
+            @search="handleSearch"
+            @press-enter="getLogs(true)">
             <label>{{ $t('account.security.search_member') }}</label>
             <button slot="search-button" @click="getLogs(true)" class="btn"><i class="fa fa-search"></i></button>
           </search-box>
@@ -168,6 +176,17 @@ export default {
       this.countPerPage = count
       this.getLogs(true)
     },
+
+    /**
+     * 处理搜索
+     */
+    handleSearch (val) {
+      this.query = val
+      if (this.query.length === 0) {
+        this.getLogs()
+      }
+    },
+
     /**
      * 切换搜索
      * @author shengzhi

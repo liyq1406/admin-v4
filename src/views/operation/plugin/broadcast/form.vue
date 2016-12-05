@@ -107,8 +107,8 @@
                               :city="area.city"
                               :show-district="false"
                               @province-change="onProvinceChange"
-                              @city-change="onCityChange"
-                            ></area-select>
+                              @city-change="onCityChange">
+                            </area-select>
                             <div class="form-tips form-tips-error">
                               <span v-if="area.type === 1 && !area.province.name && needVerification">请选择推送地域</span>
                             </div>
@@ -136,8 +136,8 @@
                             :candidate="usersTags"
                             :editing="editingTag"
                             @tag-change="onTagChange"
-                            @edit-state-change="onTagEditStateChange"
-                          ></tag-input>
+                            @edit-state-change="onTagEditStateChange">
+                          </tag-input>
                           <div class="form-tips form-tips-error">
                             <span v-if="tag.type!==0 && !tag.tag_list.length && needVerification">请选择用户标签</span>
                           </div>

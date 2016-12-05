@@ -18,7 +18,15 @@
                 </date-time-range-picker>
               </div>
               <div class="filter-group-item">
-                <search-box class="work-order-search-box" :key.sync="key" :active="searching" :placeholder="'请输入'+ queryType.label" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getRecords(true)" @cancel="getRecords(true)">
+                <search-box class="work-order-search-box"
+                  :key="key"
+                  :active="searching"
+                  :placeholder="'请输入'+ queryType.label"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getRecords(true)"
+                  @cancel="getRecords(true)">
                   <x-select width="100px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -214,6 +222,10 @@ export default {
     onPageCountUpdate (count) {
       this.countPerPage = count
       this.getRecords()
+    },
+
+    handleSearch (val) {
+      this.key = val
     },
 
     // 切换搜索

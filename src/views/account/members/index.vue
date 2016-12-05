@@ -12,7 +12,15 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getMembers(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMembers(true)">
+                <search-box
+                  :key="query"
+                  :active="searching"
+                  :placeholder="$t('common.placeholder.search')"
+                  @cancel="getMembers(true)"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getMembers(true)">
                   <x-select width="130px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -287,7 +295,11 @@ export default {
       this.query = query
     },
 
-    handleSearch () {
+    /**
+     * 处理搜索
+     */
+    handleSearch (val) {
+      this.query = val
       if (this.query.length === 0) {
         this.getMembers()
       }
