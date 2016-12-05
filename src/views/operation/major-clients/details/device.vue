@@ -65,22 +65,31 @@
 
           <!-- 功能按钮 -->
           <div class="form-row row">
-            <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
-              <input type="file" v-el:mac-file name="macFile" @change.prevent="selectFile"/>
-              <i class="fa fa-reply-all"></i> 导入文件关联
-            </label>
-            <span class="import-btn-tips-span">推荐</span>
-            <span class="file-name">{{ file.name }}</span>
-            <p class="hl-gray"><i class="fa fa-exclamation-triangle hl-orange"></i> 仅限csv格式文件,每次只能上传一个产品设备,切勿传错产品</p>
+            <label class="form-control col-4">导入方式:</label>
+            <div class="controls col-20">
+              <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
+                <input type="file" v-el:mac-file name="macFile" @change.prevent="selectFile"/>
+                <i class="fa fa-reply-all"></i> 导入文件关联
+              </label>
+              <span class="import-btn-tips-span">推荐</span>
+              <span class="file-name">{{ file.name }}</span>
+              <p class="hl-gray"><i class="fa fa-exclamation-triangle hl-orange"></i> 仅限csv格式文件,每次只能上传一个产品设备,切勿传错产品</p>
+
+              <label>
+                <button class="btn btn-ghost btn-upload" @click.prevent="goSelectDeviceView">
+                  <i class="fa fa-reply-all"></i> 选择列表设备
+                </button>
+              </label>
+            </div>
           </div>
           <!-- 功能按钮 -->
-          <div class="form-row row mt30 bordered" >
+          <!-- <div class="form-row row mt30 bordered" >
             <label>
               <button class="btn btn-ghost btn-upload" @click.prevent="goSelectDeviceView">
                 <i class="fa fa-reply-all"></i> 选择列表设备
               </button>
             </label>
-          </div>
+          </div> -->
 
           <div class="form-actions">
             <button @click.prevent.stop="batchImport" :disabled="importing" :class="{'disabled':importing}" v-text="importing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
@@ -95,9 +104,7 @@
       <h3 slot="header">提示</h3>
       <div slot="body">
         <alert type="success" title="" :cols="22" v-if="tips.type==='import-success'">
-          <p>设备导入成功
-            <!-- <a v-link="{path: 'info/list/' + tips.recordId}" class="hl-red">查看导入记录</a> -->
-          </p>
+          <p>设备导入成功</p>
         </alert>
         <alert type="warning" title="" :cols="22" v-else>
           <p>{{ tips.msg }}</p>
