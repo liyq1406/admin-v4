@@ -26,18 +26,6 @@
                 <button class="btn btn-ghost ml10" @click="showExportQRCode = true">批量导出二维码</button>
               </div>
             </div>
-            <!-- <div class="filter-group fr">
-              <div class="filter-group-item">
-                <search-box :key.sync="query" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="getRecords" @search-activate="searching=!searching"  @press-enter="getRecords">
-                  <x-select width="90px" :label="queryType.label" size="small">
-                    <select v-model="queryType">
-                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-                    </select>
-                  </x-select>
-                  <button slot="search-button" @click="getRecords" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                </search-box>
-              </div>
-            </div> -->
           </div>
           <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData" @tbody-edit="getList"  @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
         </div>

@@ -16,7 +16,7 @@
       max: false,
       key: {
         type: String,
-        twoWay: true,
+        twoWay: false,
         default: ''
       },
       auto: {
@@ -34,9 +34,9 @@
     },
 
     watch: {
-      key () {
+      key (val, oldVal) {
         if (this.max > 0) {
-          if (this.key - 0 > this.max - 0) {
+          if (val - 0 > this.max - 0) {
             this.showNotice({
               type: 'error',
               content: `输入的值不能大于${this.max}`
@@ -44,7 +44,7 @@
             return
           }
         }
-        this.$emit('search')
+        this.$emit('search', val)
       }
     },
 

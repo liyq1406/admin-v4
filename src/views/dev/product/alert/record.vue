@@ -15,7 +15,15 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="key" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getAlerts(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="getAlerts(true)" @press-enter="getAlerts(true)">
+              <search-box
+                :key="key"
+                :active="searching"
+                :placeholder="$t('common.placeholder.search')"
+                @cancel="getAlerts(true)"
+                @search-activate="toggleSearching"
+                @search-deactivate="toggleSearching"
+                @search="handleSearch"
+                @press-enter="getAlerts(true)">
                 <x-select width="100px" :label="queryType.label" size="small">
                   <select v-model="queryType" @change="getAlerts(true)">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -337,6 +345,12 @@
       cancelSearching () {
         this.getAlerts()
       },
+
+      handleSearch (val) {
+        this.key = val
+        this.getAlerts(true)
+      },
+
       // 标记为已处理
       setDeal () {
         var params = []

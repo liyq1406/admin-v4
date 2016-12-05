@@ -48,7 +48,15 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="$t('common.placeholder.search')" @search-activate="" @search-deactivate="" @search="" @press-enter="">
+                <search-box
+                  :key="query"
+                  :active="searching"
+                  @cancel=""
+                  :placeholder="$t('common.placeholder.search')"
+                  @search-activate=""
+                  @search-deactivate=""
+                  @search="handleSearch"
+                  @press-enter="">
                   <button slot="search-button" @click="" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -270,6 +278,10 @@
           this.handleError(err)
           this.loadingData = false
         })
+      },
+
+      handleSearch (val) {
+        this.query = val
       }
     }
   }

@@ -52,7 +52,15 @@
                 <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('operation.user.major.search_placeholder')" @cancel="getMajorClient(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMajorClient(true)">
+                <search-box
+                  :key="query"
+                  :active="searching"
+                  :placeholder="$t('operation.user.major.search_placeholder')"
+                  @cancel="getMajorClient(true)"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getMajorClient(true)">
                   <button slot="search-button" @click="getMajorClient(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -144,8 +152,8 @@
                       :district="curDistrict"
                       @province-change="onProvinceChange"
                       @city-change="onCityChange"
-                      @district-change="onDistrictChange"
-                    ></area-select>
+                      @district-change="onDistrictChange">
+                    </area-select>
                   </div>
                 </div>
               </div>
@@ -780,7 +788,8 @@ export default {
       this.searching = !this.searching
     },
     // 搜索
-    handleSearch () {
+    handleSearch (val) {
+      this.query = val
       if (this.query.length === 0) {
         this.getMajorClient(true)
       }

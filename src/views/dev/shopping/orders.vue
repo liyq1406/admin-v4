@@ -12,7 +12,14 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="" @search-activate="searching=!searching"  @press-enter="">
+                <search-box
+                  :key="key"
+                  :placeholder="$t('common.placeholder.search')"
+                  :active="searching"
+                  @cancel=""
+                  @search-activate="searching=!searching"
+                  @search="handleSearch"
+                  @press-enter="">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -108,6 +115,10 @@ export default {
       return products.reduce((prev, curr) => {
         return prev + curr.unit_price * curr.count
       }, 0)
+    },
+
+    handleSearch (val) {
+      this.key = val
     },
 
     /**

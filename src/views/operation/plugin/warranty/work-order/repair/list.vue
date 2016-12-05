@@ -65,7 +65,15 @@
                 <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="getOrderWorkList(true)" :placeholder="$t('operation.warranty.repair.search_placeholder')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="" @press-enter="getOrderWorkList(true)">
+                <search-box
+                  :key="query"
+                  :active="searching"
+                  :placeholder="$t('operation.warranty.repair.search_placeholder')"
+                  @cancel="getOrderWorkList(true)"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getOrderWorkList(true)">
                   <button slot="search-button" @click="getOrderWorkList(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -449,6 +457,11 @@ export default {
       this.currentPage = number
       this.getOrderWorkList()
     },
+
+    handleSearch (val) {
+      this.query = val
+    },
+
     toggleSearching () {
       this.searching = !this.searching
     },

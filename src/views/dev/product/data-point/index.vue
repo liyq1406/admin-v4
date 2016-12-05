@@ -11,7 +11,7 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')"></search-box>
+              <search-box :key="key" @search="handleSearch" :placeholder="$t('common.placeholder.search')"></search-box>
             </div>
           </div>
         </div>
@@ -195,6 +195,10 @@ export default {
           break
       }
       return result
+    },
+
+    handleSearch (val) {
+      this.key = val
     }
   }
 }
