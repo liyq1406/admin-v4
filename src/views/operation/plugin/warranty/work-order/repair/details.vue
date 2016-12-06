@@ -610,10 +610,15 @@ export default {
     margin 0
     display inline-block
     vertical-align middle
-  span
-    width 55px
+  .fa
+    font-size 18px
+    height 30px
+    line-height 30px
     vertical-align middle
-    margin-left 15px
+  span
+    /*width 55px*/
+    vertical-align middle
+    /*margin-left 15px*/
 
 .down
   color gray-light

@@ -120,7 +120,7 @@
         height 32px
         box-sizing border-box
         color gray-light
-        text-overflow 100%
+        truncate(100%)
 
       select
         absolute left top
