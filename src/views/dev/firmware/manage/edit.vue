@@ -184,6 +184,9 @@ export default {
     },
     // 编辑固件版本操作
     onEditSubmit () {
+      if (this.$validation.invalid) {
+        return this.$validate(true)
+      }
       this.adding = true
       api.product.updateFirmware(this.$route.params.product_id, this.firmware).then((res) => {
         if (res.status === 200) {
