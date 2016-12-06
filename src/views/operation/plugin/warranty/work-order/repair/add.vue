@@ -288,7 +288,7 @@
         this.addModal.label = this.selectedType
         this.addModal.images = this.images
         this.addModal.branch_id = this.selectedBranch._id
-        this.addModal.assigned_id = this.selectedBranchStarff._id
+        this.addModal.assigned_to = this.selectedBranchStarff._id
         this.addModal.assigned_name = this.selectedBranchStarff.name
         this.addModal.status = 0
         this.adding = true
