@@ -107,7 +107,7 @@
 
                 <div class="form-actions mt20 border-top row">
                   <div class="col-offset-5 col-19">
-                    <button type="submit" :disabled="adding" :class="{'disabled':adding}"  class="btn btn-primary mt5 ml20 submit-btn">{{ $t('common.ok') }}</button>
+                    <button type="submit" :disabled="adding || !hasProduct" :class="{'disabled':adding || !hasProduct}"  class="btn btn-primary mt5 ml20 submit-btn">{{ $t('common.ok') }}</button>
                   </div>
                 </div>
               </form>
@@ -181,6 +181,17 @@
           }
         ],
         images: ['']
+      }
+    },
+    computed: {
+      hasProduct () {
+        var result = false
+        if (this.selectedProduct.id) {
+          result = true
+        } else {
+          result = false
+        }
+        return result
       }
     },
     methods: {
