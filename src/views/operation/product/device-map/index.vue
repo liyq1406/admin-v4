@@ -25,7 +25,7 @@
         </div>
       </div>
       <!-- <h3>{{ $t('operation.product.devicemap.map') }}</h3> -->
-      <h3><button class="btn btn-ghost btn-sm" @click.prevent.stop="onDemoBtnClick"><i class="fa fa-expand"></i> {{ $t('operation.product.devicemap.demo') }} </button></h3>
+      <h3><button class="btn btn-ghost btn-sm" v-if="this.userRole === 'member'" @click.prevent.stop="onDemoBtnClick"><i class="fa fa-expand"></i> {{ $t('operation.product.devicemap.demo') }} </button></h3>
     </div>
 
     <!-- 设备地图 -->
@@ -86,6 +86,7 @@ export default {
 
   data () {
     return {
+      userRole: window.localStorage.getItem('userRole'),
       map: null,
       markers: [],
       infoWindow: null,
