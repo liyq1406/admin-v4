@@ -286,6 +286,7 @@
         console.log(firProductId, modePage)
         if (ableStopProduct && ableStopModel) {
           this.$route.router.replace({path: `/operation/products/${firProductId}${routeArr[modePage]}`})
+          return
         }
         // 产品相关模块没开启跑下面流程
         // api.plugin.all().then((res) => {
