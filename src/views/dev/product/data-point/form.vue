@@ -39,7 +39,7 @@
                 <div class="controls col-18">
                   <div class="radio-group">
                     <label v-for="source in locales.data.DATAPOINT_SOURCES" class="radio">
-                      <input type="radio" v-model="model.source" name="source" :value="source.value" @change="onSelectSource" number disabled="formType==='edit'"/>{{ source.label }}
+                      <input type="radio" v-model="model.source" name="source" :value="source.value" @change="onSelectSource" number :disabled="formType==='edit'"/>{{ source.label }}
                     </label>
                   </div>
                 </div>
