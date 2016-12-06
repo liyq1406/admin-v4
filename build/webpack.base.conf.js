@@ -81,19 +81,6 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      },
-      {
-        test: require.resolve('tinymce/tinymce'),
-        loaders: [
-          'imports?this=>window',
-          'exports?window.tinymce'
-        ]
-      },
-      {
-        test: /tinymce\/(themes|plugins)\//,
-        loaders: [
-          'imports?this=>window'
-        ]
       }
     ]
   },

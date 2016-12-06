@@ -1007,7 +1007,7 @@ let configRouter = (router) => {
         // 概览
         'products/:id/overview': {
           component (resolve) {
-            require.ensure(['echarts'], (require) => {
+            require.ensure([], (require) => {
               resolve(require('./views/operation/product/overview'))
             }, 'admin')
           }
