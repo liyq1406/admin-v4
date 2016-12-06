@@ -211,11 +211,11 @@
         if (this.$authValidation.valid) {
           this.setLoadingStatus(true)
           api.dealer.login(this.model).then((res) => {
-            // 如果登录账号与登录URL页面不符不允许登录
+            // 如果登录帐号与登录URL页面不符不允许登录
             if (res.data.dealer_id !== this.$route.params.dealerId) {
               this.showNotice({
                 type: 'error',
-                content: '该账号与入口不符，登录失败！'
+                content: '该帐号与入口不符，登录失败！'
               })
               this.setLoadingStatus(false)
               return
