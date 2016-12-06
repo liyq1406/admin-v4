@@ -104,7 +104,7 @@
                         <label class="label mr20">
                           授权可见：
                           <tooltip placement="left" width="300px">
-                            <p>开启授权可见，经销商账户可登录账号查看该产品下设备信息、状态、告警信息等。</p>
+                            <p>开启授权可见，经销商账户可登录帐号查看该产品下设备信息、状态、告警信息等。</p>
                             <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
                           </tooltip>
                         </label>
@@ -515,11 +515,11 @@ export default {
         display block
         height 22px
         font-size 14px
-        text-overflow 100%
+        truncate(100%)
       .product-type
         color #BCBCBC
         font-size 13px
-        text-overflow 100%
+        ttruncate(100%)
     .product-details-box
       position absolute
       top 0

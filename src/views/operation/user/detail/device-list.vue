@@ -282,10 +282,10 @@ export default {
         line-height 20px
         font-size 15px
         color #DA4E37
-        text-overflow 100%
+        truncate(100%)
       .mode
         height 50px
         line-height 20px
-        text-overflow 100%
+        truncate(100%)
         color #666666
 </style>

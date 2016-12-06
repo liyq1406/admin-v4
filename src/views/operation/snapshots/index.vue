@@ -30,7 +30,15 @@
       <div class="panel-bd layout-left">
         <div class="device-list-box">
           <div class="action-bar">
-            <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
+            <search-box
+              :key="query"
+              :active="searching"
+              :placeholder="$t('ui.overview.addForm.search_condi')"
+              @cancel="getDevices(true)"
+              @search-activate="toggleSearching"
+              @search-deactivate="toggleSearching"
+              @search="handleSearch"
+              @press-enter="getDevices(true)">
               <x-select width="100px" :label="queryType.label" size="small">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -489,7 +497,8 @@
         this.endTime = endDate
         this.getSnapshotStatistic(true)
       },
-      handleSearch () {
+      handleSearch (val) {
+        this.query = val
         if (this.query.length === 0) {
           this.getDevices(true)
         }

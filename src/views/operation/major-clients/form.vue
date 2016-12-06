@@ -67,13 +67,14 @@
           <div class="controls col-18">
             <div class="clearfix">
               <div class="filter-group-item">
-                <loc-select :showregion="false"
-                            :default-country-code="defaultCountryCode"
-                            :default-state-code="defaultStateCode"
-                            :default-city-code="defaultCityCode"
-                            @country-change="handleCountryChange"
-                            @state-change="handleStateChange"
-                            @city-change="handleCityChange">
+                <loc-select
+                  :showregion="false"
+                  :default-country-code="defaultCountryCode"
+                  :default-state-code="defaultStateCode"
+                  :default-city-code="defaultCityCode"
+                  @country-change="handleCountryChange"
+                  @state-change="handleStateChange"
+                  @city-change="handleCityChange">
                 </loc-select>
               </div>
             </div>

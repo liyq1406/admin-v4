@@ -143,7 +143,15 @@
                 <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
               </div> -->
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="getHistory(true)" :placeholder="$t('operation.warranty.repair.search_placeholder')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="" @press-enter="getHistory(true)">
+                <search-box
+                  :key="query"
+                  :active="searching"
+                  :placeholder="$t('operation.warranty.repair.search_placeholder')"
+                  @cancel="getHistory(true)"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getHistory(true)">
                   <button slot="search-button" @click="getHistory(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -374,6 +382,11 @@ export default {
       this.currentPage = number
       this.getHistory()
     },
+
+    handleSearch (val) {
+      this.query = val
+    },
+
     toggleSearching () {
       this.searching = !this.searching
     },
@@ -597,10 +610,15 @@ export default {
     margin 0
     display inline-block
     vertical-align middle
-  span
-    width 55px
+  .fa
+    font-size 18px
+    height 30px
+    line-height 30px
     vertical-align middle
-    margin-left 15px
+  span
+    /*width 55px*/
+    vertical-align middle
+    /*margin-left 15px*/
 
 .down
   color gray-light

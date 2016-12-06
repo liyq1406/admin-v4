@@ -33,7 +33,16 @@
                 <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)" :max="(queryType.value === 'id'?2100000000: false)">
+                <search-box
+                  :key="query"
+                  :active="searching"
+                  :placeholder="$t('common.placeholder.search')"
+                  :max="(queryType.value === 'id'?2100000000: false)"
+                  @cancel="getDevices(true)"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getDevices(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -70,8 +79,6 @@
           @tbody-device--mac="linkToDetails"
           @page-count-update="onPageCountUpdate"
           @current-page-change="onCurrPageChage"></x-table>
-
-          <!-- {{snapshotShuffle | json}} -->
       </div>
     </div>
   </div>
@@ -697,7 +704,6 @@ export default {
     // 导出CSV条件参数
     exportParams () {
       let condition = _.cloneDeep(this.baseCondition)
-      // condition.filter = ['id', 'name', 'mac', 'sn', 'is_active', 'active_date', 'is_online', 'last_login', 'mcu_mod', 'mcu_version', 'firmware_mod', 'firmware_version', 'corp_id', 'product_id', 'region_id', 'create_time']
 
       return {
         name: '设备列表',
@@ -736,8 +742,6 @@ export default {
       this.loadingDataField = true
       api.custom.field.getCustomFieldConfig(this.$route.params.id).then((data) => {
         this.deviceFields = data || {}
-        // if (data.base_fields && data.base_fields.length) {
-        // }
         this.loadingDataField = false
         fn && fn()
       }).catch((res) => {
@@ -890,6 +894,14 @@ export default {
     // 获取设备列表
     getDevices (reset) {
       if (this.queryType.value === 'device--id') {
+        if (!(this.query - 0)) {
+          return this.showNotice({
+            type: 'error',
+            content: this.$t('common.validation.format', {
+              field: this.$t('operation.product.device.manager.device_id')
+            })
+          })
+        }
         if (this.query - 0 > 2100000000) {
           this.showNotice({
             type: 'error',
@@ -914,7 +926,8 @@ export default {
     },
 
     // 搜索
-    handleSearch () {
+    handleSearch (val) {
+      this.query = val
       if (this.query.length === 0) {
         this.getDevices(true)
       }

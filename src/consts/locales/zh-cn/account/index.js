@@ -4,7 +4,7 @@
  */
 
 export default {
-  // 账号信息
+  // 帐号信息
   info: {
     change_password: '修改密码',
     edit_account_msg: '编辑帐号信息',
@@ -44,8 +44,8 @@ export default {
     not_enabled: '已停用',
     enabled: '已启用',
     not_action: '未激活',
-    not_enabled_account: '停用账号',
-    enabled_account: '启用账号',
+    not_enabled_account: '停用帐号',
+    enabled_account: '启用帐号',
     delete_member: '删除成员',
     change_password: '修改密码',
     no_permissions: '无权修改',

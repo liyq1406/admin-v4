@@ -33,6 +33,7 @@
                     :default-country-code="model.country"
                     :default-state-code="model.province"
                     :default-city-code="model.city"
+                    :default-option="{ name: $t('common.placeholder.select') }" 
                     @country-change="onCountryChange"
                     @state-change="onStateChange"
                     @city-change="onCityChange">

@@ -15,7 +15,14 @@
               添加设备
             </button>
             <div class="search-box" v-show="true">
-              <search-box :placeholder="'请输入设备mac'" :key.sync="query" @cancel="getDevices" @press-enter="getDevices" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" >
+              <search-box
+                :placeholder="'请输入设备mac'"
+                :key="query"
+                @cancel="getDevices"
+                @press-enter="getDevices"
+                @search-activate="toggleSearching"
+                @search-deactivate="toggleSearching"
+                @search="handleSearch" >
                 <button slot="search-button" class="search btn" @click="getDevices"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
@@ -91,7 +98,14 @@
                   </button>
                 </div>
                 <div class="filter-group-item mt10">
-                  <search-box :placeholder="'搜索端点ID'" :key.sync="query2" :active="searching" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
+                  <search-box
+                    :placeholder="'搜索端点ID'"
+                    :key="query2"
+                    :active="searching"
+                    @search="handleDatapointSearch"
+                    @search-activate="searching=!searching"
+                    @search-deactivate="searching=!searching">
+                  </search-box>
                 </div>
               </div>
             </div>
@@ -213,10 +227,11 @@
               <label class="form-control col-6">名字:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入名字'" class="input-text-wrap">
-                  <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{format: 'trim'}" lazy class="input-text"/>
+                  <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{format: 'trim', maxlength: 30}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$addValidation.name.modified && $addValidation.name.format">名字前后不能包含空格</span>
+                  <span v-if="$addValidation.name.touched && $addValidation.name.modified && $addValidation.name.maxlength">{{ $t('common.validation.maxlength', ['名字', 30]) }}</span>
                 </div>
               </div>
             </div>
@@ -759,8 +774,17 @@ export default {
         this.adding = false
       })
     },
+
+    /**
+     * 数据端点搜索
+     */
+    handleDatapointSearch (val) {
+      this.query2 = val
+    },
+
     // 搜索
-    handleSearch () {
+    handleSearch (val) {
+      this.query = val
       if (this.query.length === 0) {
         this.getDevices()
       }

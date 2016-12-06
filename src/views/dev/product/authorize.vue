@@ -34,11 +34,27 @@
                 <!-- <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
                   <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>批量导入
                 </label> -->
+
+                <span class="ml20 mr10">时间: </span>
+                <x-select width="98px" size="small" :label="rangeOption.label">
+                  <select v-model="rangeOption" @change="onRangeOptionChange">
+                    <option v-for="option in timeRangeOptions" :value="option">{{ option.label }}</option>
+                  </select>
+                </x-select>
+                <date-time-range-picker v-if="rangeOption.value === 'specified'" @timechange="onTimeChange" :start-offset="365" :show-time="false"></date-time-range-picker>
+
               </div>
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :placeholder="'请输入添加人'" :active="searching" @cancel="getRecords(true)" @search-activate="searching=!searching"  @press-enter="getRecords(true)">
+                <search-box
+                  :key="query"
+                  :placeholder="'请输入添加人'"
+                  :active="searching"
+                  @cancel="getRecords(true)"
+                  @search-activate="searching=!searching"
+                  @search="handleSearch"
+                  @press-enter="getRecords(true)">
                   <!-- <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -162,10 +178,10 @@
 </template>
 
 <script>
-// import Vue from 'vue'
+import Vue from 'vue'
+import locales from 'consts/locales/index'
 import api from 'api'
 import * as config from 'consts/config'
-// import locales from 'consts/locales/index'
 import { setCurrProductMixin } from './mixins'
 import formatDate from 'filters/format-date'
 
@@ -233,7 +249,14 @@ export default {
       adding: false,
       importing: false,
       isShowTipsModal: false,
-      tips: {}
+      tips: {},
+      rangeOption: {
+        label: this.$t('common.any'),
+        value: 'any'
+      },
+      timeRangeOptions: locales[Vue.config.lang].data.TIME_RANGE_OPTIONS,
+      startTime: new Date(new Date() - 365 * 1000 * 60 * 60 * 24),
+      endTime: new Date()
     }
   },
 
@@ -291,6 +314,14 @@ export default {
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {}
       }
+
+      if (this.rangeOption.value === 'specified') {
+        condition.query['create_time'] = {
+          '$gte': formatDate(this.startTime, 'yyyy-MM-ddT00:00:00.000Z', true),
+          '$lte': formatDate(this.endTime, 'yyyy-MM-ddT23:59:59.999Z', true)
+        }
+      }
+
       if (this.query.length > 0) {
         condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
       }
@@ -444,6 +475,10 @@ export default {
       this.getRecords()
     },
 
+    handleSearch (val) {
+      this.query = val
+    },
+
     /**
      * 选择文件
      */
@@ -564,6 +599,27 @@ export default {
     onTipsCancel () {
       this.isShowTipsModal = false
       this.tips = {}
+    },
+
+    /**
+     * 处理时间区段改变
+     */
+    onRangeOptionChange () {
+      if (this.rangeOption.value === 'any') {
+        this.getRecords(true)
+      }
+    },
+
+    /**
+     * 时间范围改变
+     * @param  {[type]} startDate [description]
+     * @param  {[type]} endDate   [description]
+     * @return {[type]}           [description]
+     */
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getRecords(true)
     }
   }
 }

@@ -28,8 +28,8 @@
                   :show-district="false"
                   select-size="small"
                   @province-change="onProvinceChange"
-                  @city-change="onCityChange"
-                ></area-select>
+                  @city-change="onCityChange">
+                </area-select>
               </div>
             </div>
           </div>

@@ -179,6 +179,7 @@
             window.localStorage.removeItem('pluginsToken')
             window.localStorage.removeItem('memberRole')
             window.localStorage.removeItem('dealerConfig')
+            window.localStorage.removeItem('heavyBuyerConfig')
             window.localStorage.setItem('memberId', res.data.member_id)
             window.localStorage.setItem('corpId', res.data.corp_id)
             window.localStorage.setItem('accessToken', res.data.access_token)

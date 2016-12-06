@@ -298,7 +298,7 @@ export default {
           line-height 130px
           font-size 26px
           overflow hidden
-          text-overflow 100%
+          truncate(100%)
           .title1
             color red
         .describe

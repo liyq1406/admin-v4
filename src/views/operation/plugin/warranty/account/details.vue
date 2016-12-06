@@ -45,7 +45,15 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getBranchStaffsList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getBranchStaffsList(true)">
+                <search-box
+                  :key="key"
+                  :active="searching"
+                  :placeholder="$t('common.placeholder.search')"
+                  @cancel="getBranchStaffsList(true)"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getBranchStaffsList(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="(index, option) in queryTypeOptions" :value="option" :selected="index===0">{{ option.label }}</option>
@@ -479,8 +487,9 @@ export default {
       this.searching = !this.searching
     },
     // 搜索
-    handleSearch () {
-      if (this.query.length === 0) {
+    handleSearch (val) {
+      this.key = val
+      if (this.key.length === 0) {
         this.getBranchStaffsList()
       }
     },
@@ -554,7 +563,8 @@ export default {
         })
       } else if (this.editValidation.$valid && !this.editing) { // 更新
         this.editing = true
-        api.warranty.UpdateBranch(this.$route.params.app_id, this.editthis.$route.params.id).then((res) => {
+        console.log(this.$route.params.app_id)
+        api.warranty.UpdateBranch(this.$route.params.app_id, this.editModal, this.$route.params.id).then((res) => {
           if (res.status === 200) {
             this.resetEdit()
             this.getBranchList()

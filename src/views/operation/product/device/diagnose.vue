@@ -10,7 +10,14 @@
                 <button :disabled="!device.is_online || refreshing" :class="{'disabled':!device.is_online || refreshing}" @click="getDatapointValues" class="btn btn-ghost btn-sm"><i :class="{'fa-spin':refreshing}" class="fa fa-refresh"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
+                <search-box
+                  :key="query"
+                  :active="searching"
+                  :placeholder="$t('common.placeholder.search')"
+                  @search="handleSearch"
+                  @search-activate="searching=!searching"
+                  @search-deactivate="searching=!searching">
+                </search-box>
               </div>
             </div>
             <h3>{{ $t('operation.product.device.diagnose.datapoint') }}</h3>
@@ -357,6 +364,10 @@ export default {
       let dp = params.expand
       dp.value = val
       this.setDataEvent(dp)
+    },
+
+    handleSearch (val) {
+      this.query = val
     },
 
     /**

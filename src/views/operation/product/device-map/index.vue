@@ -6,18 +6,31 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="onSearchCancel" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
+          <search-box
+            :key="query"
+            :active="searching"
+            :placeholder="$t('ui.overview.addForm.search_condi')"
+            @cancel="onSearchCancel"
+            @search="handleSearch"
+            @search-activate="toggleSearching"
+            @search-deactivate="toggleSearching"
+            @press-enter="doSearch">
             <x-select width="106px" :label="queryType.label" size="small">
               <select v-model="queryType">
                 <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
               </select>
             </x-select>
-            <button slot="search-button" @click="handleSearch" class="btn"><i class="fa fa-search"></i></button>
+            <button slot="search-button" @click="doSearch" class="btn"><i class="fa fa-search"></i></button>
           </search-box>
         </div>
       </div>
+<<<<<<< HEAD
       <h3>{{ $t('operation.product.devicemap.map') }}</h3>
       <!-- <h3><button class="btn btn-ghost btn-sm" @click.prevent.stop="onDemoBtnClick"><i class="fa fa-expand"></i> {{ $t('operation.product.devicemap.demo') }} </button></h3> -->
+=======
+      <!-- <h3>{{ $t('operation.product.devicemap.map') }}</h3> -->
+      <h3><button class="btn btn-ghost btn-sm" v-if="this.userRole === 'member'" @click.prevent.stop="onDemoBtnClick"><i class="fa fa-expand"></i> {{ $t('operation.product.devicemap.demo') }} </button></h3>
+>>>>>>> fix
     </div>
 
     <!-- 设备地图 -->
@@ -78,6 +91,7 @@ export default {
 
   data () {
     return {
+      userRole: window.localStorage.getItem('userRole'),
       map: null,
       markers: [],
       infoWindow: null,
@@ -593,9 +607,16 @@ export default {
     },
 
     /**
+     * 处理搜索
+     */
+    handleSearch (val) {
+      this.query = val
+    },
+
+    /**
      * 搜索
      */
-    handleSearch () {
+    doSearch () {
       if (!this.query.length) {
         this.showError(this.$t('operation.product.devicemap.input_keyword'))
         return

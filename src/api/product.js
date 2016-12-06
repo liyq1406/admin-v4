@@ -311,5 +311,15 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/product/${productId}/export/qrcode_by_import_record?query=${params}`
     )
+  },
+  /**
+   * 批量修改设备的应用型数据端点值
+   * @param  {Object} params 产品信息
+   * @return {Promise}
+   */
+  editDatapoint (productId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/product/${productId}/app_datapoint_value`, params
+    )
   }
 }

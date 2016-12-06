@@ -167,8 +167,8 @@
                     :input-disabled="true"
                     :editing="editingTag"
                     @tag-change="onTagChange"
-                    @edit-state-change="onTagEditStateChange"
-                  ></tag-input>
+                    @edit-state-change="onTagEditStateChange">
+                  </tag-input>
                 </div>
               </div>
               <div class="form-row row tag-row">
@@ -470,6 +470,14 @@ export default {
       } else {
         if (this.$validation.invalid) {
           this.$validate(true)
+          return
+        }
+        // 固定时间最小值为5分钟
+        if (this.selectedType === 2 && this.interval - 0 < 5) {
+          this.showNotice({
+            type: 'error',
+            content: '固定时间至少5分钟以上！'
+          })
           return
         }
         var param = _.clone(this.model)

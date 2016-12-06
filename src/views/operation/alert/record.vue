@@ -39,7 +39,15 @@
                 <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="getAlerts(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getAlerts(true)">
+                <search-box
+                  :key="key"
+                  :placeholder="$t('common.placeholder.search')"
+                  :active="searching"
+                  @cancel="getAlerts(true)"
+                  @search="handleSearch" 
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @press-enter="getAlerts(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -80,9 +88,9 @@
 
 <script>
 import Vue from 'vue'
+import locales from 'consts/locales/index'
 import api from 'api'
 import * as config from 'consts/config'
-import locales from 'consts/locales/index'
 import formatDate from 'filters/format-date'
 // TODO 消除代码冗余 #weijie
 
@@ -483,6 +491,10 @@ export default {
       } else {
         return `${Math.floor(n / 60000)}${this.$t('operation.product.alert.minutes')}`
       }
+    },
+
+    handleSearch (val) {
+      this.key = val
     },
 
     // 切换搜索

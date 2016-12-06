@@ -23,28 +23,33 @@
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.username.touched && $validation.username.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
                         <span v-if="$validation.username.modified && $validation.username.format">{{ $t('operation.dealer.placeholders.account') }}</span>
-                        <span v-if="$validation.username.modified && $validation.username.minlength">{{ $t('common.validation.minlength', ['账号', 6]) }}</span>
-                        <span v-if="$validation.username.modified && $validation.username.maxlength">{{ $t('common.validation.maxlength', ['账号', 32]) }}</span>
+                        <span v-if="$validation.username.modified && $validation.username.minlength">{{ $t('common.validation.minlength', ['帐号', 6]) }}</span>
+                        <span v-if="$validation.username.modified && $validation.username.maxlength">{{ $t('common.validation.maxlength', ['帐号', 32]) }}</span>
                       </div>
                     </div>
                   </div>
                   <div class="form-row row mt20">
                     <label class="form-control col-5 organization-label">登录密码:</label>
                     <div class="controls col-19" v-if="type === 'add'">
-                      <div v-placeholder="'请输入6-16位字符密码'" class="input-text-wrap">
-                        <input v-model="model.password" type="text" lazy name="model.password" v-validate:password="{required: true, minlength: 6, maxlength: 16}" class="input-text"/>
+                      <div v-placeholder="$t('operation.dealer.placeholders.password')" class="input-text-wrap">
+                        <input v-model="model.password" type="text" lazy name="model.password" v-validate:password="{required: true, format: 'password'}" class="input-text"/>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.password.touched && $validation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
-                        <span v-if="$validation.password.modified && $validation.password.minlength">{{ $t('common.validation.minlength', [$t('auth.fields.password'), 6]) }}</span>
-                        <span v-if="$validation.password.modified && $validation.password.maxlength">{{ $t('common.validation.maxlength', [$t('auth.fields.password'), 16]) }}</span>
+                        <span v-if="$validation.password.modified && $validation.password.format">{{ $t('common.validation.password') }}</span>
                       </div>
                     </div>
                     <div class="controls col-19" v-else>
                       <button class="btn btn-ghost" @click.prevent.stop="editPassword = !editPassword">修改密码</button>
-                      <div v-if="editPassword" v-placeholder="$t('ui.dealer.placeholders.password')" class="input-text-wrap mt10">
-                        <input v-model="model.password" type="text" name="model.password" minlength="8" maxlength="16" v-validate:password="{required: true, minlength: 6, maxlength: 16}" lazy class="input-text"/>
-                      </div>
+                      <template v-if="editPassword">
+                        <div v-placeholder="$t('operation.dealer.placeholders.password')" class="input-text-wrap mt10">
+                          <input v-model="model.password" type="text" name="model.password" v-validate:password="{required: true, format: 'password'}" lazy class="input-text"/>
+                        </div>
+                        <div class="form-tips form-tips-error">
+                          <span v-if="$validation.password.touched && $validation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
+                          <span v-if="$validation.password.modified && $validation.password.format">{{ $t('common.validation.password') }}</span>
+                        </div>
+                      </template>
                     </div>
                   </div>
                 </div>

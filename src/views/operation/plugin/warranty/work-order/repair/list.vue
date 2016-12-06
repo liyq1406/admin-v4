@@ -14,11 +14,11 @@
           </x-select>
         </div>
       </div>
-      <div class="filter-group fr">
+      <!-- <div class="filter-group fr">
         <div class="filter-group-item">
           <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="row statistic-group mb20">
       <div class="col-6">
@@ -65,7 +65,15 @@
                 <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="getOrderWorkList(true)" :placeholder="$t('operation.warranty.repair.search_placeholder')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="" @press-enter="getOrderWorkList(true)">
+                <search-box
+                  :key="query"
+                  :active="searching"
+                  :placeholder="$t('operation.warranty.repair.search_placeholder')"
+                  @cancel="getOrderWorkList(true)"
+                  @search-activate="toggleSearching"
+                  @search-deactivate="toggleSearching"
+                  @search="handleSearch"
+                  @press-enter="getOrderWorkList(true)">
                   <button slot="search-button" @click="getOrderWorkList(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -289,10 +297,8 @@ export default {
         query: {}
       }
 
-      condition.query = {
-        product_id: {
-          $in: [this.selectedProduct.id]
-        }
+      condition.query.product_id = {
+        $in: [this.selectedProduct.id]
       }
 
       if (this.rangeOption.value === 'specified') {
@@ -306,11 +312,9 @@ export default {
         condition.query.status = this.queryType.value
       }
       if (this.useTime === true) {
-        condition.query = {
-          create_time: {
-            $gte: {'@date': this.startTimePick},
-            $lte: {'@date': this.endTimePick}
-          }
+        condition.query.create_time = {
+          $gte: {'@date': this.startTimePick},
+          $lte: {'@date': this.endTimePick}
         }
       }
 
@@ -453,6 +457,11 @@ export default {
       this.currentPage = number
       this.getOrderWorkList()
     },
+
+    handleSearch (val) {
+      this.query = val
+    },
+
     toggleSearching () {
       this.searching = !this.searching
     },

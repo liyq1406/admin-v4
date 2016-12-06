@@ -536,7 +536,7 @@ export default {
               line-height 30px
               height 30px
               white-space nowrap
-              text-overflow 100%
+              truncate(100%)
               .name
                 font-size 16px
                 color #DA4E37

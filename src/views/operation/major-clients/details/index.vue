@@ -7,13 +7,14 @@
     <div class="panel mt15 mb20 no-split-line">
       <div class="panel-bd row">
         <div class="col-16">
-          <div class="alert-record-summary">
+          <div class="buyer-header">
             <div class="fl">
-              <h1 class="mt10">{{ majorClient.name }}
-                <a v-link="'/operation/major-client/edit/' + $route.params.id">
+              <h2 class="mt10">
+                <span class="major-client-name">{{ majorClient.name }}</span>
+                <a class="icon-edit-major-client" v-link="'/operation/major-client/edit/' + $route.params.id">
                   <i class="fa fa-edit"></i>
                 </a>
-              </h1>
+              </h2>
             </div>
             <div class="btnarea clearfix">
               <button @click.prevent.stop="toggle" class="mt20">
@@ -192,18 +193,30 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
-  .position-map
-    box-sizing border-box
-  .position-msg
-    padding-left 10px
-    padding-top 5px
-  .btnarea
-    button
-      border 1px solid #bcbcbc
-      outline none
-      background-color #fafafa
-      color #323232
-      height 24px
-      float right
-      margin-right 20px
+.buyer-header
+  h2
+    font-weight normal
+    font-size 22px
+.position-map
+  box-sizing border-box
+.position-msg
+  padding-left 10px
+  padding-top 5px
+.major-client-name
+  display inline-block
+  max-width 320px
+  white-space nowrap
+  text-overflow ellipsis
+  overflow hidden
+.icon-edit-major-client
+  vertical-align text-bottom
+.btnarea
+  button
+    border 1px solid #bcbcbc
+    outline none
+    background-color #fafafa
+    color #323232
+    height 24px
+    float right
+    margin-right 20px
 </style>

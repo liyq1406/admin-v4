@@ -105,10 +105,10 @@
         key: '',
         breadcrumbNav: [{
           label: '全部',
-          link: 'operation/major-clients'
+          link: '/operation/major-clients'
         }, {
           label: '大客户信息',
-          link: `operation/major-clients/${this.$route.params.id}/device`
+          link: `/operation/major-clients/${this.$route.params.id}/device`
         }, {
           label: '添加设备'
         }],
@@ -220,12 +220,12 @@
           order: {},
           query: {
             '$logical': 'AND',
-            device: {},
-            heavy_buyer: {}
+            device: {}
           }
         }
 
         if (this.selectDealer.id) {
+          condition.query.heavy_buyer = {}
           condition.query.heavy_buyer.id = { $like: this.selectDealer.id }
         }
 
