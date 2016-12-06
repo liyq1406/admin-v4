@@ -220,12 +220,12 @@
           order: {},
           query: {
             '$logical': 'AND',
-            device: {},
-            heavy_buyer: {}
+            device: {}
           }
         }
 
         if (this.selectDealer.id) {
+          condition.query.heavy_buyer = {}
           condition.query.heavy_buyer.id = { $like: this.selectDealer.id }
         }
 

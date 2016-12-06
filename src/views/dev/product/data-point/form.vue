@@ -13,7 +13,7 @@
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.index") }}:</label>
                 <div class="controls col-18">
                   <div class="input-text-wrap">
-                    <input v-model="model.index" type="text" name="index"  v-validate:index="{required: true, format: 'numberic'}" class="input-text" lazy/>
+                    <input v-model="model.index" type="text" name="index" v-validate:index="{required: true, format: 'numberic'}" class="input-text" lazy/>
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.index.touched && $validation.index.required">{{ $t('common.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span>
@@ -39,7 +39,7 @@
                 <div class="controls col-18">
                   <div class="radio-group">
                     <label v-for="source in locales.data.DATAPOINT_SOURCES" class="radio">
-                      <input type="radio" v-model="model.source" name="source" :value="source.value" @change="onSelectSource" number/>{{ source.label }}
+                      <input type="radio" v-model="model.source" name="source" :value="source.value" @change="onSelectSource" number disabled="formType==='edit'"/>{{ source.label }}
                     </label>
                   </div>
                 </div>

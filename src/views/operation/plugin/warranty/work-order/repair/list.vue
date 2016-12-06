@@ -14,11 +14,11 @@
           </x-select>
         </div>
       </div>
-      <div class="filter-group fr">
+      <!-- <div class="filter-group fr">
         <div class="filter-group-item">
           <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="row statistic-group mb20">
       <div class="col-6">

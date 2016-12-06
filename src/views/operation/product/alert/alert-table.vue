@@ -91,7 +91,7 @@ export default {
       queryTypeOptions: [
         { label: this.$t('operation.product.alert.mac'), value: 'mac' },
         { label: this.$t('operation.product.alert.device_id'), value: 'from' },
-        { label: this.$t('operation.product.alert.alert_content'), value: 'alert_name' }
+        { label: this.$t('operation.product.alert.alert_content'), value: 'content' }
       ],
       queryType: {},
       key: '',

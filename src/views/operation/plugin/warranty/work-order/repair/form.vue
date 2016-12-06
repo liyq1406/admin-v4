@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>{{ $t('operation.warranty.repair_form.add_title') }}</h2>
+      <h2>{{ mainTitle }}</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel">
@@ -10,11 +10,12 @@
           <div class="col-16 alert-max form">
             <validator name="validation">
               <form autocomplete="off" @submit.prevent="onSubmit">
+                <!-- 序列号 -->
                 <div class="form-row row">
                   <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.fields.sn') }}:</label>
                   <div class="controls col-19">
                     <div v-placeholder="$t('operation.warranty.repair_form.placeholders.sn')" class="input-text-wrap">
-                      <input v-model="addModal.product_sn" type="text" name="product_sn" v-validate:productsn="{required: true, minlength: 2, maxlength: 32}" lazy required class="input-text"/>
+                      <input v-model="model.product_sn" type="text" name="model.product_sn" v-validate:productsn="{required: true, minlength: 2, maxlength: 32}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.productsn.touched && $validation.productsn.required">{{ $t('common.validation.required', {field: $t('operation.warranty.repair_form.fields.sn')}) }}</span>
@@ -24,10 +25,11 @@
                   </div>
                 </div>
 
+                <!-- 产品 -->
                 <div class="form-row row">
                   <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.select_product') }}:</label>
                   <div class="controls col-19">
-                    <x-select  v-if="products.length" :label="selectedProduct.name" :width="'120px'">
+                    <x-select v-if="products.length" :label="selectedProduct.name" :width="'120px'">
                       <select v-model="selectedProduct">
                         <option v-for="product in products" :value="product">{{ product.name }}</option>
                       </select>
@@ -36,6 +38,7 @@
                   </div>
                 </div>
 
+                <!-- 维修类型 -->
                 <div class="form-row row">
                   <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.fields.type') }}:</label>
                   <div class="controls col-19">
@@ -48,11 +51,12 @@
                   </div>
                 </div>
 
+                <!-- 维修内容 -->
                 <div class="form-row row">
                   <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.fields.instructions') }}:</label>
                   <div class="controls col-19">
                     <div v-placeholder="$t('operation.warranty.repair_form.placeholders.instructions')" class="input-text-wrap">
-                      <input v-length-tip="{max: 32, model:addModal.instructions }" v-model="addModal.instructions" type="text" name="instructions" v-validate:instructions="{required: true, maxlength: 32}" lazy required class="input-text"/>
+                      <input v-length-tip="{max: 32, model:model.instructions }" v-model="model.instructions" type="text" name="instructions" v-validate:instructions="{required: true, maxlength: 32}" lazy required class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.instructions.touched && $validation.instructions.required">{{ $t('common.validation.required', {field: $t('operation.warranty.repair_form.fields.instructions')}) }}</span>
@@ -61,11 +65,12 @@
                   </div>
                 </div>
 
+                <!-- 维修说明 -->
                 <div class="form-row row">
                   <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.fields.remark') }}:</label>
                   <div class="controls col-19">
                     <div v-placeholder="$t('operation.warranty.repair_form.placeholders.remark')" class="input-text-wrap">
-                      <textarea v-length-tip="{max: 240, model:addModal.discription }" v-model="addModal.remark" type="text" v-validate:remark="{required: true, maxlength: 240}" name="remark" lazy required class="input-text"></textarea>
+                      <textarea v-length-tip="{max: 240, model:model.remark }" v-model="model.remark" type="text" v-validate:remark="{required: true, maxlength: 240}" name="remark" lazy required class="input-text"></textarea>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.remark.touched && $validation.remark.required">{{ $t('common.validation.required', {field: $t('operation.warranty.repair_form.fields.remark')}) }}</span>
@@ -74,6 +79,7 @@
                   </div>
                 </div>
 
+                <!-- 维修照片 -->
                 <div class="form-row row">
                   <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.fields.image') }}:</label>
                   <div class="controls col-19">
@@ -81,24 +87,26 @@
                   </div>
                 </div>
 
+                <!-- 网点 -->
                 <div class="form-row row">
                   <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.branch_select') }}:</label>
                   <div class="controls col-19">
-                    <x-select v-if="branchs.length" :label="selectedBranch.name" :width="'120px'">
+                    <x-select v-if="branches.length" :label="selectedBranch.name" :width="'120px'">
                       <select v-model="selectedBranch" @change="getBranchStaffsList">
-                        <option v-for="branch in branchs" :value="branch">{{ branch.name }}</option>
+                        <option v-for="branch in branches" :value="branch">{{ branch.name }}</option>
                       </select>
                     </x-select>
                     <div v-else class="non-tip">{{ $t('operation.warranty.repair_form.no_branch') }}</div>
                   </div>
                 </div>
 
+                <!-- 处理人员 -->
                 <div class="form-row row">
                   <label class="form-control col-5 alert-label">{{ $t('operation.warranty.repair_form.staff') }}:</label>
                   <div class="controls col-19">
-                    <x-select v-if="branchStaffs.length" :label="selectedBranchStarff.name" :width="'120px'">
-                      <select v-model="selectedBranchStarff">
-                        <option v-for="staff in branchStaffs" :value="staff">{{ staff.name }}</option>
+                    <x-select v-if="staffs.length" :label="selectedStarff.name" :width="'120px'">
+                      <select v-model="selectedStarff">
+                        <option v-for="staff in staffs" :value="staff">{{ staff.name }}</option>
                       </select>
                     </x-select>
                     <div v-else class="non-tip">{{ $t('operation.warranty.repair_form.no_staff') }}</div>
@@ -118,192 +126,141 @@
     </div>
   </div>
 </template>
+
 <script>
-  import { warrantyMixins } from '../../mixins'
-  import api from 'api'
+import { warrantyMixins } from '../../mixins'
+import api from 'api'
+import Promise from 'promise'
 
-  export default {
-    name: 'add-warranty',
+export default {
+  name: 'RepairForm',
 
-    mixins: [warrantyMixins],
+  mixins: [warrantyMixins],
 
-    vuex: {
-      getters: {
-        products: ({ products }) => products.released
-      }
-    },
+  vuex: {
+    getters: {
+      products: ({ products }) => products.released
+    }
+  },
 
-    components: {
-    },
-
-    route: {
-      data () {
-        this.init()
-        this.getTags()
-        this.getBranchList()
-      }
-    },
-
-    watch: {
-      products () {
-        this.init()
-      },
-      types () {
-        this.getFirstType()
-      }
-    },
-
-    data () {
-      return {
-        dealerID: window.localStorage.getItem('dealerId'),
-        token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
-        adding: false,
-        branchStaffs: [],
-        selectedBranchStarff: {},
-        branchs: [],
-        selectedBranch: {},
-        types: [],
-        selectedType: '',
-        selectedProduct: {},
-        addValidation: {},
-        breadcrumbNav: [{
-          label: this.$t('common.all'),
-          link: `/operation/plugins/warranty/${this.$route.params.app_id}/work-orders/repair`
-        }, {
-          label: this.$t('operation.warranty.repair_form.add_title')
-        }],
-        addModal: {
-        },
-        deviceTypes: [
-          {
-            label: '空气净化器',
-            value: 0
-          }
-        ],
-        images: ['']
-      }
-    },
-    computed: {
-      hasProduct () {
-        var result = false
-        if (this.selectedProduct.id) {
-          result = true
-        } else {
-          result = false
-        }
-        return result
-      }
-    },
-    methods: {
-      init () {
-        this.selectedProduct = this.products[0] || {}
-        // if (this.products.length > 0) {
-        //   this.getOrderWorkList()
-        // }
-      },
-      getFirstType () {
-        this.selectedType = this.types[0] || ''
-      },
-      // 获取标签
-      getTags () {
-        // token 不存在，无权限访问
-        if (!this.token) {
-          this.showNoTokenError()
-          return
-        }
-
-        api.warranty.getWarrantyLabel(this.$route.params.app_id).then((res) => {
-          this.types = res.data.label
-        }).catch((res) => {
-          this.handleError(res)
-        })
-      },
-      // 获取网点列表
-      getBranchList () {
-        // token 不存在，无权限访问
-        if (!this.token) {
-          this.showNoTokenError()
-          return
-        }
-
-        var params = {
-          filter: ['_id', 'name'],
-          limit: 100
-        }
-        api.warranty.getBranchList(this.$route.params.app_id, params).then((res) => {
-          this.branchs = res.data.list
-          this.selectedBranch = this.branchs[0] || {}
-          this.getBranchStaffsList()
-        }).catch((err) => {
-          this.handleError(err)
-        })
-      },
-      // 获取网点对应维修人员列表
-      getBranchStaffsList () {
-        // token 不存在，无权限访问
-        if (!this.token) {
-          this.showNoTokenError()
-          return
-        }
-
-        var params = {
-          filter: ['_id', 'name'],
-          limit: 100,
-          query: {
-            branch_id: this.selectedBranch._id
-          }
-        }
-        api.warranty.getBranchStaffsList(this.$route.params.app_id, params).then((res) => {
-          this.branchStaffs = res.data.list
-          this.selectedBranchStarff = this.branchStaffs[0] || {}
-        }).catch((err) => {
-          this.handleError(err)
-        })
-      },
-      // addFormHook (form) {
-      //   this.addModal.form = form
-      // },
-      // 提交添加
-      onSubmit () {
-        // token 不存在，无权限访问
-        if (!this.token) {
-          this.showNoTokenError()
-          return
-        }
-
-        if (this.adding) return
-
-        this.addModal.product_sn = this.addModal.product_sn.trim()
-        this.addModal.remark = this.addModal.remark.trim()
-        this.addModal.instructions = this.addModal.instructions.trim()
-        if (this.$validation.invalid) {
-          this.$validate(true)
-          return
-        }
-        if (this.dealerID) {
-          this.addModal.dealer_id = this.dealerID
-        }
-        this.addModal.heavy_buyer_id = '12312323'
-        this.addModal.product_id = this.selectedProduct.id
-        this.addModal.label = this.selectedType
-        this.addModal.images = this.images
-        this.addModal.branch_id = this.selectedBranch._id
-        this.addModal.assigned_to = this.selectedBranchStarff._id
-        this.addModal.assigned_name = this.selectedBranchStarff.name
-        this.addModal.status = 0
-        this.adding = true
-        api.warranty.addRepairDetailList(this.$route.params.app_id, this.addModal).then((res) => {
-          this.adding = false
-          this.$route.router.go('/operation/plugins/warranty/' + this.$route.params.app_id + '/work-orders/repair')
-        }).catch((err) => {
-          this.adding = false
-          this.handleError(err)
-        })
+  data () {
+    return {
+      token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
+      branches: [], // 网点列表
+      staffs: [], // 维修人员列表
+      images: [''], // 图片
+      types: [], // 类型列表
+      selectedProduct: {}, // 选中的产品
+      selectedStarff: {}, // 选中的维修人员
+      selectedType: '',
+      model: {
+        product_sn: '',
+        instructions: '',
+        remark: ''
       }
     }
+  },
+
+  computed: {
+    // 表单数据
+    formData () {
+    },
+
+    // 是否编辑表单
+    isEdit () {
+      return !!this.$route.params.id
+    },
+
+    // 大标题
+    mainTitle () {
+      let tit = this.isEdit ? 'edit_title' : 'add_title'
+      return this.$t(`operation.warranty.repair_form.${tit}`)
+    },
+
+    // 面包屑
+    breadcrumbNav () {
+      return [{
+        label: this.$t('common.all'),
+        link: `/operation/plugins/warranty/${this.$route.params.app_id}/work-orders/repair`
+      }, {
+        label: this.mainTitle
+      }]
+    }
+  },
+
+  route: {
+    data () {
+      this.fetchData()
+    }
+  },
+
+  watch: {
+    products () {
+
+    }
+  },
+
+  methods: {
+    fetchData () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
+      // 获取标签
+      let getTags = api.warranty.getWarrantyLabel(this.$route.params.app_id)
+
+      // 获取网点
+      let params = {
+        filter: ['_id', 'name'],
+        limit: 100
+      }
+      let getBranches = api.warranty.getBranchList(this.$route.params.app_id, params)
+
+      Promise.all([
+        getTags,
+        getBranches
+      ]).then((res) => {
+        this.types = res[0].data.label
+        this.branches = res[1].data.list
+
+        if (this.isEdit) {
+
+        } else {
+        }
+      })
+    },
+
+    /**
+     * 获取标签
+     */
+    getTags () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
+      api.warranty.getWarrantyLabel(this.$route.params.app_id).then((res) => {
+        this.types = res.data.label
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+
+    selectProduct () {
+    },
+
+    /**
+     * 处理表单提交
+     */
+    onSubmit () {}
   }
+}
 </script>
-<style lang='stylus' scoped>
+
+<style lang="stylus">
 .non-tip
   line-height 32px
   color red

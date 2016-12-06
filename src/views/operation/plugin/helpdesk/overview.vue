@@ -65,8 +65,8 @@
                 <tbody>
                   <tr v-for="item in feedbacks">
                     <td>{{item.label}}</td>
-                    <td>{{item.untreatedCount}} ({{item.untreatedPercent || ''}} %)</td>
-                    <td>{{item.treatedCount}} ({{item.treatedPercent || ''}} %)</td>
+                    <td>{{item.untreatedCount}} ({{ item.untreatedPercent || 0 | toFixed }}%)</td>
+                    <td>{{item.treatedCount}} ({{ item.treatedPercent || 0 | toFixed }}%)</td>
                     <td>{{item.Count}}</td>
                   </tr>
                 </tbody>

@@ -65,6 +65,15 @@ export default {
       default: true
     },
 
+    defaultOption: {
+      type: Object,
+      default () {
+        return {
+          name: this.$t('common.any')
+        }
+      }
+    },
+
     defaultCountryCode: {
       type: String,
       default: ''
@@ -99,9 +108,9 @@ export default {
       stateOptions: [],
       cityOptions: [],
       regionOptions: [],
-      defaultOption: {
-        name: this.$t('common.any')
-      },
+      // defaultOption: {
+      //   name: this.$t('common.any')
+      // },
       noState: false
     }
   },

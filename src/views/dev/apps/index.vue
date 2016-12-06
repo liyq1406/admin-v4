@@ -527,11 +527,11 @@ export default {
     .app-name
       height 22px
       font-size 14px
-      text-overflow 100%
+      truncate(100%)
     .app-type
       color #BCBCBC
       font-size 13px
-      text-overflow 100%
+      truncate(100%)
   .app-details-box
     height 100%
     margin-left 230px

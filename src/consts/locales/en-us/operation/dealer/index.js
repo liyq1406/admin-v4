@@ -7,6 +7,7 @@ export default {
   title: 'Dealer Analysis', // 概览
   dealer_name: '经销商名称',
   placeholders: {
-    account: '帐号必须以字母开头，包含数字字母和下划线'
+    account: '帐号必须以字母开头，包含数字字母和下划线',
+    password: '8-16 bits, containing numbers and uppercase and lowercase letters'
   }
 }

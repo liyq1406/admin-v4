@@ -280,16 +280,28 @@
           this.editModal.remark = info.remark
           this.images = info.images
           this.branchs.forEach((branch) => {
-            if (branch.id === info.branch_id) {
+            if (branch._id === info.branch_id) {
               this.selectedBranch = branch
+              return
             }
           })
-          this.branchStaffs.forEach((branchStaff) => {
-            if (branchStaff.id === info.branch_id && branchStaff.name === info.assigned_name) {
-              this.selectedBranchStarff = branchStaff
+          var params = {
+            filter: ['_id', 'name'],
+            limit: 100,
+            query: {
+              branch_id: this.selectedBranch._id
             }
+          }
+          api.warranty.getBranchStaffsList(this.$route.params.app_id, params).then((r) => {
+            this.branchStaffs = r.data.list
+            this.branchStaffs.forEach((branchStaff) => {
+              if (branchStaff._id === info.assigned_to) {
+                this.selectedBranchStarff = branchStaff
+              }
+            })
+          }).catch((err) => {
+            this.handleError(err)
           })
-          console.log(info)
         }).catch((err) => {
           this.handleError(err)
         })
@@ -341,7 +353,7 @@
           this.editModal.dealer_id = this.dealerID
         }
         this.editModal.branch_id = this.selectedBranch._id
-        this.editModal.assigned_id = this.selectedBranchStarff._id
+        this.editModal.assigned_to = this.selectedBranchStarff._id
         this.editModal.assigned_name = this.selectedBranchStarff.name
         this.editModal.status = 0
         this.editing = true

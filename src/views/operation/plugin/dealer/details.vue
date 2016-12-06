@@ -4,19 +4,26 @@
       <h2>经销商管理</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="panel">
-        <div class="titlemargin">{{dealer.name}}<a v-link="'/operation/plugins/dealer/' + $route.params.app_id + '/edit/' + $route.params.dealer_id"><i class="fa fa-edit"></i></a></div>
+    <div class="panel mt15">
       <div class="panel-bd">
         <div class="row">
           <div class="col-14">
-            <div class="btnarea clearfix">
-              <button @click.prevent.stop="toggle">
-                <!-- <i class="fa fa-check"></i> -->
-                <span v-if="status===0">已停用</span>
-                <span v-else>已启用</span>
-              </button>
+            <div class="dealer-header">
+              <div class="fl">
+                <h2 class="mt10">
+                  <span class="dealer-name">{{dealer.name}}</span>
+                  <a class="icon-edit-dealer" v-link="'/operation/plugins/dealer/' + $route.params.app_id + '/edit/' + $route.params.dealer_id"><i class="fa fa-edit"></i></a>
+                </h2>
+              </div>
+              <div class="actions clearfix">
+                <button @click.prevent.stop="toggle" class="mt20">
+                  <!-- <i class="fa fa-check"></i> -->
+                  <span v-if="status===0">已停用</span>
+                  <span v-else>已启用</span>
+                </button>
+              </div>
             </div>
-            <div class="listmargin">
+            <div v-stretch="182" class="mb15">
               <info-list :info="dealerInfo"></info-list>
             </div>
           </div>
@@ -38,10 +45,9 @@
           </div>
         </div>
       </div>
-      <tab :nav="secondaryNav"></tab>
-      <router-view transition="view" transition-mode="out-in" class="view"></router-view>
-
     </div>
+    <tab :nav="secondaryNav"></tab>
+    <router-view transition="view" transition-mode="out-in" class="view"></router-view>
   </div>
 </template>
 
@@ -335,23 +341,30 @@
 
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
+.dealer-header
+  h2
+    font-weight normal
+    font-size 22px
+
+  .actions
+    button
+      border 1px solid #bcbcbc
+      outline none
+      background-color #fafafa
+      color #323232
+      height 24px
+      float right
+      margin-right 20px
 .textcenter
   text-align center
-.btnarea
-  button
-    border 1px solid #bcbcbc
-    outline none
-    background-color #fafafa
-    color #323232
-    height 24px
-    float right
-    margin-right 20px
-.titlemargin
-  font-size 20px
-  margin-top 20px
-  margin-left 10px
-.listmargin
-  margin 10px 0
+.dealer-name
+  display inline-block
+  max-width 320px
+  white-space nowrap
+  text-overflow ellipsis
+  overflow hidden
+.icon-edit-dealer
+  vertical-align text-bottom
 .fa
   margin-left 5px
 .status

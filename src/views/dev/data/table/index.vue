@@ -1545,7 +1545,7 @@ export default {
           height 100%
           display block
           white-space nowrap
-          text-overflow 100%
+          truncate(100%)
           transition transform ease 0.1s
           font-size 12px
           box-sizing border-box
@@ -1607,7 +1607,7 @@ export default {
     .form-control
       span
         display inline-block
-        text-overflow 100%
+        truncate(100%)
 
 .details-header
   height 26px

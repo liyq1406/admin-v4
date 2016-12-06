@@ -470,12 +470,10 @@ export default {
           })
         } else {
           this.snapshots = []
-          this.total = 0
         }
       }).catch((res) => {
         this.refreshing = false
         this.snapshots = []
-        this.total = 0
         this.handleError(res)
       })
     },
