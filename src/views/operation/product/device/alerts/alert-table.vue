@@ -33,7 +33,7 @@
                 :placeholder="$t('common.placeholder.search')"
                 :active="searching"
                 @cancel="getAlerts(true)"
-                @searc="handleSearch"
+                @search="handleSearch"
                 @search-activate="searching=!searching"
                 @press-enter="getAlerts(true)">
                 <x-select width="90px" :label="queryType.label" size="small">
