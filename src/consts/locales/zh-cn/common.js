@@ -52,7 +52,8 @@ export default {
   count: '数量',
   percent: '占比',
   placeholder: {
-    search: '请输入查询内容'
+    search: '请输入查询内容',
+    select: '请选择'
   },
   username: '用户名',
   password: '密码',

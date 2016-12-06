@@ -51,7 +51,8 @@ export default {
   count: 'Quantity',
   percent: 'Ratio',
   placeholder: {
-    search: 'Search'
+    search: 'Search',
+    select: 'Select'
   },
   username: 'Username',
   password: 'Password',
