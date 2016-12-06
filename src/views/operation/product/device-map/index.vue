@@ -605,7 +605,6 @@ export default {
      */
     handleSearch (val) {
       this.query = val
-      this.doSearch()
     },
 
     /**
