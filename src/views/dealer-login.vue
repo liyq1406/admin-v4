@@ -224,6 +224,8 @@
             // window.localStorage.clear()
             window.localStorage.removeItem('pluginsToken')
             window.localStorage.removeItem('memberRole')
+            // 清除大客户配置
+            window.localStorage.removeItem('heavyBuyerConfig')
             window.localStorage.removeItem('dealerId')
             window.localStorage.setItem('memberId', res.data.member_id)
             // window.localStorage.setItem('corpId', res.data.corp_id)
