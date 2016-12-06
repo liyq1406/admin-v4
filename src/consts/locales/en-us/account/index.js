@@ -4,7 +4,7 @@
  */
 
 export default {
-  // 账号信息
+  // 帐号信息
   info: {
     change_password: 'Update Password',
     edit_account_msg: 'Update Account Information',

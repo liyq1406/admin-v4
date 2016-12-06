@@ -65,6 +65,11 @@ export function format (val, type) {
       result = /^[A-Z][a-z0-9_]*$/i.test(val)
       break
 
+    // 密码：
+    case 'password':
+      result = /^(?![^a-zA-Z]+$)(?!\D+$).{8,16}$/.test(val)
+      break
+
     default:
       result = false
   }
