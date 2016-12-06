@@ -215,7 +215,7 @@
             window.localStorage.removeItem('pluginsToken')
             window.localStorage.removeItem('memberRole')
             // 清除经销商配置
-            window.localStorage.removeItem('dealerConfig')
+            window.localStorage.removeItem('heavyBuyerConfig')
             // 用户角色，1表示大客户
             window.localStorage.setItem('memberId', res.data.member_id)
             window.localStorage.setItem('corpId', this.$route.params.corpId)
