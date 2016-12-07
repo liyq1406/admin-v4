@@ -335,7 +335,8 @@ export default {
 
     .sidebar-tab__item
       float left
-      width 160px
+      /*width 160px*/
+      width 320px
       text-align center
       font-size 14px
       height 44px
