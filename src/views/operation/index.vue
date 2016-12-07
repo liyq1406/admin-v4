@@ -125,14 +125,15 @@ export default {
       })
 
       // 产品导航
-      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
+      // const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
+      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map']
       var openArr = []
       var hashMap = {
         'overview': 'summary',
         'devices': 'device_list',
         'alerts': 'alert',
-        'device-map': 'device_map',
-        'analysis': 'analyse'
+        'device-map': 'device_map'
+        // 'analysis': 'analyse'
       }
       PRO_SUBS.forEach((type) => {
         this.configInfo.module.forEach((mode) => {
@@ -253,14 +254,15 @@ export default {
       })
 
       // 产品导航
-      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
+      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map']
+      // const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
       var openArr = []
       var hashMap = {
         'overview': 'summary',
         'devices': 'device_list',
         'alerts': 'alert',
-        'device-map': 'device_map',
-        'analysis': 'analyse'
+        'device-map': 'device_map'
+        // 'analysis': 'analyse'
       }
       PRO_SUBS.forEach((type) => {
         this.configInfo.module.forEach((mode) => {
