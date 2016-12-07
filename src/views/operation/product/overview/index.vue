@@ -170,6 +170,11 @@ export default {
   ready () {
     this.initTranslate()
   },
+  watch: {
+    currentProduct () {
+      this.initTranslate()
+    }
+  },
   methods: {
     resetConfig () {
       this.configLoaded = false
@@ -179,6 +184,7 @@ export default {
       this.isShowTrend = false
       this.isShowActive = false
       this.isShowDistribution = false
+      this.quatas = {}
       for (let i in this.statistic.users) {
         this.statistic.users[i].total = this.statistic.users[i].change = 0
         this.statistic.users[i].title = this.statistic.users[i].tooltip = ''

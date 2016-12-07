@@ -22,7 +22,6 @@
       <div class="col-24">
         <product-trend></product-trend>
         <product-active></product-active>
-        <!-- <product-distribution></product-distribution> -->
         <product-world-distribution></product-world-distribution>
         <user-trend></user-trend>
         <product-model></product-model>
@@ -35,7 +34,6 @@
 import api from 'api'
 import ProductTrend from './components/ProductTrend'
 import ProductActive from './components/ProductActive'
-// import ProductDistribution from './components/ProductDistribution'
 import ProductWorldDistribution from './components/ProductWorldDistribution'
 import UserTrend from './components/UserTrend'
 import ProductModel from './components/ProductModel'
@@ -45,7 +43,6 @@ export default {
 
   layouts: ['topbar', 'sidebar'],
   components: {
-    // IntervalIcon,
     ProductTrend,
     ProductActive,
     ProductWorldDistribution,
