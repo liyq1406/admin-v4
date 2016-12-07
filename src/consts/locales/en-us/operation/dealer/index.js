@@ -5,9 +5,13 @@
 
 export default {
   title: 'Dealer Analysis', // 概览
-  dealer_name: '经销商名称',
+  fields: {
+    account: 'Account',
+    password: 'Password',
+    name: 'Name'
+  },
   placeholders: {
-    account: '帐号必须以字母开头，包含数字字母和下划线',
-    password: '8-16 bits, containing numbers and uppercase and lowercase letters'
+    account: 'Please enter dealer account',
+    password: 'Please enter dealer password'
   }
 }

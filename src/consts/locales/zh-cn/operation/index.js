@@ -10,6 +10,7 @@ import user from './user'
 import snapshot from './snapshot'
 import settings from './settings'
 import dealer from './dealer'
+import heavyBuyer from './heavy-buyer'
 import warranty from './warranty'
 import helpdesk from './helpdesk'
 
@@ -23,6 +24,7 @@ export default {
   snapshot,
   settings,
   dealer,
+  heavy_buyer: heavyBuyer,
   warranty,
   helpdesk
 }

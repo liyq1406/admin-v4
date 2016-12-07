@@ -90,7 +90,7 @@ export default {
     maxlength: '{0} cannot be more than {1} characters',
     minlength: '{0} cannot be less than {1} characters',
     equal: '{0} must be equal to {1}',
-    account: '{field} must start with a letter',
+    account: 'Account must be mail format or begin with a letter, containing numbers, letters or underscores',
     password: 'Password must be 8-16 bits, containing numbers and uppercase and lowercase letters',
     trim: 'Blanks are not allowed at both ends of {field}',
     sn: 'Serial numbers can only contain numbers, letters, and dashes, and do not begin with a dash'

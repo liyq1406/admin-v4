@@ -92,7 +92,7 @@ export default {
     minlength: '{0}不能少于{1}位',
     length: '必须是{field}位',
     equal: '{0}必须与{1}一致',
-    account: '{field}必须以字母开头',
+    account: '帐号必须为邮箱格式或以字母开头，包含数字、字母和下划线',
     password: '密码必须为8-16位且同时包含数字和大小写字母',
     trim: '{field}前后不允许带空格',
     sn: '序列号只能包含数字、英文字母和中划线，且不以中划线开头'

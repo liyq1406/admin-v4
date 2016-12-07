@@ -1602,7 +1602,7 @@ let configRouter = (router) => {
         'plugins/dealer/:app_id/add': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/add'))
+              resolve(require('./views/operation/plugin/dealer/form'))
             }, 'admin')
           }
         },
@@ -1610,7 +1610,7 @@ let configRouter = (router) => {
         'plugins/dealer/:app_id/edit/:id': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/add'))
+              resolve(require('./views/operation/plugin/dealer/form'))
             }, 'admin')
           }
         },

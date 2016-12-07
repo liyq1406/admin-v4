@@ -5,9 +5,13 @@
 
 export default {
   title: '经销商分析', // 概览
-  dealer_name: '经销商名称',
+  fields: {
+    account: '帐号',
+    password: '登录密码',
+    name: '经销商名称'
+  },
   placeholders: {
-    account: '帐号必须以字母开头，包含数字字母和下划线',
-    password: '密码长度8-16位，且同时包含数字和大小写字母'
+    account: '请输入经销商帐号',
+    password: '请输入经销商登录密码'
   }
 }

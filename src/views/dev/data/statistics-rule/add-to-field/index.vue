@@ -8,7 +8,7 @@
               <label class="form-control col-3">规则key:</label>
               <div class="controls col-21">
                 <div class="input-text-wrap">
-                  <input v-model="name" type="text" placeholder="请输入规则key" v-validate:name="{required: true, minlength: 2, maxlength: 30, format: 'englist'}" name="name" class="input-text input-lenght" lazy/>
+                  <input v-model="name" type="text" placeholder="请输入规则key" v-validate:name="{required: true, minlength: 2, maxlength: 30, format: 'english'}" name="name" class="input-text input-lenght" lazy/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.name.touched && $validation.name.required">请输入规则key</span>
                     <span v-if="$validation.name.modified && $validation.name.minlength">规则key不能少于2位</span>

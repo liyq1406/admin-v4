@@ -15,41 +15,32 @@
               <div class="row">
                 <div class="part col-14 max-width">
                   <div class="form-row row">
-                    <label class="form-control col-5 organization-label">帐号:</label>
+                    <label class="form-control col-5 organization-label">{{ $t('operation.dealer.fields.account') }}:</label>
                     <div class="controls col-19">
-                      <div v-placeholder="$t('operation.dealer.placeholders.account')" class="input-text-wrap">
-                        <input v-model="model.username" name="model.username" v-validate:username="{required: true, format: 'account', minlength: 6, maxlength: 32}" lazy class="input-text"/>
+                      <div v-placeholder="$t('operation.heavy_buyer.placeholders.account')" class="input-text-wrap">
+                        <input v-model="model.username" name="model.username" v-validate:username="{required: true, format: ['account', 'email'], minlength: 6, maxlength: 32}" lazy class="input-text"/>
                       </div>
                       <div class="form-tips form-tips-error">
-                        <span v-if="$validation.username.touched && $validation.username.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
-                        <span v-if="$validation.username.modified && $validation.username.format">{{ $t('operation.dealer.placeholders.account') }}</span>
-                        <span v-if="$validation.username.modified && $validation.username.minlength">{{ $t('common.validation.minlength', ['帐号', 6]) }}</span>
-                        <span v-if="$validation.username.modified && $validation.username.maxlength">{{ $t('common.validation.maxlength', ['帐号', 32]) }}</span>
+                        <span v-if="$validation.username.touched && $validation.username.required">{{ $t('common.validation.required', {field: $t('operation.heavy_buyer.fields.account')}) }}</span>
+                        <span v-if="$validation.username.modified && $validation.username.format">{{ $t('common.validation.account') }}</span>
+                        <span v-if="$validation.username.modified && $validation.username.minlength">{{ $t('common.validation.minlength', [$t('operation.heavy_buyer.fields.account'), 6]) }}</span>
+                        <span v-if="$validation.username.modified && $validation.username.maxlength">{{ $t('common.validation.maxlength', [$t('operation.heavy_buyer.fields.account'), 32]) }}</span>
                       </div>
                     </div>
                   </div>
                   <div class="form-row row mt20">
-                    <label class="form-control col-5 organization-label">登录密码:</label>
-                    <div class="controls col-19" v-if="type === 'add'">
-                      <div v-placeholder="$t('operation.dealer.placeholders.password')" class="input-text-wrap">
-                        <input v-model="model.password" type="text" lazy name="model.password" v-validate:password="{required: true, format: 'password'}" class="input-text"/>
-                      </div>
-                      <div class="form-tips form-tips-error">
-                        <span v-if="$validation.password.touched && $validation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
-                        <span v-if="$validation.password.modified && $validation.password.format">{{ $t('common.validation.password') }}</span>
-                      </div>
-                    </div>
-                    <div class="controls col-19" v-else>
-                      <button class="btn btn-ghost" @click.prevent.stop="editPassword = !editPassword">修改密码</button>
-                      <template v-if="editPassword">
-                        <div v-placeholder="$t('operation.dealer.placeholders.password')" class="input-text-wrap mt10">
-                          <input v-model="model.password" type="text" name="model.password" v-validate:password="{required: true, format: 'password'}" lazy class="input-text"/>
+                    <label class="form-control col-5 organization-label">{{ $t('operation.heavy_buyer.fields.password') }}:</label>
+                    <div class="controls col-19">
+                      <button class="btn btn-ghost mb10" v-if="type==='edit'" @click.prevent.stop="editPassword = !editPassword">修改密码</button>
+                      <div class="controls col-19" v-if="type === 'add' || editPassword">
+                        <div v-placeholder="$t('operation.heavy_buyer.placeholders.password')" class="input-text-wrap">
+                          <input v-model="model.password" type="text" lazy name="model.password" v-validate:password="{required: true, format: 'password'}" class="input-text"/>
                         </div>
                         <div class="form-tips form-tips-error">
-                          <span v-if="$validation.password.touched && $validation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
+                          <span v-if="$validation.password.touched && $validation.password.required">{{ $t('common.validation.required', {field: $t('operation.heavy_buyer.fields.password')}) }}</span>
                           <span v-if="$validation.password.modified && $validation.password.format">{{ $t('common.validation.password') }}</span>
                         </div>
-                      </template>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -94,15 +85,15 @@
               <div class="row">
                 <div class="part col-14 max-width">
                   <div class="form-row row">
-                    <label class="form-control col-5 organization-label">联系人:</label>
+                    <label class="form-control col-5 organization-label">{{ $t('operation.heavy_buyer.fields.contacter') }}:</label>
                     <div class="controls col-19">
-                      <div v-placeholder="'请输入联系人'" class="input-text-wrap">
+                      <div v-placeholder="$t('operation.heavy_buyer.placeholders.contacter')" class="input-text-wrap">
                         <input type="text" v-model="model.contacter" name="model.contacter" v-validate:name="{required: true, minlength: 2, maxlength: 32}" lazy class="input-text"/>
                       </div>
                       <div class="form-tips form-tips-error">
-                        <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('operation.dealer.dealer_name')}) }}</span>
-                        <span v-if="$validation.name.modified && $validation.name.minlength">{{ $t('common.validation.minlength', [$t('operation.dealer.dealer_name'), 2]) }}</span>
-                        <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', [$t('operation.dealer.dealer_name'), 32]) }}</span>
+                        <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('operation.heavy_buyer.fields.contacter')}) }}</span>
+                        <span v-if="$validation.name.modified && $validation.name.minlength">{{ $t('common.validation.minlength', [$t('operation.heavy_buyer.fields.contacter'), 2]) }}</span>
+                        <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', [$t('operation.heavy_buyer.fields.contacter'), 32]) }}</span>
                       </div>
                     </div>
                   </div>
@@ -137,7 +128,7 @@
               <div class="row">
                 <div class="part col-14 row max-width">
                   <div class="form-actions offset-5 mt10">
-                    <button type="submit" :disabled="(submitting || $validation.invalid) && !delChecked" :class="{'disabled':(submitting || $validation.invalid) && !delChecked}" class="ml20 btn btn-primary btn-xlg">提交</button>
+                    <button type="submit" :disabled="(submitting || $validation.invalid) && !delChecked" :class="{'disabled':(submitting || $validation.invalid) && !delChecked}" class="ml20 btn btn-primary btn-lg">提交</button>
                   </div>
                 </div>
               </div>
