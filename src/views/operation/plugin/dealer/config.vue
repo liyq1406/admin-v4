@@ -195,11 +195,11 @@ export default {
         type: 'device_map',
         description: '查看设备地理位置详细分布',
         is_visible: false
-      }, {
-        title: '产品分析',
-        type: 'analyse',
-        description: '通过三个维度分析产品，包括单次时长、使用次数、时段分部等',
-        is_visible: false
+      // }, {
+      //   title: '产品分析',
+      //   type: 'analyse',
+      //   description: '通过三个维度分析产品，包括单次时长、使用次数、时段分部等',
+      //   is_visible: false
       }, {
         title: '智能维保',
         type: 'warranty',
@@ -335,7 +335,10 @@ export default {
       // console.info('Action:', e.action)
       // console.info('Text:', e.text)
       // console.info('Trigger:', e.trigger)
-
+      this.showNotice({
+        type: 'success',
+        content: '复制成功！'
+      })
       e.clearSelection()
     },
 
