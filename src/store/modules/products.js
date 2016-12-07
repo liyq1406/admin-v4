@@ -19,6 +19,26 @@ var state = {
 }
 
 function filterReleased (products) {
+  let userRole = window.localStorage.getItem('userRole')
+  let config = ({
+    'member': null,
+    'dealer': JSON.parse(window.localStorage.getItem('dealerConfig')),
+    'heavy-buyer': JSON.parse(window.localStorage.getItem('heavyBuyerConfig'))
+  })[userRole]
+
+  // 独立入口过滤产品
+  if (config) {
+    return products.filter((item) => {
+      let result = false
+      config.product.forEach((product) => {
+        if (product.is_visible && product.product_id === item.id) {
+          result = true
+        }
+      })
+      console.log(item.is_release && result)
+      return (item.is_release && result)
+    })
+  }
   return products.filter((item) => {
     return item.is_release
   })
