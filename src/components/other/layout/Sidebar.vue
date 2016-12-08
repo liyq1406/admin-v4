@@ -188,9 +188,11 @@ export default {
     padding-left 20px
     /*background #202020*/
     transition background .2s ease
-    overflow hidden
+    /*overflow hidden
     white-space nowrap
-    text-overflow "…"
+    text-overflow "…"*/
+    truncate()
+    box-sizing border-box
     cursor pointer
 
     .fa
