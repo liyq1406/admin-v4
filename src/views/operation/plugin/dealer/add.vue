@@ -149,6 +149,14 @@
                     </div>
                   </div>
                 </div>
+                <div class="form-row row mt20">
+                  <label class="form-control col-5 dealer-label">官网地址:</label>
+                  <div class="controls col-19">
+                    <div v-placeholder="'请输入官网地址'" class="input-text-wrap">
+                      <input type="text" v-model="dealer.home_page" class="input-text"/>
+                    </div>
+                  </div>
+                </div>
                 <div class="form-actions mt20">
                   <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary fr">提交</button>
                 </div>
@@ -185,7 +193,8 @@
           area: '',
           belongTo: '',
           sale_goal: '',
-          dealer_code: ''
+          dealer_code: '',
+          home_page: ''
         },
         belongs: [],
         belongType: {
@@ -263,7 +272,7 @@
       },
       getDealer (id) {
         var params = {
-          filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time', 'province', 'country', 'city'],
+          filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time', 'province', 'country', 'city', 'home_page'],
           query: {
             id: {$in: [id]}
           }
@@ -280,6 +289,7 @@
             this.dealer.address = dealerRaw.address
             this.dealer.area = dealerRaw.region
             this.dealer.sale_goal = dealerRaw.sale_goal
+            this.dealer.home_page = dealerRaw.home_page
             this.countryCode = dealerRaw.country
             this.stateCode = dealerRaw.province
             this.cityCode = dealerRaw.city
@@ -333,7 +343,8 @@
           password: this.dealer.password,
           address: this.dealer.address,
           region: this.dealer.area,
-          sale_goal: this.dealer.sale_goal
+          sale_goal: this.dealer.sale_goal,
+          home_page: this.dealer.home_page
         }
         // 如果有从属于
         if (this.belongType.code) {
@@ -367,7 +378,8 @@
           password: this.dealer.password,
           address: this.dealer.address,
           region: this.dealer.area,
-          sale_goal: this.dealer.sale_goal
+          sale_goal: this.dealer.sale_goal,
+          home_page: this.dealer.home_page
         }
         if (this.belongType.code) {
           params.upper_dealer_code = this.belongType.code

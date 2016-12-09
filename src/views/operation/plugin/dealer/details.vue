@@ -112,6 +112,10 @@
           sale: {
             label: '已售数量',
             value: ''
+          },
+          homepage: {
+            label: '官网地址',
+            value: ''
           }
         },
         // sales: [{
@@ -229,6 +233,7 @@
           this.dealerInfo.phone.value = this.dealer.phone || '--'
           this.dealerInfo.id.value = this.dealer.email || '--'
           this.dealerInfo.belong.value = this.dealer.upper_dealer_code || '--'
+          this.dealerInfo.homepage.value = this.dealer.home_page || '--'
           this.status = this.dealer.status
           // 获取上级经销商名字
           if (this.dealer.upper_dealer_code) {
@@ -238,7 +243,6 @@
           this.dealerInfo.area.value = this.dealer.region || '--'
           this.dealerInfo.target.value = this.dealer.sale_goal || '--'
           this.dealerInfo.sale.value = this.dealer.saled_amount || '--'
-          console.log(this.dealer)
           locParser.parse(this.dealer.country || '', this.dealer.province || '', this.dealer.city || '', '', this.lang).then((res) => {
             if (res) {
               let loc = res.country

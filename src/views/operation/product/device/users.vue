@@ -1,7 +1,14 @@
 <template>
   <div class="panel device-users">
     <div class="panel-bd row">
-      <x-table :headers="headers" :rows="rows" :page="page" :loading="loadingData"></x-table>
+      <x-table
+          :headers="headers"
+          :rows="rows"
+          :page="page"
+          :loading="loadingData"
+          @tbody-nickname="jumpuser"
+          @tbody-phone="jumpuser">
+      </x-table>
       <div class="actions clearfix mt10">
         <button class="btn btn-primary fr hidden">{{ $t('operation.product.device.users.release_bind') }}</button>
       </div>
@@ -126,6 +133,9 @@ export default {
   },
 
   methods: {
+    jumpuser (item) {
+      this.$route.router.go({path: '/operation/users/details/' + item.id + '/devices'})
+    },
     /**
      * 计算当前用户的昵称
      * @param  {[type]} user [description]
@@ -137,7 +147,7 @@ export default {
         let nickname = item.nickname || '-'
         if (user.user_id - 0 === item.id - 0) {
           if (!user.role) {
-            result = '<span><i class="fa fa-user"></i> ' + nickname + '</span>'
+            result = '<span><i class="fa fa-user"></i> ' + '<a class="hl-red">' + nickname + '</a>' + '</span>'
           } else {
             result = '<span>' + nickname + '</span>'
           }
@@ -168,7 +178,7 @@ export default {
       var result = ''
       this.usersInfo.map((user) => {
         if (id - 0 === user.id - 0) {
-          result = user.phone || '-'
+          result = '<a class="hl-red">' + (user.phone || '-') + '</a>'
         }
       })
       return result

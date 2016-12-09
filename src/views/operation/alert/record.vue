@@ -44,7 +44,7 @@
                   :placeholder="$t('common.placeholder.search')"
                   :active="searching"
                   @cancel="getAlerts(true)"
-                  @search="handleSearch" 
+                  @search="handleSearch"
                   @search-activate="toggleSearching"
                   @search-deactivate="toggleSearching"
                   @press-enter="getAlerts(true)">
@@ -381,7 +381,6 @@ export default {
     // 跳转设备详情
     jumpInfo (info) {
       this.$route.router.go({path: '/operation/products/' + this.currentProduct.id + '/devices/' + info.id + '/info'})
-      // console.log(info)
     },
     /**
      * 处理时间区段改变

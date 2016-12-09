@@ -4,7 +4,7 @@
       <div class="tips-null tac" v-if="!loadingData && !isDealerExists(dealer)"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
       <div class="info-box" v-if="!loadingData && isDealerExists(dealer)">
         <div class="dealer-name-box">
-          <span>{{dealer.name}}</span>
+          <a class="hl-red" @click="jumpDealer">{{dealer.name}}</a>
         </div>
         <div class="dealer-info-box">
           <div class="row">
@@ -43,7 +43,8 @@ export default {
   name: 'Dealers',
   vuex: {
     getters: {
-      currDevice: ({ products }) => products.currDevice
+      currDevice: ({ products }) => products.currDevice,
+      plugins: ({ plugins }) => plugins.all
     }
   },
 
@@ -75,6 +76,18 @@ export default {
      */
     isDealerExists (dealer) {
       return !isEmpty(dealer)
+    },
+    jumpDealer () {
+      if (!this.dealer.id || !this.plugins || !this.plugins.length) {
+        return
+      }
+      let plugin = _.find(this.plugins, (item) => {
+        return item.plugin === 'dealer'
+      })
+      if (!plugin) {
+        return
+      }
+      this.$route.router.go({path: '/operation/plugins/dealer/' + plugin.id + '/list/' + this.dealer.id + '/devices'})
     },
 
     /**

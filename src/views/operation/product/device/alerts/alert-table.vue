@@ -46,7 +46,7 @@
             </div>
           </div>
         </div>
-        <x-table :headers="headers" :rows="rows" :page="page" :selecting="selecting" :loading="loadingData" @tbody-content="getInfo" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
+        <x-table :headers="headers" :rows="rows" :page="page" :selecting="selecting" :loading="loadingData" @tbody-content="getInfo" @tbody-mac="jumpInfo" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
           <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
             <label>{{ $t('operation.product.device.alert.sign') }}:</label>
             <button class="btn btn-ghost" @click="setDeal">{{ $t('operation.product.device.alert.processed') }}</button>
@@ -204,10 +204,10 @@ export default {
         //   [this.$t('operation.product.device.alert.warning')]: 'text-label-warning',
         //   [this.$t('operation.product.device.alert.danger')]: 'text-label-danger'
         // })[item.tags] || ''
-        let content = '<span class="table-limit-width">' + item.content + '</span>'
+        let content = '<a class="table-limit-width hl-red">' + item.content + '</a>'
         let alert = {
           content: content,
-          mac: item.mac,
+          mac: '<a class="hl-red">' + item.mac + '</a>',
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
@@ -257,6 +257,10 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
+    },
+    // 跳转设备详情
+    jumpInfo (info) {
+      this.$route.router.go({path: '/operation/products/' + this.currentProduct.id + '/devices/' + info.id + '/info'})
     },
     init () {
       this.visibility = this.visibilityOptions[0]
